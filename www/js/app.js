@@ -104,7 +104,7 @@ angular.module('todo', ['ionic', "firebase"])
   };
 
   // Create our modal
-  $ionicModal.fromTemplateUrl('new-task.html', function(modal) {
+  $ionicModal.fromTemplateUrl('templates/new-task.html', function(modal) {
     $scope.taskModal = modal;
   }, {
     scope: $scope
@@ -154,3 +154,78 @@ angular.module('todo', ['ionic', "firebase"])
   }, 1000);
 
 })
+
+.config(function($stateProvider, $urlRouterProvider) {
+
+  $stateProvider
+    .state('tabs', {
+      url: "/tab",
+      abstract: true,
+      templateUrl: "templates/tabs.html"
+    })
+    .state('tabs.home', {
+      url: "/home",
+      views: {
+        'home-tab': {
+          templateUrl: "templates/home.html",
+          controller: 'HomeTabCtrl'
+        }
+      }
+    })
+    .state('tabs.facts', {
+      url: "/facts",
+      views: {
+        'home-tab': {
+          templateUrl: "templates/facts.html"
+        }
+      }
+    })
+    .state('tabs.facts2', {
+      url: "/facts2",
+      views: {
+        'home-tab': {
+          templateUrl: "templates/facts2.html"
+        }
+      }
+    })
+    .state('tabs.about', {
+      url: "/about",
+      views: {
+        'about-tab': {
+          templateUrl: "templates/about.html"
+        }
+      }
+    })
+    .state('tabs.navstack', {
+      url: "/navstack",
+      views: {
+        'about-tab': {
+          templateUrl: "templates/nav-stack.html"
+        }
+      }
+    })
+    .state('tabs.contact', {
+      url: "/contact",
+      views: {
+        'contact-tab': {
+          templateUrl: "templates/contact.html"
+        }
+      }
+    })
+    // .state('modal', {
+    //   url: "/modal",
+    //   templateUrl: "templates/new-task.html",
+    //   controller: "HomeTabCtrl"
+    // })
+    ;
+
+   $urlRouterProvider.otherwise("/tab/home");
+
+})
+
+.controller('HomeTabCtrl', function($scope, $ionicModal, $firebaseArray) {
+  console.log('HomeTabCtrl');
+
+  var ref = firebase.database().ref().child("messages");
+  $scope.messages = $firebaseArray(ref);
+});
