@@ -1,0 +1,39 @@
+<ion-view view-title="Login">
+  <ion-content class="padding">
+    <ion-list>
+      <ion-item >
+           Login
+      </ion-item>
+        <ion-item >
+          <form ng-submit="login(user)" ng-hide = "firebaseUser">
+            <div class="list">
+              <label class="item item-input">
+                Username:<input type="text" ng-model="user.email">
+              </label>
+            </div>
+            <div class="list">
+              <label class="item item-input">
+                Password:<input type="password"  ng-model="user.password">
+              </label>
+            </div>
+            <div class="padding">
+              <button type="submit" class="button button-block button-positive">Login</button>
+            </div>
+          </form>
+          <div ng-show="firebaseUser">
+            <div class="list">
+              <label class="item item-input">
+                hi , {{firebaseUser.uid}}
+                {{authUser.firstName}}
+              </label>
+            </div>
+            <div class="list">
+              <label class="item item-input">
+             <button ng-click="auth.$signOut()">Sign Out</button>
+              </label>
+            </div>
+          </div>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
