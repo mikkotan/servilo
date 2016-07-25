@@ -1,5 +1,5 @@
-app.controller("LoginCtrl",["$scope" , "$firebaseArray", "$firebaseAuth", "Auth","AppUser",
-function($scope , $firebaseArray , $firebaseAuth , Auth , AppUser){
+app.controller("LoginCtrl",["$scope" , "$firebaseArray", "$firebaseAuth", "Auth",
+function($scope , $firebaseArray , $firebaseAuth , Auth ){
 
 $scope.auth = Auth;
 
@@ -8,7 +8,7 @@ $scope.auth = Auth;
       Auth.$signInWithEmailAndPassword(user.email, user.password).then(function(firebase){
           console.log("----------------------------")
           console.log(firebase.uid);
-          user.password = " ";
+          user.password = "";
           user.email = ""
         }).catch(function(err){
           console.log("sala password")
@@ -16,13 +16,21 @@ $scope.auth = Auth;
   };
 
   Auth.$onAuthStateChanged(function(firebaseUser){
-    // var ref = firebase.database().ref().child("users/"+"uid/"+firebaseUser.uid);
-    // $scope.authUser = $firebaseArray(ref);
-    //
+    console.log($scope.authUser);
     $scope.firebaseUser = firebaseUser;
+    var userId = firebaseUser.uid
+    firebase.database().ref('/users/'+userId).once('value').then(function(user){
+      $scope.authUser = user.val()
+      console.log($scope.authUser);
+    });
+
    })
 
-
+// firebase.database().ref('users').then(function(users){
+//   console.log(users);
+// });
+//
+//
 
 
 }]);
