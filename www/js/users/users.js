@@ -1,11 +1,13 @@
-app.controller("UsersCtrl" , ["$scope" , "Auth" , "$firebaseArray", "$firebaseAuth",
-  function($scope , Auth , $firebaseArray, $firebaseAuth){
+app.controller("UsersCtrl" , ["$scope" , "Auth" , "$firebaseArray", "$firebaseAuth","User",
+  function($scope , Auth , $firebaseArray, $firebaseAuth, User){
 
 console.log("wew");
 
 var ref = firebase.database().ref().child("users");
-$scope.user = $firebaseArray(ref);
-console.log($scope.user[0]);
+$scope.authUser = User.auth()
+$scope.users = User.all();
+console.log("wew"+$scope.user)
+
 
 
 }]);
