@@ -104,7 +104,8 @@ app.config(function($stateProvider, $urlRouterProvider) {
       url: "/contact",
       views: {
         'contact-tab': {
-          templateUrl: "templates/contact.html"
+          templateUrl: "templates/contact.html",
+          controller : "UsersCtrl"
         }
       }
     })

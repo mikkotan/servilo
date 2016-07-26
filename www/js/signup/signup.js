@@ -16,4 +16,12 @@ app.controller("SignUpCtrl" , ["$scope" , "Auth" , "$firebaseArray", "$firebaseO
         console.log("may error")
     });
   }
+
+  function saveUser(userId , userFirstName , userLastName){
+    firebase.database().ref('users/' + userId).set({
+      firstName: userFirstName,
+      lastName : userLastName
+    })
+  }
+
 }]);

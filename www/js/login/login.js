@@ -8,7 +8,7 @@ $scope.auth = Auth;
       Auth.$signInWithEmailAndPassword(user.email, user.password).then(function(firebase){
           console.log("----------------------------")
           console.log(firebase.uid);
-          user.password = " ";
+          user.password = "";
           user.email = ""
         }).catch(function(err){
           console.log("sala password")
@@ -27,7 +27,11 @@ $scope.auth = Auth;
 
    })
 
-
+// firebase.database().ref('users').then(function(users){
+//   console.log(users);
+// });
+//
+//
 
 
 }]);
