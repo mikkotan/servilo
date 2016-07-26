@@ -119,6 +119,16 @@ app.config(function($stateProvider, $urlRouterProvider) {
       }
     })
 
+    .state('tabs.restaurant', {
+      url: "/restaurant",
+      views: {
+        'restaurant-tab': {
+          templateUrl : "templates/restaurant.html",
+          controller: "RestaurantCtrl"
+        }
+      }
+    })
+
     .state('tabs.signup',{
       url:"/signup",
       views: {

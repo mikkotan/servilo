@@ -1,5 +1,5 @@
-app.controller("LoginCtrl",["$scope" , "$firebaseArray", "$firebaseAuth", "Auth","AppUser",
-function($scope , $firebaseArray , $firebaseAuth , Auth , AppUser){
+app.controller("LoginCtrl",["$scope" , "$firebaseArray", "$firebaseAuth", "$firebaseObject", "Auth","AppUser",
+function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth , AppUser){
 
 $scope.auth = Auth;
 
@@ -16,10 +16,15 @@ $scope.auth = Auth;
   };
 
   Auth.$onAuthStateChanged(function(firebaseUser){
-    // var ref = firebase.database().ref().child("users/"+"uid/"+firebaseUser.uid);
+    var ref = firebase.database().ref().child("users");
+    if(firebaseUser){
+      var firebaseAuthUser = $firebaseObject(ref.child(firebaseUser.uid));
+      console.log(firebaseAuthUser);
+      $scope.firebaseUser = firebaseAuthUser;
+    }
     // $scope.authUser = $firebaseArray(ref);
     //
-    $scope.firebaseUser = firebaseUser;
+
    })
 
 

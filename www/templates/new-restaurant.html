@@ -1,0 +1,27 @@
+<div class="modal">
+  <ion-header-bar class="bar-secondary">
+    <h1 class="title">New Restaurant</h1>
+    <button class="button button-clear button-positive" ng-click="closeRestaurant()">Cancel</button>
+  </ion-header-bar>
+  <ion-content>
+    <form ng-submit="addRestaurant(restaurant)">
+      <div class="list">
+        <label class="item item-input">
+          <input type="text" placeholder="Name of Restaurant" ng-model="restaurant.name">
+        </label>
+        <label class="item item-input">
+          <input type="text" placeholder="Location of Restaurant" ng-model="restaurant.location">
+        </label>
+        <label class="item item-input">
+          <input type="text" placeholder="Type of Restaurant" ng-model="restaurant.type">
+        </label>
+        <label class="item item-input">
+          <input type="text" placeholder="Cuisine of Restaurant" ng-model="restaurant.cuisine">
+        </label>
+      </div>
+      <div class="padding">
+        <button type="submit" class="button button-block button-positive">Add Restaurant</button>
+      </div>
+    </form>
+  </ion-content>
+</div>
