@@ -10,6 +10,7 @@ app.run(["$ionicPlatform","$rootScope", "$state",function($ionicPlatform , $root
   $rootScope.$on("$stateChangeError" ,
     function(event , toState , toParams , fromState , fromParams , error){
       if(error === "AUTH_REQUIRED"){
+        event.preventDefault();
         $state.go("tabs.login")
       }
 

@@ -8,7 +8,7 @@ app.controller("SignUpCtrl" , ["$scope" , "Auth" , "$firebaseArray", "$firebaseO
         $scope.appUser = $firebaseArray(ref);
         $scope.message = "User created with uid: " + firebaseUser.uid;
         ref.set({
-          fisrtName : user.firstName,
+          firstName : user.firstName,
           lastName : user.lastName
         })
       }).catch(function(err){

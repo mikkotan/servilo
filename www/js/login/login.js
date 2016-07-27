@@ -11,7 +11,7 @@ $scope.auth = Auth;
           user.password = "";
           user.email = ""
         }).catch(function(err){
-          console.log("sala password")
+          console.log(err)
         });
   };
 
@@ -26,7 +26,10 @@ $scope.auth = Auth;
     //
 
    })
-
+  $scope.signOut = function() {
+    Auth.$signOut();
+    console.log("logged out..");
+  }
 // firebase.database().ref('users').then(function(users){
 //   console.log(users);
 // });
