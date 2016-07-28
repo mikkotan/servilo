@@ -7,7 +7,7 @@ app.factory("Home",["$firebaseObject" , "$firebaseAuth","$firebaseArray",
     restaurants : function(){
       return $firebaseArray(restaurant);
     },
-    restaurant : function(restaurantId){
+    getRestaurant : function(restaurantId){
       return $firebaseObject(restaurant.child(restaurantId));
     }
 

@@ -23,12 +23,14 @@
           <div ng-show="firebaseUser">
             <div class="list">
               <label class="item item-input">
-                hi , {{firebaseUser.firstName}}
+
+                hi , {{firebaseUser.firstName}} {{firebaseUser.lastName}}
+
               </label>
             </div>
             <div class="list">
               <label class="item item-input">
-             <button ng-click="auth.$signOut()">Sign Out</button>
+             <button ng-click="signOut()">Sign Out</button>
               </label>
               <label class="item item-input">
                 <!-- {{authUser.firstName}} -->

@@ -9,7 +9,7 @@ function($scope, $ionicModal, $firebaseArray , currentAuth , Home ,$stateParams 
       var id = $stateParams.restaurantId;
 
       if($state.is("tabs.viewRestaurant")){
-      $scope.restaurant = Home.restaurant(id);
+      $scope.restaurant = Home.getRestaurant(id);
       console.log(id)
     }
 
