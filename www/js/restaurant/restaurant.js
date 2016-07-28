@@ -15,25 +15,17 @@
 // }])
 
 
-app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate",
-function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate){
+app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate", "Restaurant",
+  function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant){
 
-  var ref = firebase.database().ref().child("restaurants");
-  $scope.restaurants = $firebaseArray(ref);
-  var resRef = firebase.database().ref().child("restaurants").orderByChild("owner_id").equalTo(User.auth().$id);
-
-  $scope.displayRestaurants = $firebaseArray(resRef);
+  $scope.restaurants = Restaurant.all();
+  $scope.displayRestaurants = Restaurant.getAuthUserRestaurants();
   $scope.AppUser = User.auth();
-  console.log($scope.AppUser.$id);
-
-  // console.log("initialized res ctrl: "+cUser.uid);
 
   firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
-    // User is signed in.
     console.log("User:"+user.uid);
   } else {
-    // No user is signed in.
     console.log("NOT LOGGED IN");
 
   }
