@@ -14,14 +14,19 @@
 //   }
 // }])
 
-app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "AuthUser", "$ionicModal",
-function($scope, $firebaseArray, $firebaseAuth, AuthUser, $ionicModal){
-  var cUser = firebase.auth().currentUser;
-  var ref = firebase.database().ref().child("restaurants/"+AuthUser.$id);
+
+app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate",
+function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate){
+
+  var ref = firebase.database().ref().child("restaurants");
   $scope.restaurants = $firebaseArray(ref);
-  $scope.AppUser = AuthUser;
+  var resRef = firebase.database().ref().child("restaurants").orderByChild("owner_id").equalTo(User.auth().$id);
+
+  $scope.displayRestaurants = $firebaseArray(resRef);
+  $scope.AppUser = User.auth();
   console.log($scope.AppUser.$id);
-  console.log("initialized res ctrl: "+cUser.uid);
+
+  // console.log("initialized res ctrl: "+cUser.uid);
 
   firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
@@ -34,15 +39,13 @@ function($scope, $firebaseArray, $firebaseAuth, AuthUser, $ionicModal){
   }
 });
 
-
-
-
   $scope.addRestaurant = function(restaurant){
     $scope.restaurants.$add({
       name: restaurant.name,
       location: restaurant.location,
       type: restaurant.type,
       cuisine: restaurant.cuisine,
+      owner_id: User.auth().$id
     })
 
     $scope.restaurantModal.hide();
@@ -52,11 +55,39 @@ function($scope, $firebaseArray, $firebaseAuth, AuthUser, $ionicModal){
     restaurant.cuisine = "";
   }
 
+  $scope.edit = function(restaurant){
+    $scope.restaurants.$save({
+      name: restaurant.name,
+      location: restaurant.location,
+      type: restaurant.type,
+      cuisine: restaurant.cuisine
+    })
+
+    $scope.restaurantEditModal.hide();
+    $ionicListDelegate.closeOptionButtons();
+  }
+
   $ionicModal.fromTemplateUrl('templates/new-restaurant.html', function(modalRestaurant) {
     $scope.restaurantModal = modalRestaurant;
   }, {
     scope: $scope
   });
+
+  $ionicModal.fromTemplateUrl('templates/edit-restaurant.html', function(modalEditRestaurant) {
+    $scope.restaurantEditModal = modalEditRestaurant;
+  }, {
+    scope: $scope
+  });
+
+  $scope.editRestaurant = function(restaurant){
+    console.log("HELLO WORLD EDIT CLICKED");
+    $scope.restaurant = restaurant;
+    $scope.restaurantEditModal.show();
+  }
+
+  $scope.closeEditRestaurant = function() {
+    $scope.restaurantEditModal.hide();
+  }
 
   $scope.newRestaurant = function() {
     $scope.restaurantModal.show();
@@ -65,5 +96,7 @@ function($scope, $firebaseArray, $firebaseAuth, AuthUser, $ionicModal){
   $scope.closeRestaurant = function() {
     $scope.restaurantModal.hide();
   }
+
+
 
 }])
