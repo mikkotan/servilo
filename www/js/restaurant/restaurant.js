@@ -14,13 +14,12 @@
 //   }
 // }])
 
-app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal",
-function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal){
+app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$stateParams",
+function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $stateParams){
   var cUser = firebase.auth().currentUser;
   var ref = firebase.database().ref().child("restaurants/"+User.auth().$id);
   $scope.restaurants = $firebaseArray(ref);
   $scope.AppUser = User.auth();
-  console.log($scope.AppUser.$id);
   console.log("initialized res ctrl: "+cUser.uid);
 
   firebase.auth().onAuthStateChanged(function(user) {
@@ -33,9 +32,6 @@ function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal){
 
   }
 });
-
-
-
 
   $scope.addRestaurant = function(restaurant){
     $scope.restaurants.$add({
@@ -65,5 +61,7 @@ function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal){
   $scope.closeRestaurant = function() {
     $scope.restaurantModal.hide();
   }
+
+
 
 }])

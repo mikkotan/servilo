@@ -68,11 +68,17 @@ app.config(function($stateProvider, $urlRouterProvider) {
         }
       }
     })
-    .state('tabs.facts', {
-      url: "/facts",
+    .state('tabs.viewRestaurant', {
+      url: "/viewRestaurant/:restaurantId",
       views: {
         'home-tab': {
-          templateUrl: "templates/facts.html"
+          templateUrl: "templates/viewRestaurant.html",
+          controller: "HomeTabCtrl",
+          resolve:{
+            "currentAuth" : ["Auth", function(Auth){
+              return Auth.$requireSignIn();
+            }]
+          }
         }
       }
     })
@@ -88,7 +94,8 @@ app.config(function($stateProvider, $urlRouterProvider) {
       url: "/about",
       views: {
         'about-tab': {
-          templateUrl: "templates/about.html"
+          templateUrl: "templates/about.html",
+          controller:"Upload"
         }
       }
     })
