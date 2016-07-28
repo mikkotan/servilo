@@ -29,6 +29,7 @@ $scope.auth = Auth;
   $scope.signOut = function() {
     Auth.$signOut();
     console.log("logged out..");
+    location.reload();
   }
 // firebase.database().ref('users').then(function(users){
 //   console.log(users);
