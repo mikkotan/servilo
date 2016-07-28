@@ -14,11 +14,14 @@
 //   }
 // }])
 
-app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "AuthUser", "$ionicModal",
-function($scope, $firebaseArray, $firebaseAuth, AuthUser, $ionicModal){
+app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "AuthUser", "$ionicModal", "$ionicListDelegate",
+function($scope, $firebaseArray, $firebaseAuth, AuthUser, $ionicModal, $ionicListDelegate){
   var cUser = firebase.auth().currentUser;
-  var ref = firebase.database().ref().child("restaurants/"+AuthUser.$id);
+  var ref = firebase.database().ref().child("restaurants");
   $scope.restaurants = $firebaseArray(ref);
+  var resRef = firebase.database().ref().child("restaurants").orderByChild("owner_id").equalTo(cUser.uid);
+
+  $scope.displayRestaurants = $firebaseArray(resRef);
   $scope.AppUser = AuthUser;
   console.log($scope.AppUser.$id);
   console.log("initialized res ctrl: "+cUser.uid);
@@ -43,6 +46,7 @@ function($scope, $firebaseArray, $firebaseAuth, AuthUser, $ionicModal){
       location: restaurant.location,
       type: restaurant.type,
       cuisine: restaurant.cuisine,
+      owner_id: cUser.uid
     })
 
     $scope.restaurantModal.hide();
@@ -52,11 +56,39 @@ function($scope, $firebaseArray, $firebaseAuth, AuthUser, $ionicModal){
     restaurant.cuisine = "";
   }
 
+  $scope.edit = function(restaurant){
+    $scope.restaurants.$save({
+      name: restaurant.name,
+      location: restaurant.location,
+      type: restaurant.type,
+      cuisine: restaurant.cuisine
+    })
+
+    $scope.restaurantEditModal.hide();
+    $ionicListDelegate.closeOptionButtons();
+  }
+
   $ionicModal.fromTemplateUrl('templates/new-restaurant.html', function(modalRestaurant) {
     $scope.restaurantModal = modalRestaurant;
   }, {
     scope: $scope
   });
+
+  $ionicModal.fromTemplateUrl('templates/edit-restaurant.html', function(modalEditRestaurant) {
+    $scope.restaurantEditModal = modalEditRestaurant;
+  }, {
+    scope: $scope
+  });
+
+  $scope.editRestaurant = function(restaurant){
+    console.log("HELLO WORLD EDIT CLICKED");
+    $scope.restaurant = restaurant;
+    $scope.restaurantEditModal.show();
+  }
+
+  $scope.closeEditRestaurant = function() {
+    $scope.restaurantEditModal.hide();
+  }
 
   $scope.newRestaurant = function() {
     $scope.restaurantModal.show();
