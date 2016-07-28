@@ -42,7 +42,7 @@ app.run(["$ionicPlatform","$rootScope", "$state",function($ionicPlatform , $root
 app.config(function($stateProvider, $urlRouterProvider) {
 
   var config = {
-    apiKey: "AIzaSyCQwf8CQCJNv10OiMzdBy91Cz-_GZAN1rU",
+    apiKey: "AIzaSyA9E-lSM2WKmonVkHCShv_ErYuvobxgb40",
     authDomain: "jepsrestaurantdev.firebaseapp.com",
     databaseURL: "https://jepsrestaurantdev.firebaseio.com/",
     storageBucket: "gs://jepsrestaurantdev.appspot.com"
@@ -126,7 +126,12 @@ app.config(function($stateProvider, $urlRouterProvider) {
       views: {
         'restaurant-tab': {
           templateUrl : "templates/restaurant.html",
-          controller: "RestaurantCtrl"
+          controller: "RestaurantCtrl",
+          resolve:{
+            "currentAuth" : ["Auth", function(Auth){
+              return Auth.$requireSignIn();
+            }]
+          }
         }
       }
     })
