@@ -13,8 +13,6 @@
   //   })
 //   }
 // }])
-
-
 app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate", "Restaurant",
   function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant){
 
@@ -27,7 +25,6 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
     console.log("User:"+user.uid);
   } else {
     console.log("NOT LOGGED IN");
-
   }
 });
 
@@ -88,7 +85,5 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
   $scope.closeRestaurant = function() {
     $scope.restaurantModal.hide();
   }
-
-
-
+  
 }])
