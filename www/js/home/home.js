@@ -20,7 +20,7 @@ function($scope, $ionicModal, $firebaseArray , currentAuth , Restaurant ,$stateP
     $scope.reviews = $firebaseArray(reviewRef);
 
     if($state.is("tabs.viewRestaurant")){
-    $scope.restaurant = Home.getRestaurant(id);
+    $scope.restaurant = Restaurant.get(id);
     console.log(id)
     }
 
