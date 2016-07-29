@@ -1,8 +1,8 @@
-app.controller("LoginCtrl",["$scope" , "$firebaseArray", "$firebaseAuth", "$firebaseObject", "Auth","AppUser",
-function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth , AppUser){
+app.controller("LoginCtrl",["$scope" , "$firebaseArray", "$firebaseAuth", "$firebaseObject", "Auth", "AppUser", "ionicMaterialInk", "ionicMaterialMotion",
+function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth , AppUser, ionicMaterialInk, ionicMaterialMotion){
 
+ionicMaterialInk.displayEffect();
 $scope.auth = Auth;
-
   $scope.login = function(user){
     console.log(user.password);
       Auth.$signInWithEmailAndPassword(user.email, user.password).then(function(firebase){

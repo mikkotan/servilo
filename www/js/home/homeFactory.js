@@ -10,10 +10,6 @@ app.factory("Home",["$firebaseObject" , "$firebaseAuth","$firebaseArray",
     getRestaurant : function(restaurantId){
       return $firebaseObject(restaurant.child(restaurantId));
     }
-    // getUserName : function(uid) {
-    //   var user = firebase.database().ref().child('users').child(uid);
-    //   return $firebaseObject(user);
-    // }
 
   }
 }])

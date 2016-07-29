@@ -1,23 +1,23 @@
 <ion-view view-title="Login">
   <ion-content class="padding">
     <ion-list>
-      <ion-item >
+      <ion-item>
            Login
       </ion-item>
-        <ion-item >
+        <ion-item>
           <form ng-submit="login(user)" ng-hide = "firebaseUser">
             <div class="list">
-              <label class="item item-input">
-                Username:<input type="text" ng-model="user.email">
-              </label>
+                <ion-md-input-cus placeholder="Username" highlight-color="balanced" type="text" ng-model="user.email"></ion-md-input-cus>
+                <!-- Username:<input type="text" ng-model="user.email"> -->
+
             </div>
             <div class="list">
-              <label class="item item-input">
-                Password:<input type="password"  ng-model="user.password">
-              </label>
+                <ion-md-input-cus placeholder="Password" highlight-color="energized" type="password" ng-model="user.password"></ion-md-input-cus>
+                <!-- Password:<input type="password"  ng-model="user.password"> -->
+
             </div>
             <div class="padding">
-              <button type="submit" class="button button-block button-positive">Login</button>
+              <button type="submit" class="button button-block button-assertive ink">Login</button>
             </div>
           </form>
           <div ng-show="firebaseUser">
