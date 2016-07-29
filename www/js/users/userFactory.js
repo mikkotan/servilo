@@ -2,7 +2,7 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray",
   function($firebaseObject ,$firebaseAuth, $firebaseArray){
   return {
     auth : function(){
-      let authUser = firebase.database().ref().child('users');
+      var authUser = firebase.database().ref().child('users');
       return $firebaseObject(authUser.child(firebase.auth().currentUser.uid));
     },
     all : function(){
