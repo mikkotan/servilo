@@ -1,6 +1,6 @@
 <ion-view view-title="viewRestaurant">
   <ion-content class="padding">
-      <a class="button icon ion-home" href="#/tab/home"> Home</a>
+      <a class="button button-light icon ion-home" href="#/tab/home"> Home</a>
       <!-- <a class="button icon icon-right ion-chevron-right" href="#/tab/facts2">More Facts</a> -->
       <ion-list>
         <ion-item>
@@ -12,6 +12,27 @@
         <ion-item>
             Location: {{restaurant.location}}
         </ion-item>
+        <div>
+          <button ng-click="newReview()" class="button button-block button-balanced"><icon class="ion-plus"></icon> Write Review</button>
+        </div>
       </ion-list>
+      <div class="list">
+        <div class="item item-divider">
+          Reviews
+        </div>
+        <ul>
+          <li class="item" ng-repeat="review in reviews">
+            <h3>
+              {{review.content}} <span class="badge badge-balanced">{{review.rating}}</span>
+            </h3>
+            <p>
+              Reviewed by: {{review.getUserName(review.owner_id)}}
+            </p>
+          </li>
+        </ul>
+      </div>
+      <!-- <ion-list>
+        <ion-item ng-repeat="review in reviews">{{review.content}}</ion-item>
+      </ion-list> -->
   </ion-content>
 </ion-view>
