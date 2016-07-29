@@ -14,6 +14,11 @@
         <p>
           <icon class="ion-ios-location-outline"></icon> {{restaurant.location}}
         </p>
+        <p>
+           <a class="button-calm" ui-sref="tabs.viewRestaurantMenus({restaurantId:restaurant.$id})">View Menus</a>
+            <a class="button-calm" ui-sref="tabs.addMenu({restaurantId:restaurant.$id})">Add menu</a>
+
+        </p>
         <ion-option-button class="button-royal" ng-click="displayRestaurants.$remove(restaurant)">
           Delete
         </ion-option-button>

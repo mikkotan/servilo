@@ -83,6 +83,24 @@ app.config(function($stateProvider, $urlRouterProvider) {
         }
       }
     })
+    .state('tabs.addMenu',{
+      url: "/menu/add/:restaurantId",
+      views:{
+        'restaurant-tab':{
+          templateUrl: "templates/add-menu.html",
+          controller: "MenuCtrl"
+        }
+      }
+    })
+    .state('tabs.viewRestaurantMenus',{
+      url: "/restaurant/menus/:restaurantId",
+      views:{
+        'restaurant-tab':{
+          templateUrl: "templates/viewRestaurant-menus.html",
+          controller: "MenuCtrl"
+        }
+      }
+    })
     .state('tabs.facts2', {
       url: "/facts2",
       views: {
