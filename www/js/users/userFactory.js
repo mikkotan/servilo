@@ -1,5 +1,5 @@
-app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray",
-  function($firebaseObject ,$firebaseAuth, $firebaseArray){
+app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserFactory",
+  function($firebaseObject ,$firebaseAuth, $firebaseArray , UserFactory){
 
   var users = firebase.database().ref().child("users")
 
@@ -8,8 +8,10 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray",
       return $firebaseObject(users.child(firebase.auth().currentUser.uid));
     },
     all : function(){
-      return $firebaseArray(users)
+      return UserFactory.array(users);
+    },
+    authFullName : function(){
+      return new UserFactory.object(users.child(firebase.auth().currentUser.uid))
     }
-
   }
 }])

@@ -109,12 +109,12 @@ app.config(function($stateProvider, $urlRouterProvider) {
         }
       }
     })
-    .state('tabs.about', {
-      url: "/about",
+    .state('tabs.menu', {
+      url: "/menu",
       views: {
-        'about-tab': {
-          templateUrl: "templates/about.html",
-          controller:"Upload"
+        'menu-tab': {
+          templateUrl: "templates/menus.html",
+          controller:"MenuCtrl"
         }
       }
     })
