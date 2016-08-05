@@ -7,10 +7,10 @@
       </button>
       <h3>Menus: </h3>
       <ion-list>
-        <ion-item ng-repeat="menu in menus()">
+        <ion-item ng-repeat="menu in menus">
             <a class="button icon icon-right ion-chevron-right" ui-sref="tabs.viewRestaurant({restaurantId:menu.restaurant_id})">{{menu.name}}</a>
             <p>
-            {{restaurant(menu.restaurant_id)}}
+            {{getRestaurant(menu.restaurant_id)}}
             </p>
         </ion-item>
       </ion-list>
