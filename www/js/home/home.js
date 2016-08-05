@@ -1,6 +1,6 @@
 app.controller('HomeTabCtrl', ["$scope","$ionicModal",
-"$firebaseArray","currentAuth", "Restaurant", "$stateParams", "$state", "User",
-function($scope, $ionicModal, $firebaseArray , currentAuth , Restaurant ,$stateParams ,$state, User) {
+"$firebaseArray","currentAuth", "Restaurant", "Home" ,"$stateParams", "$state", "User", "$firebaseObject",
+function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $stateParams, $state, User, $firebaseObject) {
   console.log('HomeTabCtrl');
 
 
@@ -14,10 +14,21 @@ function($scope, $ionicModal, $firebaseArray , currentAuth , Restaurant ,$stateP
     });
 
     $scope.restaurants = Restaurant.all();
-
+    $scope.getUserName = Home.getUserName;
     var id = $stateParams.restaurantId;
     var reviewRef = firebase.database().ref("restaurants/"+id+"/reviews");
     $scope.reviews = $firebaseArray(reviewRef);
+
+    // Home.getUserName(User.auth().$id).$loaded().then(function(user){
+    //   console.log("HELLO TRY USER: "+user.firstName);
+    // })
+
+    var userRfe = firebase.database().ref().child('users');
+    $scope.userRfeObj = $firebaseArray(userRfe);
+    console.log("HERE SAMPLE")
+    console.log("Sample user"+ $scope.userRfeObj);
+
+    // console.log("HELLO TRY USER2: "+Home.getUserName(User.auth().$id).$loaded());
 
     if($state.is("tabs.viewRestaurant")){
     $scope.restaurant = Restaurant.get(id);

@@ -10,6 +10,12 @@
             <a class="button button-calm icon icon-right ion-chevron-right" ui-sref="tabs.viewRestaurant({restaurantId:restaurant.$id})">{{restaurant.name}}</a>
         </ion-item>
       </ion-list>
+      <ion-list>
+        <ion-item ng-repeat="user in userRfeObj">
+            <!-- <a class="button button-calm icon icon-right ion-chevron-right" ui-sref="tabs.viewRestaurant({restaurantId:restaurant.$id})">{{restaurant.name}}</a> -->
+            {{user.firstName}}
+        </ion-item>
+      </ion-list>
     </p>
   </ion-content>
 </ion-view>

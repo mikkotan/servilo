@@ -26,7 +26,8 @@
               {{review.content}} <span class="badge badge-balanced">{{review.rating}}</span>
             </h3>
             <p>
-              Reviewed by: {{review.getUserName(review.owner_id)}}
+              Reviewed by: {{getUserName(review.reviewer_id)}}
+              <!-- Reviewed by: {{review.reviewer_id}} -->
             </p>
           </li>
         </ul>
