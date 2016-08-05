@@ -14,5 +14,4 @@ app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "U
         return $firebaseObject(restaurants.child(restaurantId));
       }
     }
-
 }]);

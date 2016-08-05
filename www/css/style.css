@@ -1,4 +1,12 @@
 /* Empty. Add your own CSS if you like */
+ion-content {
+  background-color: #6FD3EB;
+}
+#form-input {
+  background-color: #fff;
+  box-shadow: 5px 5px 2.5px grey;
+}
+
 ul.rating li {
   display: inline;
   border: 0px;

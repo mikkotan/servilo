@@ -1,8 +1,5 @@
 app.controller('TodoCtrl', function($scope, $timeout, $ionicModal, Projects, $ionicSideMenuDelegate, $firebaseArray) {
 
-  // Initialize Firebase
-
-
   var ref = firebase.database().ref().child("messages");
   $scope.messages = $firebaseArray(ref);
 
