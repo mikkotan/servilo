@@ -1,14 +1,10 @@
 app.controller("MenuCtrl",["$scope","$firebaseAuth","$firebaseArray","$firebaseObject", "Menu","$stateParams","$state",
   function($scope,$firebaseAuth,$firebaseArray,$firebaseObject, Menu , $stateParams , $state){
 
-  var menus = Menu.all();
   var restaurantId = $stateParams.restaurantId;
 
 
-  $scope.menus = function(){
-    return menus;
-  }
-
+  $scope.menus = Menu.all();
 
 
 
