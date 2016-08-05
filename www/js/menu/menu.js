@@ -1,5 +1,5 @@
-app.controller("MenuCtrl",["$scope","$firebaseAuth","$firebaseArray","$firebaseObject", "Menu","$stateParams","$state","Restaurant",
-  function($scope,$firebaseAuth,$firebaseArray,$firebaseObject, Menu , $stateParams , $state , Restaurant){
+app.controller("MenuCtrl",["$scope","$firebaseAuth","$firebaseArray","$firebaseObject", "Menu","$stateParams","$state",
+  function($scope,$firebaseAuth,$firebaseArray,$firebaseObject, Menu , $stateParams , $state){
 
   var menus = Menu.all();
   var restaurantId = $stateParams.restaurantId;

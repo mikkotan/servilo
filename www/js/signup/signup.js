@@ -1,6 +1,4 @@
 app.controller("SignUpCtrl" , ["$scope" , "Auth" , "$firebaseArray", "$firebaseObject" ,function($scope, Auth , $firebaseArray, $firebaseObject){
-
-
   $scope.createUser = function(user){
     Auth.$createUserWithEmailAndPassword(user.email , user.password)
       .then(function(firebaseUser){
@@ -23,5 +21,5 @@ app.controller("SignUpCtrl" , ["$scope" , "Auth" , "$firebaseArray", "$firebaseO
       lastName : userLastName
     })
   }
-
+  
 }]);

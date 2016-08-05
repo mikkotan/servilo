@@ -1,3 +1,4 @@
+
 app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserFactory",
   function($firebaseObject ,$firebaseAuth, $firebaseArray , UserFactory){
 
@@ -12,6 +13,7 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
     },
     authFullName : function(){
       return new UserFactory.object(users.child(firebase.auth().currentUser.uid))
+
     }
   }
 }])

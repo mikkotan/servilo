@@ -2,7 +2,6 @@ app.factory("Menu",["$firebaseAuth","$firebaseArray","$firebaseObject","Restaura
   function($firebaseAuth , $firebaseArray , $firebaseObject, Restaurant){
 
     var menus = firebase.database().ref().child("menus");
-
     return {
       all : function() {
         return $firebaseArray(menus);
@@ -17,5 +16,4 @@ app.factory("Menu",["$firebaseAuth","$firebaseArray","$firebaseObject","Restaura
         return $firebaseArray(menus.orderByChild("restaurant_id").equalTo(restaurantId))
       }
     }
-
 }]);
