@@ -22,6 +22,8 @@
             <div class="list">
               <label class="item item-input">
                 hi , {{firebaseUser.getFullName()}}
+
+                <div>Started : {{firebaseUser.startedAt | date:'medium'}}</div>
               </label>
             </div>
             <div class="list">

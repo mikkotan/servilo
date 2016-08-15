@@ -6,6 +6,8 @@
       </div>
       <div ng-repeat="user in users"class="item">
         {{user.firstName}} {{user.lastName}}
+        <div ng-if="user.online != null">online</div>
+        <div ng-if="user.online == null">offline</div>
       </div>
     </div>
   </ion-content>
