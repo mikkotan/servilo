@@ -3,19 +3,16 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var app = angular.module('todo', ['ionic', 'ionMdInput', 'ionic-material', 'firebase'])
+var app = angular.module('todo', ['ionic', 'ionMdInput', 'ionic-material', 'firebase', 'ionic.rating'])
 
 app.run(["$ionicPlatform","$rootScope", "$state",function($ionicPlatform , $rootScope , $state) {
-
   $rootScope.$on("$stateChangeError" ,
     function(event , toState , toParams , fromState , fromParams , error){
       if(error === "AUTH_REQUIRED"){
         event.preventDefault();
         $state.go("tabs.login")
       }
-
   })
-
 
   $ionicPlatform.ready(function() {
     if(window.cordova && window.cordova.plugins.Keyboard) {
@@ -34,13 +31,7 @@ app.run(["$ionicPlatform","$rootScope", "$state",function($ionicPlatform , $root
   });
 }]);
 
-
-
-
-
-
 app.config(function($stateProvider, $urlRouterProvider) {
-
   var config = {
     apiKey: "AIzaSyA9E-lSM2WKmonVkHCShv_ErYuvobxgb40",
     authDomain: "jepsrestaurantdev.firebaseapp.com",
@@ -83,6 +74,24 @@ app.config(function($stateProvider, $urlRouterProvider) {
         }
       }
     })
+    .state('tabs.addMenu',{
+      url: "/menu/add/:restaurantId",
+      views:{
+        'restaurant-tab':{
+          templateUrl: "templates/add-menu.html",
+          controller: "MenuCtrl"
+        }
+      }
+    })
+    .state('tabs.viewRestaurantMenus',{
+      url: "/restaurant/menus/:restaurantId",
+      views:{
+        'restaurant-tab':{
+          templateUrl: "templates/viewRestaurant-menus.html",
+          controller: "MenuCtrl"
+        }
+      }
+    })
     .state('tabs.facts2', {
       url: "/facts2",
       views: {
@@ -91,12 +100,12 @@ app.config(function($stateProvider, $urlRouterProvider) {
         }
       }
     })
-    .state('tabs.about', {
-      url: "/about",
+    .state('tabs.menu', {
+      url: "/menu",
       views: {
-        'about-tab': {
-          templateUrl: "templates/about.html",
-          controller:"Upload"
+        'menu-tab': {
+          templateUrl: "templates/menus.html",
+          controller:"MenuCtrl"
         }
       }
     })
@@ -117,7 +126,6 @@ app.config(function($stateProvider, $urlRouterProvider) {
         }
       }
     })
-
     .state('tabs.login', {
       url: "/login",
       views: {
@@ -127,7 +135,6 @@ app.config(function($stateProvider, $urlRouterProvider) {
         }
       }
     })
-
     .state('tabs.restaurant', {
       url: "/restaurant",
       views: {
@@ -142,7 +149,6 @@ app.config(function($stateProvider, $urlRouterProvider) {
         }
       }
     })
-
     .state('tabs.signup',{
       url:"/signup",
       views: {
@@ -152,7 +158,5 @@ app.config(function($stateProvider, $urlRouterProvider) {
         }
       }
     });
-
    $urlRouterProvider.otherwise("/tab/home");
-
 })

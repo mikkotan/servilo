@@ -1,5 +1,5 @@
-app.controller("SignUpCtrl" , ["$scope" , "Auth" , "$firebaseArray", "$firebaseObject" ,function($scope, Auth , $firebaseArray, $firebaseObject){
-
+app.controller("SignUpCtrl" , ["$scope" , "Auth" , "$firebaseArray", "$firebaseObject","User",
+  function($scope, Auth , $firebaseArray, $firebaseObject , User){
 
   $scope.createUser = function(user){
     Auth.$createUserWithEmailAndPassword(user.email , user.password)
@@ -9,19 +9,22 @@ app.controller("SignUpCtrl" , ["$scope" , "Auth" , "$firebaseArray", "$firebaseO
         $scope.message = "User created with uid: " + firebaseUser.uid;
         ref.set({
           firstName : user.firstName,
-          lastName : user.lastName
+          lastName : user.lastName,
+          startedAt : firebase.database.ServerValue.TIMESTAMP
         })
+        User.setOnline();
+        console.log("done")
       }).catch(function(err){
         console.log(err);
         console.log("may error")
     });
   }
 
-  function saveUser(userId , userFirstName , userLastName){
-    firebase.database().ref('users/' + userId).set({
-      firstName: userFirstName,
-      lastName : userLastName
-    })
-  }
+  // function saveUser(userId , userFirstName , userLastName){
+  //   firebase.database().ref('users/' + userId).set({
+  //     firstName: userFirstName,
+  //     lastName : userLastName
+  //   })
+  // }
 
 }]);

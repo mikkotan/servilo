@@ -13,39 +13,34 @@
   //   })
 //   }
 // }])
+app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate", "Restaurant",
+  function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant){
 
-
-app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate",
-function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate){
-
-  var ref = firebase.database().ref().child("restaurants");
-  $scope.restaurants = $firebaseArray(ref);
-  var resRef = firebase.database().ref().child("restaurants").orderByChild("owner_id").equalTo(User.auth().$id);
-
-  $scope.displayRestaurants = $firebaseArray(resRef);
+  $scope.restaurants = Restaurant.all();
+  $scope.pendingRestaurants = Restaurant.getPendingRestaurants();
+  $scope.displayRestaurants = Restaurant.getAuthUserRestaurants();
+  // $scope.getRestaurantPriceRange = Restaurant.getRestaurantPriceRange;
   $scope.AppUser = User.auth();
-  console.log($scope.AppUser.$id);
-
-  // console.log("initialized res ctrl: "+cUser.uid);
 
   firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
-    // User is signed in.
     console.log("User:"+user.uid);
   } else {
-    // No user is signed in.
     console.log("NOT LOGGED IN");
-
   }
 });
 
   $scope.addRestaurant = function(restaurant){
-    $scope.restaurants.$add({
+    $scope.pendingRestaurants.$add({
       name: restaurant.name,
       location: restaurant.location,
       type: restaurant.type,
       cuisine: restaurant.cuisine,
-      owner_id: User.auth().$id
+      owner_id: User.auth().$id,
+      sumPrice: 0,
+      totalMenuCount: 0,
+      sumRating: 0,
+      totalRatingCount: 0
     })
 
     $scope.restaurantModal.hide();
@@ -97,6 +92,10 @@ function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDel
     $scope.restaurantModal.hide();
   }
 
-
+  $scope.approveRestaurant = function(restaurant) {
+    $scope.pendingRestaurants.$remove(restaurant).then(function() {
+      $scope.restaurants.$add(restaurant);
+    })
+  }
 
 }])

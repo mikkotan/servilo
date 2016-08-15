@@ -1,15 +1,33 @@
-app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray",
-  function($firebaseObject ,$firebaseAuth, $firebaseArray){
+
+app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserFactory",
+  function($firebaseObject ,$firebaseAuth, $firebaseArray , UserFactory){
+
+  var users = firebase.database().ref().child("users")
+  var conRef = firebase.database().ref(".info/connected");
 
   return {
     auth : function(){
-      let authUser = firebase.database().ref().child('users').child(firebase.auth().currentUser.uid);
-      return $firebaseObject(authUser);
+      return $firebaseObject(users.child(firebase.auth().currentUser.uid));
     },
     all : function(){
-      let users = firebase.database().ref().child("users")
-      return $firebaseArray(users)
+      return $firebaseArray(users);
+    },
+    authFullName : function(){
+      return new UserFactory.object(users.child(firebase.auth().currentUser.uid))
+    },
+    register : function(userId){
+      return $firebaseArray(users.child(userId));
+    },
+    setOnline : function(){
+      var online = users.child(firebase.auth().currentUser.uid +'/online');
+      conRef.on('value', function(data){
+        if(data.val() === true){
+          var con  = online.push(true);
+          con.onDisconnect().remove();
+        }
+      })
+
     }
 
-  }
-}])
+  };
+}]);

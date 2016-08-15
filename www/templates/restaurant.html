@@ -14,12 +14,29 @@
         <p>
           <icon class="ion-ios-location-outline"></icon> {{restaurant.location}}
         </p>
+        <p>
+           <a class="button-calm" ui-sref="tabs.viewRestaurantMenus({restaurantId:restaurant.$id})">View Menus</a>
+            <a class="button-calm" ui-sref="tabs.addMenu({restaurantId:restaurant.$id})">Add menu</a>
+
+        </p>
         <ion-option-button class="button-royal" ng-click="displayRestaurants.$remove(restaurant)">
           Delete
         </ion-option-button>
         <ion-option-button class="button-calm" ng-click="editRestaurant(restaurant)">
           Edit
         </ion-option-button>
+      </ion-item>
+    </ion-list>
+    <ion-list>
+      <h6>Pending Restaurants</h6>
+      <ion-item ng-repeat="pRestaurant in pendingRestaurants">
+        <h3> <icon class="ion-spoon"></icon> {{pRestaurant.name}}</h3>
+        <p>
+          <icon class="ion-ios-location-outline"></icon> {{pRestaurant.location}}
+        </p>
+        <p>
+          <a ng-click="approveRestaurant(pRestaurant)" >Approve This</a>
+        </p>
       </ion-item>
     </ion-list>
   </ion-content>
