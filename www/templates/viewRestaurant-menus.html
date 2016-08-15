@@ -3,7 +3,10 @@
       <!-- <a class="button icon icon-right ion-chevron-right" href="#/tab/facts2">More Facts</a> -->
       <ion-list>
         <ion-item ng-repeat="menu in restaurantMenus">
-            {{menu.name}}
+            <h3>{{menu.name}}</h3>
+            <p>
+              P {{menu.price}}
+            </p>
         </ion-item>
       </ion-list>
       <p>

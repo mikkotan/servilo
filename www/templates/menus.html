@@ -10,6 +10,9 @@
         <ion-item ng-repeat="menu in menus">
             <a class="button icon icon-right ion-chevron-right" ui-sref="tabs.viewRestaurant({restaurantId:menu.restaurant_id})">{{menu.name}}</a>
             <p>
+              P {{menu.price}}
+            </p>
+            <p>
             {{getRestaurant(menu.restaurant_id)}}
             </p>
         </ion-item>

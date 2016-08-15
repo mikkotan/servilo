@@ -9,6 +9,13 @@
         <h3>Restaurants</h3>
         <ion-item ng-repeat="restaurant in restaurants">
             <a class="button button-calm icon icon-right ion-chevron-right" ui-sref="tabs.viewRestaurant({restaurantId:restaurant.$id})">{{restaurant.name}}</a>
+            <p>
+              Avg Price:
+              P {{getAvg(restaurant.$id)}}
+            </p>
+            <p>
+              Rating: {{getAvgRating(restaurant.$id)}} / 5
+            </p>
         </ion-item>
       </ion-list>
     </p>
