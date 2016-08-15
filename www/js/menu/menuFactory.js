@@ -4,6 +4,7 @@ app.factory("Menu",["$firebaseAuth","$firebaseArray","$firebaseObject","Restaura
     var menus = firebase.database().ref().child("menus");
     var restaurants = firebase.database().ref().child("restaurants");
     var restaurantsArray = $firebaseArray(restaurants);
+
     return {
       all : function() {
         console.log("ALL IS RUNNING++");

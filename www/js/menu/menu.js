@@ -2,18 +2,20 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth","$firebaseArray","$firebaseO
   function($scope,$firebaseAuth,$firebaseArray,$firebaseObject, Menu , $stateParams , $state){
 
 
+
   var restaurantId = $stateParams.restaurantId;
+
 
 
   $scope.menus = Menu.all();
   $scope.getRestaurant = Menu.getRestaurant;
   // $scope.getRestaurantMenus = Menu.getRestaurantMenus(restaurantId);
 
-  //
-  // $scope.restaurant = function(restid){
-  //   var rest = Menu.getRestaurant(restid);
-  //   return  restid;
-  // }
+
+  $scope.restaurant = function(restid){
+    var rest = Menu.getRestaurant(restid);
+    return  restid;
+  }
 
 
 
@@ -39,11 +41,10 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth","$firebaseArray","$firebaseO
         console.log("Adding count");
         return currentCount+1;
       })
-      
+
     })
     $state.go('tabs.restaurant');
   }
-
 
 
   if($state.is("tabs.viewRestaurantMenus")){

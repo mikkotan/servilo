@@ -53,7 +53,8 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
     $scope.reviews.$add({
       content: review.content,
       rating: review.rating,
-      reviewer_id: User.auth().$id
+      reviewer_id: User.auth().$id,
+      startedAt: firebase.database.ServerValue.TIMESTAMP
     }).then(function(){
       console.log("Calling callback review");
       console.log("review rate after callback: "+reviewRating);
