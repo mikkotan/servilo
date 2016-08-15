@@ -7,13 +7,13 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth","$firebaseArray","$firebaseO
 
   $scope.menus = Menu.all();
   $scope.getRestaurant = Menu.getRestaurant;
+  // $scope.getRestaurantMenus = Menu.getRestaurantMenus(restaurantId);
 
-
-
-  $scope.restaurant = function(restid){
-    var rest = Menu.getRestaurant(restid);
-    return  restid;
-  }
+  //
+  // $scope.restaurant = function(restid){
+  //   var rest = Menu.getRestaurant(restid);
+  //   return  restid;
+  // }
 
 
 
@@ -21,7 +21,25 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth","$firebaseArray","$firebaseO
     console.log("wew")
     $scope.menus.$add({
       name : menu.name,
+      price : menu.price,
       restaurant_id : restaurantId
+    }).then(function(){
+      console.log("calling callback");
+      var restaurantRef = firebase.database().ref().child("restaurants").child(restaurantId);
+      var sumRef = restaurantRef.child("sumPrice");
+      var menuCount = restaurantRef.child("totalMenuCount");
+      var avgRate = restaurantRef.child("rating");
+
+      sumRef.transaction(function(currentPrice){
+        console.log("Adding currentPrice");
+        return currentPrice + menu.price;
+      })
+
+      menuCount.transaction(function(currentCount){
+        console.log("Adding count");
+        return currentCount+1;
+      })
+      
     })
     $state.go('tabs.restaurant');
   }
@@ -30,7 +48,7 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth","$firebaseArray","$firebaseO
 
   if($state.is("tabs.viewRestaurantMenus")){
     $scope.restaurantMenus = Menu.getRestaurantMenus(restaurantId);
-        console.log("34"+Menu.getRestaurant(restaurantId));
+        // console.log("34"+Menu.getRestaurant(restaurantId));
   }
 
 }]);

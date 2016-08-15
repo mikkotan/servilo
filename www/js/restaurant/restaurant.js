@@ -17,7 +17,9 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
   function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant){
 
   $scope.restaurants = Restaurant.all();
+  $scope.pendingRestaurants = Restaurant.getPendingRestaurants();
   $scope.displayRestaurants = Restaurant.getAuthUserRestaurants();
+  // $scope.getRestaurantPriceRange = Restaurant.getRestaurantPriceRange;
   $scope.AppUser = User.auth();
 
   firebase.auth().onAuthStateChanged(function(user) {
@@ -29,12 +31,16 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
 });
 
   $scope.addRestaurant = function(restaurant){
-    $scope.restaurants.$add({
+    $scope.pendingRestaurants.$add({
       name: restaurant.name,
       location: restaurant.location,
       type: restaurant.type,
       cuisine: restaurant.cuisine,
-      owner_id: User.auth().$id
+      owner_id: User.auth().$id,
+      sumPrice: 0,
+      totalMenuCount: 0,
+      sumRating: 0,
+      totalRatingCount: 0
     })
 
     $scope.restaurantModal.hide();
@@ -85,5 +91,11 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
   $scope.closeRestaurant = function() {
     $scope.restaurantModal.hide();
   }
-  
+
+  $scope.approveRestaurant = function(restaurant) {
+    $scope.pendingRestaurants.$remove(restaurant).then(function() {
+      $scope.restaurants.$add(restaurant);
+    })
+  }
+
 }])

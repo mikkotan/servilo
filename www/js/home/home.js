@@ -13,7 +13,24 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
       console.log('New value: '+$scope.rating.rate);
     });
 
+    // $scope.RestaurantService = Restaurant;
     $scope.restaurants = Restaurant.all();
+    $scope.getAvg = Restaurant.getAveragePrice;
+    $scope.getAvgRating = Restaurant.getAverageRating;
+    // $scope.getAvg = function(restaurantId){
+    //   var getRealAvg = 1;
+    //   Restaurant.getAveragePrice(restaurantId).then(function(value){
+    //     console.log("RETURN VALUE ++"+value);
+    //     // $scope.getAvg = value;
+    //     getRealAvg = value;
+    //     console.log("Scope get avg here "+ getRealAvg)
+    //     // return value;
+    //     return getRealAvg;
+    //   })
+    //
+    // }
+
+
     $scope.getUserName = Home.getUserName;
     var id = $stateParams.restaurantId;
     var reviewRef = firebase.database().ref("restaurants/"+id+"/reviews");
@@ -31,10 +48,32 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
 
   $scope.addReview = function(review) {
     console.log("added review");
+    console.log("review rate:"+review.rating);
+    var reviewRating = review.rating;
     $scope.reviews.$add({
       content: review.content,
       rating: review.rating,
       reviewer_id: User.auth().$id
+    }).then(function(){
+      console.log("Calling callback review");
+      console.log("review rate after callback: "+reviewRating);
+      var res = firebase.database().ref().child("restaurants").child(id);
+      var sumRating = res.child("sumRating");
+      var totalRatingCount = res.child("totalRatingCount");
+
+      sumRating.transaction(function(currentSum){
+        console.log("adding rating sum");
+        // console.log("currentSumRating: "+currentSum);
+        console.log(reviewRating);
+        return currentSum + reviewRating;
+
+      })
+
+      totalRatingCount.transaction(function(currentCount){
+        console.log("adding rating count");
+        return currentCount+1;
+      })
+
     })
     review.content = '';
     review.rating = '';
