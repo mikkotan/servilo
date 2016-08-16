@@ -1,8 +1,10 @@
 <ion-view view-title="ViewRestaurant">
   <ion-content class="padding">
       <a class="button button-light icon ion-home" href="#/tab/home"> Home</a>
+
       <!-- <a class="button icon icon-right ion-chevron-right" href="#/tab/facts2">More Facts</a> -->
     <h3>{{restaurant.name}}</h3>
+    <p>{{getRestaurantStatus(restaurant.owner_id)}}</p>
       <ion-list>
         <ion-item>
             Cuisine: {{restaurant.cuisine}}
@@ -10,6 +12,11 @@
         <ion-item>
             Location: {{restaurant.location}}
         </ion-item>
+        <div ng-if='restaurant.latitude != null && restaurant.longitude != null' ng-init= 'setMap(restaurant)'>
+          <ui-gmap-google-map zoom='map.zoom' center="map.center" options='map.options' bounds='map.bounds'>
+            <ui-gmap-marker coords="map.center" icon="marker.icon" idkey="marker.id"></ui-gmap-marker>
+          </ui-gmap-google-map>
+        </div>
         <div>
           <button ng-click="newReview()" class="button button-block button-balanced"><icon class="ion-plus"></icon> Write Review</button>
         </div>

@@ -27,6 +27,7 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
         }
       })
 
+
     }
 
   };

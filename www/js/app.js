@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var app = angular.module('todo', ['ionic', 'ionMdInput', 'ionic-material', 'firebase', 'ionic.rating'])
+var app = angular.module('todo', ['ionic', 'ionMdInput', 'ionic-material', 'firebase', 'ionic.rating', 'uiGmapgoogle-maps'])
 
 app.run(["$ionicPlatform","$rootScope", "$state",function($ionicPlatform , $rootScope , $state) {
   $rootScope.$on("$stateChangeError" ,
@@ -133,6 +133,9 @@ app.config(function($stateProvider, $urlRouterProvider) {
           templateUrl: "templates/login.html",
           controller: "LoginCtrl"
         }
+      },
+      resolve : {
+
       }
     })
     .state('tabs.restaurant', {
