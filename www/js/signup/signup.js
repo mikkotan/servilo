@@ -12,7 +12,7 @@ app.controller("SignUpCtrl" , ["$scope" , "Auth" , "$firebaseArray", "$firebaseO
           lastName : user.lastName,
           startedAt : firebase.database.ServerValue.TIMESTAMP
         })
-        User.setOnline();
+
         console.log("done")
       }).catch(function(err){
         console.log(err);

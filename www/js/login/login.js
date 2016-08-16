@@ -9,7 +9,7 @@ $scope.auth = Auth;
       Auth.$signInWithEmailAndPassword(user.email, user.password).then(function(firebase){
           console.log("----------------------------")
           console.log(firebase.uid);
-          User.setOnline();
+
           user.password = "";
           user.email = ""
         }).catch(function(err){
@@ -20,6 +20,7 @@ $scope.auth = Auth;
   Auth.$onAuthStateChanged(function(firebaseUser){
     if(firebaseUser){
       $scope.firebaseUser = User.authFullName();
+        User.setOnline();
     }
    })
 
