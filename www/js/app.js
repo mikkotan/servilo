@@ -133,6 +133,9 @@ app.config(function($stateProvider, $urlRouterProvider) {
           templateUrl: "templates/login.html",
           controller: "LoginCtrl"
         }
+      },
+      resolve : {
+
       }
     })
     .state('tabs.restaurant', {

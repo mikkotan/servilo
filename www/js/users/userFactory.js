@@ -20,23 +20,13 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
     },
     setOnline : function(){
       var online = users.child(firebase.auth().currentUser.uid +'/online');
-      // conRef.on('value', function(data){
-      //   if(data.val() === true){
-      //     var con  = online.push(true);
-      //     con.onDisconnect().remove();
-      //   }
-      // })
-
-      var connectedRef = $firebaseObject(conRef);
-      var wew = $firebaseArray(online);
-
-      connectedRef.$watch(function(){
-        if(connectedRef.$value === true){
-          wew.$add(true).then(function(conRef){
-              conRef.onDisconnect().remove();
-          })
+      conRef.on('value', function(data){
+        if(data.val() === true){
+          var con  = online.push(true);
+          con.onDisconnect().remove();
         }
       })
+
 
     }
 
