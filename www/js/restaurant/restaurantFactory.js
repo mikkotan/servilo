@@ -20,13 +20,13 @@ app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "U
       getAveragePrice : function(restaurantId) {
         var res = restaurantsArray.$getRecord(restaurantId);
         var avg = res.sumPrice / res.totalMenuCount;
-        console.log(res.sumPrice / res.totalMenuCount);
         return avg.toFixed(2);
       },
       getAverageRating : function(restaurantId) {
         var res = restaurantsArray.$getRecord(restaurantId);
-        var avg = res.sumRating / res.totalRatingCount;
-        return avg.toFixed(1);
+        // var avg = res.sumRating / res.totalRatingCount;
+        // return avg.toFixed(1);
+        return res.avgRate.toFixed(1);
       }
       // getAveragePrice : function(restaurantId) {
       //   var menus = $firebaseArray(firebase.database().ref().child("menus").orderByChild("restaurant_id").equalTo(restaurantId));
