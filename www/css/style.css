@@ -14,12 +14,11 @@
   }
 
 ion-content {
-  background-color: #6FD3EB;
+  background-color: #EEF1F6;
 }
-#form-input {
+/*#form-input {
   background-color: #fff;
-  box-shadow: 5px 5px 2.5px grey;
-}
+}*/
 
 ul.rating li {
   display: inline;

@@ -42,7 +42,8 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       sumPrice: 0,
       totalMenuCount: 0,
       sumRating: 0,
-      totalRatingCount: 0
+      totalRatingCount: 0,
+      avgRate: 0
     })
 
     $scope.restaurantModal.hide();
@@ -96,6 +97,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
 
   $scope.approveRestaurant = function(restaurant) {
     $scope.pendingRestaurants.$remove(restaurant).then(function() {
+      // console.log("try rest own id "+restaurant.owner_id);
       $scope.restaurants.$add(restaurant);
     })
   }
