@@ -12,6 +12,11 @@
         <ion-item>
             Location: {{restaurant.location}}
         </ion-item>
+        <div ng-if='restaurant.latitude != null && restaurant.longitude != null' ng-init= 'setMap(restaurant)'>
+          <ui-gmap-google-map zoom='map.zoom' center="map.center" options='map.options' bounds='map.bounds'>
+            <ui-gmap-marker coords="map.center" icon="marker.icon" idkey="marker.id"></ui-gmap-marker>
+          </ui-gmap-google-map>
+        </div>
         <div>
           <button ng-click="newReview()" class="button button-block button-balanced"><icon class="ion-plus"></icon> Write Review</button>
         </div>

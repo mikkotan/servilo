@@ -34,13 +34,16 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
     $scope.pendingRestaurants.$add({
       name: restaurant.name,
       location: restaurant.location,
+      latitude: $scope.marker.coords.latitude,
+      longitude: $scope.marker.coords.longitude,
       type: restaurant.type,
       cuisine: restaurant.cuisine,
       owner_id: User.auth().$id,
       sumPrice: 0,
       totalMenuCount: 0,
       sumRating: 0,
-      totalRatingCount: 0
+      totalRatingCount: 0,
+      avgRate: 0
     })
 
     $scope.restaurantModal.hide();
@@ -94,8 +97,27 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
 
   $scope.approveRestaurant = function(restaurant) {
     $scope.pendingRestaurants.$remove(restaurant).then(function() {
+      // console.log("try rest own id "+restaurant.owner_id);
       $scope.restaurants.$add(restaurant);
     })
   }
 
+  $scope.marker ={id: 0};
+  $scope.map = { center: {latitude: (10.73016704689235+0.0123), longitude: (122.54616022109985-0.0154) }, zoom: 14, options: {scrollwheel: false}, bounds: {},
+   events: {
+     click: function (map, eventName, originalEventArgs) {
+         var e = originalEventArgs[0];
+         var lat = e.latLng.lat(),lon = e.latLng.lng();
+         var m = {
+             id: Date.now(),
+             coords: {
+                 latitude: lat,
+                 longitude: lon
+             }
+         };
+        $scope.marker = m;
+        console.log($scope.marker.coords.latitude);
+        $scope.$apply();
+     }
+   }};
 }])

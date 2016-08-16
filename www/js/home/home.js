@@ -61,18 +61,24 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
       var res = firebase.database().ref().child("restaurants").child(id);
       var sumRating = res.child("sumRating");
       var totalRatingCount = res.child("totalRatingCount");
+      var avgRating = res.child("avgRate");
+      var ratingObj = $firebaseObject(totalRatingCount);
+      var top = 0;
+      var bot = 0;
 
       sumRating.transaction(function(currentSum){
-        console.log("adding rating sum");
-        // console.log("currentSumRating: "+currentSum);
-        console.log(reviewRating);
-        return currentSum + reviewRating;
-
+        top = currentSum + reviewRating;
+        return top;
       })
 
       totalRatingCount.transaction(function(currentCount){
-        console.log("adding rating count");
-        return currentCount+1;
+        bot = currentCount + 1;
+        return bot;
+      })
+
+      avgRating.transaction(function(currentAmount){
+        var avg = top/bot;
+        return avg;
       })
 
     })
@@ -98,6 +104,13 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
 
   if($state.is("tabs.viewRestaurant")){
     $scope.restaurant = Restaurant.get(id);
-    console.log(id)
+    console.log(id);
   }
+
+  $scope.setMap = function(restaurant){
+      $scope.map =  {center:{latitude: restaurant.latitude, longitude: restaurant.longitude}, zoom: 14, options: {scrollwheel: true}, bounds: {}};
+  };
+  $scope.marker ={id: 0};
+
+
 }]);
