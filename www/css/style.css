@@ -14,12 +14,11 @@
   }
 
 ion-content {
-  background-color: #6FD3EB;
+  background-color: #EEF1F6;
 }
 
 #form-input {
   background-color: #fff;
-  box-shadow: 5px 5px 2.5px grey;
 }
 
 ul.rating li {
@@ -30,4 +29,7 @@ ul.rating li {
 }
 ul.rating li i {
   font-size: 30px;
+}
+.angular-google-map-container {
+  height: 375px;
 }

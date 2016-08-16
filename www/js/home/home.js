@@ -104,6 +104,13 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
 
   if($state.is("tabs.viewRestaurant")){
     $scope.restaurant = Restaurant.get(id);
-    console.log(id)
+    console.log(id);
   }
+
+  $scope.setMap = function(restaurant){
+      $scope.map =  {center:{latitude: restaurant.latitude, longitude: restaurant.longitude}, zoom: 14, options: {scrollwheel: true}, bounds: {}};
+  };
+  $scope.marker ={id: 0};
+
+
 }]);
