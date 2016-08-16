@@ -30,3 +30,6 @@ ul.rating li {
 ul.rating li i {
   font-size: 30px;
 }
+.angular-google-map-container {
+  height: 375px;
+}
