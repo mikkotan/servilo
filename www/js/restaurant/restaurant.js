@@ -95,7 +95,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
 
   $scope.approveRestaurant = function(restaurant) {
     $scope.pendingRestaurants.$remove(restaurant).then(function() {
-      // console.log("try rest own id "+restaurant.owner_id);
+      console.log("try rest own id "+restaurant.owner_id);
       $scope.restaurants.$add(restaurant);
     })
   }

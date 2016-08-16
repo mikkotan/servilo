@@ -4,6 +4,7 @@ app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "U
     var restaurants = firebase.database().ref().child("restaurants");
     var restaurantsArray = $firebaseArray(restaurants);
     var pendingRestaurants = firebase.database().ref().child("pending");
+    var userRestaurantsChildArray = $firebaseArray(firebase.database().ref().child('users').child(User.auth().$id).child('restaurants'));
     return {
       all : function(){
           return $firebaseArray(restaurants);
@@ -16,6 +17,9 @@ app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "U
       },
       getPendingRestaurants : function() {
           return $firebaseArray(pendingRestaurants);
+      },
+      getUserRestaurantChild : function() {
+        return userRestaurantsChildArray;
       },
       getAveragePrice : function(restaurantId) {
         var res = restaurantsArray.$getRecord(restaurantId);
