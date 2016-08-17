@@ -39,6 +39,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
     storageBucket: "gs://jepsrestaurantdev.appspot.com"
   };
   firebase.initializeApp(config);
+  $urlRouterProvider.otherwise("/home");
 
   $stateProvider
     .state('tabs', {

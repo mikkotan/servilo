@@ -1,5 +1,5 @@
-app.controller("LoginCtrl",["$scope" , "$firebaseArray", "$firebaseAuth", "$firebaseObject", "Auth", "AppUser", "ionicMaterialInk", "ionicMaterialMotion","User",
-function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth , AppUser, ionicMaterialInk, ionicMaterialMotion,User){
+app.controller("LoginCtrl",["$scope" , "$firebaseArray", "$firebaseAuth", "$firebaseObject", "Auth", "AppUser", "ionicMaterialInk", "ionicMaterialMotion","User", "$state",
+function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth , AppUser, ionicMaterialInk, ionicMaterialMotion,User,$state){
 
 ionicMaterialInk.displayEffect();
 
@@ -9,9 +9,9 @@ $scope.auth = Auth;
       Auth.$signInWithEmailAndPassword(user.email, user.password).then(function(firebase){
           console.log("----------------------------")
           console.log(firebase.uid);
-
           user.password = "";
           user.email = ""
+          $state.go("tabs.home")
         }).catch(function(err){
           console.log(err)
         });
@@ -20,7 +20,6 @@ $scope.auth = Auth;
   Auth.$onAuthStateChanged(function(firebaseUser){
     if(firebaseUser){
       $scope.firebaseUser = User.authFullName();
-        User.setOnline();
     }
    })
 

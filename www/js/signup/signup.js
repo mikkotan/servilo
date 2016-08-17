@@ -1,5 +1,5 @@
-app.controller("SignUpCtrl" , ["$scope" , "Auth" , "$firebaseArray", "$firebaseObject","User",
-  function($scope, Auth , $firebaseArray, $firebaseObject , User){
+app.controller("SignUpCtrl" , ["$scope" , "Auth" , "$firebaseArray", "$firebaseObject","User","$state",
+  function($scope, Auth , $firebaseArray, $firebaseObject , User,$state){
 
   $scope.createUser = function(user){
     Auth.$createUserWithEmailAndPassword(user.email , user.password)
@@ -12,8 +12,8 @@ app.controller("SignUpCtrl" , ["$scope" , "Auth" , "$firebaseArray", "$firebaseO
           lastName : user.lastName,
           startedAt : firebase.database.ServerValue.TIMESTAMP
         })
-
         console.log("done")
+        $state.go("tabs.home");
       }).catch(function(err){
         console.log(err);
         console.log("may error")
