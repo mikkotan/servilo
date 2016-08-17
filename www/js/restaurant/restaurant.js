@@ -15,7 +15,7 @@
 // }])
 app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate", "Restaurant",
   function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant){
-
+  $scope.modalControl = {};
   $scope.restaurants = Restaurant.all();
   $scope.pendingRestaurants = Restaurant.getPendingRestaurants();
   $scope.displayRestaurants = Restaurant.getAuthUserRestaurants();
@@ -82,10 +82,14 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
 
   $scope.editRestaurant = function(restaurant){
     console.log("HELLO WORLD EDIT CLICKED");
+    $scope.showMap = false;
     $scope.restaurant = restaurant;
-    $scope.marker.coords = {latitude: restaurant.latitude, longitude: restaurant.longitude};
-    $scope.map.center = {latitude: restaurant.latitude, longitude: restaurant.longitude};
     $scope.restaurantEditModal.show();
+    $scope.marker.coords = {latitude: restaurant.latitude, longitude: restaurant.longitude};
+    $scope.modalControl.refresh({
+          latitude: restaurant.latitude,
+          longitude: restaurant.longitude
+    });
   }
 
   $scope.closeEditRestaurant = function() {
@@ -94,6 +98,10 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
 
   $scope.newRestaurant = function() {
     $scope.restaurantModal.show();
+    $scope.modalControl.refresh({
+          latitude: 10.73016704689235,
+          longitude: 122.54616022109985
+    });
   };
 
   $scope.closeRestaurant = function() {
@@ -108,7 +116,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
   }
 
   $scope.marker ={id: 0};
-  $scope.map = { center: {latitude: (10.73016704689235+0.0123), longitude: (122.54616022109985-0.0154) }, zoom: 14, options: {scrollwheel: false}, bounds: {},
+  $scope.map = { center: {latitude: 10.73016704689235, longitude: 122.54616022109985 }, zoom: 14, options: {scrollwheel: false}, bounds: {},
    events: {
      click: function (map, eventName, originalEventArgs) {
          var e = originalEventArgs[0];

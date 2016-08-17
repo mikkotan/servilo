@@ -27,6 +27,11 @@ ul.rating li i {
 }
 .angular-google-map-container {
   height: 375px;
+  position: absolute;
+}
+.angular-google-map {
+  height: 375px;
+  position: absolute;
 }
 
 .tab-item.tab-item-active, .tab-item.active, .tab-item.activated {
