@@ -53,10 +53,11 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
 
   $scope.edit = function(restaurant){
     var resRef = firebase.database().ref().child("restaurants").child(restaurant.$id);
-    console.log("edit save");
     resRef.update({
       name: restaurant.name,
       location: restaurant.location,
+      latitude: $scope.marker.coords.latitude,
+      longitude: $scope.marker.coords.longitude,
       type: restaurant.type,
       cuisine: restaurant.cuisine
     })
@@ -80,6 +81,8 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
   $scope.editRestaurant = function(restaurant){
     console.log("HELLO WORLD EDIT CLICKED");
     $scope.restaurant = restaurant;
+    $scope.marker.coords = {latitude: restaurant.latitude, longitude: restaurant.longitude};
+    $scope.map.center = {latitude: restaurant.latitude, longitude: restaurant.longitude};
     $scope.restaurantEditModal.show();
   }
 
@@ -102,4 +105,21 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
     })
   }
 
+  $scope.marker ={id: 0};
+  $scope.map = { center: {latitude: (10.73016704689235+0.0123), longitude: (122.54616022109985-0.0154) }, zoom: 14, options: {scrollwheel: false}, bounds: {},
+   events: {
+     click: function (map, eventName, originalEventArgs) {
+         var e = originalEventArgs[0];
+         var lat = e.latLng.lat(),lon = e.latLng.lng();
+         var m = {
+             id: Date.now(),
+             coords: {
+                 latitude: lat,
+                 longitude: lon
+             }
+         };
+        $scope.marker = m;
+        $scope.$apply();
+     }
+   }};
 }])

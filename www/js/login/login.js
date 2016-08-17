@@ -20,7 +20,6 @@ $scope.auth = Auth;
   Auth.$onAuthStateChanged(function(firebaseUser){
     if(firebaseUser){
       $scope.firebaseUser = User.authFullName();
-        User.setOnline();
     }
    })
 

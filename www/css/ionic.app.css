@@ -15,6 +15,21 @@ $assertive:                       #ef473a !default;
 $royal:                           #886aea !default;
 $dark:                            #444 !default;
 */
+ul.rating li {
+  display: inline;
+  border: 0px;
+  background: none;
+  padding: 5px 10px; }
+
+ul.rating li i {
+  font-size: 30px; }
+
+.angular-google-map-container {
+  height: 375px; }
+
+.tab-item.tab-item-active, .tab-item.active, .tab-item.activated {
+  color: #ef473a; }
+
 /*!
   Ionicons, v2.0.1
   Created by Ben Sperry for the Ionic Framework, http://ionicons.com/
