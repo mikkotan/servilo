@@ -2,6 +2,7 @@ app.controller('HomeTabCtrl', ["$scope","$ionicModal",
 "$firebaseArray","currentAuth", "Restaurant", "Home" ,"$stateParams", "$state", "User", "$firebaseObject", "ionicMaterialInk",
 function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $stateParams, $state, User, $firebaseObject, ionicMaterialInk) {
   console.log('HomeTabCtrl');
+  User.setOnline();
   ionicMaterialInk.displayEffect();
 
     $scope.rating = {

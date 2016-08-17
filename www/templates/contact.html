@@ -1,6 +1,6 @@
 <ion-view title="Contact">
   <ion-content>
-    <div class="list">
+    <!-- <div class="list">
       <div class="item">
       Hello
       </div>
@@ -9,6 +9,16 @@
         <div ng-if="user.online != null">online</div>
         <div ng-if="user.online == null">offline</div>
       </div>
+    </div> -->
+    <div class="list">
+      <div class="item item-divider">
+        Users
+      </div>
+      <a class="item" href="#" ng-repeat="user in users">
+        {{user.firstName}} {{user.lastName}}
+        <div style="color:green" ng-if="user.online != null">Online</div>
+        <div style="color:red" ng-if="user.online == null">Offline</div>
+      </a>
     </div>
   </ion-content>
 </ion-view>

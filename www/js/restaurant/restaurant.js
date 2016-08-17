@@ -34,8 +34,6 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
     $scope.pendingRestaurants.$add({
       name: restaurant.name,
       location: restaurant.location,
-      latitude: $scope.marker.coords.latitude,
-      longitude: $scope.marker.coords.longitude,
       type: restaurant.type,
       cuisine: restaurant.cuisine,
       owner_id: User.auth().$id,
@@ -54,7 +52,9 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
   }
 
   $scope.edit = function(restaurant){
-    $scope.restaurants.$save({
+    var resRef = firebase.database().ref().child("restaurants").child(restaurant.$id);
+    console.log("edit save");
+    resRef.update({
       name: restaurant.name,
       location: restaurant.location,
       type: restaurant.type,
@@ -102,22 +102,4 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
     })
   }
 
-  $scope.marker ={id: 0};
-  $scope.map = { center: {latitude: (10.73016704689235+0.0123), longitude: (122.54616022109985-0.0154) }, zoom: 14, options: {scrollwheel: false}, bounds: {},
-   events: {
-     click: function (map, eventName, originalEventArgs) {
-         var e = originalEventArgs[0];
-         var lat = e.latLng.lat(),lon = e.latLng.lng();
-         var m = {
-             id: Date.now(),
-             coords: {
-                 latitude: lat,
-                 longitude: lon
-             }
-         };
-        $scope.marker = m;
-        console.log($scope.marker.coords.latitude);
-        $scope.$apply();
-     }
-   }};
 }])
