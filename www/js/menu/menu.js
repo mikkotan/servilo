@@ -25,12 +25,19 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth","$firebaseArray","$firebaseO
       name : menu.name,
       price : menu.price,
       restaurant_id : restaurantId
-    }).then(function(){
+    }).then(function(menuObj){
       console.log("calling callback");
+      console.log("KEY"+menuObj.key);
+      // console.log(menuObj.price);
+      // console.log(menuObj.$id);
       var restaurantRef = firebase.database().ref().child("restaurants").child(restaurantId);
+      // var menusRef = restaurantRef.child("menus").child(menu.id);
+      // console.log("MENUS REF"+menusRef);
       var sumRef = restaurantRef.child("sumPrice");
       var menuCount = restaurantRef.child("totalMenuCount");
       var avgRate = restaurantRef.child("rating");
+
+      restaurantRef.child("menus").child(menuObj.key).set(true);
 
       sumRef.transaction(function(currentPrice){
         console.log("Adding currentPrice");

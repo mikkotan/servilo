@@ -39,7 +39,7 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
     var userRfe = firebase.database().ref().child('users');
     $scope.userRfeObj = $firebaseArray(userRfe);
 
-
+  $scope.getRestaurantStatus = Restaurant.getRestaurantStatus;
 
   if($state.is("tabs.viewRestaurant")){
   $scope.restaurant = Restaurant.get(id);
