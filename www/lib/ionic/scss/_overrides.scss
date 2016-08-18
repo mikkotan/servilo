@@ -1,0 +1,21 @@
+// custom overrides by us
+ul.rating li {
+  display: inline;
+  border: 0;
+  background: none;
+  padding: 5px 10px;
+}
+ul.rating li i {
+  font-size: 30px;
+}
+.tab-item.activated,
+.tab-item.active,
+.tab-item.tab-item-active {
+  color: #ef473a;
+}
+.angular-google-map-container {
+  height: 375px;
+}
+.angular-google-map {
+  height: 375px;
+}

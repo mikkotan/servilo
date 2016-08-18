@@ -15,28 +15,6 @@ $royal:                           #886aea !default;
 $dark:                            #444 !default;
 */
 
-
-ul.rating li {
-  display: inline;
-  border: 0px;
-  background: none;
-  padding: 5px 10px;
-}
-ul.rating li i {
-  font-size: 30px;
-}
-.angular-google-map-container {
-  height: 375px;
-  position: absolute;
-}
-.angular-google-map {
-  height: 375px;
-  position: absolute;
-}
-
-.tab-item.tab-item-active, .tab-item.active, .tab-item.activated {
-    color:  #ef473a;
-}
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/fonts" !default;
 
