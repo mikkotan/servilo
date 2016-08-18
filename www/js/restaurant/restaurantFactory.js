@@ -1,5 +1,5 @@
-app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "User",
-  function($firebaseAuth , $firebaseArray , $firebaseObject, User){
+app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "User", "MenusWithAvg",
+  function($firebaseAuth , $firebaseArray , $firebaseObject, User, MenusWithAvg){
 
     var restaurants = firebase.database().ref().child("restaurants");
     var restaurantsArray = $firebaseArray(restaurants);
@@ -29,6 +29,12 @@ app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "U
         var res = restaurantsArray.$getRecord(restaurantId);
         var avg = res.sumPrice / res.totalMenuCount;
         return avg.toFixed(2);
+        // var menus = firebase.database().ref().child("menus").orderByChild("restaurant_id").equalTo(restaurantId);
+        // var menuAvg = new MenusWithAvg(menus);
+        // menuAvg.$loaded().then(function(){
+        //   console.log("menu avg is "+menuAvg.avg());
+        // })
+        // return "hello";
       },
       getAverageRating : function(restaurantId) {
         var res = restaurantsArray.$getRecord(restaurantId);

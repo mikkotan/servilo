@@ -1,11 +1,7 @@
-app.controller("MenuCtrl",["$scope","$firebaseAuth","$firebaseArray","$firebaseObject", "Menu","$stateParams","$state",
-  function($scope,$firebaseAuth,$firebaseArray,$firebaseObject, Menu , $stateParams , $state){
-
-
+app.controller("MenuCtrl",["$scope","$firebaseAuth","$firebaseArray","$firebaseObject", "Menu","$stateParams","$state", "$ionicModal", "$ionicListDelegate",
+  function($scope,$firebaseAuth,$firebaseArray,$firebaseObject, Menu , $stateParams , $state, $ionicModal, $ionicListDelegate){
 
   var restaurantId = $stateParams.restaurantId;
-
-
 
   $scope.menus = Menu.all();
   $scope.getRestaurant = Menu.getRestaurant;
@@ -17,22 +13,14 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth","$firebaseArray","$firebaseO
     return  restid;
   }
 
-
-
   $scope.addMenu = function(menu){
-    console.log("wew")
     $scope.menus.$add({
       name : menu.name,
       price : menu.price,
-      restaurant_id : restaurantId
+      restaurant_id : restaurantId,
+      prevPrice : menu.price
     }).then(function(menuObj){
-      console.log("calling callback");
-      console.log("KEY"+menuObj.key);
-      // console.log(menuObj.price);
-      // console.log(menuObj.$id);
       var restaurantRef = firebase.database().ref().child("restaurants").child(restaurantId);
-      // var menusRef = restaurantRef.child("menus").child(menu.id);
-      // console.log("MENUS REF"+menusRef);
       var sumRef = restaurantRef.child("sumPrice");
       var menuCount = restaurantRef.child("totalMenuCount");
       var avgRate = restaurantRef.child("rating");
@@ -53,10 +41,60 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth","$firebaseArray","$firebaseO
     $state.go('tabs.restaurant');
   }
 
+  $scope.deleteMenu = function(menu) {
+    console.log("deleted click"+ menu.name);
+    console.log("price"+menu.price);
+    var resSumRef = firebase.database().ref().child("restaurants").child(menu.restaurant_id).child("sumPrice");
+    var resTotalMenuCountRef = firebase.database().ref().child("restaurants").child(menu.restaurant_id).child("totalMenuCount");
+    resSumRef.transaction(function(currentSum){
+      return currentSum - menu.price;
+    });
+
+    resTotalMenuCountRef.transaction(function(currentCount){
+      return currentCount - 1;
+    });
+
+
+    $scope.restaurantMenus.$remove(menu);
+  }
+
+  $scope.editMenu = function(menu) {
+    console.log("editButtonModal clicked");
+    $scope.menu = menu;
+    $scope.menuEditModal.show();
+  }
+
+  $scope.updateMenu = function(menu, $state) {
+    var menuRef = firebase.database().ref().child("menus").child(menu.$id);
+    menuRef.update({
+      name : menu.name,
+      price : menu.price
+    }).then(function() {
+      var resSumRef = firebase.database().ref().child("restaurants").child(menu.restaurant_id).child("sumPrice");
+      var prevPriceRef = menuRef.child("prevPrice");
+
+      resSumRef.transaction(function(currentSum){
+        return currentSum - menu.prevPrice + menu.price;
+      })
+
+      prevPriceRef.transaction(function(currentPrevPrice){
+        return menu.price;
+      })
+    });
+
+    $scope.menuEditModal.hide();
+    $ionicListDelegate.closeOptionButtons();
+  }
+
+  $ionicModal.fromTemplateUrl('templates/edit-menu.html', function(modalEditMenu) {
+    $scope.menuEditModal = modalEditMenu;
+  }, {
+    scope: $scope
+  });
+
 
   if($state.is("tabs.viewRestaurantMenus")){
     $scope.restaurantMenus = Menu.getRestaurantMenus(restaurantId);
-        // console.log("34"+Menu.getRestaurant(restaurantId));
   }
 
 }]);

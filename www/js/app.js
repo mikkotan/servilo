@@ -35,10 +35,11 @@ app.config(function($stateProvider, $urlRouterProvider) {
   var config = {
     apiKey: "AIzaSyA9E-lSM2WKmonVkHCShv_ErYuvobxgb40",
     authDomain: "jepsrestaurantdev.firebaseapp.com",
-    databaseURL: "https://jepsrestaurantdev.firebaseio.com/",
-    storageBucket: "gs://jepsrestaurantdev.appspot.com"
+    databaseURL: "https://jepsrestaurantdev.firebaseio.com",
+    storageBucket: "jepsrestaurantdev.appspot.com",
   };
   firebase.initializeApp(config);
+  $urlRouterProvider.otherwise("/home");
 
   $stateProvider
     .state('tabs', {
