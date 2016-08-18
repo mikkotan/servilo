@@ -5,7 +5,7 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
   ionicMaterialInk.displayEffect();
 
     User.setOnline();
-    
+
     $scope.rating = {
       rate : 0,
       max: 5
