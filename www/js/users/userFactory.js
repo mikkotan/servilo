@@ -1,4 +1,3 @@
-
 app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserFactory",
   function($firebaseObject ,$firebaseAuth, $firebaseArray , UserFactory){
 
@@ -26,9 +25,6 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
           con.onDisconnect().remove();
         }
       })
-
-
     }
-
   };
 }]);

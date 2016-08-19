@@ -162,5 +162,5 @@ app.config(function($stateProvider, $urlRouterProvider) {
         }
       }
     });
-   $urlRouterProvider.otherwise("/tab/home");
+  $urlRouterProvider.otherwise("/tab/home");
 })

@@ -15,6 +15,5 @@ app.factory("Home",["$firebaseObject" , "$firebaseAuth","$firebaseArray",
     getUserName : function(uid){
       return usersObj.$getRecord(uid).firstName + " " + usersObj.$getRecord(uid).lastName;
     }
-
   }
 }])

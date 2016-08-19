@@ -1,27 +1,27 @@
 app.controller("LoginCtrl",["$scope" , "$firebaseArray", "$firebaseAuth", "$firebaseObject", "Auth", "AppUser", "ionicMaterialInk", "ionicMaterialMotion","User", "$state",
 function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth , AppUser, ionicMaterialInk, ionicMaterialMotion,User,$state){
 
-ionicMaterialInk.displayEffect();
+  ionicMaterialInk.displayEffect();
 
-$scope.auth = Auth;
+  $scope.auth = Auth;
   $scope.login = function(user){
     console.log(user.password);
-      Auth.$signInWithEmailAndPassword(user.email, user.password).then(function(firebase){
-          console.log("----------------------------")
-          console.log(firebase.uid);
-          user.password = "";
-          user.email = ""
-          $state.go("tabs.home")
-        }).catch(function(err){
-          console.log(err)
-        });
+    Auth.$signInWithEmailAndPassword(user.email, user.password).then(function(firebase){
+      console.log("----------------------------")
+      console.log(firebase.uid);
+      user.password = "";
+      user.email = ""
+      $state.go("tabs.home")
+    }).catch(function(err){
+      console.log(err)
+    });
   };
 
   Auth.$onAuthStateChanged(function(firebaseUser){
     if(firebaseUser){
       $scope.firebaseUser = User.authFullName();
     }
-   })
+  })
 
   $scope.signOut = function() {
     Auth.$signOut();
@@ -31,6 +31,4 @@ $scope.auth = Auth;
 // firebase.database().ref('users').then(function(users){
 //   console.log(users);
 // });
-//
-//
 }]);

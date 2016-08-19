@@ -92,7 +92,6 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth","$firebaseArray","$firebaseO
     scope: $scope
   });
 
-
   if($state.is("tabs.viewRestaurantMenus")){
     $scope.restaurantMenus = Menu.getRestaurantMenus(restaurantId);
   }

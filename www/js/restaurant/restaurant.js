@@ -23,12 +23,12 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
   $scope.AppUser = User.auth();
 
   firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
-    console.log("User:"+user.uid);
-  } else {
-    console.log("NOT LOGGED IN");
-  }
-});
+    if (user) {
+      console.log("User:"+user.uid);
+    } else {
+      console.log("NOT LOGGED IN");
+    }
+  });
 
   $scope.addRestaurant = function(restaurant){
     $scope.pendingRestaurants.$add({
@@ -85,8 +85,8 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
     $scope.restaurantEditModal.show();
     $scope.marker.coords = {latitude: restaurant.latitude, longitude: restaurant.longitude};
     $scope.modalControl.refresh({
-          latitude: restaurant.latitude,
-          longitude: restaurant.longitude
+      latitude: restaurant.latitude,
+      longitude: restaurant.longitude
     });
   }
 
@@ -97,8 +97,8 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
   $scope.newRestaurant = function() {
     $scope.restaurantModal.show();
     $scope.modalControl.refresh({
-          latitude: 10.73016704689235,
-          longitude: 122.54616022109985
+      latitude: 10.73016704689235,
+      longitude: 122.54616022109985
     });
   };
 
@@ -114,20 +114,24 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
   }
 
   $scope.marker ={id: 0};
-  $scope.map = { center: {latitude: 10.73016704689235, longitude: 122.54616022109985 }, zoom: 14, options: {scrollwheel: false}, bounds: {},
-   events: {
-     click: function (map, eventName, originalEventArgs) {
-         var e = originalEventArgs[0];
-         var lat = e.latLng.lat(),lon = e.latLng.lng();
-         var m = {
-             id: Date.now(),
-             coords: {
-                 latitude: lat,
-                 longitude: lon
-             }
-         };
+  $scope.map = { 
+    center: { latitude: 10.73016704689235, longitude: 122.54616022109985 }, 
+    zoom: 14, options: {scrollwheel: false}, 
+    bounds: {},
+    events: {
+      click: function (map, eventName, originalEventArgs) {
+        var e = originalEventArgs[0];
+        var lat = e.latLng.lat(),lon = e.latLng.lng();
+        var m = {
+          id: Date.now(),
+          coords: {
+            latitude: lat,
+            longitude: lon
+          }
+        };
         $scope.marker = m;
         $scope.$apply();
-     }
-   }};
+      }
+    }
+  };
 }])

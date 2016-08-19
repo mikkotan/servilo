@@ -1,22 +1,17 @@
 <ion-view view-title="Menu">
   <ion-content class="padding">
-    <p>
-      <!-- <a class="button icon icon-right ion-chevron-right" href="#/tab/facts">Scientific Facts</a>
-      <button class="button button-icon" ng-click="newTask()">
-        Add new note<i class="icon ion-compose"></i> -->
-      </button>
-      <h3>Menus: </h3>
-      <ion-list>
-        <ion-item ng-repeat="menu in menus">
-            <a class="button icon icon-right ion-chevron-right" ui-sref="tabs.viewRestaurant({restaurantId:menu.restaurant_id})">{{menu.name}}</a>
-            <p>
-              P {{menu.price}}
-            </p>
-            <p>
-            {{getRestaurant(menu.restaurant_id)}}
-            </p>
-        </ion-item>
-      </ion-list>
-    </p>
+    </button>
+    <h3>Menus: </h3>
+    <ion-list>
+      <ion-item ng-repeat="menu in menus">
+        <a class="button icon icon-right ion-chevron-right" ui-sref="tabs.viewRestaurant({restaurantId:menu.restaurant_id})">{{menu.name}}</a>
+        <p>
+          P {{menu.price}}
+        </p>
+        <p>
+          {{getRestaurant(menu.restaurant_id)}}
+        </p>
+      </ion-item>
+    </ion-list>
   </ion-content>
 </ion-view>

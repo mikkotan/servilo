@@ -8,7 +8,6 @@ app.factory("MenusWithAvg", function($firebaseArray) {
         total += rec.price;
         count ++;
       });
-
       return total / count;
     }
   });

@@ -9,11 +9,9 @@
           <form ng-submit="login(user)" ng-hide = "firebaseUser">
             <div class="list">
                 <ion-md-input-cus placeholder="Username" highlight-color="balanced" type="text" ng-model="user.email"></ion-md-input-cus>
-                <!-- Username:<input type="text" ng-model="user.email"> -->
             </div>
             <div class="list">
                 <ion-md-input-cus placeholder="Password" highlight-color="energized" type="password" ng-model="user.password"></ion-md-input-cus>
-                <!-- Password:<input type="password"  ng-model="user.password"> -->
             </div>
             <div class="padding">
               <button type="submit" class="button button-block button-assertive ink">Login</button>
@@ -23,21 +21,17 @@
             <div class="list">
               <label class="item item-input">
                 hi , {{firebaseUser.getFullName()}}
-
-                <div>Started : {{firebaseUser.startedAt | date:'medium'}}</div>
+                <div> Started : {{firebaseUser.startedAt | date:'medium'}}</div>
               </label>
             </div>
             <div class="list">
               <label class="item item-input">
-             <button ng-click="signOut()">Sign Out</button>
-              </label>
-              <label class="item item-input">
-                <!-- {{authUser.firstName}} -->
+                <button ng-click="signOut()">Sign Out</button>
               </label>
             </div>
           </div>
-      </ion-item>
-  </div>
+        </ion-item>
+      </div>
     </ion-list>
   </ion-content>
 </ion-view>
