@@ -13,8 +13,8 @@
   //   })
 //   }
 // }])
-app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate", "Restaurant",
-  function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant){
+app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera",
+  function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera){
   $scope.modalControl = {};
   $scope.restaurants = Restaurant.all();
   $scope.pendingRestaurants = Restaurant.getPendingRestaurants();
@@ -30,6 +30,44 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
     }
   });
 
+  $scope.images = [];
+  // var hehe = firebase.database().ref().child('pictures');
+  // var syncArray = $firebaseArray(hehe);
+  // $scope.images = syncArray;
+  $scope.imageURL = "";
+  $scope.upload = function(index) {
+    var source = "";
+    switch(index) {
+      case 1:
+        source = Camera.PictureSourceType.CAMERA;
+        break;
+      case 2:
+        source = Camera.PictureSourceType.PHOTOLIBRARY;
+        break;
+    }
+    var options = {
+      quality : 75,
+      destinationType : Camera.DestinationType.DATA_URL,
+      sourceType : source,
+      allowEdit : true,
+      encodingType: Camera.EncodingType.JPEG,
+      popoverOptions: CameraPopoverOptions,
+      targetWidth: 500,
+      targetHeight: 500,
+      saveToPhotoAlbum: false
+    };
+    $cordovaCamera.getPicture(options).then(function(imageData) {
+      $scope.imageURL = imageData;
+      // console.log(imageData);
+        // syncArray.$add({image: imageData}).then(function() {
+        //     alert("Image has been uploaded");
+        // });
+
+    }, function(error) {
+        console.error(error);
+    });
+  }
+
   $scope.addRestaurant = function(restaurant){
     $scope.pendingRestaurants.$add({
       name: restaurant.name,
@@ -41,7 +79,8 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       totalMenuCount: 0,
       sumRating: 0,
       totalRatingCount: 0,
-      avgRate: 0
+      avgRate: 0,
+      image: $scope.imageURL
     })
 
     $scope.restaurantModal.hide();

@@ -2,6 +2,9 @@
   <ion-content class="padding">
     <a class="button button-light icon ion-home" href="#/tab/home"> Home</a>
     <h3>{{restaurant.name}}</h3>
+    <div>
+      <img ng-src="data:image/jpeg;base64,{{restaurant.image}}" width="100%"/>
+    </div>
     <p>{{getRestaurantStatus(restaurant.owner_id)}}</p>
     <ion-list>
       <ion-item>

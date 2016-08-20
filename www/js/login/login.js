@@ -5,8 +5,10 @@ function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth , AppUse
 
   $scope.auth = Auth;
   $scope.login = function(user){
+    alert("button clicked");
     console.log(user.password);
     Auth.$signInWithEmailAndPassword(user.email, user.password).then(function(firebase){
+      alert("success");
       console.log("----------------------------")
       console.log(firebase.uid);
       user.password = "";
@@ -14,6 +16,7 @@ function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth , AppUse
       $state.go("tabs.home")
     }).catch(function(err){
       console.log(err)
+      alert("error");
     });
   };
 
