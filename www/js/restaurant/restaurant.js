@@ -21,6 +21,17 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
   $scope.displayRestaurants = Restaurant.getAuthUserRestaurants();
   // $scope.getRestaurantPriceRange = Restaurant.getRestaurantPriceRange;
   $scope.AppUser = User.auth();
+  // var user = User.auth();
+  console.log($scope.AppUser)
+  // user.$loaded().then(function() {
+  //   if(user.displayName == undefined) {
+  //     $scope.AppUser = user.firstName + " " + user.lastName;
+  //   }
+  //   else {
+  //     console.log(user)
+  //     $scope.AppUser = user.displayName;
+  //   }
+  // })
 
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {

@@ -7,6 +7,7 @@
       <div class="card">
         <ion-item id="form-input" class="hehe">
           <form ng-submit="login(user)" ng-hide = "firebaseUser">
+          <a class="button" ng-click="fbLogin()">Facebook</a>
             <div class="list">
                 <ion-md-input-cus placeholder="Username" highlight-color="balanced" type="text" ng-model="user.email"></ion-md-input-cus>
             </div>
@@ -20,13 +21,14 @@
           <div ng-show="firebaseUser">
             <div class="list">
               <label class="item item-input">
-                hi , {{firebaseUser.getFullName()}}
-                <div> Started : {{firebaseUser.startedAt | date:'medium'}}</div>
+                Hi, <strong>{{firebaseUser }}</strong>
+                <img src="{{photoURL}}" ng-show="photoURL != undefined">
               </label>
+              <div>Started : {{firebaseUser.startedAt | date:'medium'}}</div>
             </div>
             <div class="list">
               <label class="item item-input">
-                <button ng-click="signOut()">Sign Out</button>
+                <button class="button" ng-click="signOut()">Sign Out</button>
               </label>
             </div>
           </div>
