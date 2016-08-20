@@ -7,21 +7,26 @@
       <div class="card">
         <ion-item id="form-input" class="hehe">
           <form ng-submit="login(user)" ng-hide = "firebaseUser">
-          <a class="button" ng-click="fbLogin()">Facebook</a>
             <div class="list">
                 <ion-md-input-cus placeholder="Username" highlight-color="balanced" type="text" ng-model="user.email"></ion-md-input-cus>
             </div>
             <div class="list">
                 <ion-md-input-cus placeholder="Password" highlight-color="energized" type="password" ng-model="user.password"></ion-md-input-cus>
             </div>
-            <div class="padding">
+            <div>
               <button type="submit" class="button button-block button-assertive ink">Login</button>
             </div>
           </form>
+          <div>
+            <button class="button button-block button-positive" ng-click="fbLogin()">
+              Login with Facebook
+            </button>
+          </div>
+
           <div ng-show="firebaseUser">
             <div class="list">
               <label class="item item-input">
-                Hi, <strong>{{firebaseUser }}</strong>
+                Hi, <strong>{{firebaseUser.firstName }} {{firebaseUser.lastName}}</strong>
                 <img src="{{photoURL}}" ng-show="photoURL != undefined">
               </label>
               <div>Started : {{firebaseUser.startedAt | date:'medium'}}</div>

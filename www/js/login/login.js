@@ -1,5 +1,5 @@
-app.controller("LoginCtrl",["$scope" , "$firebaseArray", "$firebaseAuth", "$firebaseObject", "Auth", "AppUser", "ionicMaterialInk", "ionicMaterialMotion","User", "$state", "$cordovaOauth",
-function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth , AppUser, ionicMaterialInk, ionicMaterialMotion,User,$state, $cordovaOauth){
+app.controller("LoginCtrl",["$scope" , "$firebaseArray", "$firebaseAuth", "$firebaseObject", "Auth", "AppUser", "ionicMaterialInk", "ionicMaterialMotion", "User", "$state", "$cordovaOauth",
+function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth, AppUser, ionicMaterialInk, ionicMaterialMotion, User, $state, $cordovaOauth){
 
   ionicMaterialInk.displayEffect();
 
@@ -64,13 +64,9 @@ function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth , AppUse
       }
       else { //providerId == password
         console.log("email provider");
-        var user = User.auth();
-        user.$loaded().then(function() {
-          $scope.firebaseUser = user.firstName + " " + user.lastName;
-          // console.log($scope.firebaseUser);
-        })
+        // var user = User.auth();
+        $scope.firebaseUser = User.auth();
       }
-      // console.log(firebaseUser)
     }
   })
 

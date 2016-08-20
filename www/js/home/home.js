@@ -2,8 +2,22 @@ app.controller('HomeTabCtrl', ["$scope","$ionicModal",
 "$firebaseArray","currentAuth", "Restaurant", "Home" ,"$stateParams", "$state", "User", "$firebaseObject", "ionicMaterialInk", "MenusWithAvg",
 function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $stateParams, $state, User, $firebaseObject, ionicMaterialInk, MenusWithAvg) {
   console.log('HomeTabCtrl');
-  User.setOnline();
+  var id = $stateParams.restaurantId;
+  var rootRef = firebase.database().ref(); 
+  var reviewRef = rootRef.child("restaurants/"+id).child("reviews");
+  var userRfe = rootRef.child("users");
 
+  $scope.reviews = $firebaseArray(reviewRef);
+  $scope.userRfeObj = $firebaseArray(userRfe);
+
+  $scope.restaurants = Restaurant.all();
+  $scope.getAvg = Restaurant.getAveragePrice;
+  $scope.getAvgRating = Restaurant.getAverageRating;
+  $scope.getRestaurantStatus = Restaurant.getRestaurantStatus;
+  $scope.getUserName = Home.getUserName;
+
+
+  User.setOnline();
   ionicMaterialInk.displayEffect();
 
   $scope.rating = {
@@ -16,9 +30,7 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
   });
 
   // $scope.RestaurantService = Restaurant;
-  $scope.restaurants = Restaurant.all();
-  $scope.getAvg = Restaurant.getAveragePrice;
-  $scope.getAvgRating = Restaurant.getAverageRating;
+
   // $scope.getAvg = function(restaurantId){
   //   var getRealAvg = 1;
   //   Restaurant.getAveragePrice(restaurantId).then(function(value){
@@ -42,15 +54,7 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
   // }
 
 
-  $scope.getUserName = Home.getUserName;
-  var id = $stateParams.restaurantId;
-  var reviewRef = firebase.database().ref("restaurants/"+id+"/reviews");
-  $scope.reviews = $firebaseArray(reviewRef);
 
-  var userRfe = firebase.database().ref().child('users');
-  $scope.userRfeObj = $firebaseArray(userRfe);
-
-  $scope.getRestaurantStatus = Restaurant.getRestaurantStatus;
 
   if($state.is("tabs.viewRestaurant")){
   $scope.restaurant = Restaurant.get(id);
