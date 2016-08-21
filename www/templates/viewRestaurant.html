@@ -18,7 +18,7 @@
           <ui-gmap-marker coords="map.center" icon="marker.icon" idkey="marker.id"></ui-gmap-marker>
         </ui-gmap-google-map>
       </div>
-      <div>
+      <div ng-if="exists != true">
         <button ng-click="newReview()" class="button button-block button-balanced"><icon class="ion-plus"></icon> Write Review</button>
       </div>
     </ion-list>

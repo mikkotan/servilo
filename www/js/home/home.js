@@ -3,7 +3,7 @@ app.controller('HomeTabCtrl', ["$scope","$ionicModal",
 function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $stateParams, $state, User, $firebaseObject, ionicMaterialInk, MenusWithAvg) {
   console.log('HomeTabCtrl');
   var id = $stateParams.restaurantId;
-  var rootRef = firebase.database().ref(); 
+  var rootRef = firebase.database().ref();
   var reviewRef = rootRef.child("restaurants/"+id).child("reviews");
   var userRfe = rootRef.child("users");
 
@@ -29,6 +29,16 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
     console.log('New value: '+$scope.rating.rate);
   });
 
+  $scope.alreadyReviewed = $scope.reviews.$getRecord(User.auth().$id);
+
+  $scope.isAlreadyReviewed = function() {
+    reviewRef.child(User.auth().$id).once('value', function(snapshot) {
+      $scope.exists = (snapshot.val() !=null );
+      console.log("exists or not" + $scope.exists);
+    })
+  }
+  console.log("Reviewed or not? "+$scope.isAlreadyReviewed());
+  console.log("scope exists value "+$scope.exists);
   // $scope.RestaurantService = Restaurant;
 
   // $scope.getAvg = function(restaurantId){
@@ -62,17 +72,15 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
   }
 
   $scope.addReview = function(review) {
-    console.log("added review");
-    console.log("review rate:"+review.rating);
     var reviewRating = review.rating;
-    $scope.reviews.$add({
+    var reviewerRef = reviewRef.child(User.auth().$id);
+    reviewerRef.set({
       content: review.content,
       rating: review.rating,
       reviewer_id: User.auth().$id,
       startedAt: firebase.database.ServerValue.TIMESTAMP
     }).then(function(){
-      console.log("Calling callback review");
-      console.log("review rate after callback: "+reviewRating);
+      console.log("calling callback after add review");
       var res = firebase.database().ref().child("restaurants").child(id);
       var sumRating = res.child("sumRating");
       var totalRatingCount = res.child("totalRatingCount");
@@ -82,16 +90,19 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
       var bot = 0;
 
       sumRating.transaction(function(currentSum){
+        console.log("suming up");
         top = currentSum + reviewRating;
         return top;
       })
 
       totalRatingCount.transaction(function(currentCount){
+        console.log("count up");
         bot = currentCount + 1;
         return bot;
       })
 
       avgRating.transaction(function(currentAmount){
+        console.log("calculate avg");
         var avg = top/bot;
         return avg;
       })
@@ -100,10 +111,10 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
     review.content = '';
     review.rating = '';
     $scope.reviewModal.hide();
+    $scope.isAlreadyReviewed();
   }
 
   $scope.newReview = function() {
-    console.log("new review clicked");
     $scope.reviewModal.show();
   }
 
@@ -119,7 +130,6 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
 
   if($state.is("tabs.viewRestaurant")){
     $scope.restaurant = Restaurant.get(id);
-    console.log(id);
   }
 
   $scope.setMap = function(restaurant){
