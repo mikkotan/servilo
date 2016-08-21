@@ -22,7 +22,6 @@ app.controller('TodoCtrl', function($scope, $timeout, $ionicModal, Projects, $io
     $scope.selectProject(newProject, $scope.projects.length - 1);
   }
 
-
   // Load or initialize projects
   $scope.projects = Projects.all();
 
@@ -77,7 +76,6 @@ app.controller('TodoCtrl', function($scope, $timeout, $ionicModal, Projects, $io
   $scope.toggleProjects = function() {
     $ionicSideMenuDelegate.toggleLeft();
   };
-
 
   // Try to create the first project, make sure to defer
   // this by using $timeout so everything is initialized

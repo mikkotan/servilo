@@ -1,61 +1,69 @@
 app.controller('HomeTabCtrl', ["$scope","$ionicModal",
 "$firebaseArray","currentAuth", "Restaurant", "Home" ,"$stateParams", "$state", "User", "$firebaseObject", "ionicMaterialInk", "MenusWithAvg",
 function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $stateParams, $state, User, $firebaseObject, ionicMaterialInk, MenusWithAvg) {
-
   console.log('HomeTabCtrl');
-  User.setOnline();
+  var id = $stateParams.restaurantId;
+  var rootRef = firebase.database().ref();
+  var reviewRef = rootRef.child("restaurants/"+id).child("reviews");
+  var userRfe = rootRef.child("users");
 
-  ionicMaterialInk.displayEffect();
-  $scope.toggleLeft = function() {
-    $ionicSideMenuDelegate.toggleLeft();
-    console.log("nonon")
-};
+  $scope.reviews = $firebaseArray(reviewRef);
+  $scope.userRfeObj = $firebaseArray(userRfe);
 
-    $scope.rating = {
-      rate : 0,
-      max: 5
-    }
-
-    $scope.$watch('rating.rate', function() {
-      console.log('New value: '+$scope.rating.rate);
-    });
-
-    // $scope.RestaurantService = Restaurant;
-    $scope.restaurants = Restaurant.all();
-    $scope.getAvg = Restaurant.getAveragePrice;
-    $scope.getAvgRating = Restaurant.getAverageRating;
-    // $scope.getAvg = function(restaurantId){
-    //   var getRealAvg = 1;
-    //   Restaurant.getAveragePrice(restaurantId).then(function(value){
-    //     console.log("RETURN VALUE ++"+value);
-    //     // $scope.getAvg = value;
-    //     getRealAvg = value;
-    //     console.log("Scope get avg here "+ getRealAvg)
-    //     // return value;
-    //     return getRealAvg;
-    //   })
-    //
-    // }
-    // $scope.getAvgPrice = function(restaurantId) {
-    //   console.log("getting avg price");
-    //   var menusRef = firebase.database().ref().child("menus").orderByChild("restaurant_id").equalTo(restaurantId);
-    //   var menusArray = new MenusWithAvg(menusRef);
-    //   menusArray.$loaded().then(function(){
-    //     console.log("The average price of this restaurant is P" + menusArray.avg());
-    //     return "hello";
-    //   })
-    // }
-
-
-    $scope.getUserName = Home.getUserName;
-    var id = $stateParams.restaurantId;
-    var reviewRef = firebase.database().ref("restaurants/"+id+"/reviews");
-    $scope.reviews = $firebaseArray(reviewRef);
-
-    var userRfe = firebase.database().ref().child('users');
-    $scope.userRfeObj = $firebaseArray(userRfe);
-
+  $scope.restaurants = Restaurant.all();
+  $scope.getAvg = Restaurant.getAveragePrice;
+  $scope.getAvgRating = Restaurant.getAverageRating;
   $scope.getRestaurantStatus = Restaurant.getRestaurantStatus;
+  $scope.getUserName = Home.getUserName;
+
+
+  User.setOnline();
+  ionicMaterialInk.displayEffect();
+
+  $scope.rating = {
+    rate : 0,
+    max: 5
+  }
+
+  $scope.$watch('rating.rate', function() {
+    console.log('New value: '+$scope.rating.rate);
+  });
+
+  $scope.alreadyReviewed = $scope.reviews.$getRecord(User.auth().$id);
+
+  $scope.isAlreadyReviewed = function() {
+    reviewRef.child(User.auth().$id).once('value', function(snapshot) {
+      $scope.exists = (snapshot.val() !=null );
+      console.log("exists or not" + $scope.exists);
+    })
+  }
+  console.log("Reviewed or not? "+$scope.isAlreadyReviewed());
+  console.log("scope exists value "+$scope.exists);
+  // $scope.RestaurantService = Restaurant;
+
+  // $scope.getAvg = function(restaurantId){
+  //   var getRealAvg = 1;
+  //   Restaurant.getAveragePrice(restaurantId).then(function(value){
+  //     console.log("RETURN VALUE ++"+value);
+  //     // $scope.getAvg = value;
+  //     getRealAvg = value;
+  //     console.log("Scope get avg here "+ getRealAvg)
+  //     // return value;
+  //     return getRealAvg;
+  //   })
+  //
+  // }
+  // $scope.getAvgPrice = function(restaurantId) {
+  //   console.log("getting avg price");
+  //   var menusRef = firebase.database().ref().child("menus").orderByChild("restaurant_id").equalTo(restaurantId);
+  //   var menusArray = new MenusWithAvg(menusRef);
+  //   menusArray.$loaded().then(function(){
+  //     console.log("The average price of this restaurant is P" + menusArray.avg());
+  //     return "hello";
+  //   })
+  // }
+
+
 
   if($state.is("tabs.viewRestaurant")){
   $scope.restaurant = Restaurant.get(id);
@@ -63,17 +71,15 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
   }
 
   $scope.addReview = function(review) {
-    console.log("added review");
-    console.log("review rate:"+review.rating);
     var reviewRating = review.rating;
-    $scope.reviews.$add({
+    var reviewerRef = reviewRef.child(User.auth().$id);
+    reviewerRef.set({
       content: review.content,
       rating: review.rating,
       reviewer_id: User.auth().$id,
       startedAt: firebase.database.ServerValue.TIMESTAMP
     }).then(function(){
-      console.log("Calling callback review");
-      console.log("review rate after callback: "+reviewRating);
+      console.log("calling callback after add review");
       var res = firebase.database().ref().child("restaurants").child(id);
       var sumRating = res.child("sumRating");
       var totalRatingCount = res.child("totalRatingCount");
@@ -83,16 +89,19 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
       var bot = 0;
 
       sumRating.transaction(function(currentSum){
+        console.log("suming up");
         top = currentSum + reviewRating;
         return top;
       })
 
       totalRatingCount.transaction(function(currentCount){
+        console.log("count up");
         bot = currentCount + 1;
         return bot;
       })
 
       avgRating.transaction(function(currentAmount){
+        console.log("calculate avg");
         var avg = top/bot;
         return avg;
       })
@@ -101,10 +110,10 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
     review.content = '';
     review.rating = '';
     $scope.reviewModal.hide();
+    $scope.isAlreadyReviewed();
   }
 
   $scope.newReview = function() {
-    console.log("new review clicked");
     $scope.reviewModal.show();
   }
 
@@ -120,13 +129,11 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
 
   if($state.is("tabs.viewRestaurant")){
     $scope.restaurant = Restaurant.get(id);
-    console.log(id);
   }
 
   $scope.setMap = function(restaurant){
       $scope.map =  {center:{latitude: restaurant.latitude, longitude: restaurant.longitude}, zoom: 14, options: {scrollwheel: true}, bounds: {}};
   };
   $scope.marker ={id: 0};
-
 
 }]);

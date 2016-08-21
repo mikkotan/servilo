@@ -1,9 +1,8 @@
-
 app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserFactory",
   function($firebaseObject ,$firebaseAuth, $firebaseArray , UserFactory){
-
-  var users = firebase.database().ref().child("users")
-  var conRef = firebase.database().ref(".info/connected");
+  var rootRef = firebase.database().ref();
+  var users = rootRef.child("users")
+  var conRef = rootRef.child(".info/connected");
 
   return {
     auth : function(){
@@ -26,9 +25,6 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
           con.onDisconnect().remove();
         }
       })
-
-
     }
-
   };
 }]);

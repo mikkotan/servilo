@@ -11,6 +11,5 @@ app.factory("UserFactory",["$firebaseObject" , "$firebaseAuth","$firebaseArray",
         return this.firstName + " " + this.lastName;
       }
     })
-
   }
 }])
