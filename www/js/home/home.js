@@ -6,7 +6,10 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
   User.setOnline();
 
   ionicMaterialInk.displayEffect();
-
+  $scope.toggleLeft = function() {
+    $ionicSideMenuDelegate.toggleLeft();
+    console.log("nonon")
+};
 
     $scope.rating = {
       rate : 0,

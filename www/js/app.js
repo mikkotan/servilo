@@ -164,3 +164,12 @@ app.config(function($stateProvider, $urlRouterProvider) {
     });
    $urlRouterProvider.otherwise("/tab/home");
 })
+
+.controller('NavCtrl', function($scope, $ionicSideMenuDelegate) {
+  $scope.showMenu = function () {
+    $ionicSideMenuDelegate.toggleLeft();
+  };
+  $scope.showRightMenu = function () {
+    $ionicSideMenuDelegate.toggleRight();
+  };
+})
