@@ -21,6 +21,10 @@
       <div ng-if="exists != true">
         <button ng-click="newReview()" class="button button-block button-balanced"><icon class="ion-plus"></icon> Write Review</button>
       </div>
+      <div class="button-bar" ng-if="exists">
+        <button ng-click="editReview()" class="button button-balanced"><icon class="ion-plus"></icon> Edit Review</button>
+        <button ng-click="showConfirmDelete(review)" class="button button-assertive"><icon class="ion-android-delete"></icon> Delete Review</button>
+      </div>
     </ion-list>
     <div class="list">
       <div class="item item-divider">

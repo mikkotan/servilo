@@ -1,18 +1,3 @@
-// app.controller("RestaurantCtrl",["$scope","$firebaseArray","$firebaseAuth", "AppUser",
-// function($scope, $firebaseArray, $firebaseAuth,AppUser){
-
-  // var ref = firebase.database().ref().child('restaurants');
-  // $scope.restaurants = $firebaseArray(ref);
-  // $scope.AppUser = firebase.auth().currentUser.uid;
-  // console.log($scope.AppUser);
-  // console.log("INIT Restaurant");
-  // $scope.addRestaurant = function(restaurant){
-  //   $scope.restaurants.$add({
-  //     name: restaurant.name,
-  //     owner:
-  //   })
-//   }
-// }])
 app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera",
   function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera){
   $scope.modalControl = {};
@@ -164,9 +149,9 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
   }
 
   $scope.marker ={id: 0};
-  $scope.map = { 
-    center: { latitude: 10.73016704689235, longitude: 122.54616022109985 }, 
-    zoom: 14, options: {scrollwheel: false}, 
+  $scope.map = {
+    center: { latitude: 10.73016704689235, longitude: 122.54616022109985 },
+    zoom: 14, options: {scrollwheel: false},
     bounds: {},
     events: {
       click: function (map, eventName, originalEventArgs) {
