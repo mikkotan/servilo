@@ -12,6 +12,29 @@
   .hide-on-desktop {
     display: none!important
   }
+}
+
+ion-content {
+  background-color: #EEF1F6;
+}
+
+#form-input {
+  background-color: #fff;
+}
+
+ul.rating li {
+  display: inline;
+  border: 0px;
+  background: none;
+  padding: 5px 10px;
+}
+ul.rating li i {
+  font-size: 30px;
+}
+.angular-google-map-container {
+  height: 375px;
+}
+=======
 /*
 ion-content {
   background-color: #EEF1F6;
@@ -19,3 +42,4 @@ ion-content {
 /*#form-input {
   background-color: #fff;
 }*/
+>>>>>>> e0cb2ffd896dfd345604eecc8d9a0ea8009bf612

@@ -7,17 +7,12 @@ app.factory("Menu",["$firebaseAuth","$firebaseArray","$firebaseObject","Restaura
 
     return {
       all : function() {
-        console.log("ALL IS RUNNING++");
         return $firebaseArray(menus);
       },
       get : function(menuId) {
-        console.log("get IS RUNNING++");
         return $firebaseObject(menus.child(menuId))
       },
       getRestaurant : function(restaurantId){
-        console.log("GET RESTAURANT IS RUNNING++");
-        console.log(restaurantsArray.$getRecord(restaurantId));
-        // return $firebaseArray.$extend(Restaurant.get(restaurantId));
         return restaurantsArray.$getRecord(restaurantId).name;
       },
       getRestaurantMenus : function(restaurantId){

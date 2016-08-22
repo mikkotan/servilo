@@ -12,7 +12,7 @@
         <label class="item item-input">
           <input type="text" placeholder="Location of Restaurant" ng-model="restaurant.location">
         </label>
-        <ui-gmap-google-map zoom='map.zoom' events= 'map.events' center='map.center' options='map.options' bounds='map.bounds'>
+        <ui-gmap-google-map zoom='map.zoom' events= 'map.events' center='map.center' options='map.options' bounds='map.bounds' control="modalControl">
           <ui-gmap-marker coords="marker.coords" icon="marker.icon" idkey="marker.id"></ui-gmap-marker>
         </ui-gmap-google-map>
         <label class="item item-input">
@@ -24,8 +24,10 @@
       </div>
       <div class="padding">
         <button type="submit" class="button button-block button-positive">Add Restaurant</button>
-        <button class="button button-clear button-positive" ng-click="closeRestaurant()">Cancel</button>
       </div>
     </form>
+    <div class="padding">
+      <button class="button button-clear button-positive" ng-click="closeRestaurant()">Cancel</button>
+    </div>
   </ion-content>
 </div>

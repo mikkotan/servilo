@@ -1,11 +1,12 @@
 app.controller('HomeTabCtrl', ["$scope","$ionicModal",
-"$firebaseArray","currentAuth", "Restaurant", "Home" ,"$stateParams", "$state", "User", "$firebaseObject", "ionicMaterialInk",
-function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $stateParams, $state, User, $firebaseObject, ionicMaterialInk) {
+"$firebaseArray","currentAuth", "Restaurant", "Home" ,"$stateParams", "$state", "User", "$firebaseObject", "ionicMaterialInk", "MenusWithAvg",
+function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $stateParams, $state, User, $firebaseObject, ionicMaterialInk, MenusWithAvg) {
+
+  console.log('HomeTabCtrl');
+  
+  User.setOnline();
 
   ionicMaterialInk.displayEffect();
-
-    User.setOnline();
-
     $scope.rating = {
       rate : 0,
       max: 5
@@ -30,6 +31,15 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
     //     return getRealAvg;
     //   })
     //
+    // }
+    // $scope.getAvgPrice = function(restaurantId) {
+    //   console.log("getting avg price");
+    //   var menusRef = firebase.database().ref().child("menus").orderByChild("restaurant_id").equalTo(restaurantId);
+    //   var menusArray = new MenusWithAvg(menusRef);
+    //   menusArray.$loaded().then(function(){
+    //     console.log("The average price of this restaurant is P" + menusArray.avg());
+    //     return "hello";
+    //   })
     // }
 
 

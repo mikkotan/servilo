@@ -13,7 +13,7 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
       return $firebaseArray(users);
     },
     authFullName : function(){
-      return new UserFactory.object(users.child(firebase.auth().currentUser.uid))
+      return new UserFactory.object(users.child(firebase.auth().currentUser.uid));
     },
     register : function(userId){
       return $firebaseArray(users.child(userId));

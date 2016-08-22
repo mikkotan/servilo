@@ -1,9 +1,11 @@
 app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "User","RestaurantFactory",
   function($firebaseAuth , $firebaseArray , $firebaseObject, User,RestaurantFactory){
 
+
     var restaurants = firebase.database().ref().child("restaurants");
     var restaurantsArray = $firebaseArray(restaurants);
     var pendingRestaurants = firebase.database().ref().child("pending");
+    var userRestaurantsChildArray = $firebaseArray(firebase.database().ref().child('users').child(User.auth().$id).child('restaurants'));
 
     var users = firebase.database().ref().child("users");
     var usersArray = $firebaseArray(users);
@@ -21,12 +23,13 @@ app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "U
       getPendingRestaurants : function() {
           return $firebaseArray(pendingRestaurants);
       },
+      getUserRestaurantChild : function() {
+        return userRestaurantsChildArray;
+      },
       getAveragePrice : function(restaurantId) {
         var res = restaurantsArray.$getRecord(restaurantId);
         var avg = res.sumPrice / res.totalMenuCount;
         return avg.toFixed(2);
-        // var res = restaurants.child(restaurantId)
-        // return RestaurantFactory.getValue(res);
       },
       getAverageRating : function(restaurantId) {
         var res = restaurantsArray.$getRecord(restaurantId);
@@ -52,9 +55,6 @@ app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "U
       //       count++;
       //     })
       //     return sumPrice/count;
-      //   })
-      //   .catch(function(error){
-      //     console.log("ERROR HERE"+ error);
       //   })
       //
       //
