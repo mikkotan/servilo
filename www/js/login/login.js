@@ -1,14 +1,14 @@
-app.controller("LoginCtrl",["$scope" , "$firebaseArray", "$firebaseAuth", "$firebaseObject", "Auth", "AppUser", "ionicMaterialInk", "ionicMaterialMotion", "User", "$state", "$cordovaOauth",
-function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth, AppUser, ionicMaterialInk, ionicMaterialMotion, User, $state, $cordovaOauth){
+app.controller("LoginCtrl",["$scope" , "$firebaseArray", "$firebaseAuth", "$firebaseObject", "Auth", "AppUser", "ionicMaterialInk", "ionicMaterialMotion", "User", "$state", "$cordovaOauth", "$ionicLoading",
+function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth, AppUser, ionicMaterialInk, ionicMaterialMotion, User, $state, $cordovaOauth, $ionicLoading){
 
   ionicMaterialInk.displayEffect();
 
   $scope.auth = Auth;
   $scope.login = function(user){
-    alert("button clicked");
     console.log(user.password);
+    $ionicLoading.show();
     Auth.$signInWithEmailAndPassword(user.email, user.password).then(function(firebase){
-      alert("success");
+      $ionicLoading.hide();
       console.log("----------------------------")
       console.log(firebase.uid);
       user.password = "";
@@ -16,7 +16,6 @@ function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth, AppUser
       $state.go("tabs.home")
     }).catch(function(err){
       console.log(err)
-      alert("error");
     });
   };
   $scope.fbLogin = function() {
@@ -60,11 +59,13 @@ function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth, AppUser
         console.log("facebook provider");
         $scope.firebaseUser = firebaseUser.displayName;
         $scope.photoURL = firebaseUser.providerData[0].photoURL;
-        // console.log($scope.photoURL)
       }
       else { //providerId == password
         console.log("email provider");
         // var user = User.auth();
+        // user.$loaded().then(function() {
+        //   $scope.firebaseUser = user.firstName + " " + user.lastName;
+        // })
         $scope.firebaseUser = User.auth();
       }
     }
