@@ -83,6 +83,8 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
     $scope.pendingRestaurants.$add({
       name: restaurant.name,
       location: restaurant.location,
+      latitude: $scope.marker.coords.latitude,
+      longitude: $scope.marker.coords.longitude,
       type: restaurant.type,
       cuisine: restaurant.cuisine,
       owner_id: User.auth().$id,
@@ -164,9 +166,9 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
   }
 
   $scope.marker ={id: 0};
-  $scope.map = { 
-    center: { latitude: 10.73016704689235, longitude: 122.54616022109985 }, 
-    zoom: 14, options: {scrollwheel: false}, 
+  $scope.map = {
+    center: { latitude: 10.73016704689235, longitude: 122.54616022109985 },
+    zoom: 14, options: {scrollwheel: false},
     bounds: {},
     events: {
       click: function (map, eventName, originalEventArgs) {
