@@ -65,7 +65,6 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
 
 
 
-
   if($state.is("tabs.viewRestaurant")){
   $scope.restaurant = Restaurant.get(id);
   console.log(id)
