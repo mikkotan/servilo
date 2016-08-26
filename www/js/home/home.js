@@ -15,6 +15,8 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
   $scope.getAvgRating = Restaurant.getAverageRating;
   $scope.getRestaurantStatus = Restaurant.getRestaurantStatus;
   $scope.getUserName = Home.getUserName;
+  $scope.openRestaurant = Restaurant.getRestaurantOpenStatus;
+
 
 
   User.setOnline();

@@ -6,6 +6,7 @@
       <img ng-src="data:image/jpeg;base64,{{restaurant.image}}" width="100%"/>
     </div>
     <p>{{getRestaurantStatus(restaurant.owner_id)}}</p>
+    <p>Restaurant is: {{openRestaurant(restaurant.$id)}}</p>
     <ion-list>
       <ion-item>
           Cuisine: {{restaurant.cuisine}}

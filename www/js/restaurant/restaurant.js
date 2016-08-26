@@ -4,8 +4,15 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
   $scope.restaurants = Restaurant.all();
   $scope.pendingRestaurants = Restaurant.getPendingRestaurants();
   $scope.displayRestaurants = Restaurant.getAuthUserRestaurants();
+  $scope.openRestaurant = Restaurant.getRestaurantOpenStatus;
   // $scope.getRestaurantPriceRange = Restaurant.getRestaurantPriceRange;
   $scope.AppUser = User.auth();
+  $scope.restaurant = {
+    openTime : new Date()
+  }
+  $scope.$watch('openTime', function() {
+    console.log('New value: '+$scope.openTime);
+  });
   // var user = User.auth();
   console.log($scope.AppUser)
   // user.$loaded().then(function() {
@@ -78,7 +85,9 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       sumRating: 0,
       totalRatingCount: 0,
       avgRate: 0,
-      image: $scope.imageURL
+      image: $scope.imageURL,
+      openTime: restaurant.openTime.getTime(),
+      closeTime: restaurant.closeTime.getTime()
     })
 
     $scope.restaurantModal.hide();
