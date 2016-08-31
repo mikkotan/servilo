@@ -17,6 +17,10 @@
       <div ng-if='restaurant.latitude != null && restaurant.longitude != null' ng-init= 'setMap(restaurant)'>
         <ui-gmap-google-map zoom='map.zoom' center="map.center" options='map.options' bounds='map.bounds'>
           <ui-gmap-marker coords="map.center" icon="marker.icon" idkey="marker.id"></ui-gmap-marker>
+          <ui-gmap-map-control position="top-right">
+              <button class="btn btn-sm btn-primary" ng-click="showPath(restaurant)" >Show Driving Path</button>
+          </ui-gmap-map-control>
+          <ui-gmap-polylines models="direction" path="'paths'" stroke="'stroke'"></ui-gmap-polylines>
         </ui-gmap-google-map>
       </div>
       <div ng-if="exists != true">

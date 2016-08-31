@@ -1,6 +1,6 @@
 app.controller('HomeTabCtrl', ["$scope","$ionicModal",
-"$firebaseArray","currentAuth", "Restaurant", "Home" ,"$stateParams", "$state", "User", "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup",
-function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $stateParams, $state, User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup) {
+"$firebaseArray","currentAuth", "Restaurant", "Home" ,"$stateParams", "$state", "User", "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation",
+function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $stateParams, $state, User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation) {
   console.log('HomeTabCtrl');
   var id = $stateParams.restaurantId;
   var rootRef = firebase.database().ref();
@@ -237,11 +237,41 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
       }
     })
   }
-
+  $scope.direction =[];
+  $scope.currentLocation ={};
+  $scope.marker ={id: 0};
+  var options = {timeout: 10000, enableHighAccuracy: true};
+  $cordovaGeolocation.getCurrentPosition(options).then(function(position){
+    $scope.currentLocation = {lat: position.coords.latitude,lng: position.coords.longitude};
+  });
 
   $scope.setMap = function(restaurant){
       $scope.map =  {center:{latitude: restaurant.latitude, longitude: restaurant.longitude}, zoom: 14, options: {scrollwheel: true}, bounds: {}};
   };
-  $scope.marker ={id: 0};
+
+  $scope.showPath =  function(restaurant){
+    var direction = new google.maps.DirectionsService();
+
+    var request = {
+      origin: {lat: $scope.currentLocation.lat,lng: $scope.currentLocation.lng},
+      destination: {lat: restaurant.latitude, lng: restaurant.longitude},
+      travelMode: google.maps.DirectionsTravelMode['DRIVING'],
+      optimizeWaypoints: true
+    };
+    direction.route(request, function(response, status){
+      var steps = response.routes[0].legs[0].steps;
+      for(i=0; i<steps.length; i++){
+        var strokeColor = '#049ce5';
+        if((i%2)==0){
+          strokeColor = '#FF9E00';
+        }
+        $scope.direction.push({id:i,paths:steps[i].path, stroke: {
+            color: strokeColor,
+            weight: 5
+        }});
+        }
+    });
+
+  };
 
 }]);
