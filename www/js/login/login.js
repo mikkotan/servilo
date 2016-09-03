@@ -1,9 +1,10 @@
-app.controller("LoginCtrl",["$scope" , "$firebaseArray", "$firebaseAuth", "$firebaseObject", "Auth", "AppUser", "ionicMaterialInk", "ionicMaterialMotion", "User", "$state", "$cordovaOauth", "$ionicLoading",
-function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth, AppUser, ionicMaterialInk, ionicMaterialMotion, User, $state, $cordovaOauth, $ionicLoading){
+app.controller("LoginCtrl",["$scope" , "$firebaseArray", "$firebaseAuth", "$firebaseObject", "Auth", "AppUser", "ionicMaterialInk", "ionicMaterialMotion", "User", "$state", "$cordovaOauth", "$ionicLoading", "$ionicModal",
+function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth, AppUser, ionicMaterialInk, ionicMaterialMotion, User, $state, $cordovaOauth, $ionicLoading, $ionicModal){
 
   ionicMaterialInk.displayEffect();
 
   $scope.auth = Auth;
+
   $scope.login = function(user){
     console.log(user.password);
     $ionicLoading.show();
@@ -11,10 +12,12 @@ function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth, AppUser
       $ionicLoading.hide();
       console.log("----------------------------")
       console.log(firebase.uid);
+      console.log(firebase.email);
       user.password = "";
       user.email = ""
       $state.go("tabs.home")
     }).catch(function(err){
+      $ionicLoading.hide();
       console.log(err)
     });
   };
@@ -62,10 +65,6 @@ function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth, AppUser
       }
       else { //providerId == password
         console.log("email provider");
-        // var user = User.auth();
-        // user.$loaded().then(function() {
-        //   $scope.firebaseUser = user.firstName + " " + user.lastName;
-        // })
         $scope.firebaseUser = User.auth();
       }
     }
@@ -73,10 +72,64 @@ function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth, AppUser
 
   $scope.signOut = function() {
     Auth.$signOut();
+    User.setOnline();
     console.log("logged out..");
     location.reload();
   }
-// firebase.database().ref('users').then(function(users){
-//   console.log(users);
-// });
+
+  $scope.editProfile = function() {
+    $scope.editProfileModal.show();
+  }
+
+  $scope.updateProfile = function(firebaseUser) {
+    var userRef = firebase.database().ref().child('users').child(User.auth().$id);
+    userRef.update({
+      firstName: firebaseUser.firstName,
+      lastName: firebaseUser.lastName
+    })
+    $scope.editProfileModal.hide();
+  }
+
+  $scope.closeEditProfile = function() {
+    $scope.editProfileModal.hide();
+  }
+
+  $scope.closeChangePassword = function() {
+    $scope.changePassword.hide();
+  }
+
+  $scope.changePasswordShow = function() {
+    $scope.changePassword.show();
+  }
+
+  $scope.updateNewPassword = function(firebaseUser) {
+    var user = firebase.auth().currentUser;
+    var email = user.email;
+    var password = firebaseUser.oldPassword;
+    var credential = firebase.auth.EmailAuthProvider.credential(email,password);
+
+    user.reauthenticate(credential).then(function(){
+      $ionicLoading.show();
+      user.updatePassword(firebaseUser.newPassword).then(function() {
+        $ionicLoading.hide();
+        $scope.changePassword.hide();
+      },function() {
+        console.log("update password error")
+      })
+    },function(){
+      console.log("reauth failed");
+    })
+  }
+
+  $ionicModal.fromTemplateUrl('templates/edit-profile.html', function(modalEditProfile) {
+    $scope.editProfileModal = modalEditProfile;
+  }, {
+    scope: $scope
+  });
+
+  $ionicModal.fromTemplateUrl('templates/change-password.html', function(modalChangePassword) {
+    $scope.changePassword = modalChangePassword;
+  }, {
+    scope: $scope
+  });
 }]);

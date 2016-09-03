@@ -4,8 +4,6 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
   $scope.restaurants = Restaurant.all();
   $scope.pendingRestaurants = Restaurant.getPendingRestaurants();
   $scope.displayRestaurants = Restaurant.getAuthUserRestaurants();
-  $scope.openRestaurant = Restaurant.getRestaurantOpenStatus;
-  // $scope.getRestaurantPriceRange = Restaurant.getRestaurantPriceRange;
   $scope.AppUser = User.auth();
   $scope.restaurant = {
     openTime : new Date()
@@ -13,7 +11,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
   $scope.$watch('openTime', function() {
     console.log('New value: '+$scope.openTime);
   });
-  // var user = User.auth();
+
   console.log($scope.AppUser)
   // user.$loaded().then(function() {
   //   if(user.displayName == undefined) {
@@ -125,7 +123,6 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
   });
 
   $scope.editRestaurant = function(restaurant){
-    console.log("HELLO WORLD EDIT CLICKED");
     $scope.showMap = false;
     $scope.restaurant = restaurant;
     $scope.restaurantEditModal.show();
@@ -154,7 +151,6 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
 
   $scope.approveRestaurant = function(restaurant) {
     $scope.pendingRestaurants.$remove(restaurant).then(function() {
-      console.log("try rest own id "+restaurant.owner_id);
       $scope.restaurants.$add(restaurant);
     })
   }

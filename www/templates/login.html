@@ -29,6 +29,8 @@
                 Hi, <strong>{{firebaseUser.firstName }} {{firebaseUser.lastName}}</strong>
                 <img src="{{photoURL}}" ng-show="photoURL != undefined">
               </label>
+              <button class="button button-balanced" ng-click="editProfile()">Edit Profile</button>
+              <button class="button button-balanced" ng-click="changePasswordShow()" >Change Password</button>
               <div>Started : {{firebaseUser.startedAt | date:'medium'}}</div>
             </div>
             <div class="list">

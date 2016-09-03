@@ -7,6 +7,12 @@
     </div>
     <p>{{getRestaurantStatus(restaurant.owner_id)}}</p>
     <p>Restaurant is: {{openRestaurant(restaurant.$id)}}</p>
+    <p ng-if="openRestaurant(restaurant.$id)==='Open'" style="color:green;">
+      Restaurant Hours: {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}
+    </p>
+    <p ng-if="openRestaurant(restaurant.$id)==='Closed'" style="color:red;">
+      Opens at {{ restaurant.openTime }}
+    </p>
     <ion-list>
       <ion-item>
           Cuisine: {{restaurant.cuisine}}
