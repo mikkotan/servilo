@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 var app = angular.module('todo', ['ionic', 'ionMdInput', 'ionic-material', 'firebase', 'ionic.rating', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker'])
 
-app.run(["$ionicPlatform","$rootScope", "$state",function($ionicPlatform , $rootScope , $state) {
+app.run(["$ionicPlatform","$rootScope", "$state", '$templateCache',function($ionicPlatform , $rootScope , $state, $templateCache) {
   $rootScope.$on("$stateChangeError" ,
     function(event , toState , toParams , fromState , fromParams , error){
       if(error === "AUTH_REQUIRED"){
@@ -13,7 +13,8 @@ app.run(["$ionicPlatform","$rootScope", "$state",function($ionicPlatform , $root
         $state.go("tabs.login")
       }
   })
-
+  
+  $templateCache.put('template.tpl.html', '');
   $ionicPlatform.ready(function() {
     if(window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
