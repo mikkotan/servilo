@@ -1,5 +1,5 @@
 <ion-view view-title="ViewRestaurant">
-  <ion-content class="padding">
+  <ion-content class="padding" overflow-scroll="true">
     <a class="button button-light icon ion-home" href="#/tab/home"> Home</a>
     <h3>{{restaurant.name}}</h3>
     <div>
@@ -11,7 +11,7 @@
       Restaurant Hours: {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}
     </p>
     <p ng-if="openRestaurant(restaurant.$id)==='Closed'" style="color:red;">
-      Opens at {{ restaurant.openTime }}
+      Opens at {{ restaurant.openTime | date:'shortTime' }}
     </p>
     <ion-list>
       <ion-item>
@@ -24,7 +24,7 @@
         <ui-gmap-google-map zoom='map.zoom' center="map.center" options='map.options' bounds='map.bounds'>
           <ui-gmap-marker coords="map.center" icon="marker.icon" idkey="marker.id"></ui-gmap-marker>
           <ui-gmap-map-control position="top-right">
-              <button class="btn btn-sm btn-primary" ng-click="showPath(restaurant)" >Show Driving Path</button>
+              <button class="button button-small button-balanced" ng-click="showPath(restaurant)" >Show Driving Path</button>
           </ui-gmap-map-control>
           <ui-gmap-polylines models="direction" path="'paths'" stroke="'stroke'"></ui-gmap-polylines>
         </ui-gmap-google-map>
