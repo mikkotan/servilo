@@ -3,6 +3,5 @@ app.controller("UsersCtrl" , ["$scope" , "Auth" , "$firebaseArray", "$firebaseAu
 
     $scope.authUser = User.auth();
     $scope.users = User.all();
-
     console.log("wew"+$scope.user)
 }]);

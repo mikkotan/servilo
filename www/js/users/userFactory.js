@@ -1,9 +1,8 @@
-
 app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserFactory",
   function($firebaseObject ,$firebaseAuth, $firebaseArray , UserFactory){
-
-  var users = firebase.database().ref().child("users")
-  var conRef = firebase.database().ref(".info/connected");
+  var rootRef = firebase.database().ref();
+  var users = rootRef.child("users")
+  var conRef = rootRef.child(".info/connected");
 
   return {
     auth : function(){
@@ -13,7 +12,14 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
       return $firebaseArray(users);
     },
     authFullName : function(){
-      return new UserFactory.object(users.child(firebase.auth().currentUser.uid));
+      var name = new UserFactory.object(users.child(firebase.auth().currentUser.uid));
+      name.$loaded().then(function() {
+        console.log(name.getFullName());
+        return name.getFullName()
+      }).catch(function(){
+        return "wait"
+      })
+
     },
     register : function(userId){
       return $firebaseArray(users.child(userId));
@@ -26,9 +32,6 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
           con.onDisconnect().remove();
         }
       })
-
-
     }
-
   };
 }]);

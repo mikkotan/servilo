@@ -4,8 +4,7 @@
       <ion-item>
            Login
       </ion-item>
-      <div class="card">
-        <ion-item id="form-input" class="hehe">
+        <ion-item id="form-input">
           <form ng-submit="login(user)" ng-hide = "firebaseUser">
             <div class="list">
                 <ion-md-input-cus placeholder="Username" highlight-color="balanced" type="text" ng-model="user.email"></ion-md-input-cus>
@@ -17,6 +16,7 @@
             </div>
             <div class="padding">
               <button type="submit" class="button button-block button-assertive ink">Login</button>
+              <button type="submit" class="button button-block button-assertive ink">Signup</button>
             </div>
           </form>
           <div ng-show="firebaseUser">
@@ -24,7 +24,7 @@
               <label class="item item-input">
                 hi , {{firebaseUser.getFullName()}}
 
-                <div>Started : {{firebaseUser.startedAt | date:'medium'}}</div>
+                <div> Started : {{firebaseUser.startedAt | date:'medium'}}</div>
               </label>
             </div>
             <div class="list">
@@ -37,7 +37,6 @@
             </div>
           </div>
       </ion-item>
-  </div>
     </ion-list>
   </ion-content>
 </ion-view>

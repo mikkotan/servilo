@@ -2,30 +2,26 @@
   <ion-content class="padding">
     <ion-list>
       <ion-item >
-          Sign Up
+        Sign Up
       </ion-item>
-        <ion-item id="form-input">
-          <form ng-submit="createUser(user)" ng-hide = "firebaseUser">
-            <div class="list">
-              <ion-md-input-cus placeholder="Username" highlight-color="balanced" type="text" ng-model="user.email"></ion-md-input-cus>
-              <!-- Username:<input type="text" ng-model="user.email"> -->
-            </div>
-            <div class="list">
-              <ion-md-input-cus placeholder="Password" highlight-color="energized" type="password" ng-model="user.password"></ion-md-input-cus>
-              <!-- Password:<input type="password"  ng-model="user.password"> -->
-            </div>
-            <div class="list">
-              <ion-md-input-cus placeholder="First Name" highlight-color="balanced" type="text" ng-model="user.firstName"></ion-md-input-cus>
-                <!-- First name:<input type="text"  ng-model="user.firstName"> -->
-            </div>
-            <div class="list">
-              <ion-md-input-cus placeholder="Last Name" highlight-color="balanced" type="text" ng-model="user.lastName"></ion-md-input-cus>
-              <!-- Last Name:<input type="text"  ng-model="user.lastName"> -->
-            </div>
-            <div class="padding">
-              <button type="submit" class="button button-block button-positive">signup</button>
-            </div>
-          </form>
+      <ion-item id="form-input">
+        <form ng-submit="createUser(user)" ng-hide = "firebaseUser">
+          <div class="list">
+            <ion-md-input-cus placeholder="Username" highlight-color="balanced" type="text" ng-model="user.email"></ion-md-input-cus>
+          </div>
+          <div class="list">
+            <ion-md-input-cus placeholder="Password" highlight-color="energized" type="password" ng-model="user.password"></ion-md-input-cus>
+          </div>
+          <div class="list">
+            <ion-md-input-cus placeholder="First Name" highlight-color="balanced" type="text" ng-model="user.firstName"></ion-md-input-cus>
+          </div>
+          <div class="list">
+            <ion-md-input-cus placeholder="Last Name" highlight-color="balanced" type="text" ng-model="user.lastName"></ion-md-input-cus>
+          </div>
+          <div class="padding">
+            <button type="submit" class="button button-block button-positive">signup</button>
+          </div>
+        </form>
       </ion-item>
     </ion-list>
   </ion-content>

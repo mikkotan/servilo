@@ -1,9 +1,19 @@
+
 app.controller('HomeTabCtrl', ["$scope","$ionicModal",
-"$firebaseArray","currentAuth", "Restaurant", "Home" ,"$stateParams", "$state", "User", "$firebaseObject", "ionicMaterialInk", "MenusWithAvg",
-function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $stateParams, $state, User, $firebaseObject, ionicMaterialInk, MenusWithAvg) {
+"$firebaseArray","currentAuth", "Restaurant", "Home" ,
+"$stateParams", "$state", "User", "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "Menu",
+function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $stateParams, $state, User, $firebaseObject,
+  ionicMaterialInk, MenusWithAvg , Menu) {
 
   console.log('HomeTabCtrl');
-  
+  console.log("aws");
+  $scope.men = Home.getRestaurantMenus;
+
+
+  $scope.searchMenu = function(){
+
+  }
+
   User.setOnline();
 
   ionicMaterialInk.displayEffect();

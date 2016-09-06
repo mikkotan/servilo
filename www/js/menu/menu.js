@@ -4,6 +4,8 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth","$firebaseArray","$firebaseO
   var restaurantId = $stateParams.restaurantId;
 
   $scope.menus = Menu.all();
+  console.log("aws");
+  console.log($scope.menus);
   $scope.getRestaurant = Menu.getRestaurant;
   // $scope.getRestaurantMenus = Menu.getRestaurantMenus(restaurantId);
 
@@ -91,7 +93,6 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth","$firebaseArray","$firebaseO
   }, {
     scope: $scope
   });
-
 
   if($state.is("tabs.viewRestaurantMenus")){
     $scope.restaurantMenus = Menu.getRestaurantMenus(restaurantId);
