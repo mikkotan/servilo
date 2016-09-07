@@ -1,3 +1,4 @@
+
 <ion-view view-title="Login">
   <ion-content class="padding">
     <ion-list>
@@ -22,6 +23,11 @@
               Login with Facebook
             </button>
           </div>
+          <div>
+            <button class="button button-block button-energized" ui-sref="signup">
+              Sign up
+            </button>
+          </div>
 
           <div ng-show="firebaseUser">
             <div class="list">
@@ -29,8 +35,6 @@
                 Hi, <strong>{{firebaseUser.firstName }} {{firebaseUser.lastName}}</strong>
                 <img src="{{photoURL}}" ng-show="photoURL != undefined">
               </label>
-              <button class="button button-balanced" ng-click="editProfile()">Edit Profile</button>
-              <button class="button button-balanced" ng-click="changePasswordShow()" >Change Password</button>
               <div>Started : {{firebaseUser.startedAt | date:'medium'}}</div>
             </div>
             <div class="list">

@@ -1,0 +1,60 @@
+/*custom*/
+@media only screen and (min-width: 320px) and (max-width: 640px), only screen and (max-width: 740px) and (-webkit-device-pixel-ratio: 2), only screen and (max-width: 740px) and (-webkit-device-pixel-ratio: 3) {
+  .hide-on-mobile,
+  .hom {
+    display: none !important; } }
+
+@media only screen and (min-width: 641px) and (max-width: 991px) {
+  .hide-on-tablet,
+  .hot {
+    display: none !important; } }
+
+@media only screen and (min-width: 991px) {
+  .hide-on-desktop {
+    display: none !important; } }
+
+ul.rating li {
+  display: inline;
+  border: 0;
+  background: none;
+  padding: 5px 10px; }
+
+ul.rating li i {
+  font-size: 30px; }
+
+.tab-item.activated,
+.tab-item.active,
+.tab-item.tab-item-active {
+  color: #ef473a; }
+
+.angular-google-map-container {
+  height: 375px; }
+
+.angular-google-map {
+  height: 375px; }
+
+.bar.bar-profile {
+  height: 170px; }
+
+.bar .profile {
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 0;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+  padding-top: 15px; }
+
+.profile .name {
+  color: #444;
+  margin-top: 10px !important;
+  margin-bottom: 10px !important; }
+
+.profile-picture {
+  border-radius: 50%; }
+
+.menu .has-header {
+  top: 169px; }

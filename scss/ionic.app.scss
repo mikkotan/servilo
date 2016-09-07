@@ -19,4 +19,9 @@ $dark:                            #444 !default;
 $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 // Include all of Ionic
+
+@import "www/lib/ionic-material/src/scss/index";
+@import "custom";
 @import "www/lib/ionic/scss/ionic";
+@import "www/lib/ion-md-input/css/ion-md-input";
+@import "www/lib/ion-datetime-picker/release/ion-datetime-picker.min";
