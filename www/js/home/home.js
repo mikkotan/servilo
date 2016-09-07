@@ -246,7 +246,7 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
   });
 
   $scope.setMap = function(restaurant){
-      $scope.map =  {center:{latitude: restaurant.latitude, longitude: restaurant.longitude}, zoom: 14, options: {scrollwheel: true}, bounds: {}};
+      $scope.map =  {center:{latitude: restaurant.latitude, longitude: restaurant.longitude}, zoom: 14, options: {scrollwheel: false}, bounds: {}};
   };
 
   $scope.showPath =  function(restaurant){
@@ -270,6 +270,7 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
             weight: 5
         }});
         }
+        $scope.$apply();
     });
     console.log("Scope direction values 2nd @@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+$scope.direction);
 

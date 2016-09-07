@@ -1,5 +1,5 @@
-app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera",
-  function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera){
+app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera","$cordovaGeolocation",
+  function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, $cordovaGeolocation){
   $scope.modalControl = {};
   $scope.restaurants = Restaurant.all();
   $scope.pendingRestaurants = Restaurant.getPendingRestaurants();
@@ -156,6 +156,11 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
   }
 
   $scope.marker ={id: 0};
+  var options = {timeout: 10000, enableHighAccuracy: true};
+  $cordovaGeolocation.getCurrentPosition(options).then(function(position){
+    $scope.currentLocation = {lat: position.coords.latitude,lng: position.coords.longitude};
+  });
+
   $scope.map = {
     center: { latitude: 10.73016704689235, longitude: 122.54616022109985 },
     zoom: 14, options: {scrollwheel: false},
@@ -176,4 +181,10 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       }
     }
   };
+  $scope.markLocation = function(){
+    $scope.marker = {id: Date.now(), coords:{latitude: $scope.currentLocation.lat,
+      longitude: $scope.currentLocation.lng}
+    };
+    $scope.map.center = { latitude: $scope.currentLocation.lat, longitude: $scope.currentLocation.lng };
+  }
 }])
