@@ -242,7 +242,7 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
   $scope.marker ={id: 0};
   var options = {timeout: 10000, enableHighAccuracy: true};
   $cordovaGeolocation.getCurrentPosition(options).then(function(position){
-    $scope.currentLocation = {lat: position.coords.latitude,lng: position.coords.longitude};
+    $scope.currentLocation = {latitude: position.coords.latitude,longitude: position.coords.longitude};
   });
 
   $scope.setMap = function(restaurant){
