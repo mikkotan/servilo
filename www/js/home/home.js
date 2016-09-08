@@ -86,7 +86,7 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
   }
 
   $scope.updateReview = function(review) {
-    var reviewerRef = reviewRef.child(User.auth().$id);
+    var reviewerRef = newReviewRef.child(review.$id);
     var reviewRating = review.rating;
     reviewerRef.update({
       content: review.content,
