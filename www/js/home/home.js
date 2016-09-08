@@ -253,7 +253,7 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
     var direction = new google.maps.DirectionsService();
     console.log("scope direction values first @@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+$scope.direction);
     var request = {
-      origin: {lat: $scope.currentLocation.lat,lng: $scope.currentLocation.lng},
+      origin: {lat:$scope.currentLocation.latitude,lng:$scope.currentLocation.longitude},
       destination: {lat: restaurant.latitude, lng: restaurant.longitude},
       travelMode: google.maps.DirectionsTravelMode['DRIVING'],
       optimizeWaypoints: true
