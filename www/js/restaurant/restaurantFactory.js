@@ -43,25 +43,25 @@ app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "U
       }
     },
     getRestaurantOpenStatus : function(restaurantId) {
-      console.log("open status method factory");
+      // console.log("open status method factory");
       var restaurant = restaurantsArray.$getRecord(restaurantId);
-      console.log("openTime: "+restaurant.openTime);
-      console.log("closeTime: "+restaurant.closeTime);
+      // console.log("openTime: "+restaurant.openTime);
+      // console.log("closeTime: "+restaurant.closeTime);
       var restaurantOpenTime = new Date(restaurant.openTime);
       var restaurantCloseTime = new Date(restaurant.closeTime);
       var openTime = new Date();
       openTime.setHours(restaurantOpenTime.getHours(), restaurantOpenTime.getMinutes());
-      console.log("openTime now"+openTime.getTime());
+      // console.log("openTime now"+openTime.getTime());
       var closeTime = new Date();
       closeTime.setHours(restaurantCloseTime.getHours(), restaurantCloseTime.getMinutes());
-      console.log("closeTime now"+closeTime.getTime());
+      // console.log("closeTime now"+closeTime.getTime());
       var now = new Date();
 
       if(restaurantOpenTime.getTime() > restaurantCloseTime.getTime()) {
         closeTime.setDate(closeTime.getDate() + 1);
       }
 
-      console.log("is now open? "+ (openTime.getTime() < now.getTime() && now.getTime() < closeTime.getTime()));
+      // console.log("is now open? "+ (openTime.getTime() < now.getTime() && now.getTime() < closeTime.getTime()));
       if(openTime.getTime() < now.getTime() && now.getTime() < closeTime.getTime()) {
         return "Open";
       }

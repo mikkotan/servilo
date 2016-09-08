@@ -8,9 +8,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
   $scope.restaurant = {
     openTime : new Date()
   }
-  $scope.$watch('openTime', function() {
-    console.log('New value: '+$scope.openTime);
-  });
+  
 
   console.log($scope.AppUser)
   // user.$loaded().then(function() {
@@ -85,7 +83,8 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       avgRate: 0,
       image: $scope.imageURL,
       openTime: restaurant.openTime.getTime(),
-      closeTime: restaurant.closeTime.getTime()
+      closeTime: restaurant.closeTime.getTime(),
+      timestamp: firebase.database.ServerValue.TIMESTAMP
     })
 
     $scope.restaurantModal.hide();
@@ -151,7 +150,17 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
 
   $scope.approveRestaurant = function(restaurant) {
     $scope.pendingRestaurants.$remove(restaurant).then(function() {
-      $scope.restaurants.$add(restaurant);
+      $scope.restaurants.$add(restaurant)
+        .then(function(restaurantObject) {
+          var resRef = firebase.database().ref().child('restaurants').child(restaurantObject.key).child('timestamp');
+          console.log("THIS IS THE FIRE BASE REF "+resRef);
+          resRef.transaction(function(currentTimestamp) {
+            var lolpe = firebase.database.ServerValue.TIMESTAMP;
+            console.log('hello old timestamp ' + currentTimestamp);
+            console.log('hello new timestamp ' + firebase.database.ServerValue.TIMESTAMP );
+            return lolpe;
+          })
+        });
     })
   }
 

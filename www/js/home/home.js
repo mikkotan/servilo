@@ -251,7 +251,6 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
 
   $scope.showPath =  function(restaurant){
     var direction = new google.maps.DirectionsService();
-    console.log("scope direction values first @@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+$scope.direction);
     var request = {
       origin: {lat: $scope.currentLocation.lat,lng: $scope.currentLocation.lng},
       destination: {lat: restaurant.latitude, lng: restaurant.longitude},
@@ -271,8 +270,6 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
         }});
         }
     });
-    console.log("Scope direction values 2nd @@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+$scope.direction);
-
   };
 
 }]);
