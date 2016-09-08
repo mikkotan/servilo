@@ -242,17 +242,17 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
   $scope.marker ={id: 0};
   var options = {timeout: 10000, enableHighAccuracy: true};
   $cordovaGeolocation.getCurrentPosition(options).then(function(position){
-    $scope.currentLocation = {lat: position.coords.latitude,lng: position.coords.longitude};
+    $scope.currentLocation = {latitude: position.coords.latitude,longitude: position.coords.longitude};
   });
 
   $scope.setMap = function(restaurant){
-      $scope.map =  {center:{latitude: restaurant.latitude, longitude: restaurant.longitude}, zoom: 14, options: {scrollwheel: true}, bounds: {}};
+      $scope.map =  {center:{latitude: restaurant.latitude, longitude: restaurant.longitude}, zoom: 14, options: {scrollwheel: false}, bounds: {}};
   };
 
   $scope.showPath =  function(restaurant){
     var direction = new google.maps.DirectionsService();
     var request = {
-      origin: {lat: $scope.currentLocation.lat,lng: $scope.currentLocation.lng},
+      origin: {lat:$scope.currentLocation.latitude,lng:$scope.currentLocation.longitude},
       destination: {lat: restaurant.latitude, lng: restaurant.longitude},
       travelMode: google.maps.DirectionsTravelMode['DRIVING'],
       optimizeWaypoints: true
@@ -269,6 +269,7 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
             weight: 5
         }});
         }
+        $scope.$apply();
     });
   };
 
