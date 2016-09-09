@@ -80,9 +80,6 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
     })
     review.content = '';
     review.rating = '';
-
-    console.log("add review hide modal");
-
   }
 
   $scope.updateReview = function(review) {
