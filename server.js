@@ -6,177 +6,88 @@ firebase.initializeApp({
 })
 
 var db = firebase.database();
-var ref = db.ref().child('restaurants');
-var reviewRef = db.ref().child('reviews');
-var serverRef = db.ref().child('server');
-var count = 0;
+console.log("Thesis Server Running...");
 
-var changed1 = 0;
-// ref.orderByChild('timestamp').startAt(Date.now()).on('child_added', function(snapshot, prevKey) {
-//   var data = snapshot.val();
-//   var newCallback = trialCallbackRef.push();
-//
-//   newCallback.set({
-//     name : data.name,
-//     location : data.location,
-//     owner_id : data.owner_id
-//   })
-// })
 
-// ref.on('child_changed', function(snapshot) {
-//   var snap = snapshot.val();
-//   console.log(snap);
-//   var withReviews = (snapv.reviews != null);
-//   console.log("withReviews: "+withReviews);
-// })
-//
-// trialCallbackRef.on('child_changed', function(snapshot) {
-//   console.log("IT HAS CHANGED");
-//   var loco = snapshot.val();
-//   console.log(loco);
-// })
-//
-// trialCallbackRef.on('child_removed', function(snapshot) {
-//   var snaps = snapshot.val();
-//   console.log("this id has been removed "+snaps.name);
-// })
-
-reviewRef.orderByChild('timestamp').startAt(Date.now()).on('child_added', function(snapshot, prevKey) {
-  var review = snapshot.val();
+var calculateReviews = function(reviewSnap, typeKind) {
+  var review = reviewSnap.val();
+  var review_id = reviewSnap.key;
   var resRef = db.ref().child('restaurants').child(review.restaurant_id);
+  var prevRatingRef = db.ref().child('reviews').child(reviewSnap.key).child('prevRating');
   var sumRatingRef = resRef.child('sumRating');
   var totalRatingCountRef = resRef.child('totalRatingCount');
   var avgRatingRef = resRef.child('avgRate');
   var sum;
   var count;
 
-  sumRatingRef.once('value', function(currentSum) {
-    sumRatingRef.transaction(function(currentSum) {
-        if(!currentSum) {
-          console.log('null');
-          return review.rating;
-        }
-        console.log('nut null');
-        sum = currentSum + review.rating;
-        return sum;
-    })
+  sumRatingRef.transaction(function(currentSum) {
+    if(!currentSum) {
+      return review.rating;
+    }
+    if(typeKind == 'add') {
+      sum = currentSum + review.rating;
+    }
+    else if(typeKind == 'update') {
+      sum = currentSum - review.prevRating + review.rating;
+    }
+    else if(typeKind == 'delete') {
+      sum = currentSum - review.rating;
+    }
+    return sum;
   })
 
-  totalRatingCountRef.once('value', function(currentCount) {
-    totalRatingCountRef.transaction(function(currentCount) {
-      if(!currentCount) {
-        return 1;
-      }
-      count = currentCount +1
-      return count;
-    })
+  totalRatingCountRef.transaction(function(currentCount) {
+    if(!currentCount) {
+      return 1;
+    }
+
+    if(typeKind == 'add') {
+      count = currentCount + 1;
+    }
+    else if(typeKind == 'update') {
+      count = currentCount;
+    }
+    else if(typeKind == 'delete') {
+      count = currentCount - 1;
+    }
+    return count;
   })
 
-  avgRatingRef.once('value', function(currentAvg) {
-    avgRatingRef.transaction(function(currentAvg) {
-      if(!currentAvg) {
-        return review.rating / 1;
-      }
+  avgRatingRef.transaction(function(currentAvg) {
+    if(!currentAvg) {
+      return review.rating / 1;
+    }
+    if(count <= 0 ) {
+      return 0;
+    }
+    else {
       var avg = sum / count;
       return avg;
-    })
+    }
   })
 
+  if(typeKind !== 'delete') {
+    prevRatingRef.transaction(function(currentPrevRating) {
+      return review.rating;
+    })
+  }
+
+}
+
+reviewRef.orderByChild('timestamp').startAt(Date.now()).on('child_added', function(snapshot, prevKey) {
+  console.log('child added running');
+  var review = snapshot;
+  calculateReviews(review, 'add');
 })
 
 reviewRef.on('child_changed', function(snapshot) {
-  var review = snapshot.val();
-  var resRef = db.ref().child('restaurants').child(review.restaurant_id);
-  var prevRating = db.ref().child('reviews').child(snapshot.key).child('prevRating');
-  var sumRatingRef = resRef.child('sumRating');
-  var totalRatingCountRef = resRef.child('totalRatingCount');
-  var avgRatingRef = resRef.child('avgRate');
-  var sum;
-  var count;
-
-  sumRatingRef.once('value', function(snap) {
-    sumRatingRef.transaction(function(currentSum) {
-      if(!currentSum) {
-        return 1;
-      }
-      console.log(currentSum);
-      sum = currentSum - review.prevRating + review.rating;
-      return sum;
-    })
-  })
-
-  totalRatingCountRef.once('value', function(snap) {
-    totalRatingCountRef.transaction(function(currentCount) {
-      if(!currentCount) {
-        return 1;
-      }
-      count = currentCount;
-      return count;
-    })
-  })
-
-  avgRatingRef.once('value', function(snap) {
-    avgRatingRef.transaction(function(currentAvg) {
-      if(!currentAvg) {
-        return 1;
-      }
-      var avg = sum / count;
-      return avg;
-    })
-  })
-
-  prevRating.once('value', function(snap) {
-    prevRating.transaction(function(currentPrevRating) {
-        return review.rating;
-    })
-  })
-
+  console.log('child changed added');
+  var review = snapshot;
+  calculateReviews(review, 'update');
 })
 
 reviewRef.on('child_removed', function(snapshot) {
-  var review = snapshot.val();
-  var resRef = db.ref().child('restaurants').child(review.restaurant_id);
-  var prevRating = db.ref().child('reviews').child(snapshot.key).child('prevRating');
-  var sumRatingRef = resRef.child('sumRating');
-  var totalRatingCountRef = resRef.child('totalRatingCount');
-  var avgRatingRef = resRef.child('avgRate');
-  var sum;
-  var count;
-
-  sumRatingRef.once('value', function(snap) {
-    sumRatingRef.transaction(function(currentSum) {
-      if(!currentSum) {
-        return 1;
-      }
-      console.log(currentSum);
-      sum = currentSum - review.rating;
-      return sum;
-    })
-  })
-
-  totalRatingCountRef.once('value', function(snap) {
-    totalRatingCountRef.transaction(function(currentCount) {
-      if(!currentCount) {
-        return 1;
-      }
-      count = currentCount - 1;
-      return count;
-    })
-  })
-
-  avgRatingRef.once('value', function(snap) {
-    avgRatingRef.transaction(function(currentAvg) {
-      if(!currentAvg) {
-        return 1;
-      }
-      if(count === 0) {
-        return 0
-      }
-      else {
-        var avg = sum / count;
-        return avg;
-      }
-    })
-  })
-
+  console.log('child removed added');
+  var review = snapshot;
+  calculateReviews(review, 'delete');
 })
