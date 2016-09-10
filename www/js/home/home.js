@@ -4,7 +4,6 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
   console.log('HomeTabCtrl');
 
   var rootRef = firebase.database().ref();
-  // var reviewRef = rootRef.child("restaurants/"+id).child("reviews");
   var newReviewRef = rootRef.child("reviews"); //new
   var userRfe = rootRef.child("users");
 
@@ -31,19 +30,11 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
     max: 5
   }
 
-  $scope.$watch('rating.rate', function() {
-    console.log('New value: '+$scope.rating.rate);
-  });
-
   $scope.isAlreadyReviewed = function() {
-    console.log("isAlreadyReviewd fired");
     var userReviewsRefs = rootRef.child('users').child(User.auth().$id).child('reviewed_restaurants').child(id); //new
-    console.log("bb "+userReviewsRefs);
     userReviewsRefs.once('value', function(snapshot) {
       $scope.exists = (snapshot.val() !=null );
       $scope.review = $firebaseObject(rootRef.child("reviews").child(snapshot.val()));
-      console.log("exists "+$scope.exists);
-      console.log("isAlreadyReviewed Method review "+$scope.review.content);
     })
   }
 
@@ -62,7 +53,6 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
   $scope.addReview = function(review) {
     $ionicLoading.show();
     var reviewRating = review.rating;
-    // var reviewerRef = reviewRef.child(User.auth().$id);
     $scope.newReviews.$add({
       content: review.content,
       rating: review.rating,
@@ -73,13 +63,12 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
     }).then(function(review) {
       var userRef = rootRef.child('users').child(User.auth().$id).child('reviewed_restaurants').child(id); //new
       userRef.set(review.key); //new
-      console.log("then is finished");
       $scope.isAlreadyReviewed();
       $ionicLoading.hide();
       $scope.reviewModal.hide();
+      review.content = '';
+      review.rating = '';
     })
-    review.content = '';
-    review.rating = '';
   }
 
   $scope.updateReview = function(review) {
@@ -105,7 +94,6 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
   }
 
   $scope.editReview = function() {
-    console.log("edit review clicked");
     $scope.editReviewModal.show();
   }
 
@@ -126,8 +114,6 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
   });
 
   $scope.showConfirmDelete = function(review) {
-    console.log("review id "+review.$id);
-    console.log("review rating" + review.rating);
     var reviewObj = review;
     var reviewRating = review.rating;
     var reviewContent = review.content;
@@ -137,9 +123,7 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
     })
 
     confirmDelete.then(function(res) {
-      // var reviewsDeleteRef = firebase.database().ref().child("restaurants").child(id).child("reviews").child(User.auth().$id);
       var reviewsDeleteRef = firebase.database().ref().child('reviews').child(review.$id);
-      console.log("aa "+reviewsDeleteRef);
       if(res){
         reviewsDeleteRef.remove();
         userReviewsRef.remove();
