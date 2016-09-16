@@ -27,12 +27,12 @@ app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "U
     },
     getAveragePrice : function(restaurantId) {
       var res = restaurantsArray.$getRecord(restaurantId);
-      var avg = res.sumPrice / res.totalMenuCount;
-      return avg.toFixed(2);
+      // var avg = res.secured_data.sumPrice / res.secured_data.totalMenuCount;
+      return res.secured_data.avgPrice.toFixed(2);
     },
     getAverageRating : function(restaurantId) {
       var res = restaurantsArray.$getRecord(restaurantId);
-      return res.avgRate.toFixed(1);
+      return res.secured_data.avgRate.toFixed(1);
     },
     getRestaurantStatus : function(ownerId) {
       if(usersArray.$getRecord(ownerId).online != null){
@@ -43,33 +43,26 @@ app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "U
       }
     },
     getRestaurantOpenStatus : function(restaurantId) {
-      // console.log("open status method factory");
       var restaurant = restaurantsArray.$getRecord(restaurantId);
-      // console.log("openTime: "+restaurant.openTime);
-      // console.log("closeTime: "+restaurant.closeTime);
       var restaurantOpenTime = new Date(restaurant.openTime);
       var restaurantCloseTime = new Date(restaurant.closeTime);
       var openTime = new Date();
-      openTime.setHours(restaurantOpenTime.getHours(), restaurantOpenTime.getMinutes());
-      // console.log("openTime now"+openTime.getTime());
       var closeTime = new Date();
-      closeTime.setHours(restaurantCloseTime.getHours(), restaurantCloseTime.getMinutes());
-      // console.log("closeTime now"+closeTime.getTime());
       var now = new Date();
+
+      openTime.setHours(restaurantOpenTime.getHours(), restaurantOpenTime.getMinutes());
+      closeTime.setHours(restaurantCloseTime.getHours(), restaurantCloseTime.getMinutes());
 
       if(restaurantOpenTime.getTime() > restaurantCloseTime.getTime()) {
         closeTime.setDate(closeTime.getDate() + 1);
       }
 
-      // console.log("is now open? "+ (openTime.getTime() < now.getTime() && now.getTime() < closeTime.getTime()));
       if(openTime.getTime() < now.getTime() && now.getTime() < closeTime.getTime()) {
         return "Open";
       }
       else{
         return "Closed"
       }
-      // return "Open";
-      // return (openTime.getTime() < now.getTime() && now.getTime() < closeTime.getTime());
     }
   }
 }]);

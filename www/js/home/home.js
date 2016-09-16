@@ -30,19 +30,21 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
     max: 5
   }
 
-  $scope.isAlreadyReviewed = function() {
-    var userReviewsRefs = rootRef.child('users').child(User.auth().$id).child('reviewed_restaurants').child(id); //new
-    userReviewsRefs.once('value', function(snapshot) {
-      $scope.exists = (snapshot.val() !=null );
-      $scope.review = $firebaseObject(rootRef.child("reviews").child(snapshot.val()));
-    })
-  }
+
 
   if($state.is("tabs.viewRestaurant")){
     var id = $stateParams.restaurantId;
     var userReviewsRef = rootRef.child('users').child(User.auth().$id).child('reviewed_restaurants').child(id); //new
     var reviewRef = rootRef.child("reviews").orderByChild('restaurant_id').equalTo(id);
 
+    $scope.isAlreadyReviewed = function() {
+      var userReviewsRefs = rootRef.child('users').child(User.auth().$id).child('reviewed_restaurants').child(id); //new
+      userReviewsRefs.once('value', function(snapshot) {
+        $scope.exists = (snapshot.val() !=null );
+        $scope.review = $firebaseObject(rootRef.child("reviews").child(snapshot.val()));
+      })
+    }
+    
     $scope.restaurant = Restaurant.get(id);
     $scope.isAlreadyReviewed();
     $scope.reviews = $firebaseArray(reviewRef);

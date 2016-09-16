@@ -8,7 +8,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
   $scope.restaurant = {
     openTime : new Date()
   }
-  
+
 
   console.log($scope.AppUser)
   // user.$loaded().then(function() {
@@ -76,15 +76,23 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       type: restaurant.type,
       cuisine: restaurant.cuisine,
       owner_id: User.auth().$id,
-      sumPrice: 0,
-      totalMenuCount: 0,
-      sumRating: 0,
-      totalRatingCount: 0,
-      avgRate: 0,
+      // sumPrice: 0,
+      // totalMenuCount: 0,
+      // sumRating: 0,
+      // totalRatingCount: 0,
+      // avgRate: 0,
       image: $scope.imageURL,
       openTime: restaurant.openTime.getTime(),
       closeTime: restaurant.closeTime.getTime(),
-      timestamp: firebase.database.ServerValue.TIMESTAMP
+      timestamp: firebase.database.ServerValue.TIMESTAMP,
+      secured_data: {
+        sumPrice: 0,
+        totalMenuCount: 0,
+        avgPrice: 0,
+        sumRating: 0,
+        totalRatingCount: 0,
+        avgRate: 0
+      }
     })
 
     $scope.restaurantModal.hide();
