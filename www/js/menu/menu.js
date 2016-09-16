@@ -29,9 +29,10 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth","$firebaseArray","$firebaseO
   }
 
   $scope.deleteMenu = function(menu) {
-    var resSumRef = firebase.database().ref().child("restaurants").child(menu.restaurant_id).child("sumPrice");
+    var resSumRef = firebase.database().ref().child("restaurants").child(menu.restaurant_id).child("menus");
     var resTotalMenuCountRef = firebase.database().ref().child("restaurants").child(menu.restaurant_id).child("totalMenuCount");
-
+    console.log("menu id present"+menu.$id);
+    resSumRef.child(menu.$id).set(null);
     $scope.restaurantMenus.$remove(menu);
   }
 
@@ -39,6 +40,10 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth","$firebaseArray","$firebaseO
     console.log("editButtonModal clicked");
     $scope.menu = menu;
     $scope.menuEditModal.show();
+  }
+
+  $scope.closeEditMenu = function() {
+    $scope.menuEditModal.hide();
   }
 
   $scope.updateMenu = function(menu, $state) {
