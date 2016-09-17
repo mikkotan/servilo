@@ -129,6 +129,30 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             controller : "UsersCtrl"
           }
         }
+
+    })
+    .state('tabs.cart',{
+      url: "/cart",
+      views:{
+        'cart-tab':{
+          templateUrl:"templates/cart.html",
+          controller:"CartCtrl",
+          resolve:{
+            "currentAuth":["Auth", function(Auth){
+              return Auth.$requireSignIn();
+            }]
+          }
+        }
+      }
+    })
+    .state('tabs.signup',{
+      url:"/signup",
+      views: {
+        'signup-tab': {
+            templateUrl : "templates/signup.html",
+            controller : "SignUpCtrl"
+          }
+        }
       })
       .state('login', {
         url: "/login",

@@ -1,0 +1,28 @@
+<div class="modal">
+<ion-view view-title="AddToCart">
+  <ion-content class="padding">
+      <!-- <a class="button icon ion-home" href="#/tab/home">Restaurant</a> -->
+    <ion-list>
+      <ion-item >
+        <form ng-submit="sendToCart(menu)">
+          <div class="list">
+            <label class="item item-input">
+              Name:{{menuName}}
+            </label>
+            <label class="item item-input">
+              Quantity:<input type="number" ng-model="menu.quantity">
+            </label>
+            <label class="item item-input">
+              Total Price: wala pa
+            </label>
+          </div>
+          <div class="padding">
+            <button type="submit" class="button button-block button-positive">Add to Cart</button>
+          </div>
+        </form>
+      </ion-item>
+        <a class="button-calm" ui-sref="tabs.home">back</a>
+    </ion-list>
+  </ion-content>
+</ion-view>
+</div>

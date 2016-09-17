@@ -5,6 +5,8 @@
     <ion-list>
       <ion-item ng-repeat="menu in menus">
         <a class="button icon icon-right ion-chevron-right" ui-sref="tabs.viewRestaurant({restaurantId:menu.restaurant_id})">{{menu.name}}</a>
+
+        <button class="button button-calm" ng-click="addToCart(menu)">Buy</button>
         <p>
           P {{menu.price}}
         </p>
