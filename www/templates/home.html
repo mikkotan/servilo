@@ -2,11 +2,14 @@
   <ion-content class="padding" overflow-scroll="true">
     <ion-list>
       <h3>Restaurants</h3>
-      <ion-item ng-repeat="restaurant in restaurants">
+      <button ng-click="signOut()">Sign Out</button>
+      <label>Search: <input ng-model="searchText"></label>
+      <ion-item ng-repeat="restaurant in restaurants | filter:searchText">
         <a class="button button-calm icon icon-right ion-chevron-right" ui-sref="tabs.viewRestaurant({restaurantId:restaurant.$id})">{{restaurant.name}}</a>
         <p ng-if="restaurant.secured_data.totalMenuCount != 0">
           Avg Price:
-          P {{getAvg(restaurant.$id)}}
+            {{getAvg(restaurant.$id) | currency:"₱"}}
+
         </p>
         <p>
           Rating: {{getAvgRating(restaurant.$id)}} / 5

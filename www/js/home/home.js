@@ -1,6 +1,8 @@
 app.controller('HomeTabCtrl', ["$scope","$ionicModal",
+
 "$firebaseArray","currentAuth", "Restaurant", "Home" ,"$stateParams", "$state", "User", "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation", "$ionicLoading",
-function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $stateParams, $state, User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, $ionicLoading) {
+function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $stateParams, $state, User,
+  $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, $ionicLoading) {
   console.log('HomeTabCtrl');
 
   var rootRef = firebase.database().ref();
@@ -19,8 +21,20 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
   $scope.openRestaurant = Restaurant.getRestaurantOpenStatus;
 
   User.setOnline();
-  ionicMaterialInk.displayEffect();
 
+  function setNull(){
+
+  }
+
+  $scope.signOut = function(callback) {
+    User.auth.online = null;
+    Auth.$signOut();
+    console.log("bye");
+    $state.go("tabs.login");
+  }
+
+
+  ionicMaterialInk.displayEffect();
   $scope.rating = {
     rate : 0,
     max: 5
@@ -44,10 +58,12 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
     $scope.reviews = $firebaseArray(reviewRef);
   }
 
+
   $scope.addReview = function(review) {
     $ionicLoading.show();
     var reviewRating = review.rating;
     $scope.newReviews.$add({
+
       content: review.content,
       rating: review.rating,
       prevRating: review.rating,
@@ -72,30 +88,31 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
     var reviewRating = review.rating;
     reviewerRef.update({
       content: review.content,
-      rating: review.rating,
+      rating: review.rating
     })
 
     review.content = '';
     review.rating = '';
     $scope.editReviewModal.hide();
     $scope.isAlreadyReviewed();
-  }
+  };
 
   $scope.newReview = function() {
+    console.log("new review clicked");
     $scope.reviewModal.show();
-  }
+  };
 
   $scope.closeReview = function() {
     $scope.reviewModal.hide();
-  }
+  };
 
   $scope.editReview = function() {
     $scope.editReviewModal.show();
-  }
+  };
 
   $scope.closeEditReview = function() {
     $scope.editReviewModal.hide();
-  }
+  };
 
   $ionicModal.fromTemplateUrl('templates/new-review.html', function(modalReview) {
     $scope.reviewModal = modalReview;
@@ -103,6 +120,11 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
     scope: $scope
   });
 
+
+  if($state.is("tabs.viewRestaurant")){
+    $scope.restaurant = Restaurant.get(id);
+    console.log(id);
+  }
   $ionicModal.fromTemplateUrl('templates/edit-review.html', function(editModalReview) {
     $scope.editReviewModal = editModalReview;
   }, {
@@ -165,5 +187,6 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
         $scope.$apply();
     });
   };
+
 
 }]);

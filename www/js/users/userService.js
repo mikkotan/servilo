@@ -3,8 +3,12 @@ app.factory("UserFactory",["$firebaseObject" , "$firebaseAuth","$firebaseArray",
   return {
     object : $firebaseObject.$extend({
       getFullName: function(){
-        return this.firstName + " " + this.lastName;
-      }
+          this.$loaded().then(function(){
+          console.log(this.firstName + " " + this.lastName)
+          return this.firstName + " " + this.lastName;
+        })
+
+    }
     }),
     array : $firebaseArray.$extend({
       getFullName : function(){

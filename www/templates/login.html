@@ -5,19 +5,23 @@
       <ion-item>
            Login
       </ion-item>
-      <div class="card">
-        <ion-item id="form-input" class="hehe">
+        <ion-item id="form-input">
           <form ng-submit="login(user)" ng-hide = "firebaseUser">
             <div class="list">
                 <ion-md-input-cus placeholder="Username" highlight-color="balanced" type="text" ng-model="user.email"></ion-md-input-cus>
+                <!-- Username:<input type="text" ng-model="user.email"> -->
             </div>
             <div class="list">
                 <ion-md-input-cus placeholder="Password" highlight-color="energized" type="password" ng-model="user.password"></ion-md-input-cus>
+                <!-- Password:<input type="password"  ng-model="user.password"> -->
             </div>
-            <div>
+            <div class="padding">
               <button type="submit" class="button button-block button-assertive ink">Login</button>
+              <button type="submit" class="button button-block button-assertive ink">Signup</button>
             </div>
           </form>
+<<<<<<< HEAD
+=======
           <div>
             <button class="button button-block button-positive" ng-click="fbLogin()">
               Login with Facebook
@@ -29,22 +33,17 @@
             </button>
           </div>
 
+>>>>>>> cb94831e8d93e4a4b1ce1821f4be6a8474ebc785
           <div ng-show="firebaseUser">
             <div class="list">
               <label class="item item-input">
-                Hi, <strong>{{firebaseUser.firstName }} {{firebaseUser.lastName}}</strong>
-                <img src="{{photoURL}}" ng-show="photoURL != undefined">
+                <div>hi , {{fullname}} </div>
               </label>
               <div>Started : {{firebaseUser.startedAt | date:'medium'}}</div>
-            </div>
-            <div class="list">
-              <label class="item item-input">
-                <button class="button" ng-click="signOut()">Sign Out</button>
-              </label>
+
             </div>
           </div>
-        </ion-item>
-      </div>
+      </ion-item>
     </ion-list>
   </ion-content>
 </ion-view>

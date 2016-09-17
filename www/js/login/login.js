@@ -66,6 +66,7 @@ function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth, AppUser
       else { //providerId == password
         console.log("email provider");
         $scope.firebaseUser = User.auth();
+        $scope.fullname = User.getAuthFullName();
       }
     }
   })
