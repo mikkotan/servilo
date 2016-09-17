@@ -23,25 +23,12 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth",
       name : menu.name,
       price : menu.price,
       restaurant_id : restaurantId,
-      prevPrice : menu.price
+      prevPrice : menu.price,
+      timestamp : firebase.database.ServerValue.TIMESTAMP
     }).then(function(menuObj){
       var restaurantRef = firebase.database().ref().child("restaurants").child(restaurantId);
-      var sumRef = restaurantRef.child("sumPrice");
-      var menuCount = restaurantRef.child("totalMenuCount");
-      var avgRate = restaurantRef.child("rating");
 
       restaurantRef.child("menus").child(menuObj.key).set(true);
-
-      sumRef.transaction(function(currentPrice){
-        console.log("Adding currentPrice");
-        return currentPrice + menu.price;
-      })
-
-      menuCount.transaction(function(currentCount){
-        console.log("Adding count");
-        return currentCount+1;
-      })
-
     })
     $state.go('tabs.restaurant');
   }
@@ -49,6 +36,7 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth",
 
   $scope.addToCart = function(menu){
     console.log("Cliked!!");
+    console.log(menu)
     $scope.id = menu.$id;
     $scope.menuName = menu.name;
     $scope.menuPrice = menu.price;
@@ -57,9 +45,10 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth",
   };
 
   $scope.sendToCart = function(menu){
-    var menuCart = {id:$scope.id, name:$scope.menuName, price : $scope.menu , quantity:menu.quantity};
+    var menuCart = {id:$scope.id, name:$scope.menuName, price : $scope.menuPrice , quantity:menu.quantity};
     CartDataService.add(menuCart);
-    $state.go("tabs.cart")
+    console.log(CartDataService.get())
+    $state.go("tabs.menu")
     $scope.addToCartModal.hide();
   }
 
