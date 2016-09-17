@@ -1,5 +1,5 @@
-app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera",
-  function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera){
+app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera","$cordovaGeolocation",
+  function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, $cordovaGeolocation){
   $scope.modalControl = {};
   $scope.restaurants = Restaurant.all();
   $scope.pendingRestaurants = Restaurant.getPendingRestaurants();
@@ -8,9 +8,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
   $scope.restaurant = {
     openTime : new Date()
   }
-  $scope.$watch('openTime', function() {
-    console.log('New value: '+$scope.openTime);
-  });
+
 
   console.log($scope.AppUser)
   // user.$loaded().then(function() {
@@ -78,14 +76,23 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       type: restaurant.type,
       cuisine: restaurant.cuisine,
       owner_id: User.auth().$id,
-      sumPrice: 0,
-      totalMenuCount: 0,
-      sumRating: 0,
-      totalRatingCount: 0,
-      avgRate: 0,
+      // sumPrice: 0,
+      // totalMenuCount: 0,
+      // sumRating: 0,
+      // totalRatingCount: 0,
+      // avgRate: 0,
       image: $scope.imageURL,
       openTime: restaurant.openTime.getTime(),
-      closeTime: restaurant.closeTime.getTime()
+      closeTime: restaurant.closeTime.getTime(),
+      timestamp: firebase.database.ServerValue.TIMESTAMP,
+      secured_data: {
+        sumPrice: 0,
+        totalMenuCount: 0,
+        avgPrice: 0,
+        sumRating: 0,
+        totalRatingCount: 0,
+        avgRate: 0
+      }
     })
 
     $scope.restaurantModal.hide();
@@ -151,11 +158,26 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
 
   $scope.approveRestaurant = function(restaurant) {
     $scope.pendingRestaurants.$remove(restaurant).then(function() {
-      $scope.restaurants.$add(restaurant);
+      $scope.restaurants.$add(restaurant)
+        .then(function(restaurantObject) {
+          var resRef = firebase.database().ref().child('restaurants').child(restaurantObject.key).child('timestamp');
+          console.log("THIS IS THE FIRE BASE REF "+resRef);
+          resRef.transaction(function(currentTimestamp) {
+            var lolpe = firebase.database.ServerValue.TIMESTAMP;
+            console.log('hello old timestamp ' + currentTimestamp);
+            console.log('hello new timestamp ' + firebase.database.ServerValue.TIMESTAMP );
+            return lolpe;
+          })
+        });
     })
   }
 
   $scope.marker ={id: 0};
+  var options = {timeout: 10000, enableHighAccuracy: true};
+  $cordovaGeolocation.getCurrentPosition(options).then(function(position){
+    $scope.currentLocation = {latitude: position.coords.latitude,longitude: position.coords.longitude};
+  });
+
   $scope.map = {
     center: { latitude: 10.73016704689235, longitude: 122.54616022109985 },
     zoom: 14, options: {scrollwheel: false},
@@ -176,4 +198,10 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       }
     }
   };
+  $scope.markLocation = function(){
+    $scope.marker = {id: Date.now(), coords:{latitude:$scope.currentLocation.latitude,
+      longitude: $scope.currentLocation.longitude}
+    };
+    $scope.map.center = { latitude: $scope.currentLocation.latitude, longitude:$scope.currentLocation.longitude };
+  }
 }])

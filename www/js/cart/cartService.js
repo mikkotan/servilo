@@ -1,5 +1,6 @@
-app.controller("Cart",["$scope","$firebaseAuth","$firebaseArray","firebaseObject",
-function($scope,$firebaseAuth,$firebaseArray,$firebaseObject){
+app.factory("Cart",["$firebaseObject" , "$firebaseAuth","$firebaseArray",
+  function($firebaseObject ,$firebaseAuth, $firebaseArray){
+  return {
 
-
-}]);
+  }
+}])

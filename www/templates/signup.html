@@ -1,28 +1,30 @@
 <ion-view view-title="SignUp">
   <ion-content class="padding">
     <ion-list>
-      <ion-item >
+      <ion-item>
         Sign Up
       </ion-item>
-      <ion-item id="form-input">
-        <form ng-submit="createUser(user)" ng-hide = "firebaseUser">
-          <div class="list">
-            <ion-md-input-cus placeholder="Username" highlight-color="balanced" type="text" ng-model="user.email"></ion-md-input-cus>
-          </div>
-          <div class="list">
-            <ion-md-input-cus placeholder="Password" highlight-color="energized" type="password" ng-model="user.password"></ion-md-input-cus>
-          </div>
-          <div class="list">
-            <ion-md-input-cus placeholder="First Name" highlight-color="balanced" type="text" ng-model="user.firstName"></ion-md-input-cus>
-          </div>
-          <div class="list">
-            <ion-md-input-cus placeholder="Last Name" highlight-color="balanced" type="text" ng-model="user.lastName"></ion-md-input-cus>
-          </div>
-          <div class="padding">
-            <button type="submit" class="button button-block button-positive">signup</button>
-          </div>
-        </form>
-      </ion-item>
+      <div class="card">
+        <ion-item id="form-input">
+          <form ng-submit="createUser(user)" ng-hide="firebaseUser">
+            <div class="list">
+              <ion-md-input-cus placeholder="Username" highlight-color="balanced" type="text" ng-model="user.email"></ion-md-input-cus>
+            </div>
+            <div class="list">
+              <ion-md-input-cus placeholder="Password" highlight-color="energized" type="password" ng-model="user.password"></ion-md-input-cus>
+            </div>
+            <div class="list">
+              <ion-md-input-cus placeholder="First Name" highlight-color="balanced" type="text" ng-model="user.firstName"></ion-md-input-cus>
+            </div>
+            <div class="list">
+              <ion-md-input-cus placeholder="Last Name" highlight-color="balanced" type="text" ng-model="user.lastName"></ion-md-input-cus>
+            </div>
+            <div class="padding">
+              <button type="submit" class="button button-block button-positive">signup</button>
+            </div>
+          </form>
+        </ion-item>
+      </div>
     </ion-list>
   </ion-content>
 </ion-view>

@@ -1,15 +1,20 @@
 app.controller('HomeTabCtrl', ["$scope","$ionicModal",
-  "$firebaseArray","currentAuth", "Restaurant", "Home" ,"$stateParams", "$state",
-  "User", "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation","Auth",
-    function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home,
-      $stateParams, $state, User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation,Auth) {
 
+"$firebaseArray","currentAuth", "Restaurant", "Home" ,"$stateParams", "$state", "User", "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation", "$ionicLoading",
+function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $stateParams, $state, User,
+  $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, $ionicLoading) {
   console.log('HomeTabCtrl');
 
+  var rootRef = firebase.database().ref();
+  var newReviewRef = rootRef.child("reviews"); //new
+  var userRfe = rootRef.child("users");
 
-  console.log('HomeTabCtrl');
-  console.log("aws");
-  $scope.men = Home.getRestaurantMenus;
+
+
+  $scope.newReviews = $firebaseArray(newReviewRef); //new
+  $scope.userRfeObj = $firebaseArray(userRfe);
+
+
 
   $scope.restaurants = Restaurant.all();
   $scope.getAvg = Restaurant.getAveragePrice;
@@ -30,40 +35,6 @@ app.controller('HomeTabCtrl', ["$scope","$ionicModal",
     console.log("bye");
     $state.go("tabs.login");
   }
-
-  $scope.$watch('rating.rate', function() {
-    console.log('New value: '+$scope.rating.rate);
-  });
-
-  $scope.isAlreadyReviewed = function() {
-    reviewRef.child(User.auth().$id).once('value', function(snapshot) {
-      $scope.exists = (snapshot.val() !=null );
-      $scope.review = snapshot.val();
-    })
-  }
-  // $scope.RestaurantService = Restaurant;
-
-  // $scope.getAvg = function(restaurantId){
-  //   var getRealAvg = 1;
-  //   Restaurant.getAveragePrice(restaurantId).then(function(value){
-  //     console.log("RETURN VALUE ++"+value);
-  //     // $scope.getAvg = value;
-  //     getRealAvg = value;
-  //     console.log("Scope get avg here "+ getRealAvg)
-  //     // return value;
-  //     return getRealAvg;
-  //   })
-  //
-  // }
-  // $scope.getAvgPrice = function(restaurantId) {
-  //   console.log("getting avg price");
-  //   var menusRef = firebase.database().ref().child("menus").orderByChild("restaurant_id").equalTo(restaurantId);
-  //   var menusArray = new MenusWithAvg(menusRef);
-  //   menusArray.$loaded().then(function(){
-  //     console.log("The average price of this restaurant is P" + menusArray.avg());
-  //     return "hello";
-  //   })
-  // }
 
 
   ionicMaterialInk.displayEffect();
@@ -115,95 +86,56 @@ app.controller('HomeTabCtrl', ["$scope","$ionicModal",
   $scope.getRestaurantStatus = Restaurant.getRestaurantStatus;
 
   if($state.is("tabs.viewRestaurant")){
-  $scope.restaurant = Restaurant.get(id);
-  $scope.isAlreadyReviewed();
+    var id = $stateParams.restaurantId;
+    var userReviewsRef = rootRef.child('users').child(User.auth().$id).child('reviewed_restaurants').child(id); //new
+    var reviewRef = rootRef.child("reviews").orderByChild('restaurant_id').equalTo(id);
+
+    $scope.isAlreadyReviewed = function() {
+      var userReviewsRefs = rootRef.child('users').child(User.auth().$id).child('reviewed_restaurants').child(id); //new
+      userReviewsRefs.once('value', function(snapshot) {
+        $scope.exists = (snapshot.val() !=null );
+        $scope.review = $firebaseObject(rootRef.child("reviews").child(snapshot.val()));
+      })
+    }
+
+    $scope.restaurant = Restaurant.get(id);
+    $scope.isAlreadyReviewed();
+    $scope.reviews = $firebaseArray(reviewRef);
   }
 
 
+
+
   $scope.addReview = function(review) {
-    console.log("added review");
-    console.log("review rate:"+review.rating);
+    $ionicLoading.show();
     var reviewRating = review.rating;
-    $scope.reviews.$add({
+    $scope.newReviews.$add({
+
       content: review.content,
       rating: review.rating,
       prevRating: review.rating,
       reviewer_id: User.auth().$id,
-      startedAt: firebase.database.ServerValue.TIMESTAMP
-    }).then(function(){
-
-      console.log("Calling callback review");
-      console.log("review rate after callback: "+reviewRating);
-
-      var res = firebase.database().ref().child("restaurants").child(id);
-      var sumRating = res.child("sumRating");
-      var totalRatingCount = res.child("totalRatingCount");
-      var avgRating = res.child("avgRate");
-      var ratingObj = $firebaseObject(totalRatingCount);
-      var top = 0;
-      var bot = 0;
-
-      sumRating.transaction(function(currentSum){
-        top = currentSum + reviewRating;
-        return top;
-      })
-
-      totalRatingCount.transaction(function(currentCount){
-        bot = currentCount + 1;
-        return bot;
-      })
-
-      avgRating.transaction(function(currentAmount){
-        var avg = top/bot;
-        return avg;
-      })
-
+      restaurant_id : id,
+      timestamp: firebase.database.ServerValue.TIMESTAMP
+    }).then(function(review) {
+      var userRef = rootRef.child('users').child(User.auth().$id).child('reviewed_restaurants').child(id); //new
+      userRef.set(review.key); //new
+      $scope.isAlreadyReviewed();
+      $ionicLoading.hide();
+      $scope.reviewModal.hide();
+      review.content = '';
+      review.rating = '';
     })
-    review.content = '';
-    review.rating = '';
-    $scope.reviewModal.hide();
   }
 
   $scope.updateReview = function(review) {
-    var reviewerRef = reviewRef.child(User.auth().$id);
+    var reviewerRef = newReviewRef.child(review.$id);
     var reviewRating = review.rating;
     reviewerRef.update({
       content: review.content,
-      rating: review.rating,
-    }).then(function() {
-      var res = firebase.database().ref().child("restaurants").child(id);
-      var sumRating = res.child("sumRating");
-      var totalRatingCount = res.child("totalRatingCount");
-      var avgRating = res.child("avgRate");
-      var prevRating = reviewerRef.child("prevRating");
-      var top = 0;
-      var bot = 0;
+      rating: review.rating
+    })
 
-      sumRating.transaction(function(currentSum){
-        top = currentSum - review.prevRating + reviewRating;
-        return top;
-      })
-
-      totalRatingCount.transaction(function(currentCount){
-        console.log("totalcount updated");
-        bot = currentCount;
-        console.log("current count" +bot);
-        return bot;
-      })
-
-      avgRating.transaction(function(currentAvg) {
-        console.log("avg calculated");
-        var avg = top / bot;
-        console.log("new avg" + avg);
-        return avg;
-      })
-
-      prevRating.transaction(function(currentPrevRating) {
-        console.log("updating prevRating to new");
-        console.log("new prevRating "+reviewRating);
-        return reviewRating;
-      });
-    });
     review.content = '';
     review.rating = '';
     $scope.editReviewModal.hide();
@@ -220,7 +152,6 @@ app.controller('HomeTabCtrl', ["$scope","$ionicModal",
   };
 
   $scope.editReview = function() {
-    console.log("edit review clicked");
     $scope.editReviewModal.show();
   };
 
@@ -255,43 +186,10 @@ app.controller('HomeTabCtrl', ["$scope","$ionicModal",
     })
 
     confirmDelete.then(function(res) {
-      var reviewsDeleteRef = firebase.database().ref().child("restaurants").child(id).child("reviews").child(User.auth().$id);
+      var reviewsDeleteRef = firebase.database().ref().child('reviews').child(review.$id);
       if(res){
-        var res = firebase.database().ref().child("restaurants").child(id);
-        var sumRating = res.child("sumRating");
-        var totalRatingCount = res.child("totalRatingCount");
-        var avgRating = res.child("avgRate");
-        var top = 0;
-        var bot = 0;
-
-        sumRating.transaction(function(currentSum) {
-          top = currentSum - reviewRating;
-          if(top <= 0){
-            return 0
-          }else {
-            return top;
-          }
-        })
-
-        totalRatingCount.transaction(function(currentCount) {
-          bot = currentCount - 1;
-          if(bot <= 0){
-            return 0;
-          }else{
-            return bot;
-          }
-        })
-
-        avgRating.transaction(function(currentAvg) {
-          if(bot <= 0){
-            return 0;
-          }else {
-            var avg = top / bot;
-            return avg;
-          }
-        })
-
         reviewsDeleteRef.remove();
+        userReviewsRef.remove();
         $scope.isAlreadyReviewed();
       }
       else {
@@ -304,18 +202,17 @@ app.controller('HomeTabCtrl', ["$scope","$ionicModal",
   $scope.marker ={id: 0};
   var options = {timeout: 10000, enableHighAccuracy: true};
   $cordovaGeolocation.getCurrentPosition(options).then(function(position){
-    $scope.currentLocation = {lat: position.coords.latitude,lng: position.coords.longitude};
+    $scope.currentLocation = {latitude: position.coords.latitude,longitude: position.coords.longitude};
   });
 
   $scope.setMap = function(restaurant){
-      $scope.map =  {center:{latitude: restaurant.latitude, longitude: restaurant.longitude}, zoom: 14, options: {scrollwheel: true}, bounds: {}};
+      $scope.map =  {center:{latitude: restaurant.latitude, longitude: restaurant.longitude}, zoom: 14, options: {scrollwheel: false}, bounds: {}};
   };
 
   $scope.showPath =  function(restaurant){
     var direction = new google.maps.DirectionsService();
-    console.log("scope direction values first @@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+$scope.direction);
     var request = {
-      origin: {lat: $scope.currentLocation.lat,lng: $scope.currentLocation.lng},
+      origin: {lat:$scope.currentLocation.latitude,lng:$scope.currentLocation.longitude},
       destination: {lat: restaurant.latitude, lng: restaurant.longitude},
       travelMode: google.maps.DirectionsTravelMode['DRIVING'],
       optimizeWaypoints: true
@@ -332,9 +229,8 @@ app.controller('HomeTabCtrl', ["$scope","$ionicModal",
             weight: 5
         }});
         }
+        $scope.$apply();
     });
-    console.log("Scope direction values 2nd @@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+$scope.direction);
-
   };
 
 

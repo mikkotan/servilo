@@ -6,7 +6,7 @@
       <label>Search: <input ng-model="searchText"></label>
       <ion-item ng-repeat="restaurant in restaurants | filter:searchText">
         <a class="button button-calm icon icon-right ion-chevron-right" ui-sref="tabs.viewRestaurant({restaurantId:restaurant.$id})">{{restaurant.name}}</a>
-        <p ng-if="restaurant.totalMenuCount != 0">
+        <p ng-if="restaurant.secured_data.totalMenuCount != 0">
           Avg Price:
             {{getAvg(restaurant.$id) | currency:"₱"}}
 

@@ -32,7 +32,7 @@ app.run(["$ionicPlatform","$rootScope", "$state", '$templateCache',function($ion
   });
 }]);
 
-app.config(function($stateProvider, $urlRouterProvider) {
+app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
   var config = {
     apiKey: "AIzaSyA9E-lSM2WKmonVkHCShv_ErYuvobxgb40",
     authDomain: "jepsrestaurantdev.firebaseapp.com",
@@ -41,118 +41,95 @@ app.config(function($stateProvider, $urlRouterProvider) {
   };
   firebase.initializeApp(config);
   $urlRouterProvider.otherwise("/home");
+  $ionicConfigProvider.tabs.position('bottom');
 
-  $stateProvider
-    .state('tabs', {
-      url: "/tab",
-      abstract: true,
-      templateUrl: "templates/tabs.html"
-    })
-    .state('tabs.home', {
-      url: "/home",
-      views: {
-        'home-tab': {
-          templateUrl: "templates/home.html",
-          controller: 'HomeTabCtrl',
-          resolve:{
-            "currentAuth" : ["Auth", function(Auth){
-              return Auth.$requireSignIn();
-            }]
+    $stateProvider
+      .state('tabs', {
+        url: "/tab",
+        cache:false,
+        abstract: true,
+        templateUrl: "templates/tabs.html"
+      })
+      .state('tabs.home', {
+        url: "/home",
+        views: {
+          'home-tab': {
+            templateUrl: "templates/home.html",
+            controller: 'HomeTabCtrl',
+            resolve:{
+              "currentAuth" : ["Auth", function(Auth){
+                return Auth.$requireSignIn();
+              }]
+            }
           }
         }
-      }
-    })
-    .state('tabs.viewRestaurant', {
-      url: "/viewRestaurant/:restaurantId",
-      views: {
-        'home-tab': {
-          templateUrl: "templates/viewRestaurant.html",
-          controller: "HomeTabCtrl",
-          resolve:{
-            "currentAuth" : ["Auth", function(Auth){
-              return Auth.$requireSignIn();
-            }]
+      })
+      .state('tabs.viewRestaurant', {
+        url: "/viewRestaurant/:restaurantId",
+        views: {
+          'home-tab': {
+            templateUrl: "templates/viewRestaurant.html",
+            controller: "HomeTabCtrl",
+            resolve:{
+              "currentAuth" : ["Auth", function(Auth){
+                return Auth.$requireSignIn();
+              }]
+            }
           }
         }
-      }
-    })
-    .state('tabs.addMenu',{
-      url: "/menu/add/:restaurantId",
-      views:{
-        'restaurant-tab':{
-          templateUrl: "templates/add-menu.html",
-          controller: "MenuCtrl"
+      })
+      .state('tabs.addMenu',{
+        url: "/menu/add/:restaurantId",
+        views:{
+          'restaurant-tab':{
+            templateUrl: "templates/add-menu.html",
+            controller: "MenuCtrl"
+          }
         }
-      }
-    })
-    .state('tabs.viewRestaurantMenus',{
-      url: "/restaurant/menus/:restaurantId",
-      views:{
-        'restaurant-tab':{
-          templateUrl: "templates/viewRestaurant-menus.html",
-          controller: "MenuCtrl"
+      })
+      .state('tabs.viewRestaurantMenus',{
+        url: "/restaurant/menus/:restaurantId",
+        views:{
+          'restaurant-tab':{
+            templateUrl: "templates/viewRestaurant-menus.html",
+            controller: "MenuCtrl"
+          }
         }
-      }
-    })
-    .state('tabs.facts2', {
-      url: "/facts2",
-      views: {
-        'home-tab': {
-          templateUrl: "templates/facts2.html"
+      })
+      .state('tabs.facts2', {
+        url: "/facts2",
+        views: {
+          'home-tab': {
+            templateUrl: "templates/facts2.html"
+          }
         }
-      }
-    })
-    .state('tabs.menu', {
-      url: "/menu",
-      views: {
-        'menu-tab': {
-          templateUrl: "templates/menus.html",
-          controller:"MenuCtrl"
+      })
+      .state('tabs.menu', {
+        url: "/menu",
+        views: {
+          'menu-tab': {
+            templateUrl: "templates/menus.html",
+            controller:"MenuCtrl"
+          }
         }
-      }
-    })
-    .state('tabs.navstack', {
-      url: "/navstack",
-      views: {
-        'about-tab': {
-          templateUrl: "templates/nav-stack.html"
+      })
+      .state('tabs.navstack', {
+        url: "/navstack",
+        views: {
+          'about-tab': {
+            templateUrl: "templates/nav-stack.html"
+          }
         }
-      }
-    })
-    .state('tabs.contact', {
-      url: "/contact",
-      views: {
-        'contact-tab': {
-          templateUrl: "templates/contact.html",
-          controller : "UsersCtrl"
+      })
+      .state('tabs.contact', {
+        url: "/contact",
+        views: {
+          'contact-tab': {
+            templateUrl: "templates/contact.html",
+            controller : "UsersCtrl"
+          }
         }
-      }
-    })
-    .state('tabs.login', {
-      url: "/login",
-      views: {
-        'login-tab': {
-          templateUrl: "templates/login.html",
-          controller: "LoginCtrl"
-        }
-      },
-      resolve : {
 
-      }
-    })
-    .state('tabs.restaurant', {
-      url: "/restaurant",
-      views: {
-        'restaurant-tab': {
-          templateUrl : "templates/restaurant.html",
-          controller: "RestaurantCtrl",
-          resolve:{
-            "currentAuth" : ["Auth", function(Auth){
-              return Auth.$requireSignIn();
-            }]
-          }
-        }
-      }
     })
     .state('tabs.cart',{
       url: "/cart",
@@ -174,17 +151,75 @@ app.config(function($stateProvider, $urlRouterProvider) {
         'signup-tab': {
             templateUrl : "templates/signup.html",
             controller : "SignUpCtrl"
+          }
         }
-      }
-    });
-  $urlRouterProvider.otherwise("/tab/home");
+      })
+      .state('login', {
+        url: "/login",
+      //   views: {
+      //     'login-tab': {
+            templateUrl: "templates/login.html",
+            controller: "LoginCtrl"
+      //     }
+      //   },
+      //   resolve : {
+        //
+      //   }
+      })
+      .state('tabs.restaurant', {
+        url: "/restaurant",
+        views: {
+          'restaurant-tab': {
+            templateUrl : "templates/restaurant.html",
+            controller: "RestaurantCtrl",
+            resolve:{
+              "currentAuth" : ["Auth", function(Auth){
+                return Auth.$requireSignIn();
+              }]
+            }
+          }
+        }
+      })
+      .state('signup',{
+        url:"/signup",
+      //   views: {
+      //     'signup-tab': {
+              templateUrl : "templates/signup.html",
+              controller : "SignUpCtrl"
+      //     }
+      //   }
+      });
+    $urlRouterProvider.otherwise("/tab/home");
 })
 
-.controller('NavCtrl', function($scope, $ionicSideMenuDelegate) {
+
+.controller('NavCtrl', function($scope, $ionicSideMenuDelegate, Auth, User) {
   $scope.showMenu = function () {
     $ionicSideMenuDelegate.toggleLeft();
   };
   $scope.showRightMenu = function () {
     $ionicSideMenuDelegate.toggleRight();
   };
+  $scope.signOut = function() {
+    Auth.$signOut();
+    console.log("logged out..");
+    location.reload();
+  }
+  Auth.$onAuthStateChanged(function(firebaseUser){
+    if(firebaseUser){
+      if(firebaseUser.providerData[0].providerId == "facebook.com") {
+        console.log("facebook provider");
+        $scope.firebaseUser = firebaseUser.displayName;
+        $scope.photoURL = firebaseUser.providerData[0].photoURL;
+      }
+      else { //providerId == password
+        console.log("email provider");
+        // var user = User.auth();
+        // user.$loaded().then(function() {
+        //   $scope.firebaseUser = user.firstName + " " + user.lastName;
+        // })
+        $scope.firebaseUser = User.auth();
+      }
+    }
+  })
 })

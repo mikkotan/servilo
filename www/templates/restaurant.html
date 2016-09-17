@@ -8,7 +8,7 @@
     <div>
       <button ng-click="newRestaurant()" class="button button-block button-positive"><icon class="ion-plus"></icon> New Restaurant</button>
     </div>
-    
+
     <ion-list>
       <ion-item ng-repeat="restaurant in displayRestaurants">
         <h3><icon class="ion-spoon"></icon> {{restaurant.name}}</h3>
@@ -16,8 +16,8 @@
           <icon class="ion-ios-location-outline"></icon> {{restaurant.location}}
         </p>
         <p>
-          <a class="button-calm" ui-sref="tabs.viewRestaurantMenus({restaurantId:restaurant.$id})">View Menus</a>
-          <a class="button-calm" ui-sref="tabs.addMenu({restaurantId:restaurant.$id})">Add menu</a>
+          <a class="button button-small button-calm" ui-sref="tabs.viewRestaurantMenus({restaurantId:restaurant.$id})">View Menus</a>
+          <a class="button button-small button-calm" ui-sref="tabs.addMenu({restaurantId:restaurant.$id})">Add menu</a>
         </p>
         <ion-option-button class="button-royal" ng-click="displayRestaurants.$remove(restaurant)">
           Delete
