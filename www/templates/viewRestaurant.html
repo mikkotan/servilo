@@ -1,11 +1,18 @@
 <ion-view view-title="ViewRestaurant">
-  <ion-content class="padding">
+  <ion-content class="padding" overflow-scroll="true">
     <a class="button button-light icon ion-home" href="#/tab/home"> Home</a>
     <h3>{{restaurant.name}}</h3>
     <div>
       <img ng-src="data:image/jpeg;base64,{{restaurant.image}}" width="100%"/>
     </div>
     <p>{{getRestaurantStatus(restaurant.owner_id)}}</p>
+    <p>Restaurant is: {{openRestaurant(restaurant.$id)}}</p>
+    <p ng-if="openRestaurant(restaurant.$id)==='Open'" style="color:green;">
+      Restaurant Hours: {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}
+    </p>
+    <p ng-if="openRestaurant(restaurant.$id)==='Closed'" style="color:red;">
+      Opens at {{ restaurant.openTime | date:'shortTime' }}
+    </p>
     <ion-list>
       <ion-item>
           Cuisine: {{restaurant.cuisine}}
@@ -16,10 +23,18 @@
       <div ng-if='restaurant.latitude != null && restaurant.longitude != null' ng-init= 'setMap(restaurant)'>
         <ui-gmap-google-map zoom='map.zoom' center="map.center" options='map.options' bounds='map.bounds'>
           <ui-gmap-marker coords="map.center" icon="marker.icon" idkey="marker.id"></ui-gmap-marker>
+          <ui-gmap-map-control position="top-right">
+              <button class="button button-small button-balanced" ng-click="showPath(restaurant)" >Show Driving Path</button>
+          </ui-gmap-map-control>
+          <ui-gmap-polylines models="direction" path="'paths'" stroke="'stroke'"></ui-gmap-polylines>
         </ui-gmap-google-map>
       </div>
       <div ng-if="exists != true">
         <button ng-click="newReview()" class="button button-block button-balanced"><icon class="ion-plus"></icon> Write Review</button>
+      </div>
+      <div class="button-bar" ng-if="exists">
+        <button ng-click="editReview()" class="button button-balanced"><icon class="ion-plus"></icon> Edit Review</button>
+        <button ng-click="showConfirmDelete(review)" class="button button-assertive"><icon class="ion-android-delete"></icon> Delete Review</button>
       </div>
     </ion-list>
     <div class="list">

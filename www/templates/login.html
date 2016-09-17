@@ -22,18 +22,12 @@
           <div ng-show="firebaseUser">
             <div class="list">
               <label class="item item-input">
-                hi , {{firebaseUser.getFullName()}}
+                <div>hi , {{fullname}} </div>
+              </label>
+              <button class="button button-balanced" ng-click="editProfile()">Edit Profile</button>
+              <button class="button button-balanced" ng-click="changePasswordShow()" >Change Password</button>
+              <div>Started : {{firebaseUser.startedAt | date:'medium'}}</div>
 
-                <div> Started : {{firebaseUser.startedAt | date:'medium'}}</div>
-              </label>
-            </div>
-            <div class="list">
-              <label class="item item-input">
-             <button ng-click="signOut()">Sign Out</button>
-              </label>
-              <label class="item item-input">
-                <!-- {{authUser.firstName}} -->
-              </label>
             </div>
           </div>
       </ion-item>

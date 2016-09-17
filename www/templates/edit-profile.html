@@ -1,0 +1,21 @@
+<div class="modal">
+  <ion-header-bar class="bar-secondary">
+    <h1 class="title">Edit Profile</h1>
+    <button class="button button-calm" ng-click="closeEditProfile()">Cancel</button>
+  </ion-header-bar>
+  <ion-content>
+    <form ng-submit="updateProfile(firebaseUser)">
+      <div class="list">
+        <label class="item item-input">
+          <input type="text" placeholder="First Name" ng-model="firebaseUser.firstName">
+        </label>
+        <label class="item item-input">
+          <input type="text" placeholder="Last Name" ng-model="firebaseUser.lastName">
+        </label>
+      </div>
+      <div class="padding">
+        <button type="submit" class="button button-block button-positive">Edit Profile</button>
+      </div>
+    </form>
+  </ion-content>
+</div>

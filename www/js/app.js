@@ -3,9 +3,9 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var app = angular.module('todo', ['ionic', 'ionMdInput', 'ionic-material', 'firebase', 'ionic.rating', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth'])
+var app = angular.module('todo', ['ionic', 'ionMdInput', 'ionic-material', 'firebase', 'ionic.rating', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker'])
 
-app.run(["$ionicPlatform","$rootScope", "$state",function($ionicPlatform , $rootScope , $state) {
+app.run(["$ionicPlatform","$rootScope", "$state", '$templateCache',function($ionicPlatform , $rootScope , $state, $templateCache) {
   $rootScope.$on("$stateChangeError" ,
     function(event , toState , toParams , fromState , fromParams , error){
       if(error === "AUTH_REQUIRED"){
@@ -14,6 +14,7 @@ app.run(["$ionicPlatform","$rootScope", "$state",function($ionicPlatform , $root
       }
   })
 
+  $templateCache.put('template.tpl.html', '');
   $ionicPlatform.ready(function() {
     if(window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -147,6 +148,20 @@ app.config(function($stateProvider, $urlRouterProvider) {
           controller: "RestaurantCtrl",
           resolve:{
             "currentAuth" : ["Auth", function(Auth){
+              return Auth.$requireSignIn();
+            }]
+          }
+        }
+      }
+    })
+    .state('tabs.cart',{
+      url: "/cart",
+      views:{
+        'cart-tab':{
+          templateUrl:"templates/cart.html",
+          controller:"CartCtrl",
+          resolve:{
+            "currentAuth":["Auth", function(Auth){
               return Auth.$requireSignIn();
             }]
           }

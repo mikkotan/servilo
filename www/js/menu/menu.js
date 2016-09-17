@@ -1,5 +1,8 @@
-app.controller("MenuCtrl",["$scope","$firebaseAuth","$firebaseArray","$firebaseObject", "Menu","$stateParams","$state", "$ionicModal", "$ionicListDelegate",
-  function($scope,$firebaseAuth,$firebaseArray,$firebaseObject, Menu , $stateParams , $state, $ionicModal, $ionicListDelegate){
+app.controller("MenuCtrl",["$scope","$firebaseAuth",
+"$firebaseArray","$firebaseObject", "Menu","$stateParams","$state",
+"$ionicModal", "$ionicListDelegate","CartDataService",
+  function($scope,$firebaseAuth,$firebaseArray,$firebaseObject, Menu , $stateParams ,
+    $state, $ionicModal, $ionicListDelegate,CartDataService){
 
   var restaurantId = $stateParams.restaurantId;
 
@@ -42,6 +45,36 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth","$firebaseArray","$firebaseO
     })
     $state.go('tabs.restaurant');
   }
+  //   {{{{{{{  ADD TO CART  }}}}}}}---------------------------------------------->
+
+
+  $scope.addToCart = function(menu){
+    console.log("Cliked!!");
+    $scope.id = menu.$id;
+    $scope.menuName = menu.name;
+    $scope.menuPrice = menu.price;
+    $scope.restaurant_id = menu.restaurant_id;
+    $scope.addToCartModal.show();
+  };
+
+  $scope.sendToCart = function(menu){
+    console.log("send to cart");
+    let menuCart = { id:$scope.id , name:$scope.menuName, price : $scope.menuPrice , restaurant_id : $scope.restaurant_id , quantity: menu.quantity};
+    console.log(menuCart);
+    CartDataService.add(menuCart);
+    console.log(CartDataService.get());
+    $state.go("tabs.menu")
+    $scope.addToCartModal.hide();
+  }
+
+  $ionicModal.fromTemplateUrl('templates/add-to-cart-modal.html', function(addToCartModal) {
+    $scope.addToCartModal = addToCartModal;
+  }, {
+    scope: $scope  /// GIVE THE MODAL ACCESS TO PARENT SCOPE
+  });
+
+
+  // {{{{{{{{{{{{{{{ END }}}}}}}}}}}}}}}--------------------------------------------->
 
   $scope.deleteMenu = function(menu) {
     console.log("deleted click"+ menu.name);

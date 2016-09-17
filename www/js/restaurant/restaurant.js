@@ -1,27 +1,17 @@
-// app.controller("RestaurantCtrl",["$scope","$firebaseArray","$firebaseAuth", "AppUser",
-// function($scope, $firebaseArray, $firebaseAuth,AppUser){
-
-  // var ref = firebase.database().ref().child('restaurants');
-  // $scope.restaurants = $firebaseArray(ref);
-  // $scope.AppUser = firebase.auth().currentUser.uid;
-  // console.log($scope.AppUser);
-  // console.log("INIT Restaurant");
-  // $scope.addRestaurant = function(restaurant){
-  //   $scope.restaurants.$add({
-  //     name: restaurant.name,
-  //     owner:
-  //   })
-//   }
-// }])
 app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera",
   function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera){
   $scope.modalControl = {};
   $scope.restaurants = Restaurant.all();
   $scope.pendingRestaurants = Restaurant.getPendingRestaurants();
   $scope.displayRestaurants = Restaurant.getAuthUserRestaurants();
-  // $scope.getRestaurantPriceRange = Restaurant.getRestaurantPriceRange;
   $scope.AppUser = User.auth();
-  // var user = User.auth();
+  $scope.restaurant = {
+    openTime : new Date()
+  }
+  $scope.$watch('openTime', function() {
+    console.log('New value: '+$scope.openTime);
+  });
+
   console.log($scope.AppUser)
   // user.$loaded().then(function() {
   //   if(user.displayName == undefined) {
@@ -93,7 +83,9 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       sumRating: 0,
       totalRatingCount: 0,
       avgRate: 0,
-      image: $scope.imageURL
+      image: $scope.imageURL,
+      openTime: restaurant.openTime.getTime(),
+      closeTime: restaurant.closeTime.getTime()
     })
 
     $scope.restaurantModal.hide();
@@ -131,7 +123,6 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
   });
 
   $scope.editRestaurant = function(restaurant){
-    console.log("HELLO WORLD EDIT CLICKED");
     $scope.showMap = false;
     $scope.restaurant = restaurant;
     $scope.restaurantEditModal.show();
@@ -160,7 +151,6 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
 
   $scope.approveRestaurant = function(restaurant) {
     $scope.pendingRestaurants.$remove(restaurant).then(function() {
-      console.log("try rest own id "+restaurant.owner_id);
       $scope.restaurants.$add(restaurant);
     })
   }
