@@ -49,6 +49,7 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth",
 
   $scope.addToCart = function(menu){
     console.log("Cliked!!");
+    console.log(menu)
     $scope.id = menu.$id;
     $scope.menuName = menu.name;
     $scope.menuPrice = menu.price;
@@ -57,9 +58,10 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth",
   };
 
   $scope.sendToCart = function(menu){
-    let menuCart = {id:$scope.id, name:$scope.menuName, price : $scope.menu , quantity:menu.quantity};
+    let menuCart = {id:$scope.id, name:$scope.menuName, price : $scope.menuPrice , quantity:menu.quantity};
     CartDataService.add(menuCart);
-    $state.go("tabs.cart")
+    console.log(CartDataService.get())
+    $state.go("tabs.menu")
     $scope.addToCartModal.hide();
   }
 
