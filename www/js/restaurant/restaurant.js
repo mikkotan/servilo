@@ -140,6 +140,34 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
     });
   }
 
+  $scope.deleteRestaurant = function(restaurant) {
+    var resObj = restaurant;
+    console.log(resObj);
+    $scope.displayRestaurants.$remove(resObj).then(function() {
+      console.log('deleted?');
+    });
+
+    for(var menu in resObj.menus) {
+      console.log(menu);
+      var menusRef = firebase.database().ref().child('menus');
+      menusRef.child(menu).set(null);
+    }
+
+    for(var review in resObj.reviews) {
+      console.log(review);
+      var reviewsRef = firebase.database().ref().child('reviews');
+      reviewsRef.child(review).set(null);
+    }
+
+    for(var reviewer in resObj.reviewers) {
+      console.log(reviewer);
+      var userReviewedRestaurantsRef = firebase.database().ref().child('users').child(reviewer).child('reviewed_restaurants');
+      console.log('reviewer ref'+userReviewedRestaurantsRef);
+      userReviewedRestaurantsRef.child(resObj.$id).set(null);
+    }
+
+  }
+
   $scope.closeEditRestaurant = function() {
     $scope.restaurantEditModal.hide();
   }

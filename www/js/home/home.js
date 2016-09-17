@@ -6,12 +6,10 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
   var rootRef = firebase.database().ref();
   var newReviewRef = rootRef.child("reviews"); //new
   var userRfe = rootRef.child("users");
-
-
+  var restaurantsRef = rootRef.child("restaurants");
 
   $scope.newReviews = $firebaseArray(newReviewRef); //new
   $scope.userRfeObj = $firebaseArray(userRfe);
-
 
   $scope.restaurants = Restaurant.all();
   $scope.getAvg = Restaurant.getAveragePrice;
@@ -20,8 +18,6 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
   $scope.getUserName = Home.getUserName;
   $scope.openRestaurant = Restaurant.getRestaurantOpenStatus;
 
-
-
   User.setOnline();
   ionicMaterialInk.displayEffect();
 
@@ -29,8 +25,6 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
     rate : 0,
     max: 5
   }
-
-
 
   if($state.is("tabs.viewRestaurant")){
     var id = $stateParams.restaurantId;
@@ -44,13 +38,11 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
         $scope.review = $firebaseObject(rootRef.child("reviews").child(snapshot.val()));
       })
     }
-    
+
     $scope.restaurant = Restaurant.get(id);
     $scope.isAlreadyReviewed();
     $scope.reviews = $firebaseArray(reviewRef);
   }
-
-
 
   $scope.addReview = function(review) {
     $ionicLoading.show();
@@ -64,6 +56,8 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
       timestamp: firebase.database.ServerValue.TIMESTAMP
     }).then(function(review) {
       var userRef = rootRef.child('users').child(User.auth().$id).child('reviewed_restaurants').child(id); //new
+      restaurantsRef.child(id).child('reviews').child(review.key).set(true);
+      restaurantsRef.child(id).child('reviewers').child(User.auth().$id).set(true);
       userRef.set(review.key); //new
       $scope.isAlreadyReviewed();
       $ionicLoading.hide();

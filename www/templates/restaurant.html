@@ -19,7 +19,7 @@
           <a class="button button-small button-calm" ui-sref="tabs.viewRestaurantMenus({restaurantId:restaurant.$id})">View Menus</a>
           <a class="button button-small button-calm" ui-sref="tabs.addMenu({restaurantId:restaurant.$id})">Add menu</a>
         </p>
-        <ion-option-button class="button-royal" ng-click="displayRestaurants.$remove(restaurant)">
+        <ion-option-button class="button-royal" ng-click="deleteRestaurant(restaurant)">
           Delete
         </ion-option-button>
         <ion-option-button class="button-calm" ng-click="editRestaurant(restaurant)">
