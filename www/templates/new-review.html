@@ -1,7 +1,7 @@
 <div class="modal">
-  <ion-header-bar class="bar-secondary">
-    <h1 class="title">Write Review</h1>
-    <button class="button button-clear button-positive" ng-click="closeReview()">Cancel</button>
+  <ion-header-bar class="bar bar-header bar-assertive">
+    <h1 class="title">New Review</h1>
+    <button class="button button-clear button-primary" ng-click="reviewModal.hide()"><i class="icon ion-ios-close"></i></button>
   </ion-header-bar>
   <ion-content>
     <form ng-submit="addReview(review)">
@@ -9,7 +9,8 @@
         <label class="item item-input">
           <textarea placeholder="Write review here . . . " ng-model="review.content"></textarea>
         </label>
-          Rate us: <rating ng-model="review.rating" max="rating.max"></rating>
+        Rate us:
+        <rating ng-model="review.rating" max="rating.max"></rating>
       </div>
       <div class="padding">
         <button type="submit" class="button button-block button-positive">Save</button>

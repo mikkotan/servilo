@@ -141,22 +141,24 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
     $scope.editReviewModal.hide();
     $scope.isAlreadyReviewed();
   };
-  $ionicModal.fromTemplateUrl('templates/new-review.html', function(modalReview) {
-    $scope.modalReview = modalReview;
+
+  $ionicModal.fromTemplateUrl('templates/new-review.html', function(reviewModal) {
+    $scope.reviewModal = reviewModal;
   }, {
     scope: $scope
   });
-
+  $ionicModal.fromTemplateUrl('templates/edit-review.html', function(editReviewModal) {
+    $scope.editReviewModal = editReviewModal;
+  }, {
+    scope: $scope
+  });
 
   if($state.is("tabs.viewRestaurant")){
     $scope.restaurant = Restaurant.get(id);
     console.log(id);
   }
-  $ionicModal.fromTemplateUrl('templates/edit-review.html', function(editModalReview) {
-    $scope.editModalReview = editModalReview;
-  }, {
-    scope: $scope
-  });
+
+
 
   $scope.showConfirmDelete = function(review) {
     var reviewObj = review;

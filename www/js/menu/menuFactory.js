@@ -13,7 +13,7 @@ app.factory("Menu",["$firebaseAuth","$firebaseArray","$firebaseObject","Restaura
       return $firebaseObject(menus.child(menuId))
     },
     getRestaurant : function(restaurantId){
-      return restaurantsArray.$getRecord(restaurantId).name;
+      return restaurantsArray.$getRecord(restaurantId);
     },
     getRestaurantMenus : function(restaurantId){
       return $firebaseArray(menus.orderByChild("restaurant_id").equalTo(restaurantId))
