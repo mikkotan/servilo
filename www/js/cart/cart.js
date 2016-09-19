@@ -1,51 +1,52 @@
-app.controller("CartCtrl",["$scope","$firebaseAuth","$firebaseArray","$firebaseObject","CartDataService","Menu","User",
-  function($scope ,$firebaseAuth ,$firebaseArray ,$firebaseObject, CartDataService,User){
+app.controller("CartCtrl",["$scope","$firebaseAuth","$firebaseArray","$firebaseObject",
+  "CartData","Menu","User","$stateParams",
+  function($scope ,$firebaseAuth ,$firebaseArray ,$firebaseObject, CartData, User ,$stateParams){
 
 var total = [];
 
-var rootRef = firebase.database().ref();
-var menus = rootRef.child("order");
 
-$scope.cart = CartDataService.get();
+$scope.cart = CartData.get();
 
-CartDataService.get().forEach(function(order){
-    let sub = order.quantity * order.price;
+function price(){
+  $scope.cart.forEach(function(order){
+    var sub = order.quantity * order.price;
     total.push(sub);
     console.log("this is total "+total)
-});
+  });
+}
 
 
+// $scope.$on('$ionicView.enter', function() {
+//    console.log('Opened!')
+// })
+
+console.log("unod sang array" + total);
+console.log($scope.cart);
 
 $scope.subtotal = function(price , quantity){
     var subtotal = price * quantity;
     return subtotal;
   };
 
-
-$scope.getTotalPrice = function(){
-// let totalPrice = 0;
-//
-// for(var i in total){
-//     totalPrice += total[i];
-// }
-//   return totalPrice;
-let totalPrice = total.reduce(add, 0);
-  return totalPrice;
-};
-
 function add(a, b) {
     return a + b;
 }
 
+$scope.getTotalPrice = function(){
+let totalPrice = total.reduce(add, 0);
+  return totalPrice;
+};
+
+s
 $scope.buy = function(cart){
-  // cart.forEach(function(order){
-  //   if(order.restaurant_id){
-  //
-  //   }
-  // });
-  console.log("carty");
-  console.log(User.auth);
-  console.log(cart);
+
+  $scope.order = Order.all();
+
+  $scope.order.$add({
+    restaurant_id : $stateParams.restaurantId,
+    customer : firebase.auth().currentUser.uid,
+    menus : cart
+
 };
 
 
