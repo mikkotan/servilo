@@ -1,6 +1,12 @@
 app.factory("Cart",["$firebaseObject" , "$firebaseAuth","$firebaseArray",
   function($firebaseObject ,$firebaseAuth, $firebaseArray){
-  return {
 
+    var rootRef = firebase.database().ref();
+    var orders = rootRef.child("order");
+
+  return {
+    all : function(){
+      return $firebaseArray(orders);
+    }
   }
 }])

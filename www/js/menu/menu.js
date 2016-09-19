@@ -1,21 +1,19 @@
 app.controller("MenuCtrl",["$scope","$firebaseAuth",
 "$firebaseArray","$firebaseObject", "Menu","$stateParams","$state",
-"$ionicModal", "$ionicListDelegate","CartDataService",
+"$ionicModal", "$ionicListDelegate","CartData",
   function($scope,$firebaseAuth,$firebaseArray,$firebaseObject, Menu , $stateParams ,
-    $state, $ionicModal, $ionicListDelegate,CartDataService){
+    $state, $ionicModal, $ionicListDelegate,CartData){
 
   var restaurantId = $stateParams.restaurantId;
 
   $scope.menus = Menu.all();
-  console.log("aws");
+
   console.log($scope.menus);
   $scope.getRestaurant = Menu.getRestaurant;
-  // $scope.getRestaurantMenus = Menu.getRestaurantMenus(restaurantId);
 
 
-  $scope.restaurant = function(restid){
-    var rest = Menu.getRestaurant(restid);
-    return  restid;
+  if($state.is("tabs.viewRestaurantMenus") || $state.is("tabs.restaurantMenus")){
+    $scope.restaurantMenus = Menu.getRestaurantMenus(restaurantId);
   }
 
   $scope.addMenu = function(menu){
@@ -47,28 +45,47 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth",
   }
   //   {{{{{{{  ADD TO CART  }}}}}}}---------------------------------------------->
 
-  $scope.addToCart = function(menu){
+  $scope.addToCart = function(menu) {
     console.log("Cliked!!");
-    console.log(menu)
     $scope.id = menu.$id;
     $scope.menuName = menu.name;
     $scope.menuPrice = menu.price;
-    $scope.restaurant_id = menu.restaurant_id;
     $scope.addToCartModal.show();
   };
 
+  function menuId(array, key, value) {
+    for (var i = 0; i < array.length; i++) {
+    if (array[i][key] == value) {
+      return i;
+    }
+  }
+    return null;
+  }
+
   $scope.sendToCart = function(menu){
-    let menuCart = {id:$scope.id, name:$scope.menuName, price : $scope.menuPrice , quantity:menu.quantity};
-    CartDataService.add(menuCart);
-    console.log(CartDataService.get())
-    $state.go("tabs.menu")
-    $scope.addToCartModal.hide();
+
+    if(menuId(CartData.get(),"id",$scope.id) == null){
+
+      var menuCart = { menu_id:$scope.id, name:$scope.menuName, price : $scope.menuPrice , quantity:menu.quantity};
+      CartData.add(menuCart);
+      $state.go("tabs.menu");
+      $scope.addToCartModal.hide();
+    }
+    else{
+      CartData.get().map(function(order){
+              if(order.id == $scope.id){
+                order.quantity = order.quantity + menu.quantity;
+                $state.go("tabs.menu");
+                $scope.addToCartModal.hide();
+              }
+      });
+    };
   }
 
   $ionicModal.fromTemplateUrl('templates/add-to-cart-modal.html', function(addToCartModal) {
     $scope.addToCartModal = addToCartModal;
   }, {
-    scope: $scope  /// GIVE THE MODAL ACCESS TO PARENT SCOPE
+    scope: $scope
   });
 
 
@@ -125,8 +142,6 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth",
     scope: $scope
   });
 
-  if($state.is("tabs.viewRestaurantMenus")){
-    $scope.restaurantMenus = Menu.getRestaurantMenus(restaurantId);
-  }
+
 
 }]);

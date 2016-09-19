@@ -37,7 +37,6 @@ let totalPrice = total.reduce(add, 0);
   return totalPrice;
 };
 
-s
 $scope.buy = function(cart){
 
   $scope.order = Order.all();
