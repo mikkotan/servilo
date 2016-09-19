@@ -141,26 +141,8 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
     $scope.editReviewModal.hide();
     $scope.isAlreadyReviewed();
   };
-
-  $scope.newReview = function() {
-    console.log("new review clicked");
-    $scope.reviewModal.show();
-  };
-
-  $scope.closeReview = function() {
-    $scope.reviewModal.hide();
-  };
-
-  $scope.editReview = function() {
-    $scope.editReviewModal.show();
-  };
-
-  $scope.closeEditReview = function() {
-    $scope.editReviewModal.hide();
-  };
-
   $ionicModal.fromTemplateUrl('templates/new-review.html', function(modalReview) {
-    $scope.reviewModal = modalReview;
+    $scope.modalReview = modalReview;
   }, {
     scope: $scope
   });
@@ -171,7 +153,7 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
     console.log(id);
   }
   $ionicModal.fromTemplateUrl('templates/edit-review.html', function(editModalReview) {
-    $scope.editReviewModal = editModalReview;
+    $scope.editModalReview = editModalReview;
   }, {
     scope: $scope
   });
