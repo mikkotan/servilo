@@ -1,0 +1,18 @@
+<ion-view view-title="Restaurant Menus">
+<ion-content class="padding">
+
+    <ion-list>
+      <ion-item ng-repeat="menu in restaurantMenus">
+          <h3>{{menu.name}}</h3><button class="button button-calm" ng-click="addToCart(menu)">Buy</button>
+          <p>
+            P {{menu.price}}
+          </p>
+      </ion-item>
+
+    </ion-list>
+    <p>
+      <a class="button-calm" ui-sref="tabs.home">back</a>
+    </p>
+</ion-content>
+</ion-view>
+  

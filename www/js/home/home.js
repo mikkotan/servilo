@@ -143,39 +143,23 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
     $scope.isAlreadyReviewed();
   };
 
-  $scope.newReview = function() {
-    console.log("new review clicked");
-    $scope.reviewModal.show();
-  };
-
-  $scope.closeReview = function() {
-    $scope.reviewModal.hide();
-  };
-
-  $scope.editReview = function() {
-    $scope.editReviewModal.show();
-  };
-
-  $scope.closeEditReview = function() {
-    $scope.editReviewModal.hide();
-  };
-
-  $ionicModal.fromTemplateUrl('templates/new-review.html', function(modalReview) {
-    $scope.reviewModal = modalReview;
+  $ionicModal.fromTemplateUrl('templates/new-review.html', function(reviewModal) {
+    $scope.reviewModal = reviewModal;
   }, {
     scope: $scope
   });
-
+  $ionicModal.fromTemplateUrl('templates/edit-review.html', function(editReviewModal) {
+    $scope.editReviewModal = editReviewModal;
+  }, {
+    scope: $scope
+  });
 
   if($state.is("tabs.viewRestaurant")){
     $scope.restaurant = Restaurant.get(id);
     console.log(id);
   }
-  $ionicModal.fromTemplateUrl('templates/edit-review.html', function(editModalReview) {
-    $scope.editReviewModal = editModalReview;
-  }, {
-    scope: $scope
-  });
+
+
 
   $scope.showConfirmDelete = function(review) {
     var reviewObj = review;

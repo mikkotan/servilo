@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="todo">
+<html ng-app="app">
 
 <head>
   <meta charset="utf-8">
@@ -30,8 +30,6 @@
   <script src="js/cart/cartService.js"></script>
   <script src="js/menu/menuFactory.js"></script>
   <script src="js/menu/menusWithAvg.js"></script>
-  <script src="js/sample/sample.js"></script>
-  <script src="js/sample/sampleFactory.js"></script>
   <script src="js/login/login.js"></script>
   <script src="js/login/loginFactory.js"></script>
   <script src="js/login/authProvider.js"></script>
@@ -47,14 +45,14 @@
   <script src="cordova.js"></script>
 </head>
 
-<body ng-app="todo">
+<body ng-app="app">
 
-  <ion-side-menus ng-controller="NavCtrl">
+  <ion-side-menus ng-controller="AppCtrl">
 
     <ion-side-menu-content>
       <ion-nav-bar class="bar-assertive">
-          <ion-nav-back-button class="button-icon ion-arrow-left-c">
-                     </ion-nav-back-button>
+        <ion-nav-back-button class="button-icon ion-arrow-left-c">
+        </ion-nav-back-button>
         <ion-nav-buttons side="left">
           <button class="button button-icon button-clear ion-navicon" ng-click="showMenu()">
           </button>
@@ -68,30 +66,30 @@
     </ion-side-menu-content>
 
     <ion-side-menu side="left" enable-menu-with-back-views="false">
-        <ion-header-bar class="bar-profile bar-stable">
-            <div ng-show="firebaseUser" class="profile">
-                <img class="profile-picture" src="{{photoURL}}" ng-show="photoURL != undefined">
-                <h3 class="name">{{firebaseUser.firstName}} {{firebaseUser.lastName}}</h3>
-            </div>
-            <div ng-hide="firebaseUser" class="profile">
-                <img class="profile-picture" src="{{photoURL}}" ng-show="photoURL != undefined">
-                <h3 class="name">{{firebaseUser.firstName}} {{firebaseUser.lastName}}</h3>
-            </div>
+      <ion-header-bar class="bar-profile bar-stable">
+        <div ng-show="firebaseUser" class="profile">
+          <img class="profile-picture" src="{{photoURL}}" ng-show="photoURL != undefined">
+          <h3 class="name">{{firebaseUser.firstName}} {{firebaseUser.lastName}}</h3>
+        </div>
+        <div ng-hide="firebaseUser" class="profile">
+          <img class="profile-picture" src="{{photoURL}}" ng-show="photoURL != undefined">
+          <h3 class="name">{{firebaseUser.firstName}} {{firebaseUser.lastName}}</h3>
+        </div>
 
-        </ion-header-bar>
+      </ion-header-bar>
 
-        <ion-content has-header="true">
-            <ion-list>
-                <ion-item menu-close href="#/tab/home" class="item-sidelist">
-                    Home
-                </ion-item>
-                <ion-item menu-close ui-sref="login" ng-hide="firebaseUser">
-                    Login or Signup
-                </ion-item>
-                <ion-item menu-close ui-sref="signup" ng-hide="firebaseUser">
-                    Sign Up
-                </ion-item>
-                <!-- <li>
+      <ion-content has-header="true">
+        <ion-list>
+          <ion-item menu-close href="#/tab/home" class="item-sidelist">
+            Home
+          </ion-item>
+          <ion-item menu-close ui-sref="login" ng-hide="firebaseUser">
+            Login or Signup
+          </ion-item>
+          <ion-item menu-close ui-sref="signup" ng-hide="firebaseUser">
+            Sign Up
+          </ion-item>
+          <!-- <li>
                     <a class="item" menu-close nav-clear href="#/tab/home">Home</a>
                 </li>
                 <li>
@@ -100,13 +98,14 @@
                 <li>
                     <a class="item" menu-close ui-sref="signup" ng-hide="firebaseUser">Sign up</a>
                 </li> -->
-                <ion-item ng-show="firebaseUser" ng-click="signOut()">
-                    Sign Out
-                </ion-item>
-            </ion-list>
-        </ion-content>
+          <ion-item ng-show="firebaseUser" ng-click="signOut()">
+            Sign Out
+          </ion-item>
+        </ion-list>
+      </ion-content>
     </ion-side-menu>
 
   </ion-side-menus>
 </body>
+
 </html>

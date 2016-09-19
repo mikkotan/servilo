@@ -1,9 +1,8 @@
 app.controller("CartCtrl",["$scope","$firebaseAuth","$firebaseArray","$firebaseObject",
-  "CartData","Menu","User","$stateParams",
+  "CartData","User","$stateParams",
   function($scope ,$firebaseAuth ,$firebaseArray ,$firebaseObject, CartData, User ,$stateParams){
 
 var total = [];
-
 
 $scope.cart = CartData.get();
 
@@ -15,13 +14,9 @@ function price(){
   });
 }
 
+price();
 
-// $scope.$on('$ionicView.enter', function() {
-//    console.log('Opened!')
-// })
 
-console.log("unod sang array" + total);
-console.log($scope.cart);
 
 $scope.subtotal = function(price , quantity){
     var subtotal = price * quantity;
@@ -38,16 +33,13 @@ let totalPrice = total.reduce(add, 0);
 };
 
 $scope.buy = function(cart){
-
-  $scope.order = Order.all();
-
+$scope.order = Order.all();
   $scope.order.$add({
     restaurant_id : $stateParams.restaurantId,
     customer : firebase.auth().currentUser.uid,
     menus : cart
+  });
 
-};
-
-
+}
 
 }]);

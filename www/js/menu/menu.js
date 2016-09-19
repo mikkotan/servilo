@@ -8,7 +8,6 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth",
 
   $scope.menus = Menu.all();
 
-  console.log($scope.menus);
   $scope.getRestaurant = Menu.getRestaurant;
 
 
@@ -53,29 +52,31 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth",
     $scope.addToCartModal.show();
   };
 
-  function menuId(array, key, value) {
-    for (var i = 0; i < array.length; i++) {
-    if (array[i][key] == value) {
-      return i;
-    }
-  }
-    return null;
+  var menuId = function(array, key, value){
+      for (var i = 0; i < array.length; i++) {
+        if (array[i][key] == value) {
+          return i;
+        }
+      }
+      return null;
   }
 
   $scope.sendToCart = function(menu){
-
+    console.log("DIRI")
+    console.log("AMO NI "+ menuId(CartData.get(),"id",$scope.id));
     if(menuId(CartData.get(),"id",$scope.id) == null){
-
+      console.log("KONG WALA PAREHO");
       var menuCart = { menu_id:$scope.id, name:$scope.menuName, price : $scope.menuPrice , quantity:menu.quantity};
       CartData.add(menuCart);
-      $state.go("tabs.menu");
+      $state.go("tabs.restaurantMenus");
       $scope.addToCartModal.hide();
     }
-    else{
+    else {
+      console.log("KONG MAY PAREHO");
       CartData.get().map(function(order){
               if(order.id == $scope.id){
                 order.quantity = order.quantity + menu.quantity;
-                $state.go("tabs.menu");
+                $state.go("tabs.restaurantMenus");
                 $scope.addToCartModal.hide();
               }
       });
@@ -88,60 +89,58 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth",
     scope: $scope
   });
 
+    // {{{{{{{{{{{{{{{ END }}}}}}}}}}}}}}}--------------------------------------------->
 
-  // {{{{{{{{{{{{{{{ END }}}}}}}}}}}}}}}--------------------------------------------->
-
-  $scope.deleteMenu = function(menu) {
-    console.log("deleted click"+ menu.name);
-    console.log("price"+menu.price);
-    var resSumRef = firebase.database().ref().child("restaurants").child(menu.restaurant_id).child("sumPrice");
-    var resTotalMenuCountRef = firebase.database().ref().child("restaurants").child(menu.restaurant_id).child("totalMenuCount");
-    resSumRef.transaction(function(currentSum){
-      return currentSum - menu.price;
-    });
-
-    resTotalMenuCountRef.transaction(function(currentCount){
-      return currentCount - 1;
-    });
-
-
-    $scope.restaurantMenus.$remove(menu);
-  }
-
-  $scope.editMenu = function(menu) {
-    console.log("editButtonModal clicked");
-    $scope.menu = menu;
-    $scope.menuEditModal.show();
-  }
-
-  $scope.updateMenu = function(menu, $state) {
-    var menuRef = firebase.database().ref().child("menus").child(menu.$id);
-    menuRef.update({
-      name : menu.name,
-      price : menu.price
-    }).then(function() {
+    $scope.deleteMenu = function(menu) {
+      console.log("deleted click" + menu.name);
+      console.log("price" + menu.price);
       var resSumRef = firebase.database().ref().child("restaurants").child(menu.restaurant_id).child("sumPrice");
-      var prevPriceRef = menuRef.child("prevPrice");
+      var resTotalMenuCountRef = firebase.database().ref().child("restaurants").child(menu.restaurant_id).child("totalMenuCount");
+      resSumRef.transaction(function(currentSum) {
+        return currentSum - menu.price;
+      });
 
-      resSumRef.transaction(function(currentSum){
-        return currentSum - menu.prevPrice + menu.price;
-      })
+      resTotalMenuCountRef.transaction(function(currentCount) {
+        return currentCount - 1;
+      });
 
-      prevPriceRef.transaction(function(currentPrevPrice){
-        return menu.price;
-      })
+
+      $scope.restaurantMenus.$remove(menu);
+    }
+
+    $scope.editMenu = function(menu) {
+      console.log("editButtonModal clicked");
+      $scope.menu = menu;
+      $scope.menuEditModal.show();
+    }
+
+    $scope.updateMenu = function(menu, $state) {
+      var menuRef = firebase.database().ref().child("menus").child(menu.$id);
+      menuRef.update({
+        name: menu.name,
+        price: menu.price
+      }).then(function() {
+        var resSumRef = firebase.database().ref().child("restaurants").child(menu.restaurant_id).child("sumPrice");
+        var prevPriceRef = menuRef.child("prevPrice");
+
+        resSumRef.transaction(function(currentSum) {
+          return currentSum - menu.prevPrice + menu.price;
+        })
+
+        prevPriceRef.transaction(function(currentPrevPrice) {
+          return menu.price;
+        })
+      });
+
+      $scope.menuEditModal.hide();
+      $ionicListDelegate.closeOptionButtons();
+    }
+
+    $ionicModal.fromTemplateUrl('templates/edit-menu.html', function(modalEditMenu) {
+      $scope.menuEditModal = modalEditMenu;
+    }, {
+      scope: $scope
     });
 
-    $scope.menuEditModal.hide();
-    $ionicListDelegate.closeOptionButtons();
   }
-
-  $ionicModal.fromTemplateUrl('templates/edit-menu.html', function(modalEditMenu) {
-    $scope.menuEditModal = modalEditMenu;
-  }, {
-    scope: $scope
-  });
-
-
-
-}]);
+]);

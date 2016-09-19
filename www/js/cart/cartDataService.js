@@ -7,10 +7,9 @@ app.factory('CartData', function(){
         cart.push(menu);
     },
     get: function(){
-      console.log("gagana permi");
       return cart;
     }
 
-  }
+  };
 
-})
+});
