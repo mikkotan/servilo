@@ -1,9 +1,9 @@
-<div class="modal">
-  <ion-header-bar class="bar-secondary">
-    <h1 class="title">New Restaurant</h1>
-
-  </ion-header-bar>
-  <ion-content>
+<ion-modal-view view-title="NewRestaurant">
+    <ion-header-bar class="bar bar-header bar-assertive">
+      <h1 class="title">New Restaurant</h1>
+      <button class="button button-clear button-primary" ng-click="restaurantModal.hide()"><i class="icon ion-ios-close"></i></button>
+    </ion-header-bar>
+  <ion-content class="padding">
     <form ng-submit="addRestaurant(restaurant)">
       <div class="list">
         <a class="button button-icon icon ion-camera" ng-click="upload(1)">CAM</a>
@@ -45,8 +45,5 @@
         <button type="submit" class="button button-block button-positive">Add Restaurant</button>
       </div>
     </form>
-    <div class="padding">
-      <button class="button button-clear button-positive" ng-click="closeRestaurant()">Cancel</button>
-    </div>
   </ion-content>
-</div>
+</ion-modal-view>
