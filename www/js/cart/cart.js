@@ -23,14 +23,19 @@ $scope.subtotal = function(price , quantity){
 
 
 $scope.getTotalPrice = function(){
-let totalPrice = 0;
-
-for(var i in total){
-    totalPrice += total[i];
-}
+// let totalPrice = 0;
+//
+// for(var i in total){
+//     totalPrice += total[i];
+// }
+//   return totalPrice;
+let totalPrice = total.reduce(add, 0);
   return totalPrice;
 };
 
+function add(a, b) {
+    return a + b;
+}
 
 $scope.buy = function(cart){
   // cart.forEach(function(order){
