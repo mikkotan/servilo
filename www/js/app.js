@@ -133,15 +133,18 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
     })
     .state('tabs.cart', {
       url: "/cart",
+      // params:{
+      //   'restaurant_id':null
+      // },
       views: {
         'cart-tab': {
           templateUrl: "templates/cart.html",
           controller: "CartCtrl",
-          resolve: {
-            "currentAuth": ["Auth", function(Auth) {
-              return Auth.$requireSignIn();
-            }]
-          }
+          // resolve: {
+          //   "currentAuth": ["Auth", function(Auth) {
+          //     return Auth.$requireSignIn();
+          //   }]
+          // }
         }
       }
     })

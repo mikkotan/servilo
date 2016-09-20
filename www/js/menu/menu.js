@@ -55,26 +55,24 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth",
   var menuId = function(array, key, value){
       for (var i = 0; i < array.length; i++) {
         if (array[i][key] == value) {
-          return i;
+            return i;
         }
       }
       return null;
   }
 
   $scope.sendToCart = function(menu){
-    console.log("DIRI")
-    console.log("AMO NI "+ menuId(CartData.get(),"id",$scope.id));
-    if(menuId(CartData.get(),"id",$scope.id) == null){
-      console.log("KONG WALA PAREHO");
+
+    if(menuId(CartData.get(),"menu_id",$scope.id) == null){
       var menuCart = { menu_id:$scope.id, name:$scope.menuName, price : $scope.menuPrice , quantity:menu.quantity};
       CartData.add(menuCart);
       $state.go("tabs.restaurantMenus");
       $scope.addToCartModal.hide();
     }
     else {
-      console.log("KONG MAY PAREHO");
+
       CartData.get().map(function(order){
-              if(order.id == $scope.id){
+              if(order.menu_id == $scope.id){
                 order.quantity = order.quantity + menu.quantity;
                 $state.go("tabs.restaurantMenus");
                 $scope.addToCartModal.hide();

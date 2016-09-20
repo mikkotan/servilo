@@ -3,7 +3,7 @@ app.controller("CartCtrl",["$scope","$firebaseAuth","$firebaseArray","$firebaseO
   function($scope ,$firebaseAuth ,$firebaseArray ,$firebaseObject, CartData, User ,$stateParams){
 
 var total = [];
-
+console.log("please gwa " +$stateParams.restaurant_id);
 $scope.cart = CartData.get();
 
 function price(){
