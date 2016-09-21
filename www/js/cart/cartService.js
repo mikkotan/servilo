@@ -5,7 +5,7 @@ app.factory("Cart",["$firebaseObject" , "$firebaseAuth","$firebaseArray",
     var orders = rootRef.child("order");
 
   return {
-    all : function(){
+    order : function(){
       return $firebaseArray(orders);
     }
   }

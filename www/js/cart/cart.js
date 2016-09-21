@@ -1,9 +1,11 @@
 app.controller("CartCtrl",["$scope","$firebaseAuth","$firebaseArray","$firebaseObject",
-  "CartData","User","$stateParams",
-  function($scope ,$firebaseAuth ,$firebaseArray ,$firebaseObject, CartData, User ,$stateParams){
+  "CartData","User","$stateParams","Cart",
+  function($scope ,$firebaseAuth ,$firebaseArray ,$firebaseObject, CartData, User ,$stateParams,Cart){
 
 var total = [];
-console.log("please gwa " +$stateParams.restaurant_id);
+console.log("please gwa " +$stateParams.restaurantId);
+
+$scope.order = Cart.order();
 $scope.cart = CartData.get();
 
 function price(){
@@ -33,13 +35,22 @@ let totalPrice = total.reduce(add, 0);
 };
 
 $scope.buy = function(cart){
-$scope.order = Order.all();
+  console.log("click")
+
+
+
   $scope.order.$add({
     restaurant_id : $stateParams.restaurantId,
     customer : firebase.auth().currentUser.uid,
     menus : cart
+  }).then(function(){
+      $scope.cart = [];
+      alert("success")
+    .catch(function(){
+      alert("error")
+    });
   });
-
+  console.log($scope.order);
 }
 
 }]);

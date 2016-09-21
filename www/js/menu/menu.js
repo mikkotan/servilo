@@ -4,7 +4,7 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth",
   function($scope,$firebaseAuth,$firebaseArray,$firebaseObject, Menu , $stateParams ,
     $state, $ionicModal, $ionicListDelegate,CartData){
 
-  var restaurantId = $stateParams.restaurantId;
+  $scope.restaurantId = $stateParams.restaurantId;
 
   $scope.menus = Menu.all();
 
@@ -12,14 +12,14 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth",
 
 
   if($state.is("tabs.viewRestaurantMenus") || $state.is("tabs.restaurantMenus")){
-    $scope.restaurantMenus = Menu.getRestaurantMenus(restaurantId);
+    $scope.restaurantMenus = Menu.getRestaurantMenus($scope.restaurantId);
   }
 
   $scope.addMenu = function(menu){
     $scope.menus.$add({
       name : menu.name,
       price : menu.price,
-      restaurant_id : restaurantId,
+      restaurant_id : $scope.restaurantId,
       prevPrice : menu.price
     }).then(function(menuObj){
       var restaurantRef = firebase.database().ref().child("restaurants").child(restaurantId);

@@ -19,6 +19,7 @@
         Total : {{getTotalPrice()}}
       </p>
       <p>
+          <button class="button button-calm" ui-sref="tabs.restaurantMenus({restaurantId:restaurant.$id})">Order</button>
         <button class="button button-calm" ng-click="buy(cart)">Buy</button>
       </p>
     </ion-list>

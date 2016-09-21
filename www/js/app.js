@@ -132,10 +132,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
       }
     })
     .state('tabs.cart', {
-      url: "/cart",
-      // params:{
-      //   'restaurant_id':null
-      // },
+      url: "/cart/:restaurantId",
       views: {
         'cart-tab': {
           templateUrl: "templates/cart.html",
