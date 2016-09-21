@@ -1,41 +1,46 @@
-app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "User", "MenusWithAvg",
-  function($firebaseAuth , $firebaseArray , $firebaseObject, User, MenusWithAvg){
-  var rootRef = firebase.database().ref();
+app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "User", "MenusWithAvg", "Database",
+  function($firebaseAuth , $firebaseArray , $firebaseObject, User, MenusWithAvg, Database){
+
   var authUserId = User.auth().$id;
-  var restaurants = rootRef.child("restaurants");
-  var pendingRestaurants = rootRef.child("pending");
-  var restaurantsArray = $firebaseArray(restaurants);
-  var users = rootRef.child("users");
-  var userRestaurantsChildArray = $firebaseArray(rootRef.child('users').child(authUserId).child('restaurants'));
-  var usersArray = $firebaseArray(users);
+
+  var restaurants = Database.restaurantsReference();
+  var pendingRestaurants = Database.pendingsReference();
+  var users = Database.usersReference();
+  var menus = Database.menusReference();
+
+  var pendingRestaurantsArray = Database.pendings();
+  var restaurantsArray = Database.restaurants();
+  var usersArray = Database.users();
+
+  var userRestaurantsChildArray = $firebaseArray(Database.usersReference().child(authUserId).child('restaurants'));
 
   return {
     all : function(){
-        return $firebaseArray(restaurants);
+        return restaurantsArray;
     },
     getAuthUserRestaurants : function(){
         return $firebaseArray(restaurants.orderByChild("owner_id").equalTo(authUserId))
     },
     get : function(restaurantId){
-        return $firebaseObject(restaurants.child(restaurantId));
+        return restaurantsArray.$getRecord(restaurantId);
     },
     getPendingRestaurants : function() {
-        return $firebaseArray(pendingRestaurants);
+        return pendingRestaurantsArray;
     },
     getUserRestaurantChild : function() {
       return userRestaurantsChildArray;
     },
-
     getAveragePrice : function(restaurantId) {
       var res = restaurantsArray.$getRecord(restaurantId);
-      // var avg = res.secured_data.sumPrice / res.secured_data.totalMenuCount;
       return res.secured_data.avgPrice.toFixed(2);
     },
     getAverageRating : function(restaurantId) {
       var res = restaurantsArray.$getRecord(restaurantId);
       return res.secured_data.avgRate.toFixed(1);
     },
-
+    getMenus : function(restaurantId) {
+      return $firebaseArray(menus.orderByChild("restaurant_id").equalTo(restaurantId));
+    },
     getRestaurantStatus : function(ownerId) {
       if(usersArray.$getRecord(ownerId).online != null){
         return "Online"

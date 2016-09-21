@@ -42,12 +42,12 @@
         Reviews
       </div>
       <ul>
-        <li class="item" ng-repeat="review in reviews">
+        <li class="item" ng-repeat="review in restaurantReviews">
           <h3>
             {{review.content}} <span class="badge badge-balanced">{{review.rating}}</span>
           </h3>
           <p>
-            Reviewed by: {{getUserName(review.reviewer_id)}}
+            Reviewed by: {{getReviewer(review).firstName}} {{getReviewer(review).lastName}}
             <!-- Reviewed by: {{review.reviewer_id}} -->
           </p>
         </li>

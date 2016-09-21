@@ -193,7 +193,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 })
 
 
-.controller('NavCtrl', function($scope, $ionicSideMenuDelegate, Auth, User) {
+.controller('NavCtrl', function($scope, $ionicSideMenuDelegate, Auth, User, Database) {
   $scope.showMenu = function () {
     $ionicSideMenuDelegate.toggleLeft();
   };
@@ -202,6 +202,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
   };
   $scope.signOut = function() {
     Auth.$signOut();
+    Database.usersReference().child(User.auth().$id).child('online').set(null);
     console.log("logged out..");
     location.reload();
   }

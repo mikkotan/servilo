@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <widget id="com.ionicframework.todo334097" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>todo</name>
-  <description>&#xD;&#xD;&#xD;
-        An Ionic Framework and Cordova project.&#xD;&#xD;&#xD;
+  <description>
+        An Ionic Framework and Cordova project.
     </description>
-  <author email="you@example.com" href="http://example.com.com/">&#xD;&#xD;&#xD;
-      Your Name Here&#xD;&#xD;&#xD;
+  <author email="you@example.com" href="http://example.com.com/">
+      Your Name Here
     </author>
   <content src="index.html"/>
   <access origin="*"/>
@@ -48,4 +48,5 @@
   <plugin name="cordova-plugin-whitelist" spec="~1.2.2"/>
   <plugin name="ionic-plugin-keyboard" spec="~2.2.1"/>
   <plugin name="cordova-plugin-camera" spec="~2.2.0"/>
+  <plugin name="cordova-plugin-geolocation" spec="~2.3.0"/>
 </widget>

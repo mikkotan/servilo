@@ -1,5 +1,5 @@
-app.controller("LoginCtrl",["$scope" , "$firebaseArray", "$firebaseAuth", "$firebaseObject", "Auth", "AppUser", "ionicMaterialInk", "ionicMaterialMotion", "User", "$state", "$cordovaOauth", "$ionicLoading", "$ionicModal",
-function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth, AppUser, ionicMaterialInk, ionicMaterialMotion, User, $state, $cordovaOauth, $ionicLoading, $ionicModal){
+app.controller("LoginCtrl",["$scope" , "$firebaseArray", "$firebaseAuth", "$firebaseObject", "Auth", "AppUser", "ionicMaterialInk", "ionicMaterialMotion", "User", "$state", "$cordovaOauth", "$ionicLoading", "$ionicModal", "Database",
+function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth, AppUser, ionicMaterialInk, ionicMaterialMotion, User, $state, $cordovaOauth, $ionicLoading, $ionicModal, Database){
 
   ionicMaterialInk.displayEffect();
 
@@ -83,7 +83,7 @@ function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth, AppUser
   }
 
   $scope.updateProfile = function(firebaseUser) {
-    var userRef = firebase.database().ref().child('users').child(User.auth().$id);
+    var userRef = Database.usersReference().child(User.auth().$id);
     userRef.update({
       firstName: firebaseUser.firstName,
       lastName: firebaseUser.lastName
