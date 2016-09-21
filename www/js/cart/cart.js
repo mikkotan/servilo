@@ -3,7 +3,7 @@ app.controller("CartCtrl",["$scope","$firebaseAuth","$firebaseArray","$firebaseO
   function($scope ,$firebaseAuth ,$firebaseArray ,$firebaseObject, CartData, User ,$stateParams,Cart){
 
 var total = [];
-console.log("please gwa " +$stateParams.restaurantId);
+$scope.restaurantId = $stateParams.restaurantId
 
 $scope.order = Cart.order();
 $scope.cart = CartData.get();
@@ -40,7 +40,7 @@ $scope.buy = function(cart){
 
 
   $scope.order.$add({
-    restaurant_id : $stateParams.restaurantId,
+    restaurant_id : $scope.restaurantId,
     customer : firebase.auth().currentUser.uid,
     menus : cart
   }).then(function(){
@@ -50,7 +50,7 @@ $scope.buy = function(cart){
       alert("error")
     });
   });
-  console.log($scope.order);
+
 }
 
 }]);
