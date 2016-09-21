@@ -73,14 +73,14 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth",
   }
 
   $scope.updateMenu = function(menu) {
-
     Database.menusReference().child(menu.$id).update({
       name : menu.name,
       price : menu.price
     });
+  }
 
-    $scope.menuEditModal.hide();
-    $ionicListDelegate.closeOptionButtons();
+  if ($state.is("tabs.viewRestaurantMenus")) {
+    $scope.restaurantMenus = Menu.getRestaurantMenus(restaurantId);
   }
 
   $ionicModal.fromTemplateUrl('templates/edit-menu.html', function(modalEditMenu) {
@@ -88,10 +88,5 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth",
   }, {
     scope: $scope
   });
-
-  if($state.is("tabs.viewRestaurantMenus")){
-    $scope.restaurantMenus = Restaurant.getMenus(restaurantId);
-    // $scope.restaurantMenus = Menu.getRestaurantMenus(restaurantId);
-  }
 
 }]);
