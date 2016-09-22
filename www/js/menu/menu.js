@@ -1,12 +1,12 @@
 app.controller("MenuCtrl",["$scope","$firebaseAuth",
-"$firebaseArray","$firebaseObject", "Menu","$stateParams","$state",
-"$ionicModal", "$ionicListDelegate","CartData",
-  function($scope,$firebaseAuth,$firebaseArray,$firebaseObject, Menu , $stateParams ,
-    $state, $ionicModal, $ionicListDelegate,CartData){
+  "$firebaseArray","$firebaseObject", "menu","$stateParams","$state",
+    "$ionicModal", "$ionicListDelegate","CartData","Menu",
+      function($scope,$firebaseAuth,$firebaseArray,$firebaseObject, menu, $stateParams ,
+          $state, $ionicModal, $ionicListDelegate,CartData,Menu){
 
   $scope.restaurantId = $stateParams.restaurantId;
 
-  $scope.menus = Menu.all();
+  $scope.menus = menu ;
 
   $scope.getRestaurant = Menu.getRestaurant;
 
@@ -63,8 +63,8 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth",
 
   $scope.sendToCart = function(menu){
 
-    if(menuId(CartData.get(),"menu_id",$scope.id) == null){
-      var menuCart = { menu_id:$scope.id, name:$scope.menuName, price : $scope.menuPrice , quantity:menu.quantity};
+    if(menuId(CartData.get(),"id",$scope.id) == null){
+      var menuCart = { id:$scope.id, name:$scope.menuName, price : $scope.menuPrice , quantity:menu.quantity};
       CartData.add(menuCart);
       $state.go("tabs.restaurantMenus");
       $scope.addToCartModal.hide();
@@ -72,7 +72,7 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth",
     else {
 
       CartData.get().map(function(order){
-              if(order.menu_id == $scope.id){
+              if(order.id == $scope.id){
                 order.quantity = order.quantity + menu.quantity;
                 $state.go("tabs.restaurantMenus");
                 $scope.addToCartModal.hide();

@@ -1,30 +1,28 @@
-<ion-view view-title="Cart">
+<ion-view view-title="Order">
   <ion-content class="padding">
-    </button>
     <h3>Cart</h3>
-    <ion-list>
-      <ion-item ng-repeat="restaurant in restaurants">
-        <ion-item ng-repeat="order in orders(restaurant.$id)">
-          <p>
-            Name: {{order.customer}}
-          </p>
-            <ion-item ng-repeat="menu in order.menus">
+      <ion-list>
+        <ion-item ng-repeat="data in order">
+          <p>{{data.restaurant.name}}</p>
+          <p>  {{data.restaurant.$id}}  </p>
+
+            <ion-item  ng-repeat="order in data.orders">
               <p>
+              Customer Name: {{order.customer_id}}
+              </p>
+              <ion-item ng-repeat="menu in order.menus">
+                <p>
                 Name : {{menu.name}}
-              </p>
-              <p>
+                </p>
+                <p>
                 Quantity : {{menu.quantity}}
-              </p>
+                </p>
+                <p>
+                Price : {{menu.price}}
+                </p>
+              </ion-item>
             </ion-item>
         </ion-item>
-    </ion-item>
-      <p>
-        Total : {{getTotalPrice()}}
-      </p>
-      <!-- <p>
-          <button class="button button-calm" ui-sref="tabs.restaurantMenus({restaurantId:restaurant.$id})">Order</button>
-        <button class="button button-calm" ng-click="buy(cart)">Buy</button>
-      </p> -->
-    </ion-list>
+      </ion-list>
   </ion-content>
 </ion-view>

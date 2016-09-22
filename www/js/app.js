@@ -83,7 +83,16 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
         views: {
           'restaurantmenus-tab' : {
             templateUrl: "templates/restaurantMenus.html",
-            controller: "MenuCtrl"
+            controller: "MenuCtrl",
+            resolve: {
+              menu : function(Menu){
+                return {
+                  all : function(){
+                      return Menu.all().$loaded();
+                  }
+                }
+              }
+            }
           }
         }
       })
@@ -110,7 +119,12 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
         views: {
           'menu-tab': {
             templateUrl: "templates/menus.html",
-            controller:"MenuCtrl"
+            controller:"MenuCtrl",
+            resolve: {
+              menu : function(Menu){
+                return Menu.all().$loaded();
+              }
+            }
           }
       }
     })
@@ -136,21 +150,22 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
       views: {
         'cart-tab': {
           templateUrl: "templates/cart.html",
-          controller: "CartCtrl",
-          // resolve: {
-          //   "currentAuth": ["Auth", function(Auth) {
-          //     return Auth.$requireSignIn();
-          //   }]
-          // }
+          controller: "CartCtrl"
         }
       }
     })
-    .state('tabs.order',{
-      url: "/order",
+
+    .state('tabs.orders',{
+      url: "/orders",
       views:{
         'order-tab':{
           templateUrl:"templates/order.html",
           controller:"OrderCtrl",
+          resolve: {
+            restaurants: function(Order) {
+              return Order.getRestaurants().$loaded();
+            }
+          }
         }
       }
     })

@@ -15,9 +15,10 @@ app.factory("Order",["$firebaseAuth","$firebaseArray","$firebaseObject",
       return $firebaseArray(orders);
     },
     getOrder : function(restaurantId){
-      return $firebaseArray(orders.orderByChild("restaurant_id").equalTo(restaurantId))
+      return $firebaseArray(orders.orderByChild("restaurant_id").equalTo(restaurantId));
+
     },
-    restaurants : function() {
+    getRestaurants : function() {
       return $firebaseArray(restaurant.orderByChild("owner_id").equalTo(firebase.auth().currentUser.uid));
     }
   }
