@@ -31,7 +31,7 @@
         </ion-item>
         <div ng-if='restaurant.latitude != null && restaurant.longitude != null' ng-init='setMap(restaurant)'>
           <ui-gmap-google-map zoom='map.zoom' center="map.center" options='map.options' bounds='map.bounds'>
-            <ui-gmap-marker coords="map.center" icon="marker.icon" idkey="marker.id"></ui-gmap-marker>
+            <ui-gmap-markers models="restaurantMarkers" coords="'coords'" icon="'icon'"></ui-gmap-markers>
             <ui-gmap-map-control position="top-right">
               <button class="button button-small button-balanced" ng-click="showPath(restaurant)">Show Driving Path</button>
             </ui-gmap-map-control>
@@ -60,6 +60,10 @@
             </h3>
             <p>
               Reviewed by: {{getReviewer(review).firstName}} {{getReviewer(review).lastName}}
+            </p>
+            <p ng-if="review.images != null">
+            Images: <br>
+              <img src="{{img.image}}" ng-repeat="img in review.images" style="width:100px">
             </p>
           </li>
         </ul>

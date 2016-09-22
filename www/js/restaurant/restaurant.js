@@ -9,7 +9,6 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       openTime: new Date()
     }
 
-
     console.log($scope.AppUser)
       // user.$loaded().then(function() {
       //   if(user.displayName == undefined) {
@@ -29,43 +28,35 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       }
     });
 
-    $scope.images = [];
-    // var hehe = firebase.database().ref().child('pictures');
-    // var syncArray = $firebaseArray(hehe);
-    // $scope.images = syncArray;
-    $scope.imageURL = "";
-    $scope.upload = function(index) {
-      var source = "";
-      switch (index) {
-        case 1:
-          source = Camera.PictureSourceType.CAMERA;
-          break;
-        case 2:
-          source = Camera.PictureSourceType.PHOTOLIBRARY;
-          break;
-      }
-      var options = {
-        quality: 75,
-        destinationType: Camera.DestinationType.DATA_URL,
-        sourceType: source,
-        allowEdit: true,
-        encodingType: Camera.EncodingType.JPEG,
-        popoverOptions: CameraPopoverOptions,
-        targetWidth: 500,
-        targetHeight: 500,
-        saveToPhotoAlbum: false
-      };
-      $cordovaCamera.getPicture(options).then(function(imageData) {
-        $scope.imageURL = imageData;
-        // console.log(imageData);
-        // syncArray.$add({image: imageData}).then(function() {
-        //     alert("Image has been uploaded");
-        // });
+  $scope.imageURL = "";
+  $scope.upload = function(index) {
+    var source = "";
+    switch(index) {
+      case 1:
+        source = Camera.PictureSourceType.CAMERA;
+        break;
+      case 2:
+        source = Camera.PictureSourceType.PHOTOLIBRARY;
+        break;
+    }
+    var options = {
+      quality : 75,
+      destinationType : Camera.DestinationType.DATA_URL,
+      sourceType : source,
+      allowEdit : true,
+      encodingType: Camera.EncodingType.JPEG,
+      popoverOptions: CameraPopoverOptions,
+      targetWidth: 500,
+      targetHeight: 500,
+      saveToPhotoAlbum: false
+    };
+    $cordovaCamera.getPicture(options).then(function(imageData) {
+      $scope.imageURL = imageData;
 
       }, function(error) {
         console.error(error);
       });
-    }
+  }
 
   $scope.addRestaurant = function(restaurant){
     $scope.pendingRestaurants.$add({

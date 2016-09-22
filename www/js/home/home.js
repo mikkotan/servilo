@@ -1,9 +1,7 @@
-app.controller('HomeTabCtrl', ["$scope","$ionicModal",
-"$firebaseArray","currentAuth", "Restaurant", "Home" ,"$stateParams", "$state", "User", "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation", "Database","Review","$ionicLoading",
-function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $stateParams, $state, User,
-  $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, Database,Review, $ionicLoading) {
+app.controller('HomeTabCtrl', 
+  ["$scope","$ionicModal","$firebaseArray","currentAuth", "Restaurant", "Home" ,"$stateParams", "$state", "User", "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation", "$ionicLoading", "$cordovaImagePicker", "Database", "Review",
+function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $stateParams, $state, User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, $ionicLoading, $cordovaImagePicker, Database, Review) {
   console.log('HomeTabCtrl');
-
 
   $scope.usersRefObj = Database.users(); //new
   $scope.restaurants = Database.restaurants(); //new
@@ -50,6 +48,30 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
     $scope.restaurantReviews = $firebaseArray(restaurantReviewsRef);
   }
 
+  $scope.images = [];
+  // $scope.editImages = [];
+
+  $scope.selImages = function() {
+    var options = {
+      maximumImagesCount: 10,
+      width: 800,
+      height: 800,
+      quality: 80
+    };
+
+    $cordovaImagePicker.getPictures(options)
+    .then(function (results) {
+      for (var i = 0; i < results.length; i++) {
+        window.plugins.Base64.encodeFile(results[i], function(base64){
+          $scope.images.push(base64);
+          $scope.$apply();
+        });
+        console.log('Image URI: ' + results[i]);
+      }
+    }, function(error) {
+      // error getting photos
+    });
+  };
 
   $scope.addReview = function(review) {
     $ionicLoading.show();
@@ -63,6 +85,13 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
       restaurant_id : id,
       timestamp: firebase.database.ServerValue.TIMESTAMP
     }).then(function(review) {
+      var newImages = newReviewRef.child(review.key).child('images');
+      var list = $firebaseArray(newImages);
+      for (var i = 0; i < $scope.images.length; i++) {
+        list.$add({ image: $scope.images[i] }).then(function(ref) {
+          console.log("added..." + ref);
+        });
+      }
       console.log("add review done");
       Database.usersReference().child(User.auth().$id).child('reviewed_restaurants').child(id).set(review.key);
       // Database.restaurantsReference().child(id).child('reviews').child(review.key).set(true); //new
@@ -73,6 +102,7 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
       review.content = '';
       $scope.review.rating = 0;
       $scope.rating.rate = 0;
+      $scope.images = [];
     })
   }
 
@@ -82,13 +112,22 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
     reviewRef.update({
       content: review.content,
       rating: review.rating
+    }).then(function() {
+      console.log("finished updating review.");
+      // var newImages = newReviewRef.child(review.$id).child('images');
+      // var list = $firebaseArray(newImages);
+      // for (var i = 0; i < $scope.images.length; i++) {
+      //   list.$add({ image: $scope.images[i] }).then(function(ref) {
+      //     console.log("added..." + ref);
+      //   });
+      // }
     })
-
     review.content = '';
     $scope.review.rating = 0;
     $scope.rating.rate = 0;
     $scope.editReviewModal.hide();
     $scope.isAlreadyReviewed();
+    $scope.images = [];
   };
 
   $ionicModal.fromTemplateUrl('templates/new-review.html', function(reviewModal) {
@@ -151,9 +190,15 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
   };
 
   $scope.addMarker = function(restaurant){
-    $scope.markers.push({id: Date.now(),
+    $scope.markers.push({id: restaurant.$id,
       coords: {latitude:restaurant.latitude, longitude:restaurant.longitude}
     });
+  };
+
+  $scope.markerEvents = {
+    click: function(marker, eventName, model){
+        $state.go("tabs.viewRestaurant",{restaurantId:model.id});
+    }
   };
 
   $scope.showPath =  function(restaurant){
@@ -171,7 +216,7 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
     });
     direction.route(request, function(response, status){
       var steps = response.routes[0].legs[0].steps;
-      var distance =response.routes[0].legs[0].distance.value/100;
+      var distance =response.routes[0].legs[0].distance.value/1000;
       for(i=0; i<steps.length; i++){
         var strokeColor = '#049ce5';
         if((i%2)==0){
