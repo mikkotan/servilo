@@ -63,14 +63,16 @@
           Reviews
         </div>
         <ul>
-          <li class="item" ng-repeat="review in reviews">
+          <li class="item" ng-repeat="review in restaurantReviews">
             <h3>
-
             {{review.content}} <span class="badge badge-balanced">{{review.rating}}</span>
-          </h3>
+            </h3>
             <p>
-              Reviewed by: {{getUserName(review.reviewer_id)}}
-              <!-- Reviewed by: {{review.reviewer_id}} -->
+              Reviewed by: {{getReviewer(review).firstName}} {{getReviewer(review).lastName}}
+            </p>
+            <p ng-if="review.images != null">
+            Images: <br>
+              <img src="{{img.image}}" ng-repeat="img in review.images" style="width:100px">
             </p>
           </li>
         </ul>

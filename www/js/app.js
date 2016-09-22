@@ -96,28 +96,12 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
         }
       }
     })
-    .state('tabs.facts2', {
-      url: "/facts2",
-      views: {
-        'home-tab': {
-          templateUrl: "templates/facts2.html"
-        }
-      }
-    })
     .state('tabs.menu', {
       url: "/menu",
       views: {
         'menu-tab': {
           templateUrl: "templates/menus.html",
           controller: "MenuCtrl"
-        }
-      }
-    })
-    .state('tabs.navstack', {
-      url: "/navstack",
-      views: {
-        'about-tab': {
-          templateUrl: "templates/nav-stack.html"
         }
       }
     })
@@ -193,15 +177,17 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 })
 
 
+
 .controller('AppCtrl', function($scope, $ionicSideMenuDelegate, Auth, User) {
   $scope.showMenu = function() {
-    $ionicSideMenuDelegate.toggleLeft();
+  $ionicSideMenuDelegate.toggleLeft();
   };
   $scope.showRightMenu = function() {
     $ionicSideMenuDelegate.toggleRight();
   };
   $scope.signOut = function() {
     Auth.$signOut();
+    Database.usersReference().child(User.auth().$id).child('online').set(null);
     console.log("logged out..");
     location.reload();
   }
