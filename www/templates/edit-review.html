@@ -1,8 +1,8 @@
 <div class="modal">
-  <ion-header-bar class="bar-secondary">
-    <h1 class="title">Edit Review</h1>
-    <button class="button button-clear button-positive" ng-click="closeEditReview()">Cancel</button>
-  </ion-header-bar>
+    <ion-header-bar class="bar bar-header bar-assertive">
+      <h1 class="title">Edit Review</h1>
+      <button class="button button-clear button-primary" ng-click="editReviewModal.hide()"><i class="icon ion-ios-close"></i></button>
+    </ion-header-bar>
   <ion-content>
     <form ng-submit="updateReview(review)">
       <a class="button button-block button-balanced" ng-click="selImages()" >

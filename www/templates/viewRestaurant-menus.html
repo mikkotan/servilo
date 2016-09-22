@@ -1,21 +1,22 @@
-<ion-view view-title="RestaurantMenus">
+  <ion-view view-title="RestaurantMenus">
   <ion-content class="padding">
-    <ion-list>
-      <ion-item ng-repeat="menu in restaurantMenus">
-        <h3>{{menu.name}}</h3>
-        <p>
-          P {{menu.price}}
-        </p>
-        <ion-option-button class="button-royal" ng-click="deleteMenu(menu)">
-          Delete
-        </ion-option-button>
-        <ion-option-button class="button-calm" ng-click="editMenu(menu)">
-          Edit
-        </ion-option-button>
-      </ion-item>
-    </ion-list>
-    <p>
-      <a class="button-calm" ui-sref="tabs.restaurant">back</a>
-    </p>
+      <!-- <a class="button icon icon-right ion-chevron-right" href="#/tab/facts2">More Facts</a> -->
+      <ion-list>
+        <ion-item ng-repeat="menu in restaurantMenus">
+            <h3>{{menu.name}}</h3>
+            <p>
+              P {{menu.price}}
+            </p>
+            <ion-option-button class="button-royal" ng-click="deleteMenu(menu)">
+              Delete
+            </ion-option-button>
+            <ion-option-button class="button-calm" ng-click="editMenu(menu)">
+              Edit
+            </ion-option-button>
+        </ion-item>
+      </ion-list>
+      <p>
+        <a class="button-calm" ui-sref="tabs.restaurant">back</a>
+      </p>
   </ion-content>
 </ion-view>

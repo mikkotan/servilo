@@ -1,8 +1,8 @@
 <div class="modal">
-  <ion-header-bar class="bar-secondary">
-    <h1 class="title">Edit Restaurant</h1>
-    <button class="button button-clear button-positive" ng-click="closeEditRestaurant()">Cancel</button>
-  </ion-header-bar>
+    <ion-header-bar class="bar bar-header bar-assertive">
+      <h1 class="title">Edit {{restaurant.name}}</h1>
+      <button class="button button-clear button-primary" ng-click="restaurantEditModal.hide()"><i class="icon ion-ios-close"></i></button>
+    </ion-header-bar>
   <ion-content>
     <form ng-submit="edit(restaurant)">
       <div class="list">
