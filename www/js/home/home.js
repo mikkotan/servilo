@@ -200,9 +200,15 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
   };
 
   $scope.addMarker = function(restaurant){
-    $scope.markers.push({id: Date.now(),
+    $scope.markers.push({id: restaurant.$id,
       coords: {latitude:restaurant.latitude, longitude:restaurant.longitude}
     });
+  };
+
+  $scope.markerEvents = {
+    click: function(marker, eventName, model){
+        $state.go("tabs.viewRestaurant",{restaurantId:model.id});
+    }
   };
 
   $scope.showPath =  function(restaurant){
@@ -220,7 +226,7 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
     });
     direction.route(request, function(response, status){
       var steps = response.routes[0].legs[0].steps;
-      var distance =response.routes[0].legs[0].distance.value/100;
+      var distance =response.routes[0].legs[0].distance.value/1000;
       for(i=0; i<steps.length; i++){
         var strokeColor = '#049ce5';
         if((i%2)==0){
