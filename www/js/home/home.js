@@ -1,4 +1,4 @@
-app.controller('HomeTabCtrl', 
+app.controller('HomeTabCtrl',
   ["$scope","$ionicModal","$firebaseArray","currentAuth", "Restaurant", "Home" ,"$stateParams", "$state", "User", "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation", "$ionicLoading", "$cordovaImagePicker", "Database", "Review",
 function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $stateParams, $state, User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, $ionicLoading, $cordovaImagePicker, Database, Review) {
   console.log('HomeTabCtrl');
@@ -85,7 +85,7 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
       restaurant_id : id,
       timestamp: firebase.database.ServerValue.TIMESTAMP
     }).then(function(review) {
-      var newImages = newReviewRef.child(review.key).child('images');
+      var newImages = Database.reviewsReference().child(review.key).child('images');
       var list = $firebaseArray(newImages);
       for (var i = 0; i < $scope.images.length; i++) {
         list.$add({ image: $scope.images[i] }).then(function(ref) {

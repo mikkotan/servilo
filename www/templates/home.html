@@ -24,7 +24,7 @@
         </p>
       </ion-item> -->
       <div class="card padding" ng-repeat="restaurant in restaurants | filter:searchText">
-        <a class="item item-thumbnail-left" href="#" ng-init="addMarker(restaurant)" >
+        <div class="item item-thumbnail-left" ng-init="addMarker(restaurant)" >
           <img class="img-thumbnail" ng-src="data:image/jpeg;base64,{{restaurant.image}}"/>
           <h3 ui-sref="tabs.viewRestaurant({restaurantId:restaurant.$id})">
             <icon class="ion-spoon"></icon> {{restaurant.name}}
@@ -41,7 +41,7 @@
           <button class="button button-balanced button-small button-outline" ng-click="CallNumber()">
             <icon class="ion-android-call"></icon> Call Us
           </button>
-        </a>
+        </div>
     </div>
     </ion-list>
   </ion-content>
