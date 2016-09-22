@@ -13,7 +13,7 @@
         </ui-gmap-markers>
       </ui-gmap-google-map>
       <h3>Restaurants</h3>
-      <ion-item ng-repeat="restaurant in restaurants | filter:searchText">
+      <!-- <ion-item ng-repeat="restaurant in restaurants | filter:searchText">
         <a ng-init="addMarker(restaurant)" class="button button-calm icon icon-right ion-chevron-right" ui-sref="tabs.viewRestaurant({restaurantId:restaurant.$id})">{{restaurant.name}}</a>
         <p ng-if="restaurant.secured_data.totalMenuCount != 0">
           Avg Price: {{getAvg(restaurant.$id) | currency:"₱"}}
@@ -22,7 +22,27 @@
         <p>
           Rating: {{getAvgRating(restaurant.$id)}} / 5
         </p>
-      </ion-item>
+      </ion-item> -->
+      <div class="card padding" ng-repeat="restaurant in restaurants | filter:searchText">
+        <a class="item item-thumbnail-left" href="#" ng-init="addMarker(restaurant)" >
+          <img class="img-thumbnail" ng-src="data:image/jpeg;base64,{{restaurant.image}}"/>
+          <h3 ui-sref="tabs.viewRestaurant({restaurantId:restaurant.$id})">
+            <icon class="ion-spoon"></icon> {{restaurant.name}}
+            <span style="color:green">
+              <icon class="ion-android-star-outline"></icon> {{getAvgRating(restaurant.$id)}}
+            </span>
+          </h3>
+          <p>
+            {{getAvg(restaurant.$id) | currency:"₱"}}
+          </p>
+          <p>
+            <icon class="ion-ios-location-outline"></icon> {{restaurant.location}}
+          </p>
+          <button class="button button-balanced button-small button-outline" ng-click="CallNumber()">
+            <icon class="ion-android-call"></icon> Call Us
+          </button>
+        </a>
+    </div>
     </ion-list>
   </ion-content>
 </ion-view>

@@ -89,6 +89,12 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
         avgRate: 0
       }
     })
+
+    restaurant.name = "";
+    restaurant.location = "";
+    restaurant.type = "";
+    restaurant.cuisine = "";
+    $scope.restaurantModal.hide();
   }
 
   $scope.edit = function(restaurant) {
