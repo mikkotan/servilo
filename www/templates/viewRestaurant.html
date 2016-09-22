@@ -1,16 +1,8 @@
-<ion-view view-title="ViewRestaurant">
+<ion-view view-title={{restaurant.name}}>
   <ion-content overflow-scroll="true">
     <img ng-src="data:image/jpeg;base64,{{restaurant.image}}" width="100%" />
-    <div class="list card no-padding">
-
-      <!-- <div class="item item-avatar">
-        <img src="mcfly.jpg">
-        <h2>Marty McFly</h2>
-        <p>November 05, 1955</p>
-      </div> -->
-
+    <!-- <div class="list card no-padding">
       <div class="item item-body">
-
         <p>
           This is a "Facebook" styled Card. The header is created from a Thumbnail List item, the content is from a card-body consisting of an image and paragraph text. The footer consists of tabs, icons aligned left, within the card-footer.
         </p>
@@ -19,8 +11,7 @@
           <a href="#" class="subdued">5 Comments</a>
         </p>
       </div>
-
-    </div>
+    </div> -->
     <div class="padding">
       <h3>{{restaurant.name}}</h3>
       <p>{{getRestaurantStatus(restaurant.owner_id)}}</p>
@@ -40,7 +31,7 @@
         </ion-item>
         <div ng-if='restaurant.latitude != null && restaurant.longitude != null' ng-init='setMap(restaurant)'>
           <ui-gmap-google-map zoom='map.zoom' center="map.center" options='map.options' bounds='map.bounds'>
-            <ui-gmap-marker coords="map.center" icon="marker.icon" idkey="marker.id"></ui-gmap-marker>
+            <ui-gmap-markers models="restaurantMarkers" coords="'coords'" icon="'icon'"></ui-gmap-markers>
             <ui-gmap-map-control position="top-right">
               <button class="button button-small button-balanced" ng-click="showPath(restaurant)">Show Driving Path</button>
             </ui-gmap-map-control>
