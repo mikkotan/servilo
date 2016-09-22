@@ -1,5 +1,5 @@
-app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera","$cordovaGeolocation",
-  function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, $cordovaGeolocation){
+app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera","$cordovaGeolocation", "$cordovaImagePicker",
+  function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, $cordovaGeolocation, $cordovaImagePicker){
   $scope.modalControl = {};
   $scope.restaurants = Restaurant.all();
   $scope.pendingRestaurants = Restaurant.getPendingRestaurants();
@@ -30,9 +30,39 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
   });
 
   $scope.images = [];
-  // var hehe = firebase.database().ref().child('pictures');
-  // var syncArray = $firebaseArray(hehe);
-  // $scope.images = syncArray;
+
+  $scope.multipleUpload = function() {
+    var ref = firebase.database().ref().child("pictures");
+    var list = $firebaseArray(ref);
+    for (var i = 0; i < $scope.images.length; i++) {
+      list.$add({ image: $scope.images[i] }).then(function(ref) {
+        console.log("added..." + ref);
+      });
+    }
+  }
+
+  $scope.selImages = function() {
+    var options = {
+      maximumImagesCount: 10,
+      width: 800,
+      height: 800,
+      quality: 80
+    };
+
+    $cordovaImagePicker.getPictures(options)
+    .then(function (results) {
+      // console.log(results);
+      for (var i = 0; i < results.length; i++) {
+        window.plugins.Base64.encodeFile(results[i], function(base64){
+          $scope.images.push(base64);
+        });
+        console.log('Image URI: ' + results[i]);
+      }
+    }, function(error) {
+      // error getting photos
+    });
+  };
+
   $scope.imageURL = "";
   $scope.upload = function(index) {
     var source = "";

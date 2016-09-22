@@ -39,21 +39,21 @@ function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth, AppUser
     //   var credential = error.credential;
     //   // ...
     // });
-  $cordovaOauth.facebook("1697524080497035", ["email", "public_profile"], {redirect_uri: "http://localhost/callback"}).then(function(result){
-    $scope.detailsfb = result.access_token;
-    Auth.$signInWithCredential(firebase.auth.FacebookAuthProvider.credential(result.access_token)).then(
-      function(succes){
-        console.log(succes.displayName);
-        console.log('Firebase Facebook login success');
-      },
-      function(error){
-        console.log("error!!");
-        console.log(error);
+    $cordovaOauth.facebook("1697524080497035", ["email", "public_profile"], {redirect_uri: "http://localhost/callback"}).then(function(result){
+      $scope.detailsfb = result.access_token;
+      Auth.$signInWithCredential(firebase.auth.FacebookAuthProvider.credential(result.access_token)).then(
+        function(succes){
+          console.log(succes.displayName);
+          console.log('Firebase Facebook login success');
+        },
+        function(error){
+          console.log("error!!");
+          console.log(error);
+        });
+      }, function(error){
+          console.log("errrr!!");
+          alert("Error: " + error);
       });
-    }, function(error){
-        console.log("errrr!!");
-        alert("Error: " + error);
-    });
   }
 
   Auth.$onAuthStateChanged(function(firebaseUser){

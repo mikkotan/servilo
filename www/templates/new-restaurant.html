@@ -4,6 +4,17 @@
 
   </ion-header-bar>
   <ion-content>
+  <button class="button button-block button-balanced" ng-click="selImages()" >
+    Select Images
+  </button>
+      
+    <p ng-repeat="img in images track by $index">
+      <!-- {{img}} -->
+      <img ng-src="{{img}}" style="max-width:250px;max-height:250px" />
+    </p>
+    <button ng-click="multipleUpload()" ng-show="images">
+      upload hehe
+    </button>
     <form ng-submit="addRestaurant(restaurant)">
       <div class="list">
         <a class="button button-icon icon ion-camera" ng-click="upload(1)">CAM</a>

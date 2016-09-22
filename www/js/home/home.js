@@ -1,6 +1,6 @@
 app.controller('HomeTabCtrl', ["$scope","$ionicModal",
-"$firebaseArray","currentAuth", "Restaurant", "Home" ,"$stateParams", "$state", "User", "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation", "$ionicLoading",
-function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $stateParams, $state, User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, $ionicLoading) {
+"$firebaseArray","currentAuth", "Restaurant", "Home" ,"$stateParams", "$state", "User", "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation", "$ionicLoading", "$cordovaImagePicker",
+function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $stateParams, $state, User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, $ionicLoading, $cordovaImagePicker) {
   console.log('HomeTabCtrl');
 
   var rootRef = firebase.database().ref();
@@ -50,7 +50,31 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
     $scope.reviews = $firebaseArray(reviewRef);
   }
 
+  $scope.images = [];
+  // $scope.editImages = [];
 
+  $scope.selImages = function() {
+    var options = {
+      maximumImagesCount: 10,
+      width: 800,
+      height: 800,
+      quality: 80
+    };
+
+    $cordovaImagePicker.getPictures(options)
+    .then(function (results) {
+      for (var i = 0; i < results.length; i++) {
+        window.plugins.Base64.encodeFile(results[i], function(base64){
+          // console.log("uploading...");
+          $scope.images.push(base64);
+          $scope.$apply();
+        });
+        console.log('Image URI: ' + results[i]);
+      }
+    }, function(error) {
+      // error getting photos
+    });
+  };
 
   $scope.addReview = function(review) {
     $ionicLoading.show();
@@ -63,13 +87,22 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
       restaurant_id : id,
       timestamp: firebase.database.ServerValue.TIMESTAMP
     }).then(function(review) {
+      console.log("THEN??");
       var userRef = rootRef.child('users').child(User.auth().$id).child('reviewed_restaurants').child(id); //new
+      var newImages = newReviewRef.child(review.key).child('images');
+      var list = $firebaseArray(newImages);
+      for (var i = 0; i < $scope.images.length; i++) {
+        list.$add({ image: $scope.images[i] }).then(function(ref) {
+          console.log("added..." + ref);
+        });
+      }
       userRef.set(review.key); //new
       $scope.isAlreadyReviewed();
       $ionicLoading.hide();
       $scope.reviewModal.hide();
       review.content = '';
       review.rating = '';
+      $scope.images = [];
     })
   }
 
@@ -79,6 +112,15 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
     reviewerRef.update({
       content: review.content,
       rating: review.rating,
+    }).then(function() {
+      console.log("finished updating review.");
+      // var newImages = newReviewRef.child(review.$id).child('images');
+      // var list = $firebaseArray(newImages);
+      // for (var i = 0; i < $scope.images.length; i++) {
+      //   list.$add({ image: $scope.images[i] }).then(function(ref) {
+      //     console.log("added..." + ref);
+      //   });
+      // }
     })
 
     review.content = '';
