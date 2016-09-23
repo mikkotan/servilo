@@ -68,6 +68,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       cuisine: restaurant.cuisine,
       owner_id: User.auth().$id,
       image: $scope.imageURL,
+      phonenumber: restaurant.phonenumber,
       openTime: restaurant.openTime.getTime(),
       closeTime: restaurant.closeTime.getTime(),
       timestamp: firebase.database.ServerValue.TIMESTAMP,

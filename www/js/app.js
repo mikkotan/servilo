@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var app = angular.module('app', ['ionic', 'ionMdInput', 'ionic-material', 'firebase', 'ionic.rating', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker'])
+var app = angular.module('app', ['ui.mask','ionic', 'ionMdInput', 'ionic-material', 'firebase', 'ionic.rating', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker'])
 
 app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', function($ionicPlatform, $rootScope, $state, $templateCache) {
   $rootScope.$on("$stateChangeError",
@@ -178,7 +178,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
 
 
-.controller('AppCtrl', function($scope, $ionicSideMenuDelegate, Auth, User) {
+.controller('AppCtrl', function($scope, $ionicSideMenuDelegate, Auth, User, Database) {
   $scope.showMenu = function() {
   $ionicSideMenuDelegate.toggleLeft();
   };
@@ -186,6 +186,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
     $ionicSideMenuDelegate.toggleRight();
   };
   $scope.signOut = function() {
+    console.log("logged out..");
     Auth.$signOut();
     Database.usersReference().child(User.auth().$id).child('online').set(null);
     console.log("logged out..");

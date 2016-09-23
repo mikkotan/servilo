@@ -17,6 +17,9 @@
         <label class="item item-input">
           <input type="text" placeholder="Location of Restaurant" ng-model="restaurant.location">
         </label>
+        <label class="item item-input">
+          <input type="text" ng-model="restaurant.phonenumber" ui-mask="(999) 999-9999"  ui-mask-placeholder ui-mask-placeholder-char="_"/>
+        </label>
         <ui-gmap-google-map zoom='map.zoom' events= 'map.events' center='map.center' options='map.options' bounds='map.bounds' control="modalControl">
           <ui-gmap-map-control position="top-right">
               <a class="button button-small button-balanced" ng-click="markLocation()" >Mark Current Location</a>

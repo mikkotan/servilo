@@ -234,8 +234,8 @@ function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $st
     });
   };
 
-  $scope.CallNumber = function(){
-     var number = '09772475405' ;
+  $scope.CallNumber = function(number){
+    //  var number = '09772475405' ;
      window.plugins.CallNumber.callNumber(function(){
       //success logic goes here
       console.log("call success");
