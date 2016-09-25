@@ -1,5 +1,5 @@
-app.controller("LoginCtrl",["$scope" , "$firebaseArray", "$firebaseAuth", "$firebaseObject", "Auth", "AppUser", "ionicMaterialInk", "ionicMaterialMotion", "User", "$state", "$cordovaOauth", "$ionicLoading", "$ionicModal",
-function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth, AppUser, ionicMaterialInk, ionicMaterialMotion, User, $state, $cordovaOauth, $ionicLoading, $ionicModal){
+app.controller("LoginCtrl",["$scope" , "$firebaseArray", "$firebaseAuth", "$firebaseObject", "Auth", "AppUser", "ionicMaterialInk", "ionicMaterialMotion", "User", "$state", "$cordovaOauth", "$ionicLoading", "$ionicModal", "Database",
+function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth, AppUser, ionicMaterialInk, ionicMaterialMotion, User, $state, $cordovaOauth, $ionicLoading, $ionicModal, Database){
 
   ionicMaterialInk.displayEffect();
 
@@ -39,21 +39,21 @@ function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth, AppUser
     //   var credential = error.credential;
     //   // ...
     // });
-  $cordovaOauth.facebook("1697524080497035", ["email", "public_profile"], {redirect_uri: "http://localhost/callback"}).then(function(result){
-    $scope.detailsfb = result.access_token;
-    Auth.$signInWithCredential(firebase.auth.FacebookAuthProvider.credential(result.access_token)).then(
-      function(succes){
-        console.log(succes.displayName);
-        console.log('Firebase Facebook login success');
-      },
-      function(error){
-        console.log("error!!");
-        console.log(error);
+    $cordovaOauth.facebook("1697524080497035", ["email", "public_profile"], {redirect_uri: "http://localhost/callback"}).then(function(result){
+      $scope.detailsfb = result.access_token;
+      Auth.$signInWithCredential(firebase.auth.FacebookAuthProvider.credential(result.access_token)).then(
+        function(succes){
+          console.log(succes.displayName);
+          console.log('Firebase Facebook login success');
+        },
+        function(error){
+          console.log("error!!");
+          console.log(error);
+        });
+      }, function(error){
+          console.log("errrr!!");
+          alert("Error: " + error);
       });
-    }, function(error){
-        console.log("errrr!!");
-        alert("Error: " + error);
-    });
   }
 
   Auth.$onAuthStateChanged(function(firebaseUser){
@@ -83,7 +83,7 @@ function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth, AppUser
   }
 
   $scope.updateProfile = function(firebaseUser) {
-    var userRef = firebase.database().ref().child('users').child(User.auth().$id);
+    var userRef = Database.usersReference().child(User.auth().$id);
     userRef.update({
       firstName: firebaseUser.firstName,
       lastName: firebaseUser.lastName

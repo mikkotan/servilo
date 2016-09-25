@@ -4,9 +4,10 @@ app.factory('CartData', function(){
 
   return {
     add: function(menu) {
-        cart.push(menu);
+        cart.unshift(menu);
     },
     get: function(){
+      console.log("hi "+ cart);
       return cart;
     }
 

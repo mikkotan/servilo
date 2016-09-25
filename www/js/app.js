@@ -57,9 +57,12 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
           templateUrl: "templates/home.html",
           controller: 'HomeTabCtrl',
           resolve: {
-            "currentAuth": ["Auth", function(Auth) {
+            currentAuth:function(Auth) {
               return Auth.$requireSignIn();
-            }]
+            },
+            restaurants : function(Restaurant){
+                return Restaurant.all().$loaded();
+            }
           }
         }
       }
@@ -71,9 +74,12 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
           templateUrl: "templates/viewRestaurant.html",
           controller: "HomeTabCtrl",
           resolve: {
-            "currentAuth": ["Auth", function(Auth) {
+            currentAuth:function(Auth) {
               return Auth.$requireSignIn();
-            }]
+            },
+            restaurants : function(Restaurant){
+                return Restaurant.all().$loaded();
+            }
           }
         }
       }
@@ -83,37 +89,50 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
         views: {
           'restaurantmenus-tab' : {
             templateUrl: "templates/restaurantMenus.html",
-            controller: "MenuCtrl",
+            controller: "ViewRestaurantMenuOrder",
             resolve: {
-              menu : function(Menu){
-                return {
-                  all : function(){
-                      return Menu.all().$loaded();
-                  }
-                }
+              restaurantMenus : function(Menu , $stateParams){
+                  return Menu.getRestaurantMenus($stateParams.restaurantId).$loaded();
               }
             }
           }
         }
       })
+      .state('tabs.viewRestaurantMenus', {
+        url: "/restaurant/menus/:restaurantId",
+        views: {
+          'restaurant-tab': {
+            templateUrl: "templates/view-restaurant-menus.html",
+            controller: "ViewRestaurantMenu",
+            resolve: {
+              restaurantMenu : function(Menu , $stateParams){
+                  return Menu.getRestaurantMenus($stateParams.restaurantId).$loaded();
+              }
+            }
+          }
+        }
+        })
       .state('tabs.addMenu',{
         url: "/menu/add/:restaurantId",
         views:{
           'restaurant-tab':{
             templateUrl: "templates/add-menu.html",
-            controller: "MenuCtrl"
+            controller: "MenuCtrl",
+            resolve: {
+              menus : function(Menu){
+                  return Menu.all().$loaded();
+              }
+              // restaurant : function($stateParams,Restaurant){
+              //   var restaurantRef = Restaurant.getRestaurant($stateParams.restaurantId);
+              //   return {
+              //       sumPrice : restaurantRef.sumPrice,
+              //       menuCount : restaurantRef.
+              //   }
+              // }
+            }
           }
         }
     })
-    .state('tabs.viewRestaurantMenus', {
-      url: "/restaurant/menus/:restaurantId",
-      views: {
-        'restaurant-tab': {
-          templateUrl: "templates/viewRestaurant-menus.html",
-          controller: "MenuCtrl"
-        }
-      }
-      })
       .state('tabs.menu', {
         url: "/menu",
         views: {
@@ -121,19 +140,11 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             templateUrl: "templates/menus.html",
             controller:"MenuCtrl",
             resolve: {
-              menu : function(Menu){
+              menus : function(Menu){
                 return Menu.all().$loaded();
               }
             }
           }
-      }
-    })
-    .state('tabs.navstack', {
-      url: "/navstack",
-      views: {
-        'about-tab': {
-          templateUrl: "templates/nav-stack.html"
-        }
       }
     })
     .state('tabs.contact', {
@@ -150,7 +161,18 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
       views: {
         'cart-tab': {
           templateUrl: "templates/cart.html",
-          controller: "CartCtrl"
+          controller: "CartCtrl",
+          resolve : {
+            orders : function(Order){
+              return Order.all().$loaded();
+            },
+            authUser : function(User){
+              return User.auth().$loaded()
+            },
+            restaurantId : function($stateParams){
+              return $stateParams.restaurantId
+            }
+          }
         }
       }
     })
@@ -162,8 +184,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
           templateUrl:"templates/order.html",
           controller:"OrderCtrl",
           resolve: {
-            restaurants: function(Order) {
-              return Order.getRestaurants().$loaded();
+            restaurants : function(Restaurant){
+              return Restaurant.getAuthUserRestaurants().$loaded();
             }
           }
         }
@@ -206,15 +228,17 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 })
 
 
+
 .controller('AppCtrl', function($scope, $ionicSideMenuDelegate, Auth, User) {
   $scope.showMenu = function() {
-    $ionicSideMenuDelegate.toggleLeft();
+  $ionicSideMenuDelegate.toggleLeft();
   };
   $scope.showRightMenu = function() {
     $ionicSideMenuDelegate.toggleRight();
   };
   $scope.signOut = function() {
     Auth.$signOut();
+    Database.usersReference().child(User.auth().$id).child('online').set(null);
     console.log("logged out..");
     location.reload();
   }

@@ -1,19 +1,17 @@
 app.controller("MenuCtrl",["$scope","$firebaseAuth",
-  "$firebaseArray","$firebaseObject", "menu","$stateParams","$state",
+  "$firebaseArray","$firebaseObject", "menus","$stateParams","$state",
     "$ionicModal", "$ionicListDelegate","CartData","Menu",
-      function($scope,$firebaseAuth,$firebaseArray,$firebaseObject, menu, $stateParams ,
+      function($scope,$firebaseAuth,$firebaseArray,$firebaseObject, menus,$stateParams ,
           $state, $ionicModal, $ionicListDelegate,CartData,Menu){
 
   $scope.restaurantId = $stateParams.restaurantId;
 
-  $scope.menus = menu ;
+  $scope.menus = menus ;
 
   $scope.getRestaurant = Menu.getRestaurant;
 
 
-  if($state.is("tabs.viewRestaurantMenus") || $state.is("tabs.restaurantMenus")){
-    $scope.restaurantMenus = Menu.getRestaurantMenus($scope.restaurantId);
-  }
+
 
   $scope.addMenu = function(menu){
     $scope.menus.$add({
@@ -22,6 +20,7 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth",
       restaurant_id : $scope.restaurantId,
       prevPrice : menu.price
     }).then(function(menuObj){
+
       var restaurantRef = firebase.database().ref().child("restaurants").child(restaurantId);
       var sumRef = restaurantRef.child("sumPrice");
       var menuCount = restaurantRef.child("totalMenuCount");
@@ -42,103 +41,6 @@ app.controller("MenuCtrl",["$scope","$firebaseAuth",
     })
     $state.go('tabs.restaurant');
   }
-  //   {{{{{{{  ADD TO CART  }}}}}}}---------------------------------------------->
-
-  $scope.addToCart = function(menu) {
-    console.log("Cliked!!");
-    $scope.id = menu.$id;
-    $scope.menuName = menu.name;
-    $scope.menuPrice = menu.price;
-    $scope.addToCartModal.show();
-  };
-
-  var menuId = function(array, key, value){
-      for (var i = 0; i < array.length; i++) {
-        if (array[i][key] == value) {
-            return i;
-        }
-      }
-      return null;
-  }
-
-  $scope.sendToCart = function(menu){
-
-    if(menuId(CartData.get(),"id",$scope.id) == null){
-      var menuCart = { id:$scope.id, name:$scope.menuName, price : $scope.menuPrice , quantity:menu.quantity};
-      CartData.add(menuCart);
-      $state.go("tabs.restaurantMenus");
-      $scope.addToCartModal.hide();
-    }
-    else {
-
-      CartData.get().map(function(order){
-              if(order.id == $scope.id){
-                order.quantity = order.quantity + menu.quantity;
-                $state.go("tabs.restaurantMenus");
-                $scope.addToCartModal.hide();
-              }
-      });
-    };
-  }
-
-  $ionicModal.fromTemplateUrl('templates/add-to-cart-modal.html', function(addToCartModal) {
-    $scope.addToCartModal = addToCartModal;
-  }, {
-    scope: $scope
-  });
-
-    // {{{{{{{{{{{{{{{ END }}}}}}}}}}}}}}}--------------------------------------------->
-
-    $scope.deleteMenu = function(menu) {
-      console.log("deleted click" + menu.name);
-      console.log("price" + menu.price);
-      var resSumRef = firebase.database().ref().child("restaurants").child(menu.restaurant_id).child("sumPrice");
-      var resTotalMenuCountRef = firebase.database().ref().child("restaurants").child(menu.restaurant_id).child("totalMenuCount");
-      resSumRef.transaction(function(currentSum) {
-        return currentSum - menu.price;
-      });
-
-      resTotalMenuCountRef.transaction(function(currentCount) {
-        return currentCount - 1;
-      });
 
 
-      $scope.restaurantMenus.$remove(menu);
-    }
-
-    $scope.editMenu = function(menu) {
-      console.log("editButtonModal clicked");
-      $scope.menu = menu;
-      $scope.menuEditModal.show();
-    }
-
-    $scope.updateMenu = function(menu, $state) {
-      var menuRef = firebase.database().ref().child("menus").child(menu.$id);
-      menuRef.update({
-        name: menu.name,
-        price: menu.price
-      }).then(function() {
-        var resSumRef = firebase.database().ref().child("restaurants").child(menu.restaurant_id).child("sumPrice");
-        var prevPriceRef = menuRef.child("prevPrice");
-
-        resSumRef.transaction(function(currentSum) {
-          return currentSum - menu.prevPrice + menu.price;
-        })
-
-        prevPriceRef.transaction(function(currentPrevPrice) {
-          return menu.price;
-        })
-      });
-
-      $scope.menuEditModal.hide();
-      $ionicListDelegate.closeOptionButtons();
-    }
-
-    $ionicModal.fromTemplateUrl('templates/edit-menu.html', function(modalEditMenu) {
-      $scope.menuEditModal = modalEditMenu;
-    }, {
-      scope: $scope
-    });
-
-  }
-]);
+}]);

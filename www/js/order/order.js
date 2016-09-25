@@ -8,6 +8,4 @@ app.controller("OrderCtrl",["$scope","restaurants","Order",
           orders : Order.getOrder(restaurant.$id)
       }
     });
-
-
 }]);

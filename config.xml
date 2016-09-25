@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <widget id="com.ionicframework.todo334097" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>todo</name>
-  <description>&#xD;&#xD;&#xD;&#xD;
-        An Ionic Framework and Cordova project.&#xD;&#xD;&#xD;&#xD;
-    </description>
-  <author email="you@example.com" href="http://example.com.com/">&#xD;&#xD;&#xD;&#xD;
-      Your Name Here&#xD;&#xD;&#xD;&#xD;
-    </author>
+  <description>
+    An Ionic Framework and Cordova project.
+  </description>
+  <author email="you@example.com" href="http://example.com.com/">
+    Your Name Here
+  </author>
   <content src="index.html"/>
   <access origin="*"/>
   <preference name="webviewbounce" value="false"/>
@@ -48,4 +48,7 @@
   <plugin name="cordova-plugin-whitelist" spec="~1.2.2"/>
   <plugin name="ionic-plugin-keyboard" spec="~2.2.1"/>
   <plugin name="cordova-plugin-camera" spec="~2.2.0"/>
+  <plugin name="mx.ferreyra.callnumber" spec="https://github.com/Rohfosho/CordovaCallNumberPlugin.git"/>
+  <plugin name="cordova-plugin-compat" spec="~1.0.0"/>
+  <plugin name="cordova-plugin-image-picker" spec="https://github.com/Findiglay/cordova-imagePicker.git"/>
 </widget>

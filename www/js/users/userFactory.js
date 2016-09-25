@@ -15,6 +15,9 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
       var authId = firebase.auth().currentUser.uid;
       return usersObj.$getRecord(authId).firstName + " " + usersObj.$getRecord(authId).lastName;
     },
+    getUserFullname : function(id){
+      return  usersObj.$getRecord(id).firstName + " " + usersObj.$getRecord(id).lastName;
+    },
     register : function(userId){
       return $firebaseArray(users.child(userId));
     },
