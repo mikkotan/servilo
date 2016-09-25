@@ -1,5 +1,6 @@
 app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera", "$cordovaGeolocation",
   function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, $cordovaGeolocation) {
+
     $scope.modalControl = {};
     $scope.restaurants = Restaurant.all();
     $scope.pendingRestaurants = Restaurant.getPendingRestaurants();
@@ -11,15 +12,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
     }
 
     console.log($scope.AppUser)
-      // user.$loaded().then(function() {
-      //   if(user.displayName == undefined) {
-      //     $scope.AppUser = user.firstName + " " + user.lastName;
-      //   }
-      //   else {
-      //     console.log(user)
-      //     $scope.AppUser = user.displayName;
-      //   }
-      // })
+
 
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {

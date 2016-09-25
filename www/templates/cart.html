@@ -3,23 +3,24 @@
     </button>
     <h3>Cart</h3>
     <ion-list>
-      <ion-item ng-repeat="order in cart">
+      <ion-item ng-repeat="menu in menus">
         <p>
-          Name: {{order.name}}
+          Name: {{menu.name}}
         </p>
         <p>
-          Quantity: {{order.quantity}}
+          Quantity: {{menu.quantity}}
         </p>
         <p>
-          Subtotal : {{subtotal(order.price,order.quantity)}}
+          Subtotal : wala pa
         </p>
 
       </ion-item>
       <p>
-        Total : {{getTotalPrice()}}
+        Total : Wala pa
       </p>
       <p>
-        <button class="button button-calm" ng-click="buy(cart)">Buy</button>
+          <button class="button button-calm" ui-sref="tabs.restaurantMenus({restaurantId:restaurantId})">back</button>
+        <button class="button button-calm" ng-click="buy(menus)">Buy</button>
       </p>
     </ion-list>
   </ion-content>

@@ -4,12 +4,10 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
   var users = rootRef.child("users")
   var usersObj = $firebaseArray(users);
   var restaurantsRef = Database.restaurantsReference();
-  // var current_user = firebase.auth().currentUser;
 
   return {
     auth : function() {
         return $firebaseObject(users.child(firebase.auth().currentUser.uid));
-        // return $firebaseObject(users.child(current_user.uid));
     },
     all : function() {
       return $firebaseArray(users);
@@ -21,7 +19,10 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
       var authId = firebase.auth().currentUser.uid;
       return usersObj.$getRecord(authId).firstName + " " + usersObj.$getRecord(authId).lastName;
     },
-    register : function(userId) {
+    getUserFullname : function(id){
+      return  usersObj.$getRecord(id).firstName + " " + usersObj.$getRecord(id).lastName;
+    },
+    register : function(userId){
       return $firebaseArray(users.child(userId));
     },
     setOnline : function() {

@@ -1,6 +1,9 @@
-<<<<<<< HEAD
 <div class="modal">
-  <ion-view view-title="AddToCart">
+  <ion-modal-view view-title="AddToCart">
+    <ion-header-bar class="bar bar-header bar-assertive">
+      <h1 class="title">Order Form</h1>
+      <button class="button button-clear button-primary" ng-click="addToCartModal.hide()"><i class="icon ion-ios-close"></i></button>
+    </ion-header-bar>
     <ion-content class="padding">
         <!-- <a class="button icon ion-home" href="#/tab/home">Restaurant</a> -->
       <ion-list>
@@ -13,45 +16,14 @@
               <label class="item item-input">
                 Quantity:<input type="number" ng-model="menu.quantity">
               </label>
-              <label class="item item-input">
-                Total Price: wala pa
-              </label>
             </div>
             <div class="padding">
               <button type="submit" class="button button-block button-positive">Add to Cart</button>
             </div>
           </form>
         </ion-item>
-        <ion-item>
           <a class="button-calm" ui-sref="tabs.home">back</a>
-        </ion-item>
       </ion-list>
     </ion-content>
-  </ion-view>
+  </ion-modal-view>
 </div>
-=======
-<ion-modal-view view-title="AddToCart">
-  <ion-header-bar class="bar bar-header bar-assertive">
-    <h1 class="title">Order Form</h1>
-    <button class="button button-clear button-primary" ng-click="addToCartModal.hide()"><i class="icon ion-ios-close"></i></button>
-  </ion-header-bar>
-  <ion-content class="padding">
-    <!-- <a class="button icon ion-home" href="#/tab/home">Restaurant</a> -->
-    <div class="list">
-      <label class="item item-input">
-        <span class="input-label">Name: </span>
-        {{menuName}}
-      </label>
-      <label class="item item-input">
-        <span class="input-label">Quantity</span>
-        <input ng-model="menu.quantity" type="number">
-      </label>
-      <label class="item item-input">
-        <span class="input-label">Total Price</span>
-        <input value="wala pa" type="text">
-      </label>
-      <button class="button button-full button-balanced" ng-click="sendToCart(menu)">ORDER</button>
-    </div>
-  </ion-content>
-</ion-modal-view>
->>>>>>> b04491c3f7a6dd9f1543da4d68864cd863ad2550

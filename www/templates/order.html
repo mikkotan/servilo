@@ -1,0 +1,28 @@
+<ion-view view-title="Order">
+  <ion-content class="padding">
+    <h3>Cart</h3>
+      <ion-list>
+        <ion-item ng-repeat="data in order">
+          <p>{{data.restaurant.name}}</p>
+          <p>  {{data.restaurant.$id}}  </p>
+
+            <ion-item  ng-repeat="order in data.orders">
+              <p>
+              Customer Name: {{order.customer_id}}
+              </p>
+              <ion-item ng-repeat="menu in order.menus">
+                <p>
+                Name : {{menu.name}}
+                </p>
+                <p>
+                Quantity : {{menu.quantity}}
+                </p>
+                <p>
+                Price : {{menu.price}}
+                </p>
+              </ion-item>
+            </ion-item>
+        </ion-item>
+      </ion-list>
+  </ion-content>
+</ion-view>

@@ -4,6 +4,33 @@
       <ion-item>
         Login
       </ion-item>
+<<<<<<< HEAD
+        <ion-item id="form-input">
+          <form ng-submit="login(user)" ng-hide = "firebaseUser">
+            <div class="list">
+                <ion-md-input-cus placeholder="Username" highlight-color="balanced" type="text" ng-model="user.email"></ion-md-input-cus>
+                <!-- Username:<input type="text" ng-model="user.email"> -->
+            </div>
+            <div class="list">
+                <ion-md-input-cus placeholder="Password" highlight-color="energized" type="password" ng-model="user.password"></ion-md-input-cus>
+                <!-- Password:<input type="password"  ng-model="user.password"> -->
+            </div>
+            <div class="padding">
+              <button type="submit" class="button button-block button-assertive ink">Login</button>
+              <button type="submit" class="button button-block button-assertive ink">Signup</button>
+            </div>
+          </form>
+          <div ng-show="firebaseUser">
+            <div class="list">
+              <label class="item item-input">
+                <div>hi , {{fullname}} </div>
+              </label>
+              <button class="button button-balanced" ng-click="editProfile()">Edit Profile</button>
+              <button class="button button-balanced" ng-click="changePasswordShow()" >Change Password</button>
+              <div>Started : {{firebaseUser.startedAt | date:'medium'}}</div>
+
+            </div>
+=======
 
       <div class="card">
       <ion-item id="form-input">
@@ -18,6 +45,7 @@
           </div>
           <div>
             <button type="submit" class="button button-block button-assertive ink">Login</button>
+>>>>>>> b04491c3f7a6dd9f1543da4d68864cd863ad2550
           </div>
         </form>
         <div>

@@ -12,23 +12,19 @@ app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "U
   var restaurantsArray = Database.restaurants();
   var usersArray = Database.users();
 
-  var userRestaurantsChildArray = $firebaseArray(Database.usersReference().child(authUserId).child('restaurants'));
 
   return {
-    all : function(){
+    all : function() {
         return restaurantsArray;
     },
-    getAuthUserRestaurants : function(){
+    getAuthUserRestaurants : function() {
         return $firebaseArray(restaurants.orderByChild("owner_id").equalTo(authUserId))
     },
-    get : function(restaurantId){
+    get : function(restaurantId) {
         return restaurantsArray.$getRecord(restaurantId);
     },
     getPendingRestaurants : function() {
         return pendingRestaurantsArray;
-    },
-    getUserRestaurantChild : function() {
-      return userRestaurantsChildArray;
     },
     getAveragePrice : function(restaurantId) {
       var res = restaurantsArray.$getRecord(restaurantId);
@@ -42,7 +38,6 @@ app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "U
       return $firebaseArray(menus.orderByChild("restaurant_id").equalTo(restaurantId));
     },
     getRestaurantStatus : function(ownerId) {
-      console.log("method status hehehehehehe");
       if(usersArray.$getRecord(ownerId).online != null){
         return "Online"
       }
@@ -50,8 +45,10 @@ app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "U
         return "Offline"
       }
     },
+    getRestaurant : function(restaurantId){
+      return $firebaseArray(restaurants.child(restaurantId));
+    },
     getRestaurantOpenStatus : function(restaurantId) {
-      console.log("method fired");
       var restaurant = restaurantsArray.$getRecord(restaurantId);
       var restaurantOpenTime = new Date(restaurant.openTime);
       var restaurantCloseTime = new Date(restaurant.closeTime);

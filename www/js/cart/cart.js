@@ -1,47 +1,32 @@
-app.controller("CartCtrl",["$scope","$firebaseAuth","$firebaseArray","$firebaseObject","CartDataService","Menu","User",
-  function($scope ,$firebaseAuth ,$firebaseArray ,$firebaseObject, CartDataService,User){
+app.controller("CartCtrl",["$scope","CartData","$stateParams","orders","authUser","restaurantId",
+  function($scope , CartData ,$stateParams,orders,authUser,restaurantId){
 
 var total = [];
 
-var rootRef = firebase.database().ref();
-var menus = rootRef.child("order");
+$scope.order = orders;
 
-$scope.cart = CartDataService.get();
-
-CartDataService.get().forEach(function(order){
-    var sub = order.quantity * order.price;
-    total.push(sub);
-    console.log("this is total "+total)
-});
+$scope.restaurantId = restaurantId;
+console.log($scope.restaurantId);
 
 
-
-$scope.subtotal = function(price , quantity){
-    var subtotal = price * quantity;
-    return subtotal;
-  };
-
-
-$scope.getTotalPrice = function(){
-  var totalPrice = total.reduce(add, 0);
-    return totalPrice;
-  };
+$scope.menus = CartData.get()
 
 function add(a, b) {
-  return a + b;
+    return a + b;
 }
 
 $scope.buy = function(cart){
-  // cart.forEach(function(order){
-  //   if(order.restaurant_id){
-  //
-  //   }
-  // });
-  console.log("carty");
-  console.log(User.auth);
-  console.log(cart);
-};
+  $scope.order.$add({
+    restaurant_id : $scope.restaurantId,
+    customer_id : authUser.$id,
+    menus : cart
+  }).then(function(){
+      $scope.menus.length = 0;
+      alert("success")
+  }).catch(function(error){
+        alert(error);
+  });
 
-
+}
 
 }]);

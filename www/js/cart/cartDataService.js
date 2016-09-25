@@ -1,12 +1,16 @@
-app.factory('CartDataService', function(){
+app.factory('CartData', function(){
+
   var cart = [];
+
   return {
     add: function(menu) {
-        cart.push(menu);
+        cart.unshift(menu);
     },
     get: function(){
+      console.log("hi "+ cart);
       return cart;
     }
 
-  }
-})
+  };
+
+});
