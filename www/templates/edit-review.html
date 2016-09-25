@@ -14,6 +14,11 @@
         </label>
           Rate us: <rating ng-model="review.rating" max="rating.max"></rating>
       </div>
+      <div>
+        <p ng-repeat="img in review.images">
+          <img src="{{img.image}}" style="width: 100px">
+        </p>
+      </div>
       <div class="padding">
         <button type="submit" class="button button-block button-positive">Save</button>
       </div>

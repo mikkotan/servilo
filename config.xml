@@ -49,6 +49,6 @@
   <plugin name="ionic-plugin-keyboard" spec="~2.2.1"/>
   <plugin name="cordova-plugin-camera" spec="~2.2.0"/>
   <plugin name="mx.ferreyra.callnumber" spec="https://github.com/Rohfosho/CordovaCallNumberPlugin.git"/>
-  <plugin name="cordova-plugin-image-picker" spec="~1.1.1"/>
   <plugin name="cordova-plugin-compat" spec="~1.0.0"/>
+  <plugin name="cordova-plugin-image-picker" spec="https://github.com/Findiglay/cordova-imagePicker.git"/>
 </widget>

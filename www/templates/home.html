@@ -29,11 +29,11 @@
           <h3 ui-sref="tabs.viewRestaurant({restaurantId:restaurant.$id})">
             <icon class="ion-spoon"></icon> {{restaurant.name}}
             <span style="color:green">
-              <icon class="ion-android-star-outline"></icon> {{getAvgRating(restaurant.$id)}}
+              <icon class="ion-android-star-outline"></icon> {{restaurant.secured_data.avgRate.toFixed(1)}}
             </span>
           </h3>
           <p>
-            {{getAvg(restaurant.$id) | currency:"₱"}}
+            {{restaurant.secured_data.avgPrice.toFixed(2) | currency:"₱"}}
           </p>
           <p>
             <icon class="ion-ios-location-outline"></icon> {{restaurant.location}}

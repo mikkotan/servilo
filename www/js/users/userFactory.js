@@ -1,27 +1,33 @@
-app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserFactory",
-  function($firebaseObject ,$firebaseAuth, $firebaseArray , UserFactory){
+app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserFactory", "Database",
+  function($firebaseObject ,$firebaseAuth, $firebaseArray , UserFactory, Database){
   var rootRef = firebase.database().ref();
   var users = rootRef.child("users")
   var usersObj = $firebaseArray(users);
+  var restaurantsRef = Database.restaurantsReference();
+  // var current_user = firebase.auth().currentUser;
 
   return {
-    auth : function(){
+    auth : function() {
         return $firebaseObject(users.child(firebase.auth().currentUser.uid));
+        // return $firebaseObject(users.child(current_user.uid));
     },
-    all : function(){
+    all : function() {
       return $firebaseArray(users);
     },
-    getAuthFullName : function(){
+    getAuthRestaurants : function() {
+      return $firebaseArray(restaurantsRef.orderByChild('owner_id').equalTo(firebase.auth().currentUser.uid));
+    },
+    getAuthFullName : function() {
       var authId = firebase.auth().currentUser.uid;
       return usersObj.$getRecord(authId).firstName + " " + usersObj.$getRecord(authId).lastName;
     },
-    register : function(userId){
+    register : function(userId) {
       return $firebaseArray(users.child(userId));
     },
-    setOnline : function(){
+    setOnline : function() {
       var conRef = rootRef.child(".info/connected");
       var online = users.child(firebase.auth().currentUser.uid +'/online');
-      conRef.on('value', function(data){
+      conRef.on('value', function(data) {
         if(data.val() === true){
           var con  = online.push(true);
           con.onDisconnect().remove();

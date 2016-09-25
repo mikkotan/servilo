@@ -14,12 +14,13 @@
     </div> -->
     <div class="padding">
       <h3>{{restaurant.name}}</h3>
-      <p>{{getRestaurantStatus(restaurant.owner_id)}}</p>
-      <p>Restaurant is: {{openRestaurant(restaurant.$id)}}</p>
-      <p ng-if="openRestaurant(restaurant.$id)==='Open'" style="color:green;">
+      <p>{{getRestaurantStatus}}</p>
+      <p>Restaurant is: {{restaurantService}}</p>
+      <!-- <p ng-if="openRestaurant(restaurant.$id)==='Open'" style="color:green;"> -->
+      <p ng-if="restaurantService === 'Open'" style="color:green;">
         Restaurant Hours: {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}
       </p>
-      <p ng-if="openRestaurant(restaurant.$id)==='Closed'" style="color:red;">
+      <p ng-if="restaurantService === 'Closed'" style="color:red;">
         Opens at {{ restaurant.openTime | date:'shortTime' }}
       </p>
       <ion-list>

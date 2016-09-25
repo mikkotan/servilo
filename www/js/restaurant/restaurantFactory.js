@@ -42,6 +42,7 @@ app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "U
       return $firebaseArray(menus.orderByChild("restaurant_id").equalTo(restaurantId));
     },
     getRestaurantStatus : function(ownerId) {
+      console.log("method status hehehehehehe");
       if(usersArray.$getRecord(ownerId).online != null){
         return "Online"
       }
@@ -50,6 +51,7 @@ app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "U
       }
     },
     getRestaurantOpenStatus : function(restaurantId) {
+      console.log("method fired");
       var restaurant = restaurantsArray.$getRecord(restaurantId);
       var restaurantOpenTime = new Date(restaurant.openTime);
       var restaurantCloseTime = new Date(restaurant.closeTime);
