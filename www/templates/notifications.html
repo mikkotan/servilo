@@ -1,0 +1,17 @@
+<ion-view view-title="Notifications">
+  <ion-content overflow-scroll="true">
+    <div class="list">
+      <a class="item item-icon-left positive" href="#">
+        <i class="icon ion-android-list"></i>
+        Order #10320 on Restaurant: Fuel PH
+      </a>
+
+      <a class="item item-icon-left balanced" ng-repeat="notif in notifications" >
+        <i class="icon ion-thumbsup"></i>
+        {{notif.sender_id}} reviewed your restaurant {{notif.restaurant_id}}
+      </a>
+
+
+    </div>
+  </ion-content>
+</ion-view>

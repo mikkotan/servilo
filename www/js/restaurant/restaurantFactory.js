@@ -7,6 +7,7 @@ app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "U
   var pendingRestaurants = Database.pendingsReference();
   var users = Database.usersReference();
   var menus = Database.menusReference();
+  var reviews = Database.reviewsReference();
 
   var pendingRestaurantsArray = Database.pendings();
   var restaurantsArray = Database.restaurants();
@@ -45,8 +46,15 @@ app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "U
         return "Offline"
       }
     },
-    getRestaurant : function(restaurantId){
+    getRestaurant : function(restaurantId) {
       return $firebaseArray(restaurants.child(restaurantId));
+    },
+    getReviews : function(restaurantId) {
+      return $firebaseArray(reviews.orderByChild('restaurant_id').equalTo(restaurantId));
+    },
+    getOwner : function(restaurantId) {
+      var restaurant = restaurantsArray.$getRecord(restaurantId);
+      return usersArray.$getRecord(restaurant.owner_id);
     },
     getRestaurantOpenStatus : function(restaurantId) {
       var restaurant = restaurantsArray.$getRecord(restaurantId);

@@ -196,6 +196,20 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
         }
       }
     })
+    .state('tabs.notifications', {
+      url:"/notifications",
+      views : {
+        'notifications-tab' : {
+          templateUrl: 'templates/notifications.html',
+          controller: "NotificationsCtrl",
+          resolve : {
+            notifications : function(User) {
+              return User.getAuthNotifications().$loaded();
+            }
+          }
+        }
+      }
+    })
     .state('login', {
       url: "/login",
       templateUrl: "templates/login.html",
@@ -239,9 +253,6 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
     console.log("logged out..");
     location.reload();
   }
-
-
-
 
   Auth.$onAuthStateChanged(function(firebaseUser) {
     if (firebaseUser) {

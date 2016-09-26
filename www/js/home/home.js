@@ -125,6 +125,17 @@ app.controller('HomeTabCtrl',
       $scope.review.rating = 0;
       $scope.rating.rate = 0;
       $scope.images = [];
+
+
+    })
+    var restaurant_owner = Restaurant.getOwner(id);
+    Database.notifications().$add({
+      sender_id : User.auth().$id,
+      receiver_id : restaurant_owner.$id,
+      restaurant_id : id,
+      type : 'review'
+    }).then(function() {
+      console.log("hello notification squad");
     })
   }
 
