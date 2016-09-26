@@ -117,18 +117,14 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
         views:{
           'restaurant-tab':{
             templateUrl: "templates/add-menu.html",
-            controller: "MenuCtrl",
+            controller: "AddMenuCtrl",
             resolve: {
               menus : function(Menu){
                   return Menu.all().$loaded();
+              },
+              restaurantId : function($stateParams){
+                return $stateParams.restaurantId
               }
-              // restaurant : function($stateParams,Restaurant){
-              //   var restaurantRef = Restaurant.getRestaurant($stateParams.restaurantId);
-              //   return {
-              //       sumPrice : restaurantRef.sumPrice,
-              //       menuCount : restaurantRef.
-              //   }
-              // }
             }
           }
         }
