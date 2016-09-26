@@ -14,7 +14,7 @@ app.controller('HomeTabCtrl',
   $scope.getReviewer = Review.reviewer;
   $scope.RestaurantService = Restaurant;
   $scope.openRestaurant = Restaurant.getRestaurantOpenStatus;
-  
+
   User.setOnline();
 
   $scope.signOut = function(callback) {
@@ -47,6 +47,7 @@ app.controller('HomeTabCtrl',
     $scope.restaurantService = Restaurant.getRestaurantOpenStatus(id)
     $scope.isAlreadyReviewed();
     $scope.restaurantReviews = $firebaseArray(restaurantReviewsRef);
+    // $scope.restaurantReviews = $firebaseArray(Database.reviewsReference().orderByChild('restaurant_id').equalTo(id));
   }
 
   $scope.images = [];
