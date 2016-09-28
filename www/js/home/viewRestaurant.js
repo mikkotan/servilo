@@ -1,99 +1,25 @@
-app.controller('HomeTabCtrl',
-  ["$scope","$ionicModal","$firebaseArray","currentAuth", "Restaurant", "Home" ,"$stateParams", "$state", "User",
-    "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation", "$ionicLoading", "$cordovaImagePicker", "Database", "Review",
-        function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $stateParams, $state,
-            User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, $ionicLoading, $cordovaImagePicker, Database, Review) {
+// app.controller("ViewRestaurantCtrl",["$scope","currentUser","review","$firebaseArray","$firebaseObject","Database",
+//   function($scope,currentUser,review,$firebaseArray,$firebaseObject,Database){
+    app.controller("ViewRestaurantCtrl",["$scope","currentUser","userReview",
+    "restaurantReview","$firebaseArray","$firebaseObject","Database","$ionicLoading","$ionicModal",
+      function($scope,currentUser,userReview,restaurantReview,
+        $firebaseArray,$firebaseObject,Database,$ionicLoading,$ionicModal){
 
 
-console.log('HomeTabCtrl');
-
-  $scope.usersRefObj = Database.users(); //new
-  $scope.restaurants = Database.restaurants();//new
-  $scope.getAvg = Restaurant.getAveragePrice;
-  $scope.getAvgRating = Restaurant.getAverageRating;
-  $scope.getRestaurantStatus = Restaurant.getRestaurantStatus;
-  $scope.getReviewer = Review.reviewer;
-  $scope.openRestaurant = Restaurant.getRestaurantOpenStatus;
-
-  User.setOnline();
-
-  $scope.signOut = function(callback) {
-    // User.auth.online = null;
-    Auth.$signOut();
-    console.log("bye");
-    $state.go("tabs.login");
-  }
-
-  ionicMaterialInk.displayEffect();
-
-  $scope.rating = {
-    rate : 0,
-    max: 5
-  }
-
-  if($state.is("tabs.viewRestaurant")){
+  console.log("View Restaurant Ctrl")
     var id = $stateParams.restaurantId;
-    var userReviewsRef = Database.usersReference().child(User.auth().$id).child('reviewed_restaurants').child(id); //new subs below
-    var restaurantReviewsRef = Database.reviewsReference().orderByChild('restaurant_id').equalTo(id); //new subs above
-
-    $scope.isAlreadyReviewed = function() {
-      userReviewsRef.once('value', function(snapshot) {
-        $scope.exists = (snapshot.val() !=null );
-        $scope.review = $firebaseObject(Database.reviewsReference().child(snapshot.val()));
-      })
-    }
-
-    $scope.restaurant = Restaurant.get(id);
-    $scope.isAlreadyReviewed();
-    $scope.restaurantReviews = $firebaseArray(restaurantReviewsRef);
+    $scope.restaurants = Database.restaurants();//new
+    $scope.usersRefObj = Database.users(); //new
+  $scope.isAlreadyReviewed = function() {
+    userReviewsRef.once('value', function(snapshot) {
+      $scope.exists = (snapshot.val() !=null );
+      $scope.review = $firebaseObject(Database.reviewsReference().child(snapshot.val()));
+    })
   }
 
-  $scope.images = [];
-  // $scope.editImages = [];
-
-  $scope.selImages = function() {
-    var options = {
-      maximumImagesCount: 10,
-      width: 800,
-      height: 800,
-      quality: 80
-    };
-    window.imagePicker.getPictures(
-        function(results) {
-            for (var i = 0; i < results.length; i++) {
-                console.log('Image URI: ' + results[i]);
-                window.plugins.Base64.encodeFile(results[i], function(base64){
-                    $scope.images.push(base64);
-                    $scope.$apply();
-                });
-            }
-        }, function (error) {
-            console.log('Error: ' + error);
-        }, {
-            maximumImagesCount: 10,
-            width: 800,
-            quality: 80,
-          // output type, defaults to FILE_URIs.
-          // available options are
-          // window.imagePicker.OutputType.FILE_URI (0) or
-          // window.imagePicker.OutputType.BASE64_STRING (1)
-            // outputType: window.imagePicker.OutputType.BASE64_STRING
-        }
-    );
-
-    // $cordovaImagePicker.getPictures(options)
-    // .then(function (results) {
-    //   for (var i = 0; i < results.length; i++) {
-    //     window.plugins.Base64.encodeFile(results[i], function(base64){
-    //       $scope.images.push(base64);
-    //       $scope.$apply();
-    //     });
-    //     console.log('Image URI: ' + results[i]);
-    //   }
-    // }, function(error) {
-    //   // error getting photos
-    // });
-  };
+  $scope.restaurant = Restaurant.get(id);
+  $scope.isAlreadyReviewed();
+  $scope.restaurantReviews = $firebaseArray(restaurantReviewsRef);
 
   $scope.addReview = function(review) {
     $ionicLoading.show();
@@ -247,16 +173,4 @@ console.log('HomeTabCtrl');
         $scope.$apply();
     });
   };
-
-  $scope.CallNumber = function(){
-     var number = '09772475405' ;
-     window.plugins.CallNumber.callNumber(function(){
-      //success logic goes here
-      console.log("call success");
-     }, function(){
-       console.log("call failed");
-      //error logic goes here
-     }, number)
-   };
-
 }]);

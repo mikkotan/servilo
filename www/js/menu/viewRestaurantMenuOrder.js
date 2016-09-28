@@ -1,8 +1,6 @@
 app.controller("ViewRestaurantMenuOrder",["$scope","$state","restaurantMenus",'$stateParams', "CartData","$ionicModal",
   function($scope ,$state , restaurantMenus,$stateParams, CartData,$ionicModal){
 
-console.log("View Order Menu");
-
 $scope.restaurantId = $stateParams.restaurantId
 $scope.restaurantMenus = restaurantMenus;
 
@@ -23,13 +21,14 @@ $scope.restaurantMenus = restaurantMenus;
       return null;
   }
 
-  var closeModal = fucntion(){
+  var closeModal = function(){
     $state.go("tabs.restaurantMenus");
     $scope.addToCartModal.hide();
   }
 
   $scope.sendToCart = function(menu){
     var menuOrder = menuId(CartData.get(),"id",$scope.id);
+
     if( menuOrder === null){
       var menuCart = { id:$scope.id, name:$scope.menuName, price : $scope.menuPrice , quantity:menu.quantity };
       CartData.add(menuCart);

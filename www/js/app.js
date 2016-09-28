@@ -56,12 +56,9 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
         'home-tab': {
           templateUrl: "templates/home.html",
           controller: 'HomeTabCtrl',
-          resolve: {
-            currentAuth:function(Auth) {
+          resolve : {
+            currentAuth : function(Auth) {
               return Auth.$requireSignIn();
-            },
-            restaurants : function(Restaurant){
-                return Restaurant.all().$loaded();
             }
           }
         }
@@ -74,12 +71,22 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
           templateUrl: "templates/viewRestaurant.html",
           controller: "HomeTabCtrl",
           resolve: {
-            currentAuth:function(Auth) {
+            currentAuth : function(Auth) {
               return Auth.$requireSignIn();
-            },
-            restaurants : function(Restaurant){
-                return Restaurant.all().$loaded();
             }
+            // review : function(Review , $stateParams){
+            //   return {
+            //     userReview : Review.userReview($stateParams.restaurantId).$loaded(),
+            //     restaurantReview : Review.userReview($stateParams.restaurantId).$loaded()
+            //     }
+            //   }
+            // userReview : function($stateParams , Review){
+            //   return Review.userReview($stateParams.restaurantId).$loaded();
+            // },
+            // restaurantReview : function($stateParams , Review){
+            //   return Review.restaurantReview($stateParams.restaurantId).$loaded();
+            // }
+
           }
         }
       }

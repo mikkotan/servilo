@@ -1,7 +1,7 @@
 app.factory("Menu",["$firebaseAuth","$firebaseArray","$firebaseObject","Restaurant", "Database",
   function($firebaseAuth , $firebaseArray , $firebaseObject, Restaurant, Database){
-  var rootRef = firebase.database().ref();
 
+  var rootRef = firebase.database().ref();
   var menus = Database.menusReference();
   var restaurants = Database.restaurantsReference();
   var menusArray = Database.menus();
