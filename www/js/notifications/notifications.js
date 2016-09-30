@@ -1,15 +1,42 @@
-app.controller("NotificationsCtrl", ["$scope", "$firebaseArray", "User",
-  function($scope, $firebaseArray, User, notifications){
-    // $scope.notifications = notifications.map(function(notification) {
+app.controller("NotificationsCtrl", ["$scope", "$firebaseArray", "User", "Restaurant", "notifications",
+  function($scope, $firebaseArray, User, Restaurant, notifications){
+
+    $scope.notifs = notifications;
+    // $scope.notifs.sender = User.getUserFullname;
+    // $scope.notifs.restaurant = Restaurant.get;
+
+    $scope.$watchCollection('notifs', function(newNotifs) {
+      $scope.newNotifs = newNotifs.map(function(notification) {
+        return {
+          sender : User.getUserFullname(notification.sender_id),
+          restaurant : Restaurant.get(notification.restaurant_id).name
+        }
+      })
+    });
+
+    // $scope.notifications = $scope.notifs.map(function(notification) {
     //   return {
     //     notification : notification,
-    //     sender : User.getUserFullname(notification.sender_id)
+    //     sender : User.getUser
     //   }
     // })
-    // $scope.notifications = notifications;
-    $scope.notifications = User.getAuthNotifications();
 
-    // $scope.notifications = notifications;
-    // $scope.notifications = $firebaseArray(r.notificationsReference().orderByChild('receiver_id').equalTo(User.auth().$id));
-    // $scope.hello = "neoti";
+    // $scope.$watch('notifs', function() {
+    //   $scope.notifs = notifications.map(function(notification) {
+    //     return {
+    //       notification : notification,
+    //       sender : User.getUserFullname(notification.sender_id),
+    //       restaurant : Restaurant.get(notification.restaurant_id).name
+    //     }
+    //   })
+    // })
+
+    // $scope.notifs = notifications.map(function(notification) {
+    //   return {
+    //     notification : notification,
+    //     sender : User.getUserFullname(notification.sender_id),
+    //     restaurant : Restaurant.get(notification.restaurant_id).name,
+    //   }
+    // });
+
   }]);

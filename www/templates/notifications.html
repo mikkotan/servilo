@@ -5,13 +5,10 @@
         <i class="icon ion-android-list"></i>
         Order #10320 on Restaurant: Fuel PH
       </a>
-
-      <a class="item item-icon-left balanced" ng-repeat="notif in notifications" >
+      <a class="item item-icon-left balanced" ng-repeat="notif in newNotifs" >
         <i class="icon ion-thumbsup"></i>
-        {{notif.sender_id}} reviewed your restaurant {{notif.restaurant_id}}
+        <h6>{{notif.sender}} reviewed your restaurant {{notif.restaurant}}</h6>
       </a>
-
-
     </div>
   </ion-content>
 </ion-view>

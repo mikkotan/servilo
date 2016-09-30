@@ -60,8 +60,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             currentAuth:function(Auth) {
               return Auth.$requireSignIn();
             },
-            restaurants : function(Restaurant){
-                return Restaurant.all().$loaded();
+            restaurants : function(Database) {
+              return Database.restaurants().$loaded();
             }
           }
         }
@@ -77,8 +77,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             currentAuth:function(Auth) {
               return Auth.$requireSignIn();
             },
-            restaurants : function(Restaurant){
-                return Restaurant.all().$loaded();
+            restaurants : function(Database) {
+                return Database.restaurants().$loaded();
             }
           }
         }

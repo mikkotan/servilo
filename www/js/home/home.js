@@ -1,14 +1,15 @@
 app.controller('HomeTabCtrl',
   ["$scope","$ionicModal","$firebaseArray","currentAuth", "Restaurant", "Home" ,"$stateParams", "$state", "User",
-    "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation", "$ionicLoading", "$cordovaImagePicker", "Database", "Review","restaurants",
+    "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation", "$ionicLoading", "$cordovaImagePicker", "Database", "Review", "restaurants",
         function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $stateParams, $state,
-            User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, $ionicLoading, $cordovaImagePicker, Database, Review,restaurants) {
+            User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, $ionicLoading, $cordovaImagePicker, Database, Review, restaurants) {
 
 
   console.log('HomeTabCtrl');
 
   $scope.usersRefObj = Database.users(); //new
   $scope.restaurants = restaurants; //new
+  // $scope.restaurants = Database.restaurants();
   $scope.getAvg = Restaurant.getAveragePrice;
   $scope.getAvgRating = Restaurant.getAverageRating;
   $scope.getReviewer = Review.reviewer;
@@ -269,13 +270,10 @@ app.controller('HomeTabCtrl',
   };
 
   $scope.CallNumber = function(number){
-    //  var number = '09772475405' ;
      window.plugins.CallNumber.callNumber(function(){
-      //success logic goes here
       console.log("call success");
      }, function(){
        console.log("call failed");
-      //error logic goes here
      }, number)
    };
 
