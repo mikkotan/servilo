@@ -23,7 +23,7 @@
           Rating: {{getAvgRating(restaurant.$id)}} / 5
         </p>
       </ion-item> -->
-      <div class="card padding" ng-repeat="restaurant in restaurants">
+      <div class="card padding" ng-repeat="restaurant in restaurants | restaurantFilter:searchRestaurant track by restaurant.$id">
         <div class="item item-thumbnail-left" ng-init="addMarker(restaurant)" >
           <img class="img-thumbnail" ng-src="data:image/jpeg;base64,{{restaurant.image}}"/>
           <h3 ui-sref="tabs.viewRestaurant({restaurantId:restaurant.$id})">

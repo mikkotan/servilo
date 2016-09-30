@@ -1,56 +1,34 @@
-app.controller('HomeTabCtrl',
-  ["$scope","$ionicModal","$firebaseArray","currentAuth", "Restaurant", "Home" ,"$stateParams", "$state", "User",
-    "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation", "$ionicLoading", "$cordovaImagePicker", "Database", "Review", "restaurants",
-        function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $stateParams, $state,
-            User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, $ionicLoading, $cordovaImagePicker, Database, Review, restaurants) {
+app.controller("ViewRestaurantCtrl",["$scope","currentUser","$firebaseArray","$firebaseObject","Database","$ionicLoading","$ionicModal", "$ionicPopup","$cordovaGeolocation", "$stateParams", "Restaurant", "User", "Review",
+  function($scope,currentUser,$firebaseArray,$firebaseObject,Database, $ionicLoading, $ionicModal, $ionicPopup, $cordovaGeolocation, $stateParams, Restaurant, User, Review){
 
-
-
-  console.log('HomeTabCtrl');
-
-  $scope.usersRefObj = Database.users(); //new
-  $scope.restaurants = restaurants; //new
-  // $scope.restaurants = Database.restaurants();
-  $scope.getAvg = Restaurant.getAveragePrice;
-  $scope.getAvgRating = Restaurant.getAverageRating;
-  $scope.getReviewer = Review.reviewer;
-  $scope.RestaurantService = Restaurant;
-  $scope.openRestaurant = Restaurant.getRestaurantOpenStatus;
-
-  User.setOnline();
-
-  $scope.signOut = function(callback) {
-    Auth.$signOut();
-    console.log("bye");
-    $state.go("tabs.login");
-  }
-
-  ionicMaterialInk.displayEffect();
+  console.log("View Restaurant Ctrl")
 
   $scope.rating = {
     rate : 0,
     max: 5
   }
 
-  // if ($state.is("tabs.viewRestaurant")) {
-  //   var id = $stateParams.restaurantId;
-  // var userReviewsRef = Database.usersReference().child(User.auth().$id).child('reviewed_restaurants').child(id); //new subs below
-  // var restaurantReviewsRef = Database.reviewsReference().orderByChild('restaurant_id').equalTo(id); //new subs above
-  //
-  //   $scope.isAlreadyReviewed = function() {
-  //     userReviewsRef.once('value', function(snapshot) {
-  //       $scope.exists = (snapshot.val() !=null );
-  //       $scope.review = $firebaseObject(Database.reviewsReference().child(snapshot.val()));
-  //     })
-  //   }
-  //
-  //   $scope.restaurant = Restaurant.get(id);
-  //   $scope.getRestaurantStatus = Restaurant.getRestaurantStatus(Restaurant.get(id).owner_id);
-  //   $scope.restaurantService = Restaurant.getRestaurantOpenStatus(id)
-  //   $scope.isAlreadyReviewed();
-  //   $scope.restaurantReviews = $firebaseArray(restaurantReviewsRef);
-  //   // $scope.restaurantReviews = $firebaseArray(Database.reviewsReference().orderByChild('restaurant_id').equalTo(id));
-  // }
+  var id = $stateParams.restaurantId;
+  var userReviewsRef = Database.usersReference().child(User.auth().$id).child('reviewed_restaurants').child(id); //new subs below
+  var restaurantReviewsRef = Database.reviewsReference().orderByChild('restaurant_id').equalTo(id); //new subs above
+
+  $scope.restaurants = Database.restaurants();//new
+  $scope.usersRefObj = Database.users(); //new
+  $scope.getReviewer = Review.reviewer;
+
+
+  $scope.isAlreadyReviewed = function() {
+    userReviewsRef.once('value', function(snapshot) {
+      $scope.exists = (snapshot.val() !=null );
+      $scope.review = $firebaseObject(Database.reviewsReference().child(snapshot.val()));
+    })
+  }
+
+  $scope.restaurant = Restaurant.get(id);
+  $scope.getRestaurantStatus = Restaurant.getRestaurantStatus(Restaurant.get(id).owner_id);
+  $scope.restaurantService = Restaurant.getRestaurantOpenStatus(id)
+  $scope.isAlreadyReviewed();
+  $scope.restaurantReviews = $firebaseArray(restaurantReviewsRef);
 
   $scope.images = [];
   // $scope.editImages = [];
@@ -121,14 +99,14 @@ app.controller('HomeTabCtrl',
       }
       console.log("add review done");
       Database.usersReference().child(User.auth().$id).child('reviewed_restaurants').child(id).set(review.key);
+      // Database.restaurantsReference().child(id).child('reviews').child(review.key).set(true); //new
+      // Database.restaurantsReference().child(id).child('reviewers').child(User.auth().$id).set(true); //new
       $scope.isAlreadyReviewed();
       $scope.reviewModal.hide();
       review.content = '';
       $scope.review.rating = 0;
       $scope.rating.rate = 0;
       $scope.images = [];
-
-
     })
     var restaurant_owner = Restaurant.getOwner(id);
     Database.notifications().$add({
@@ -171,6 +149,7 @@ app.controller('HomeTabCtrl',
   }, {
     scope: $scope
   });
+
   $ionicModal.fromTemplateUrl('templates/edit-review.html', function(editReviewModal) {
     $scope.editReviewModal = editReviewModal;
   }, {
@@ -210,10 +189,7 @@ app.controller('HomeTabCtrl',
 
   $scope.direction =[];
   $scope.currentLocation ={};
-  $scope.markers =[];
-  $scope.restaurantMarkers =[];
-  $scope.map =  {center: { latitude: 10.729984, longitude: 122.549298 }, zoom: 12, options: {scrollwheel: false}, bounds: {}};
-
+  $scope.marker ={id: 0};
   var options = {timeout: 10000, enableHighAccuracy: true};
   $cordovaGeolocation.getCurrentPosition(options).then(function(position){
     $scope.currentLocation = {latitude: position.coords.latitude,longitude: position.coords.longitude};
@@ -247,13 +223,9 @@ app.controller('HomeTabCtrl',
       travelMode: google.maps.DirectionsTravelMode['DRIVING'],
       optimizeWaypoints: true
     };
-
-    $scope.restaurantMarkers.push({id: Date.now(),
-      coords:{latitude:$scope.currentLocation.latitude, longitude:$scope.currentLocation.longitude}
-    });
-
     direction.route(request, function(response, status){
       var steps = response.routes[0].legs[0].steps;
+
       var distance =response.routes[0].legs[0].distance.value/1000;
       for(i=0; i<steps.length; i++){
         var strokeColor = '#049ce5';
@@ -265,18 +237,7 @@ app.controller('HomeTabCtrl',
             weight: 5
         }});
         }
-        $scope.restaurantMarkers[0].icon = new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_bubble_icon_texts_big&chld=restaurant|edge_bc|FFBB00|000000|'
-            + restaurant.name +'|Distance: '+ distance + 'km');
         $scope.$apply();
     });
   };
-
-  $scope.CallNumber = function(number){
-     window.plugins.CallNumber.callNumber(function(){
-      console.log("call success");
-     }, function(){
-       console.log("call failed");
-     }, number)
-   };
-
 }]);

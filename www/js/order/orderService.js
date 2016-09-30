@@ -13,7 +13,6 @@ app.factory("Order",["$firebaseAuth","$firebaseArray","$firebaseObject",
     },
     getOrder : function(restaurantId){
       return $firebaseArray(orders.orderByChild("restaurant_id").equalTo(restaurantId));
-
     }
   }
 }]);

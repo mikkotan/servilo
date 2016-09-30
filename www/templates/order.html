@@ -4,23 +4,22 @@
       <ion-list>
         <ion-item ng-repeat="data in order">
           <p>{{data.restaurant.name}}</p>
-          <p>  {{data.restaurant.$id}}  </p>
-
             <ion-item  ng-repeat="order in data.orders">
               <p>
-              Customer Name: {{order.customer_id}}
+              Customer Name: {{customer_name(order.customer_id)}}
               </p>
               <ion-item ng-repeat="menu in order.menus">
                 <p>
-                Name : {{menu.name}}
+                Name : {{orderMenu(menu.id).name}}
                 </p>
                 <p>
                 Quantity : {{menu.quantity}}
                 </p>
                 <p>
-                Price : {{menu.price}}
+                Price : {{orderMenu(menu.id).price}}
                 </p>
               </ion-item>
+              Location: {{order.location}}
             </ion-item>
         </ion-item>
       </ion-list>

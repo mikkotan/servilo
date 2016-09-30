@@ -14,7 +14,7 @@ app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "U
   var usersArray = Database.users();
 
 
-  return {
+  var Restaurant = {
     all : function() {
         return restaurantsArray;
     },
@@ -79,4 +79,6 @@ app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "U
       }
     }
   }
+
+  return Restaurant;
 }]);
