@@ -14,12 +14,27 @@ $scope.add = function(orderMenu){
 }
 
 
+// $scope.minus = function(orderMenu){
+//   var menu = $scope.cartData.indexOf(orderMenu);
+//   if($scope.cartData[menu].quantity > 1){
+//     $scope.cartData[menu].quantity -= 1;
+//   }else{
+//     $scope.cartData[menu].quantity -= 1;
+//     if($scope.cartData[menu].quantity < 0){
+//       $scope.cartData.splice(menu,1);
+//     }
+//   }
+// }
 $scope.minus = function(orderMenu){
   var menu = $scope.cartData.indexOf(orderMenu);
-  if($scope.cartData[menu].quantity > 1){
+  var menuId = Cart.menuId($scope.totalPrice,"menu_id",orderMenu.id)
+
+  if($scope.cartData[menu].quantity > 0){
     $scope.cartData[menu].quantity -= 1;
-  }else{
-    $scope.cartData.splice(menu,1);
+      if($scope.cartData[menu].quantity <= 0){
+        $scope.cartData.splice(menu,1);
+        $scope.totalPrice.splice(menuId,1)
+      }
   }
 }
 
@@ -29,23 +44,21 @@ $scope.delete = function(orderMenu){
     $scope.cartData.splice(menu,1);
     $scope.totalPrice.splice(menuId,1)
 
-}
+};
 
 $scope.$watch('cartData',function(newArray){
-    $scope.menus = newArray.map(function(menu){
-      if(Cart.menuId($scope.totalPrice,"menu_id",menu.id) === null){
-           $scope.totalPrice.push({menu_id:menu.id, subtotal:menu.price * menu.quantity});
-      }else{
-        var menuid = Cart.menuId($scope.totalPrice,"menu_id",menu.id)
-          $scope.totalPrice[menuid].subtotal = menu.price * menu.quantity
-      }
-
-      return {
-          menu : menu,
-          subtotal : menu.price * menu.quantity
-      }
-    })
-
+  $scope.menus = newArray.map(function(menu){
+    if(Cart.menuId($scope.totalPrice,"menu_id",menu.id) === null){
+      $scope.totalPrice.push({menu_id:menu.id, subtotal:menu.price * menu.quantity});
+    }else{
+      var menuid = Cart.menuId($scope.totalPrice,"menu_id",menu.id)
+      $scope.totalPrice[menuid].subtotal = menu.price * menu.quantity
+    }
+    return {
+        menu : menu,
+        subtotal : menu.price * menu.quantity
+    }
+  })
 },true);
 
 
@@ -83,6 +96,5 @@ $scope.buy = function(cart , location){
       alert("please fill up Location");
     }
   }
-
 
 }]);
