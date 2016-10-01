@@ -74,7 +74,10 @@ $scope.$watch('totalPrice',function(newValue){
 var scanCart = function(Cart){
   var scanMenu = []
     for (var i = 0; i < Cart.length; i++) {
-      scanMenu.push({id:Cart[i].menu.id , quantity:Cart[i].menu.quantity});
+      scanMenu.push({
+        id : Cart[i].menu.id,
+        quantity : Cart[i].menu.quantity,
+      });
     }
     return scanMenu;
 }
@@ -85,9 +88,11 @@ $scope.buy = function(cart , location){
         restaurant_id : restaurantId,
         customer_id : authUser.$id,
         location : location,
-        menus : scanCart(cart)
+        menus : scanCart(cart),
+        totalprice : $scope.total,
       }).then(function(){
           $scope.menus.length = 0;
+          $scope.total = 0;
           alert("success")
       }).catch(function(error){
             alert(error);

@@ -11,15 +11,25 @@
               <ion-item ng-repeat="menu in order.menus">
                 <p>
                 Name : {{orderMenu(menu.id).name}}
+                  <!-- Name : {{ menu.name }} -->
                 </p>
                 <p>
-                Quantity : {{menu.quantity}}
+                  Quantity : {{menu.quantity}}
                 </p>
                 <p>
                 Price : {{orderMenu(menu.id).price}}
+                  <!-- Price : {{ menu.unit_price }} -->
+                </p>
+                <p>
+                  Subtotal : {{ orderMenu(menu.id).price  * menu.quantity }}
                 </p>
               </ion-item>
-              Location: {{order.location}}
+              <p>
+                Location: {{order.location}}
+              </p>
+              <p>
+                Total : {{order.totalprice}}
+              </p>
             </ion-item>
         </ion-item>
       </ion-list>
