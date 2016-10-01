@@ -100,6 +100,9 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             resolve: {
               restaurantMenus : function(Menu , $stateParams){
                   return Menu.getRestaurantMenus($stateParams.restaurantId).$loaded();
+              },
+              restaurantId : function($stateParams){
+                return $stateParams.restaurantId
               }
             }
           }
@@ -160,7 +163,10 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
       }
     })
     .state('tabs.cart', {
-      url: "/cart/:restaurantId",
+      url: "/cart",
+      params : {
+        restaurantId : null
+      },
       views: {
         'cart-tab': {
           templateUrl: "templates/cart.html",

@@ -1,6 +1,7 @@
 app.factory('CartData', function(){
 
   var cart = [];
+  var totalPrice =[];
 
   return {
     add: function(menu) {
@@ -9,6 +10,9 @@ app.factory('CartData', function(){
     get: function(){
       console.log("hi "+ cart);
       return cart;
+    },
+    totalPrice : function(){
+      return totalPrice
     }
 
   };

@@ -5,7 +5,7 @@
     <ion-list>
       <ion-item ng-repeat="order in menus">
         <p>
-          Name: {{order.menu.name}}
+          Name: {{order.menu.name}} <button class="button button-calm" ng-click="delete(order.menu)">delete</button>
         </p>
         <p>
           Price: {{order.menu.price}}
@@ -17,10 +17,17 @@
           Subtotal : {{order.subtotal}}
         </p>
 
+        <p>
+        <button class="button button-calm" ng-click="add(order.menu)">+</button>
+        <input type='text' name='quantity' value='0' class='qty'/>
+        <button class="button button-calm" ng-click="minus(order.menu)">-</button>
+          </form>
+        </p>
+
       </ion-item>
 
       <p>
-        Total : {{totalPrice}}
+        Total : {{total}}
       </p>
       address : <input type="text" required ng-trim="false" ng-model="location">
       <p>

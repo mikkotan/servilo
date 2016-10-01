@@ -1,36 +1,56 @@
-app.controller("CartCtrl",["$scope","CartData","$stateParams","orders","authUser","restaurantId",
-  function($scope , CartData ,$stateParams,orders,authUser,restaurantId){
-
-var total = [];
+app.controller("CartCtrl",["$scope","CartData","orders","authUser","restaurantId","Cart",
+  function($scope , CartData ,orders,authUser,restaurantId,Cart){
 
 $scope.order = orders;
-
-$scope.restaurantId = restaurantId;
-console.log($scope.restaurantId);
-
+$scope.restaurantId = restaurantId
 $scope.cartData = CartData.get()
-
-$scope.$watchCollection('cartData', function(newMenus){
-  var totalPrice = [];
-
-  $scope.menus = newMenus.map(function(menu){
-    totalPrice.push(menu.price * menu.quantity)
-    return {
-        menu:menu,
-        subtotal : menu.price * menu.quantity
-    }
-  })
-  Promise.all([$scope.menus]).then(function(){
-    $scope.totalPrice = totalPrice.reduce(add, 0);
-  })
-})
+$scope.totalPrice = CartData.totalPrice()
 
 
+$scope.add = function(orderMenu){
+  var order = $scope.cartData.indexOf(orderMenu);
+  $scope.cartData[order].quantity += 1;
 
-
-function add(a, b) {
-    return a + b;
 }
+
+
+$scope.minus = function(orderMenu){
+  var menu = $scope.cartData.indexOf(orderMenu);
+  if($scope.cartData[menu].quantity <= 0){
+    $scope.cartData[menu].quantity -= 1;
+
+  }else{
+    $scope.cartData.splice(menu,1);
+  }
+}
+
+
+$scope.$watch('cartData',function(newArray){
+    $scope.menus = newArray.map(function(menu){
+      if(Cart.menuId($scope.totalPrice,"menu_id",menu.id) === null){
+           $scope.totalPrice.push({menu_id:menu.id, subtotal:menu.price * menu.quantity});
+      }else{
+        var menuid = Cart.menuId($scope.totalPrice,"menu_id",menu.id)
+          $scope.totalPrice[menuid].subtotal = menu.price * menu.quantity
+      }
+
+      // totalPrice.push(menu.price * menu.quantity);
+      return {
+          menu : menu,
+          subtotal : menu.price * menu.quantity
+      }
+    })
+
+},true);
+
+
+$scope.$watch('totalPrice',function(newValue){
+      var price = 0;
+      for (var i = 0; i < newValue.length; i++) {
+        price += newValue[i].subtotal;
+      }
+      $scope.total = price;
+},true);
 
 
 var scanCart = function(Cart){
@@ -39,14 +59,12 @@ var scanCart = function(Cart){
       scanMenu.push({id:Cart[i].menu.id , quantity:Cart[i].menu.quantity});
     }
     return scanMenu;
-
 }
 
 $scope.buy = function(cart , location){
-  console.log(typeof location);
     if(typeof location !== "undefined"){
       $scope.order.$add({
-        restaurant_id : $scope.restaurantId,
+        restaurant_id : restaurantId,
         customer_id : authUser.$id,
         location : location,
         menus : scanCart(cart)
@@ -59,7 +77,7 @@ $scope.buy = function(cart , location){
     }else{
       alert("please fill up Location");
     }
-
-
   }
+
+
 }]);

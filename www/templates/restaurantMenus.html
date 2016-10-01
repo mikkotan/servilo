@@ -11,8 +11,9 @@
 
     </ion-list>
     <p>
-      <a class="button-calm" ui-sref="tabs.home">back</a>
-      <a class="button-calm" ui-sref="tabs.cart({restaurantId:restaurantId})">View Cart</a>
+      <a class="button-calm" ng-click="back()" >back</a>
+      <!-- <a class="button-calm" ui-sref="tabs.cart({restaurantId:restaurantId})">View Cart</a> -->
+      <a class="button-calm" ng-click="viewCart()">View Cart</a>
     </p>
 </ion-content>
 </ion-view>

@@ -3,7 +3,7 @@ app.filter('restaurantFilter',function(Menu){
   return function(restaurants , searchRestaurant){
 
     var filtered = [];
-    var fil = []
+
       if(typeof searchRestaurant !== "undefined"){
         angular.forEach(restaurants,function(restaurant){
           if(restaurant.name.indexOf(searchRestaurant) > -1){
