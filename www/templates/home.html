@@ -3,7 +3,7 @@
 
     <label class="item-input-wrapper">
       <i class="icon ion-search placeholder-icon"></i>
-      <input type="search" value="" ng-model="searchRestaurant">
+      <input placeholder="Search..." type="search" ng-model="searchRestaurant">
     </label>
   </ion-header-bar>
   <ion-content class="padding has-subheader" overflow-scroll="true">
@@ -18,34 +18,30 @@
         <p ng-if="restaurant.secured_data.totalMenuCount != 0">
           Avg Price: {{getAvg(restaurant.$id) | currency:"₱"}}
 
-
         </p>
         <p>
           Rating: {{getAvgRating(restaurant.$id)}} / 5
         </p>
       </ion-item> -->
       <div class="card padding" ng-repeat="restaurant in restaurants | restaurantFilter:searchRestaurant track by restaurant.$id">
-        <a class="item item-thumbnail-left" href="#" ng-init="addMarker(restaurant)" >
+        <div class="item item-thumbnail-left" ng-init="addMarker(restaurant)" >
           <img class="img-thumbnail" ng-src="data:image/jpeg;base64,{{restaurant.image}}"/>
           <h3 ui-sref="tabs.viewRestaurant({restaurantId:restaurant.$id})">
             <icon class="ion-spoon"></icon> {{restaurant.name}}
             <span style="color:green">
-              <icon class="ion-android-star-outline"></icon> {{getAvgRating(restaurant.$id)}}
+              <icon class="ion-android-star-outline"></icon> {{restaurant.secured_data.avgRate.toFixed(1)}}
             </span>
           </h3>
           <p>
-            {{getAvg(restaurant.$id) | currency:"₱"}}
+            {{restaurant.secured_data.avgPrice.toFixed(2) | currency:"₱"}}
           </p>
           <p>
             <icon class="ion-ios-location-outline"></icon> {{restaurant.location}}
-            <!-- <p ng-if="restaurant.name != searchRestaurant && searchRestaurant !== '' ">
-              Yes we have {{searchRestaurant}}
-            </p -->
           </p>
-          <button class="button button-balanced button-small button-outline" ng-click="CallNumber()">
+          <button class="button button-balanced button-small button-outline" ng-click="CallNumber(restaurant.phonenumber)">
             <icon class="ion-android-call"></icon> Call Us
           </button>
-        </a>
+        </div>
     </div>
     </ion-list>
   </ion-content>

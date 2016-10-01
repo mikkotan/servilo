@@ -1,24 +1,25 @@
 app.controller('HomeTabCtrl',
   ["$scope","$ionicModal","$firebaseArray","currentAuth", "Restaurant", "Home" ,"$stateParams", "$state", "User",
-    "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation", "$ionicLoading", "$cordovaImagePicker", "Database", "Review",
+    "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation", "$ionicLoading", "$cordovaImagePicker", "Database", "Review", "restaurants",
         function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $stateParams, $state,
-            User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, $ionicLoading, $cordovaImagePicker, Database, Review) {
+            User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, $ionicLoading, $cordovaImagePicker, Database, Review, restaurants) {
 
 
-console.log('HomeTabCtrl');
+
+  console.log('HomeTabCtrl');
 
   $scope.usersRefObj = Database.users(); //new
-  $scope.restaurants = Database.restaurants();//new
+  $scope.restaurants = restaurants; //new
+  // $scope.restaurants = Database.restaurants();
   $scope.getAvg = Restaurant.getAveragePrice;
   $scope.getAvgRating = Restaurant.getAverageRating;
-  $scope.getRestaurantStatus = Restaurant.getRestaurantStatus;
   $scope.getReviewer = Review.reviewer;
+  $scope.RestaurantService = Restaurant;
   $scope.openRestaurant = Restaurant.getRestaurantOpenStatus;
 
   User.setOnline();
 
   $scope.signOut = function(callback) {
-    // User.auth.online = null;
     Auth.$signOut();
     console.log("bye");
     $state.go("tabs.login");
@@ -31,22 +32,25 @@ console.log('HomeTabCtrl');
     max: 5
   }
 
-  if($state.is("tabs.viewRestaurant")){
-    var id = $stateParams.restaurantId;
-    var userReviewsRef = Database.usersReference().child(User.auth().$id).child('reviewed_restaurants').child(id); //new subs below
-    var restaurantReviewsRef = Database.reviewsReference().orderByChild('restaurant_id').equalTo(id); //new subs above
-
-    $scope.isAlreadyReviewed = function() {
-      userReviewsRef.once('value', function(snapshot) {
-        $scope.exists = (snapshot.val() !=null );
-        $scope.review = $firebaseObject(Database.reviewsReference().child(snapshot.val()));
-      })
-    }
-
-    $scope.restaurant = Restaurant.get(id);
-    $scope.isAlreadyReviewed();
-    $scope.restaurantReviews = $firebaseArray(restaurantReviewsRef);
-  }
+  // if ($state.is("tabs.viewRestaurant")) {
+  //   var id = $stateParams.restaurantId;
+  // var userReviewsRef = Database.usersReference().child(User.auth().$id).child('reviewed_restaurants').child(id); //new subs below
+  // var restaurantReviewsRef = Database.reviewsReference().orderByChild('restaurant_id').equalTo(id); //new subs above
+  //
+  //   $scope.isAlreadyReviewed = function() {
+  //     userReviewsRef.once('value', function(snapshot) {
+  //       $scope.exists = (snapshot.val() !=null );
+  //       $scope.review = $firebaseObject(Database.reviewsReference().child(snapshot.val()));
+  //     })
+  //   }
+  //
+  //   $scope.restaurant = Restaurant.get(id);
+  //   $scope.getRestaurantStatus = Restaurant.getRestaurantStatus(Restaurant.get(id).owner_id);
+  //   $scope.restaurantService = Restaurant.getRestaurantOpenStatus(id)
+  //   $scope.isAlreadyReviewed();
+  //   $scope.restaurantReviews = $firebaseArray(restaurantReviewsRef);
+  //   // $scope.restaurantReviews = $firebaseArray(Database.reviewsReference().orderByChild('restaurant_id').equalTo(id));
+  // }
 
   $scope.images = [];
   // $scope.editImages = [];
@@ -117,14 +121,23 @@ console.log('HomeTabCtrl');
       }
       console.log("add review done");
       Database.usersReference().child(User.auth().$id).child('reviewed_restaurants').child(id).set(review.key);
-      // Database.restaurantsReference().child(id).child('reviews').child(review.key).set(true); //new
-      // Database.restaurantsReference().child(id).child('reviewers').child(User.auth().$id).set(true); //new
       $scope.isAlreadyReviewed();
       $scope.reviewModal.hide();
       review.content = '';
       $scope.review.rating = 0;
       $scope.rating.rate = 0;
       $scope.images = [];
+
+
+    })
+    var restaurant_owner = Restaurant.getOwner(id);
+    Database.notifications().$add({
+      sender_id : User.auth().$id,
+      receiver_id : restaurant_owner.$id,
+      restaurant_id : id,
+      type : 'review'
+    }).then(function() {
+      console.log("hello notification squad");
     })
   }
 
@@ -258,14 +271,11 @@ console.log('HomeTabCtrl');
     });
   };
 
-  $scope.CallNumber = function(){
-     var number = '09772475405' ;
+  $scope.CallNumber = function(number){
      window.plugins.CallNumber.callNumber(function(){
-      //success logic goes here
       console.log("call success");
      }, function(){
        console.log("call failed");
-      //error logic goes here
      }, number)
    };
 

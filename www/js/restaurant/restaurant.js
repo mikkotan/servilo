@@ -4,7 +4,8 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
     $scope.modalControl = {};
     $scope.restaurants = Restaurant.all();
     $scope.pendingRestaurants = Restaurant.getPendingRestaurants();
-    $scope.displayRestaurants = Restaurant.getAuthUserRestaurants();
+    // $scope.displayRestaurants = Restaurant.getAuthUserRestaurants();
+    $scope.displayRestaurants = User.getAuthRestaurants();
     $scope.AppUser = User.auth();
     $scope.restaurant = {
       openTime: new Date()
@@ -61,6 +62,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       cuisine: restaurant.cuisine,
       owner_id: User.auth().$id,
       image: $scope.imageURL,
+      phonenumber: restaurant.phonenumber,
       openTime: restaurant.openTime.getTime(),
       closeTime: restaurant.closeTime.getTime(),
       timestamp: firebase.database.ServerValue.TIMESTAMP,
@@ -101,6 +103,13 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
   }, {
     scope: $scope
   });
+
+  $ionicModal.fromTemplateUrl('templates/edit-restaurant.html', function(restaurantEditModal) {
+    $scope.restaurantEditModal = restaurantEditModal;
+  }, {
+    scope: $scope
+  });
+
 
   $scope.deleteRestaurant = function(restaurant) {
     var resObj = restaurant;

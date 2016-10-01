@@ -1,34 +1,15 @@
-<ion-view view-title="ViewRestaurant">
+<ion-view view-title="{{restaurant.name}}">
   <ion-content overflow-scroll="true">
     <img ng-src="data:image/jpeg;base64,{{restaurant.image}}" width="100%" />
-    <div class="list card no-padding">
-
-      <!-- <div class="item item-avatar">
-        <img src="mcfly.jpg">
-        <h2>Marty McFly</h2>
-        <p>November 05, 1955</p>
-      </div> -->
-
-      <div class="item item-body">
-
-        <p>
-          This is a "Facebook" styled Card. The header is created from a Thumbnail List item, the content is from a card-body consisting of an image and paragraph text. The footer consists of tabs, icons aligned left, within the card-footer.
-        </p>
-        <p>
-          <a href="#" class="subdued">1 Like</a>
-          <a href="#" class="subdued">5 Comments</a>
-        </p>
-      </div>
-    </div>
     <div class="padding">
       <h3>{{restaurant.name}}</h3>
       <a class="button button-small button-calm" ui-sref="tabs.restaurantMenus({restaurantId:restaurant.$id})">Menus</a>
-      <p>{{getRestaurantStatus(restaurant.owner_id)}}</p>
-      <p>Restaurant is: {{openRestaurant(restaurant.$id)}}</p>
-      <p ng-if="openRestaurant(restaurant.$id)==='Open'" style="color:green;">
+      <p>{{getRestaurantStatus}}</p>
+      <p>Restaurant is: {{restaurantService}}</p>
+      <p ng-if="restaurantService === 'Open'" style="color:green;">
         Restaurant Hours: {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}
       </p>
-      <p ng-if="openRestaurant(restaurant.$id)==='Closed'" style="color:red;">
+      <p ng-if="restaurantService === 'Closed'" style="color:red;">
         Opens at {{ restaurant.openTime | date:'shortTime' }}
       </p>
       <ion-list>
@@ -63,14 +44,12 @@
           Reviews
         </div>
         <ul>
-          <li class="item" ng-repeat="review in reviews">
+          <li class="item" ng-repeat="review in restaurantReviews">
             <h3>
-
             {{review.content}} <span class="badge badge-balanced">{{review.rating}}</span>
           </h3>
             <p>
-              Reviewed by: {{getUserName(review.reviewer_id)}}
-              <!-- Reviewed by: {{review.reviewer_id}} -->
+              Reviewed by: {{getReviewer(review).firstName}} {{getReviewer(review).lastName}}
             </p>
           </li>
         </ul>
