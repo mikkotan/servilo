@@ -16,14 +16,20 @@ $scope.add = function(orderMenu){
 
 $scope.minus = function(orderMenu){
   var menu = $scope.cartData.indexOf(orderMenu);
-  if($scope.cartData[menu].quantity <= 0){
+  if($scope.cartData[menu].quantity > 1){
     $scope.cartData[menu].quantity -= 1;
-
   }else{
     $scope.cartData.splice(menu,1);
   }
 }
 
+$scope.delete = function(orderMenu){
+    var menu = $scope.cartData.indexOf(orderMenu);
+    var menuId = Cart.menuId($scope.totalPrice,"menu_id",orderMenu.id)
+    $scope.cartData.splice(menu,1);
+    $scope.totalPrice.splice(menuId,1)
+
+}
 
 $scope.$watch('cartData',function(newArray){
     $scope.menus = newArray.map(function(menu){
@@ -34,7 +40,6 @@ $scope.$watch('cartData',function(newArray){
           $scope.totalPrice[menuid].subtotal = menu.price * menu.quantity
       }
 
-      // totalPrice.push(menu.price * menu.quantity);
       return {
           menu : menu,
           subtotal : menu.price * menu.quantity
