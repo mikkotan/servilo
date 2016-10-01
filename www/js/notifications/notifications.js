@@ -9,7 +9,8 @@ app.controller("NotificationsCtrl", ["$scope", "$firebaseArray", "User", "Restau
       $scope.newNotifs = newNotifs.map(function(notification) {
         return {
           sender : User.getUserFullname(notification.sender_id),
-          restaurant : Restaurant.get(notification.restaurant_id).name
+          restaurant : Restaurant.get(notification.restaurant_id).name,
+          type : notification.type
         }
       })
     });

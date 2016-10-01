@@ -8,6 +8,7 @@ app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "U
   var users = Database.usersReference();
   var menus = Database.menusReference();
   var reviews = Database.reviewsReference();
+  var orders = Database.ordersReference();
 
   var pendingRestaurantsArray = Database.pendings();
   var restaurantsArray = Database.restaurants();
@@ -55,6 +56,9 @@ app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "U
     getOwner : function(restaurantId) {
       var restaurant = restaurantsArray.$getRecord(restaurantId);
       return usersArray.$getRecord(restaurant.owner_id);
+    },
+    getOrders : function(restaurantId) {
+      return $firebaseArray(orders.orderByChild("restaurant_id").equalTo(restaurantId));
     },
     getRestaurantOpenStatus : function(restaurantId) {
       var restaurant = restaurantsArray.$getRecord(restaurantId);

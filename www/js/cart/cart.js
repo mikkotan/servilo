@@ -1,5 +1,5 @@
-app.controller("CartCtrl",["$scope","CartData","orders","authUser","restaurantId","Cart",
-  function($scope , CartData ,orders,authUser,restaurantId,Cart){
+app.controller("CartCtrl",["$scope","CartData","orders","authUser","restaurantId","Cart", "Database", "Restaurant",
+  function($scope , CartData ,orders,authUser,restaurantId,Cart, Database, Restaurant){
 
 $scope.order = orders;
 $scope.restaurantId = restaurantId
@@ -93,6 +93,13 @@ $scope.buy = function(cart , location){
       }).then(function(){
           $scope.menus.length = 0;
           $scope.total = 0;
+          var restaurant_owner = Restaurant.getOwner(restaurantId);
+          Database.notifications().$add({
+            sender_id : authUser.$id,
+            receiver_id : restaurant_owner.$id,
+            restaurant_id : restaurantId,
+            type : 'order'
+          });
           alert("success")
       }).catch(function(error){
             alert(error);
