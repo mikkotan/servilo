@@ -257,7 +257,7 @@ app.controller('HomeTabCtrl',
       var distance =response.routes[0].legs[0].distance.value/1000;
       for(i=0; i<steps.length; i++){
         var strokeColor = '#049ce5';
-        if((i%2)==0){
+        if((i%2) === 0){
           strokeColor = '#FF9E00';
         }
         $scope.direction.push({id:i,paths:steps[i].path, stroke: {

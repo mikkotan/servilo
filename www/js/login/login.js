@@ -1,5 +1,7 @@
-app.controller("LoginCtrl",["$scope" , "$firebaseArray", "$firebaseAuth", "$firebaseObject", "Auth", "AppUser", "ionicMaterialInk", "ionicMaterialMotion", "User", "$state", "$cordovaOauth", "$ionicLoading", "$ionicModal", "Database",
-function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth, AppUser, ionicMaterialInk, ionicMaterialMotion, User, $state, $cordovaOauth, $ionicLoading, $ionicModal, Database){
+app.controller("LoginCtrl",["$scope" , "$firebaseArray", "$firebaseAuth", "$firebaseObject", "Auth",
+  "AppUser", "ionicMaterialInk", "ionicMaterialMotion", "User", "$state", "$cordovaOauth", "$ionicLoading", "$ionicModal", "Database",
+    function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth, AppUser, ionicMaterialInk,
+        ionicMaterialMotion, User, $state, $cordovaOauth, $ionicLoading, $ionicModal, Database){
 
   ionicMaterialInk.displayEffect();
 
@@ -8,11 +10,12 @@ function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth, AppUser
   $scope.login = function(user){
     console.log(user.password);
     $ionicLoading.show();
-    Auth.$signInWithEmailAndPassword(user.email, user.password).then(function(firebase){
+    Auth.$signInWithEmailAndPassword(user.email, user.password).then(function(authUser){
       $ionicLoading.hide();
       console.log("----------------------------")
-      console.log(firebase.uid);
-      console.log(firebase.email);
+      console.log(authUser.uid);
+      console.log(authUser.email);
+      User.setOnline(authUser.uid);
       user.password = "";
       user.email = ""
       $state.go("tabs.home")
@@ -73,7 +76,7 @@ function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth, AppUser
 
   $scope.signOut = function() {
     Auth.$signOut();
-    User.setOnline();
+
     console.log("logged out..");
     location.reload();
   }

@@ -182,7 +182,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
               return Order.all().$loaded();
             },
             authUser : function(User){
-              return User.auth().$loaded()
+              return User.auth().$loaded();
             },
             restaurantId : function($stateParams){
               return $stateParams.restaurantId
