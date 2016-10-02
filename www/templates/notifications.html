@@ -1,13 +1,16 @@
 <ion-view view-title="Notifications">
   <ion-content overflow-scroll="true">
     <div class="list">
-      <a class="item item-icon-left positive" href="#">
+      <!-- <a class="item item-icon-left positive" href="#">
         <i class="icon ion-android-list"></i>
         Order #10320 on Restaurant: Fuel PH
-      </a>
-      <a class="item item-icon-left balanced" ng-repeat="notif in newNotifs" >
-        <i class="icon ion-thumbsup"></i>
-        <h6>{{notif.sender}} reviewed your restaurant {{notif.restaurant}}</h6>
+      </a> -->
+      <a class="item item-icon-left" ng-repeat="notif in newNotifs" >
+        <i ng-if="notif.type === 'review'" class="icon ion-thumbsup balanced"></i>
+        <h6 ng-if="notif.type === 'review'">{{notif.sender}} reviewed your restaurant {{notif.restaurant}}</h6>
+
+        <i ng-if="notif.type === 'order'" class="icon ion-android-list positive"></i>
+        <h6 ng-if="notif.type === 'order'">{{notif.sender}} ordered at {{notif.restaurant}}</h6>
       </a>
     </div>
   </ion-content>

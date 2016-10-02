@@ -2,7 +2,7 @@
   <ion-content class="padding">
     <h3>Cart</h3>
       <ion-list>
-        <ion-item ng-repeat="data in order">
+        <ion-item ng-repeat="data in restaurants">
           <p>{{data.restaurant.name}}</p>
             <ion-item  ng-repeat="order in data.orders">
               <p>
@@ -13,13 +13,21 @@
                 Name : {{orderMenu(menu.id).name}}
                 </p>
                 <p>
-                Quantity : {{menu.quantity}}
+                  Quantity : {{menu.quantity}}
                 </p>
                 <p>
                 Price : {{orderMenu(menu.id).price}}
                 </p>
+                <p>
+                  Subtotal : {{ orderMenu(menu.id).price  * menu.quantity }}
+                </p>
               </ion-item>
-              Location: {{order.location}}
+              <p>
+                Location: {{order.location}}
+              </p>
+              <p>
+                Total : {{order.totalprice}}
+              </p>
             </ion-item>
         </ion-item>
       </ion-list>

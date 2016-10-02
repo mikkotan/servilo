@@ -16,8 +16,8 @@ app.controller('HomeTabCtrl',
   $scope.getReviewer = Review.reviewer;
   $scope.RestaurantService = Restaurant;
   $scope.openRestaurant = Restaurant.getRestaurantOpenStatus;
-
-  User.setOnline();
+  console.log(currentAuth.$id);
+  User.setOnline(currentAuth.$id);
 
   $scope.signOut = function(callback) {
     Auth.$signOut();

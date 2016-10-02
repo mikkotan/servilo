@@ -1,5 +1,5 @@
-app.controller("ViewRestaurantCtrl",["$scope","currentUser","$firebaseArray","$firebaseObject","Database","$ionicLoading","$ionicModal", "$ionicPopup","$cordovaGeolocation", "$stateParams", "Restaurant", "User", "Review",
-  function($scope,currentUser,$firebaseArray,$firebaseObject,Database, $ionicLoading, $ionicModal, $ionicPopup, $cordovaGeolocation, $stateParams, Restaurant, User, Review){
+app.controller("ViewRestaurantCtrl",["$scope","$firebaseArray","$firebaseObject","Database","$ionicLoading","$ionicModal", "$ionicPopup","$cordovaGeolocation", "$stateParams", "Restaurant", "User", "Review",
+  function($scope,$firebaseArray,$firebaseObject,Database, $ionicLoading, $ionicModal, $ionicPopup, $cordovaGeolocation, $stateParams, Restaurant, User, Review){
 
   console.log("View Restaurant Ctrl")
 
@@ -12,8 +12,8 @@ app.controller("ViewRestaurantCtrl",["$scope","currentUser","$firebaseArray","$f
   var userReviewsRef = Database.usersReference().child(User.auth().$id).child('reviewed_restaurants').child(id); //new subs below
   var restaurantReviewsRef = Database.reviewsReference().orderByChild('restaurant_id').equalTo(id); //new subs above
 
-  $scope.restaurants = Database.restaurants();//new
-  $scope.usersRefObj = Database.users(); //new
+  // $scope.restaurants = Database.restaurants();//new
+  // $scope.usersRefObj = Database.users(); //new
   $scope.getReviewer = Review.reviewer;
 
 
@@ -26,7 +26,7 @@ app.controller("ViewRestaurantCtrl",["$scope","currentUser","$firebaseArray","$f
 
   $scope.restaurant = Restaurant.get(id);
   $scope.getRestaurantStatus = Restaurant.getRestaurantStatus(Restaurant.get(id).owner_id);
-  $scope.restaurantService = Restaurant.getRestaurantOpenStatus(id)
+  $scope.restaurantOpenStatus = Restaurant.getRestaurantOpenStatus(id)
   $scope.isAlreadyReviewed();
   $scope.restaurantReviews = $firebaseArray(restaurantReviewsRef);
 

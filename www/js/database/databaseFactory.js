@@ -8,6 +8,7 @@ app.factory("Database", ["$firebaseArray", "$firebaseObject", "$firebaseAuth",
     var pendingsRef = rootRef.child('pending');
     var restaurantsRef = rootRef.child('restaurants');
     var notificationsRef = rootRef.child('notifications');
+    var ordersRef = rootRef.child('orders');
 
     var Database = {
       rootReference : function() {
@@ -31,6 +32,9 @@ app.factory("Database", ["$firebaseArray", "$firebaseObject", "$firebaseAuth",
       notificationsReference : function() {
         return notificationsRef;
       },
+      ordersReference : function() {
+        return ordersRef;
+      },
       users : function() {
         return $firebaseArray(usersRef);
       },
@@ -48,6 +52,9 @@ app.factory("Database", ["$firebaseArray", "$firebaseObject", "$firebaseAuth",
       },
       notifications : function() {
         return $firebaseArray(notificationsRef);
+      },
+      orders : function() {
+        return $firebaseArray(ordersRef);
       }
     }
 

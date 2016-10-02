@@ -1,13 +1,15 @@
-app.controller("OrderCtrl",["$scope","restaurants","Order","User","Menu",
-  function($scope ,restaurants,Order,User,Menu){
+app.controller("OrderCtrl",["$scope","restaurants","Restaurant","User","Menu",
+  function($scope ,restaurants,Restaurant,User,Menu){
 
-    $scope.order = restaurants.map(function(restaurant){
+    $scope.restaurants = restaurants.map(function(restaurant){
       return {
           restaurant : restaurant,
-
+          orders : Restaurant.getOrders(restaurant.$id)
       }
     });
 
-    $scope.customer_name = User.getUserFullname
+    $scope.customer_name = User.getUserFullname;
+    $scope.orderMenu = Menu.get;
     console.log($scope.order);
+
 }]);
