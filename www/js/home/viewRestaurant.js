@@ -113,7 +113,8 @@ app.controller("ViewRestaurantCtrl",["$scope","$firebaseArray","$firebaseObject"
       sender_id : User.auth().$id,
       receiver_id : restaurant_owner.$id,
       restaurant_id : id,
-      type : 'review'
+      type : 'review',
+      timestamp: firebase.database.ServerValue.TIMESTAMP
     }).then(function() {
       console.log("hello notification squad");
     })
