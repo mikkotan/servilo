@@ -21,10 +21,10 @@ $scope.minus = function(orderMenu){
     $scope.cartData[menu].quantity -= 1;
       if($scope.cartData[menu].quantity <= 0){
         $scope.cartData.splice(menu,1);
-        $scope.totalPrice.splice(menuId,1)
+        $scope.totalPrice.splice(menuId,1);
       }
   }
-}
+};
 
 $scope.delete = function(orderMenu){
     var menu = $scope.cartData.indexOf(orderMenu);
@@ -80,7 +80,7 @@ $scope.buy = function(cart , location){
         totalprice : $scope.total,
       }).then(function(){
           $scope.menus.length = 0;
-          $scope.total = 0;
+          $scope.totalPrice.length = 0;
           var restaurant_owner = Restaurant.getOwner(restaurantId);
           Database.notifications().$add({
             sender_id : authUser.$id,

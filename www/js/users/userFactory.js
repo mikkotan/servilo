@@ -37,15 +37,9 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
       conRef.on('value', function(data) {
         if(data.val() === true){
           var con = online.push(true);
-
           con.onDisconnect().remove();
         }
       })
-    },
-    setOffline : function() {
-      var online = users.child(firebase.auth().currentUser.uid +'/online');
-      console.log($firebaseArray(online))
-      $firebaseArray(online)
     }
   };
 }]);

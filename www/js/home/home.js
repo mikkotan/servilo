@@ -1,29 +1,29 @@
 app.controller('HomeTabCtrl',
   ["$scope","$ionicModal","$firebaseArray","currentAuth", "Restaurant", "Home" ,"$stateParams", "$state", "User",
-    "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation", "$ionicLoading", "$cordovaImagePicker", "Database", "Review", "restaurants",
+    "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation", "$ionicLoading", "$cordovaImagePicker",
+     "Database", "Review", "restaurants",
         function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $stateParams, $state,
-            User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, $ionicLoading, $cordovaImagePicker, Database, Review, restaurants) {
+            User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, $ionicLoading,
+             $cordovaImagePicker, Database, Review, restaurants) {
 
 
 
   console.log('HomeTabCtrl');
 
+
   $scope.usersRefObj = Database.users(); //new
   $scope.restaurants = restaurants; //new
-  // $scope.restaurants = Database.restaurants();
   $scope.getAvg = Restaurant.getAveragePrice;
   $scope.getAvgRating = Restaurant.getAverageRating;
   $scope.getReviewer = Review.reviewer;
   $scope.RestaurantService = Restaurant;
   $scope.openRestaurant = Restaurant.getRestaurantOpenStatus;
-  console.log(currentAuth.$id);
-  User.setOnline(currentAuth.$id);
 
-  $scope.signOut = function(callback) {
-    Auth.$signOut();
-    console.log("bye");
-    $state.go("tabs.login");
-  }
+  User.setOnline(currentAuth.uid);
+
+
+
+
 
   ionicMaterialInk.displayEffect();
 

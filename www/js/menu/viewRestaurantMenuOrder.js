@@ -1,15 +1,17 @@
-app.controller("ViewRestaurantMenuOrder",["$scope","$state","restaurantMenus","restaurantId", "CartData","$ionicModal","Cart",
-  function($scope ,$state , restaurantMenus,restaurantId,CartData,$ionicModal,Cart){
+app.controller("ViewRestaurantMenuOrder",["$scope","$state","restaurantMenus","restaurantId", "CartData","$ionicModal","Cart","Restaurant",
+  function($scope ,$state , restaurantMenus,restaurantId,CartData,$ionicModal,Cart,Restaurant){
 
 $scope.restaurantId = restaurantId
 $scope.restaurantMenus = restaurantMenus;
 
+
+
   $scope.addToCart = function(menu) {
-    console.log("Cliked!!");
-    $scope.id = menu.$id;
-    $scope.menuName = menu.name;
-    $scope.menuPrice = menu.price;
-    $scope.addToCartModal.show();
+      console.log("Cliked!!");
+      $scope.id = menu.$id;
+      $scope.menuName = menu.name;
+      $scope.menuPrice = menu.price;
+      $scope.addToCartModal.show();
   };
 
   $scope.viewCart = function(){
@@ -25,6 +27,7 @@ $scope.restaurantMenus = restaurantMenus;
       var confirmation = confirm("Leaving this restaurant will cancel all your orders, Are you sure you want to leave?")
       if(confirmation === true){
         CartData.get().length = 0;
+        CartData.totalPrice().length = 0;
         $state.go("tabs.home");
       }
     }

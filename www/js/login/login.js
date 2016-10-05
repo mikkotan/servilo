@@ -12,10 +12,6 @@ app.controller("LoginCtrl",["$scope" , "$firebaseArray", "$firebaseAuth", "$fire
     $ionicLoading.show();
     Auth.$signInWithEmailAndPassword(user.email, user.password).then(function(authUser){
       $ionicLoading.hide();
-      console.log("----------------------------")
-      console.log(authUser.uid);
-      console.log(authUser.email);
-      User.setOnline(authUser.uid);
       user.password = "";
       user.email = ""
       $state.go("tabs.home")
