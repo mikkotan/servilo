@@ -6,10 +6,10 @@
       <a class="button button-small button-calm" ui-sref="tabs.restaurantMenus({restaurantId:restaurant.$id})">Menus</a>
       <p>{{getRestaurantStatus}}</p>
       <p>Restaurant is: {{restaurantOpenStatus}}</p>
-      <p ng-if="restaurantService === 'Open'" style="color:green;">
+      <p ng-if="restaurantOpenStatus === 'Open'" style="color:green;">
         Restaurant Hours: {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}
       </p>
-      <p ng-if="restaurantService === 'Closed'" style="color:red;">
+      <p ng-if="restaurantOpenStatus === 'Closed'" style="color:red;">
         Opens at {{ restaurant.openTime | date:'shortTime' }}
       </p>
       <ion-list>
