@@ -3,8 +3,8 @@ app.controller("CartCtrl",["$scope","CartData","orders","authUser","restaurantId
 
 $scope.order = orders;
 $scope.restaurantId = restaurantId
-$scope.cartData = CartData.get()
-$scope.totalPrice = CartData.totalPrice()
+$scope.cartData = CartData.get();
+$scope.totalPrice = CartData.totalPrice();
 
 
 $scope.add = function(orderMenu){
@@ -79,8 +79,8 @@ $scope.buy = function(cart , location){
         menus : scanCart(cart),
         totalprice : $scope.total,
       }).then(function(){
-          $scope.menus.length = 0;
-          $scope.totalPrice.length = 0;
+          CartData.get().length = 0;
+          CartData.totalPrice().length = 0;
           var restaurant_owner = Restaurant.getOwner(restaurantId);
           Database.notifications().$add({
             sender_id : authUser.$id,
