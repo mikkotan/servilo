@@ -1,11 +1,13 @@
 app.controller('HomeTabCtrl',
-  ["$scope","$ionicModal","$firebaseArray", "Restaurant", "Home" ,"$stateParams", "$state", "User",
-    "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation", "$ionicLoading", "$cordovaImagePicker", "Database", "Review", "restaurants",
-        function($scope, $ionicModal, $firebaseArray, Restaurant, Home, $stateParams, $state,
-            User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, $ionicLoading, $cordovaImagePicker, Database, Review, restaurants) {
+  ["$scope","$ionicModal","$firebaseArray","currentAuth", "Restaurant", "Home" ,"$stateParams", "$state", "User",
+    "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation", "$ionicLoading", "$cordovaImagePicker",
+     "Database", "Review", "restaurants",
+        function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $stateParams, $state,
+            User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, $ionicLoading,
+             $cordovaImagePicker, Database, Review, restaurants) {
 
   console.log('HomeTabCtrl');
-  
+
   $scope.usersRefObj = Database.users(); //new
   Database.restaurants().$loaded().then(function() {
     console.log($scope.restaurants.length);
@@ -18,6 +20,7 @@ app.controller('HomeTabCtrl',
   $scope.openRestaurant = Restaurant.getRestaurantOpenStatus;
 
   // User.setOnline();
+  User.setOnline(currentAuth.uid);
 
   ionicMaterialInk.displayEffect();
 
@@ -186,13 +189,7 @@ app.controller('HomeTabCtrl',
   $scope.mapdirection =[];
   $scope.currentLocation ={};
   $scope.markers =[];
-  $scope.restaurantMarkers =[];
   $scope.map =  {center: { latitude: 10.729984, longitude: 122.549298 }, zoom: 12, options: {scrollwheel: false}, bounds: {}};
-
-  var options = {timeout: 10000, enableHighAccuracy: true};
-  $cordovaGeolocation.getCurrentPosition(options).then(function(position){
-    $scope.currentLocation = {latitude: position.coords.latitude,longitude: position.coords.longitude};
-  });
 
   $scope.setMap = function(restaurant){
       $scope.map =  {center:{latitude: restaurant.latitude, longitude: restaurant.longitude}, zoom: 14, options: {scrollwheel: false}, bounds: {}};
@@ -201,10 +198,14 @@ app.controller('HomeTabCtrl',
       });
   };
 
-  $scope.addMarker = function(restaurant){
-    $scope.markers.push({id: restaurant.$id,
-      coords: {latitude:restaurant.latitude, longitude:restaurant.longitude}
-    });
+  $scope.addMarkers = function(items){
+     $scope.markers.length = 0;
+     for (var i = 0; i < items.length; i++) {
+      $scope.markers.push({id: items[i].$id,
+        coords: {latitude:items[i].latitude, longitude:items[i].longitude}
+      });
+    }
+
   };
 
   $scope.markerEvents = {

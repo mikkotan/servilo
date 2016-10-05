@@ -11,21 +11,23 @@ app.controller("ViewRestaurantCtrl",["$scope","$firebaseArray","$firebaseObject"
   var id = $stateParams.restaurantId;
   var userReviewsRef = Database.usersReference().child(User.auth().$id).child('reviewed_restaurants').child(id); //new subs below
   var restaurantReviewsRef = Database.reviewsReference().orderByChild('restaurant_id').equalTo(id); //new subs above
-
-  // $scope.restaurants = Database.restaurants();//new
-  // $scope.usersRefObj = Database.users(); //new
   $scope.getReviewer = Review.reviewer;
+  $scope.restaurant = Restaurant.get(id);
 
+  $scope.restaurantStatus = Restaurant.getRestaurantStatus(Restaurant.get(id).owner_id);
+
+
+  $scope.restaurantStatus.on('value' , function(snap){
+      $scope.getRestaurantStatus = snap.val() ? "Online" : "Offline";
+  })
 
   $scope.isAlreadyReviewed = function() {
     userReviewsRef.once('value', function(snapshot) {
-      $scope.exists = (snapshot.val() !=null );
+      $scope.exists = (snapshot.val() !== null );
       $scope.review = $firebaseObject(Database.reviewsReference().child(snapshot.val()));
     })
   }
 
-  $scope.restaurant = Restaurant.get(id);
-  $scope.getRestaurantStatus = Restaurant.getRestaurantStatus(Restaurant.get(id).owner_id);
   $scope.restaurantOpenStatus = Restaurant.getRestaurantOpenStatus(id)
   $scope.isAlreadyReviewed();
   $scope.restaurantReviews = $firebaseArray(restaurantReviewsRef);
@@ -113,7 +115,8 @@ app.controller("ViewRestaurantCtrl",["$scope","$firebaseArray","$firebaseObject"
       sender_id : User.auth().$id,
       receiver_id : restaurant_owner.$id,
       restaurant_id : id,
-      type : 'review'
+      type : 'review',
+      timestamp: firebase.database.ServerValue.TIMESTAMP
     }).then(function() {
       console.log("hello notification squad");
     })
@@ -189,7 +192,7 @@ app.controller("ViewRestaurantCtrl",["$scope","$firebaseArray","$firebaseObject"
 
   $scope.direction =[];
   $scope.currentLocation ={};
-  $scope.marker ={id: 0};
+  $scope.restaurantMarkers = [];
   var options = {timeout: 10000, enableHighAccuracy: true};
   $cordovaGeolocation.getCurrentPosition(options).then(function(position){
     $scope.currentLocation = {latitude: position.coords.latitude,longitude: position.coords.longitude};
@@ -200,12 +203,6 @@ app.controller("ViewRestaurantCtrl",["$scope","$firebaseArray","$firebaseObject"
       $scope.restaurantMarkers.push({id: Date.now(),
         coords:{latitude:restaurant.latitude, longitude:restaurant.longitude}
       });
-  };
-
-  $scope.addMarker = function(restaurant){
-    $scope.markers.push({id: restaurant.$id,
-      coords: {latitude:restaurant.latitude, longitude:restaurant.longitude}
-    });
   };
 
   $scope.markerEvents = {
@@ -223,6 +220,11 @@ app.controller("ViewRestaurantCtrl",["$scope","$firebaseArray","$firebaseObject"
       travelMode: google.maps.DirectionsTravelMode['DRIVING'],
       optimizeWaypoints: true
     };
+
+    $scope.restaurantMarkers.push({id: Date.now(),
+     coords:{latitude:$scope.currentLocation.latitude, longitude:$scope.currentLocation.longitude}
+    });
+
     direction.route(request, function(response, status){
       var steps = response.routes[0].legs[0].steps;
 
@@ -236,8 +238,10 @@ app.controller("ViewRestaurantCtrl",["$scope","$firebaseArray","$firebaseObject"
             color: strokeColor,
             weight: 5
         }});
-        }
-        $scope.$apply();
+      }
+      $scope.restaurantMarkers[0].icon = new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_bubble_icon_texts_big&chld=restaurant|edge_bc|FFBB00|000000|'
+        + restaurant.name +'|Distance: '+ distance + 'km');
+      $scope.$apply();
     });
   };
 }]);

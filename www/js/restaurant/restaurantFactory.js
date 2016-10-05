@@ -41,12 +41,7 @@ app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "U
       return $firebaseArray(menus.orderByChild("restaurant_id").equalTo(restaurantId));
     },
     getRestaurantStatus : function(ownerId) {
-      if(usersArray.$getRecord(ownerId).online != null){
-        return "Online"
-      }
-      else{
-        return "Offline"
-      }
+      return Database.usersReference().child(ownerId).child("online")
     },
     getRestaurant : function(restaurantId) {
       return $firebaseArray(restaurants.child(restaurantId));

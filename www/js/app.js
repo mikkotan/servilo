@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var app = angular.module('app', ['ui.mask','ionic', 'ionMdInput', 'ionic-material', 'firebase', 'ionic.rating', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker'])
+var app = angular.module('app', ['ui.mask','ionic', 'ionMdInput', 'ionic-material', 'firebase', 'ionic.rating', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker', 'yaru22.angular-timeago'])
 
 app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', function($ionicPlatform, $rootScope, $state, $templateCache) {
   $rootScope.$on("$stateChangeError",
@@ -74,12 +74,12 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
           templateUrl: "templates/viewRestaurant.html",
           controller: "ViewRestaurantCtrl",
           resolve: {
-            // currentAuth : function(Auth) {
-            //   return Auth.$requireSignIn();
-            // },
-            // currentUser : function(User) {
-            //   return User.auth();
-            // }
+            currentAuth : function(Auth) {
+              return Auth.$requireSignIn();
+            },
+            currentUser : function(User) {
+              return User.auth();
+            }
             // review : function(Review , $stateParams){
             //   return {
             //     userReview : Review.userReview($stateParams.restaurantId).$loaded(),
@@ -92,7 +92,6 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             // restaurantReview : function($stateParams , Review){
             //   return Review.restaurantReview($stateParams.restaurantId).$loaded();
             // }
-
           }
         }
       }
@@ -253,6 +252,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
       templateUrl: "templates/signup.html",
       controller: "SignUpCtrl"
     });
+
+
   $urlRouterProvider.otherwise("/tab/home");
 })
 
@@ -265,11 +266,17 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
     $ionicSideMenuDelegate.toggleRight();
   };
   $scope.signOut = function() {
-    console.log("logged out..");
-    Auth.$signOut();
-    Database.usersReference().child(User.auth().$id).child('online').set(null);
-    console.log("logged out..");
-    location.reload();
+    Database.userOnlineTrue().$loaded().then(function(loaded){
+      loaded.$remove(0).then(function(ref){
+        console.log("success")
+        Auth.$signOut();
+        location.reload();
+      }).catch(function(err){
+        console.log(err)
+      })
+    }).catch(err => {
+      console.log(err)
+    })
   }
 
   Auth.$onAuthStateChanged(function(firebaseUser) {
@@ -302,4 +309,4 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
       console.log("NOT LOGGED IN SA TABS")
     }
   });
-});
+})
