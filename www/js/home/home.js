@@ -14,8 +14,8 @@ app.controller('HomeTabCtrl',
   $scope.getAvg = Restaurant.getAveragePrice;
   $scope.getAvgRating = Restaurant.getAverageRating;
   $scope.getReviewer = Review.reviewer;
-  $scope.RestaurantService = Restaurant;
   $scope.openRestaurant = Restaurant.getRestaurantOpenStatus;
+  $scope.RestaurantService = Restaurant;
 
   User.setOnline();
 
