@@ -10,6 +10,7 @@ app.factory("Database", ["$firebaseArray", "$firebaseObject", "$firebaseAuth",
     var notificationsRef = rootRef.child('notifications');
     var ordersRef = rootRef.child('orders');
 
+
     var Database = {
       rootReference : function() {
         return rootRef;
@@ -55,6 +56,9 @@ app.factory("Database", ["$firebaseArray", "$firebaseObject", "$firebaseAuth",
       },
       orders : function() {
         return $firebaseArray(ordersRef);
+      },
+      userOnlineTrue : function(){
+        return $firebaseArray(usersRef.child(firebase.auth().currentUser.uid +'/online'));
       }
     }
 
