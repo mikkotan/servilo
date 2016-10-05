@@ -86,7 +86,8 @@ $scope.buy = function(cart , location){
             sender_id : authUser.$id,
             receiver_id : restaurant_owner.$id,
             restaurant_id : restaurantId,
-            type : 'order'
+            type : 'order',
+            timestamp: firebase.database.ServerValue.TIMESTAMP
           });
           alert("success")
       }).catch(function(error){
