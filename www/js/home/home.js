@@ -208,16 +208,8 @@ app.controller('HomeTabCtrl',
     })
   }
 
-  $scope.direction =[];
-  $scope.currentLocation ={};
   $scope.markers =[];
-  $scope.restaurantMarkers =[];
   $scope.map =  {center: { latitude: 10.729984, longitude: 122.549298 }, zoom: 12, options: {scrollwheel: false}, bounds: {}};
-
-  var options = {timeout: 10000, enableHighAccuracy: true};
-  $cordovaGeolocation.getCurrentPosition(options).then(function(position){
-    $scope.currentLocation = {latitude: position.coords.latitude,longitude: position.coords.longitude};
-  });
 
   $scope.setMap = function(restaurant){
       $scope.map =  {center:{latitude: restaurant.latitude, longitude: restaurant.longitude}, zoom: 14, options: {scrollwheel: false}, bounds: {}};
@@ -226,49 +218,20 @@ app.controller('HomeTabCtrl',
       });
   };
 
-  $scope.addMarker = function(restaurant){
-    $scope.markers.push({id: restaurant.$id,
-      coords: {latitude:restaurant.latitude, longitude:restaurant.longitude}
-    });
+  $scope.addMarkers = function(items){
+     $scope.markers.length = 0;
+     for (var i = 0; i < items.length; i++) {
+      $scope.markers.push({id: items[i].$id,
+        coords: {latitude:items[i].latitude, longitude:items[i].longitude}
+      });
+    }
+
   };
 
   $scope.markerEvents = {
     click: function(marker, eventName, model){
         $state.go("tabs.viewRestaurant",{restaurantId:model.id});
     }
-  };
-
-  $scope.showPath =  function(restaurant){
-    $scope.map.zoom = 12;
-    var direction = new google.maps.DirectionsService();
-    var request = {
-      origin: {lat:$scope.currentLocation.latitude,lng:$scope.currentLocation.longitude},
-      destination: {lat: restaurant.latitude, lng: restaurant.longitude},
-      travelMode: google.maps.DirectionsTravelMode['DRIVING'],
-      optimizeWaypoints: true
-    };
-
-    $scope.restaurantMarkers.push({id: Date.now(),
-      coords:{latitude:$scope.currentLocation.latitude, longitude:$scope.currentLocation.longitude}
-    });
-
-    direction.route(request, function(response, status){
-      var steps = response.routes[0].legs[0].steps;
-      var distance =response.routes[0].legs[0].distance.value/1000;
-      for(i=0; i<steps.length; i++){
-        var strokeColor = '#049ce5';
-        if((i%2)==0){
-          strokeColor = '#FF9E00';
-        }
-        $scope.direction.push({id:i,paths:steps[i].path, stroke: {
-            color: strokeColor,
-            weight: 5
-        }});
-        }
-        $scope.restaurantMarkers[0].icon = new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_bubble_icon_texts_big&chld=restaurant|edge_bc|FFBB00|000000|'
-            + restaurant.name +'|Distance: '+ distance + 'km');
-        $scope.$apply();
-    });
   };
 
   $scope.CallNumber = function(number){
