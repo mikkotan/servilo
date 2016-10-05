@@ -1,29 +1,29 @@
 app.controller('HomeTabCtrl',
   ["$scope","$ionicModal","$firebaseArray","currentAuth", "Restaurant", "Home" ,"$stateParams", "$state", "User",
-    "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation", "$ionicLoading", "$cordovaImagePicker", "Database", "Review", "restaurants",
+    "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation", "$ionicLoading", "$cordovaImagePicker",
+     "Database", "Review", "restaurants",
         function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $stateParams, $state,
-            User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, $ionicLoading, $cordovaImagePicker, Database, Review, restaurants) {
+            User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, $ionicLoading,
+             $cordovaImagePicker, Database, Review, restaurants) {
 
 
 
   console.log('HomeTabCtrl');
 
+
   $scope.usersRefObj = Database.users(); //new
   $scope.restaurants = restaurants; //new
-  // $scope.restaurants = Database.restaurants();
   $scope.getAvg = Restaurant.getAveragePrice;
   $scope.getAvgRating = Restaurant.getAverageRating;
   $scope.getReviewer = Review.reviewer;
   $scope.openRestaurant = Restaurant.getRestaurantOpenStatus;
   $scope.RestaurantService = Restaurant;
 
-  User.setOnline();
+  User.setOnline(currentAuth.uid);
 
-  $scope.signOut = function(callback) {
-    Auth.$signOut();
-    console.log("bye");
-    $state.go("tabs.login");
-  }
+
+
+
 
   ionicMaterialInk.displayEffect();
 
@@ -257,7 +257,7 @@ app.controller('HomeTabCtrl',
       var distance =response.routes[0].legs[0].distance.value/1000;
       for(i=0; i<steps.length; i++){
         var strokeColor = '#049ce5';
-        if((i%2)==0){
+        if((i%2) === 0){
           strokeColor = '#FF9E00';
         }
         $scope.direction.push({id:i,paths:steps[i].path, stroke: {

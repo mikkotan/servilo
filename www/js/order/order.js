@@ -10,6 +10,11 @@ app.controller("OrderCtrl",["$scope","restaurants","Restaurant","User","Menu",
 
     $scope.customer_name = User.getUserFullname;
     $scope.orderMenu = Menu.get;
-    console.log($scope.order);
 
+//     $scope.restaurants = restaurants.map(function(restaurant){
+//         return Restaurant.getOrders(restaurant.$id).map(function(orders){
+//           return orders
+//         })
+//     });
+//     console.log($scope.restaurants);
 }]);

@@ -1,6 +1,6 @@
 app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera", "$cordovaGeolocation",
   function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, $cordovaGeolocation) {
-
+    var total = 123;
     $scope.modalControl = {};
     $scope.restaurants = Restaurant.all();
     $scope.pendingRestaurants = Restaurant.getPendingRestaurants();

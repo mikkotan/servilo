@@ -3,8 +3,8 @@ app.controller("CartCtrl",["$scope","CartData","orders","authUser","restaurantId
 
 $scope.order = orders;
 $scope.restaurantId = restaurantId
-$scope.cartData = CartData.get()
-$scope.totalPrice = CartData.totalPrice()
+$scope.cartData = CartData.get();
+$scope.totalPrice = CartData.totalPrice();
 
 
 $scope.add = function(orderMenu){
@@ -13,34 +13,22 @@ $scope.add = function(orderMenu){
 
 }
 
-
-// $scope.minus = function(orderMenu){
-//   var menu = $scope.cartData.indexOf(orderMenu);
-//   if($scope.cartData[menu].quantity > 1){
-//     $scope.cartData[menu].quantity -= 1;
-//   }else{
-//     $scope.cartData[menu].quantity -= 1;
-//     if($scope.cartData[menu].quantity < 0){
-//       $scope.cartData.splice(menu,1);
-//     }
-//   }
-// }
 $scope.minus = function(orderMenu){
   var menu = $scope.cartData.indexOf(orderMenu);
-  var menuId = Cart.menuId($scope.totalPrice,"menu_id",orderMenu.id)
+  var menuId = Cart.menuId($scope.totalPrice,"id",orderMenu.id)
 
   if($scope.cartData[menu].quantity > 0){
     $scope.cartData[menu].quantity -= 1;
       if($scope.cartData[menu].quantity <= 0){
         $scope.cartData.splice(menu,1);
-        $scope.totalPrice.splice(menuId,1)
+        $scope.totalPrice.splice(menuId,1);
       }
   }
-}
+};
 
 $scope.delete = function(orderMenu){
     var menu = $scope.cartData.indexOf(orderMenu);
-    var menuId = Cart.menuId($scope.totalPrice,"menu_id",orderMenu.id)
+    var menuId = Cart.menuId($scope.totalPrice,"id",orderMenu.id)
     $scope.cartData.splice(menu,1);
     $scope.totalPrice.splice(menuId,1)
 
@@ -48,11 +36,11 @@ $scope.delete = function(orderMenu){
 
 $scope.$watch('cartData',function(newArray){
   $scope.menus = newArray.map(function(menu){
-    if(Cart.menuId($scope.totalPrice,"menu_id",menu.id) === null){
-      $scope.totalPrice.push({menu_id:menu.id, subtotal:menu.price * menu.quantity});
+    if(Cart.menuId($scope.totalPrice,"id",menu.id) === null){
+      $scope.totalPrice.push({id:menu.id, price:menu.price * menu.quantity});
     }else{
-      var menuid = Cart.menuId($scope.totalPrice,"menu_id",menu.id)
-      $scope.totalPrice[menuid].subtotal = menu.price * menu.quantity
+      var menuid = Cart.menuId($scope.totalPrice,"id",menu.id)
+      $scope.totalPrice[menuid].price = menu.price * menu.quantity
     }
     return {
         menu : menu,
@@ -65,7 +53,7 @@ $scope.$watch('cartData',function(newArray){
 $scope.$watch('totalPrice',function(newValue){
       var price = 0;
       for (var i = 0; i < newValue.length; i++) {
-        price += newValue[i].subtotal;
+        price += newValue[i].price;
       }
       $scope.total = price;
 },true);
@@ -91,8 +79,8 @@ $scope.buy = function(cart , location){
         menus : scanCart(cart),
         totalprice : $scope.total,
       }).then(function(){
-          $scope.menus.length = 0;
-          $scope.total = 0;
+          CartData.get().length = 0;
+          CartData.totalPrice().length = 0;
           var restaurant_owner = Restaurant.getOwner(restaurantId);
           Database.notifications().$add({
             sender_id : authUser.$id,
