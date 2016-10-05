@@ -43,8 +43,22 @@ function($scope , $firebaseArray , $firebaseAuth, $firebaseObject, Auth, AppUser
       $scope.detailsfb = result.access_token;
       Auth.$signInWithCredential(firebase.auth.FacebookAuthProvider.credential(result.access_token)).then(
         function(succes){
+          var ref = firebase.database().ref().child("users").child(succes.uid);
+          ref.set({
+            displayName : succes.displayName,
+            provider: "facebook",
+            startedAt : firebase.database.ServerValue.TIMESTAMP
+          },function(error) {
+            if(error) {
+              console.log("hello error" + error);
+            }
+            else {
+              console.log("no error means succues");
+            }
+          })
           console.log(succes.displayName);
           console.log('Firebase Facebook login success');
+          $state.go("tabs.home")
         },
         function(error){
           console.log("error!!");

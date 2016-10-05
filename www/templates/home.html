@@ -6,7 +6,7 @@
       <input placeholder="Search..." type="search" ng-model="searchRestaurant">
     </label>
   </ion-header-bar>
-  <ion-content class="padding has-subheader" overflow-scroll="true">
+  <ion-content class="padding has-subheader">
     <ion-list>
       <ui-gmap-google-map zoom='map.zoom' center="map.center" options='map.options' bounds='map.bounds'>
         <ui-gmap-markers models="markers" coords="'coords'" icon="'icon'" events="markerEvents">
@@ -25,7 +25,8 @@
       </ion-item> -->
       <div class="card padding" ng-repeat="restaurant in restaurants | restaurantFilter:searchRestaurant track by restaurant.$id">
         <div class="item item-thumbnail-left" ng-init="addMarker(restaurant)" >
-          <img class="img-thumbnail" ng-src="data:image/jpeg;base64,{{restaurant.image}}"/>
+          <img class="img-thumbnail" ng-if="restaurant.image" ng-src="data:image/jpeg;base64,{{restaurant.image}}"/>
+          <img ng-if="!restaurant.image" ng-src="img/wow.jpg">
           <h3 ui-sref="tabs.viewRestaurant({restaurantId:restaurant.$id})">
             <icon class="ion-spoon"></icon> {{restaurant.name}}
             <span style="color:green">

@@ -8,7 +8,7 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
 
   return {
     auth : function() {
-        return $firebaseObject(users.child(firebase.auth().currentUser.uid));
+      return $firebaseObject(users.child(firebase.auth().currentUser.uid));
     },
     all : function() {
       return $firebaseArray(users);

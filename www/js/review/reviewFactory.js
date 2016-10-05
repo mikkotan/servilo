@@ -1,7 +1,7 @@
 app.factory("Review", ["$firebaseObject", "$firebaseArray", "$firebaseAuth", "Database","User",
   function($firebaseObject, $firebaseArray, $firebaseAuth, Database,User){
 
-    var authUserId = User.auth().$id;
+    
     var rootRef = Database.rootReference();
     var reviews = Database.reviewsReference();
     var restaurants = Database.restaurantsReference();
@@ -25,6 +25,7 @@ app.factory("Review", ["$firebaseObject", "$firebaseArray", "$firebaseAuth", "Da
         return reviews;
       },
       userReview : function(id){
+        var authUserId = User.auth().$id;
         return users.child(authUserId).child('reviewed_restaurants').child(id);
       },
       restaurantReview : function(id){

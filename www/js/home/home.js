@@ -1,29 +1,23 @@
 app.controller('HomeTabCtrl',
-  ["$scope","$ionicModal","$firebaseArray","currentAuth", "Restaurant", "Home" ,"$stateParams", "$state", "User",
+  ["$scope","$ionicModal","$firebaseArray", "Restaurant", "Home" ,"$stateParams", "$state", "User",
     "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation", "$ionicLoading", "$cordovaImagePicker", "Database", "Review", "restaurants",
-        function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $stateParams, $state,
+        function($scope, $ionicModal, $firebaseArray, Restaurant, Home, $stateParams, $state,
             User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, $ionicLoading, $cordovaImagePicker, Database, Review, restaurants) {
 
-
-
   console.log('HomeTabCtrl');
-
+  
   $scope.usersRefObj = Database.users(); //new
+  Database.restaurants().$loaded().then(function() {
+    console.log($scope.restaurants.length);
+  }); //try
   $scope.restaurants = restaurants; //new
-  // $scope.restaurants = Database.restaurants();
   $scope.getAvg = Restaurant.getAveragePrice;
   $scope.getAvgRating = Restaurant.getAverageRating;
   $scope.getReviewer = Review.reviewer;
   $scope.RestaurantService = Restaurant;
   $scope.openRestaurant = Restaurant.getRestaurantOpenStatus;
 
-  User.setOnline();
-
-  $scope.signOut = function(callback) {
-    Auth.$signOut();
-    console.log("bye");
-    $state.go("tabs.login");
-  }
+  // User.setOnline();
 
   ionicMaterialInk.displayEffect();
 
@@ -63,40 +57,23 @@ app.controller('HomeTabCtrl',
       quality: 80
     };
     window.imagePicker.getPictures(
-        function(results) {
-            for (var i = 0; i < results.length; i++) {
-                console.log('Image URI: ' + results[i]);
-                window.plugins.Base64.encodeFile(results[i], function(base64){
-                    $scope.images.push(base64);
-                    $scope.$apply();
-                });
-            }
-        }, function (error) {
-            console.log('Error: ' + error);
-        }, {
-            maximumImagesCount: 10,
-            width: 800,
-            quality: 80,
-          // output type, defaults to FILE_URIs.
-          // available options are
-          // window.imagePicker.OutputType.FILE_URI (0) or
-          // window.imagePicker.OutputType.BASE64_STRING (1)
-            // outputType: window.imagePicker.OutputType.BASE64_STRING
+      function(results) {
+        for (var i = 0; i < results.length; i++) {
+          console.log('Image URI: ' + results[i]);
+          window.plugins.Base64.encodeFile(results[i], function(base64){
+            $scope.images.push(base64);
+            $scope.$apply();
+          });
         }
+      }, function (error) {
+        console.log('Error: ' + error);
+      }, {
+        maximumImagesCount: 10,
+        width: 800,
+        quality: 80,
+        // outputType: window.imagePicker.OutputType.BASE64_STRING or 1
+      }
     );
-
-    // $cordovaImagePicker.getPictures(options)
-    // .then(function (results) {
-    //   for (var i = 0; i < results.length; i++) {
-    //     window.plugins.Base64.encodeFile(results[i], function(base64){
-    //       $scope.images.push(base64);
-    //       $scope.$apply();
-    //     });
-    //     console.log('Image URI: ' + results[i]);
-    //   }
-    // }, function(error) {
-    //   // error getting photos
-    // });
   };
 
   $scope.addReview = function(review) {
@@ -127,8 +104,6 @@ app.controller('HomeTabCtrl',
       $scope.review.rating = 0;
       $scope.rating.rate = 0;
       $scope.images = [];
-
-
     })
     var restaurant_owner = Restaurant.getOwner(id);
     Database.notifications().$add({
@@ -208,7 +183,7 @@ app.controller('HomeTabCtrl',
     })
   }
 
-  $scope.direction =[];
+  $scope.mapdirection =[];
   $scope.currentLocation ={};
   $scope.markers =[];
   $scope.restaurantMarkers =[];
@@ -260,7 +235,7 @@ app.controller('HomeTabCtrl',
         if((i%2)==0){
           strokeColor = '#FF9E00';
         }
-        $scope.direction.push({id:i,paths:steps[i].path, stroke: {
+        $scope.mapdirection.push({id:i,paths:steps[i].path, stroke: {
             color: strokeColor,
             weight: 5
         }});
