@@ -259,7 +259,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
       loaded.$remove(0).then(function(ref){
         console.log("success")
         Auth.$signOut();
-        $state.go("login");
+        location.reload();
       }).catch(function(err){
         console.log(err)
       })

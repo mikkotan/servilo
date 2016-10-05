@@ -5,13 +5,28 @@ $scope.restaurantId = restaurantId
 $scope.restaurantMenus = restaurantMenus;
 
 
+$scope.restaurantStatus = Restaurant.getRestaurantStatus(Restaurant.get($scope.restaurantId).owner_id);
+
+$scope.restaurantStatus.on('value' , function(snap){
+    $scope.getRestaurantStatus = snap.val() ? true : false;
+    $scope.status = Restaurant.get(restaurantId).name + " is " + (snap.val() ? "Online" : "Offline");
+
+})
+console.log($scope.status)
+
 
   $scope.addToCart = function(menu) {
+    if($scope.getRestaurantStatus){
       console.log("Cliked!!");
       $scope.id = menu.$id;
       $scope.menuName = menu.name;
       $scope.menuPrice = menu.price;
       $scope.addToCartModal.show();
+    }
+    else{
+      alert('sorry the restaurant is offline')
+    }
+
   };
 
   $scope.viewCart = function(){
