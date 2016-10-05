@@ -1,17 +1,17 @@
 app.controller('HomeTabCtrl',
-  ["$scope","$ionicModal","$firebaseArray","currentAuth", "Restaurant", "Home" ,"$stateParams", "$state", "User",
+  ["$scope","$ionicModal","$firebaseArray","Auth", "Restaurant", "Home" ,"$stateParams", "$state", "User",
     "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation", "$ionicLoading", "$cordovaImagePicker",
      "Database", "Review", "restaurants",
-        function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $stateParams, $state,
+        function($scope, $ionicModal, $firebaseArray, Auth, Restaurant, Home, $stateParams, $state,
             User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, $ionicLoading,
              $cordovaImagePicker, Database, Review, restaurants) {
 
   console.log('HomeTabCtrl');
 
   $scope.usersRefObj = Database.users(); //new
-  Database.restaurants().$loaded().then(function() {
-    console.log($scope.restaurants.length);
-  }); //try
+  // Database.restaurants().$loaded().then(function() {
+  //   console.log($scope.restaurants.length);
+  // }); //try
   $scope.restaurants = restaurants; //new
   $scope.getAvg = Restaurant.getAveragePrice;
   $scope.getAvgRating = Restaurant.getAverageRating;
@@ -19,8 +19,11 @@ app.controller('HomeTabCtrl',
   $scope.RestaurantService = Restaurant;
   $scope.openRestaurant = Restaurant.getRestaurantOpenStatus;
 
-  // User.setOnline();
-  User.setOnline(currentAuth.uid);
+  Auth.$onAuthStateChanged(function(firebaseUser) {
+    if(firebaseUser) {
+      User.setOnline(firebaseUser.uid);
+    }
+  })
 
   ionicMaterialInk.displayEffect();
 

@@ -74,12 +74,12 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
           templateUrl: "templates/viewRestaurant.html",
           controller: "ViewRestaurantCtrl",
           resolve: {
-            currentAuth : function(Auth) {
-              return Auth.$requireSignIn();
-            },
-            currentUser : function(User) {
-              return User.auth();
-            }
+            // currentAuth : function(Auth) {
+            //   return Auth.$requireSignIn();
+            // },
+            // currentUser : function(User) {
+            //   return User.auth();
+            // }
             // review : function(Review , $stateParams){
             //   return {
             //     userReview : Review.userReview($stateParams.restaurantId).$loaded(),
@@ -309,4 +309,4 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
       console.log("NOT LOGGED IN SA TABS")
     }
   });
-})
+});
