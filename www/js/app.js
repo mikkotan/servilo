@@ -57,9 +57,9 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
           templateUrl: "templates/home.html",
           controller: 'HomeTabCtrl',
           resolve : {
-            currentAuth : function(Auth) {
-              return Auth.$requireSignIn();
-            },
+            // currentAuth : function(Auth) {
+            //   return Auth.$requireSignIn();
+            // },
             restaurants : function(Database) {
               return Database.restaurants().$loaded();
             }
@@ -74,12 +74,24 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
           templateUrl: "templates/viewRestaurant.html",
           controller: "ViewRestaurantCtrl",
           resolve: {
-            currentAuth : function(Auth) {
-              return Auth.$requireSignIn();
-            },
-            currentUser : function(User) {
-              return User.auth();
-            }
+            // currentAuth : function(Auth) {
+            //   return Auth.$requireSignIn();
+            // },
+            // currentUser : function(User) {
+            //   return User.auth();
+            // }
+            // review : function(Review , $stateParams){
+            //   return {
+            //     userReview : Review.userReview($stateParams.restaurantId).$loaded(),
+            //     restaurantReview : Review.userReview($stateParams.restaurantId).$loaded()
+            //     }
+            //   }
+            // userReview : function($stateParams , Review){
+            //   return Review.userReview($stateParams.restaurantId).$loaded();
+            // },
+            // restaurantReview : function($stateParams , Review){
+            //   return Review.restaurantReview($stateParams.restaurantId).$loaded();
+            // }
           }
         }
       }
@@ -246,8 +258,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 })
 
 
-
-.controller('AppCtrl', function($scope, $ionicSideMenuDelegate, Auth, User, Database,$state) {
+.controller('AppCtrl', function($scope, $ionicSideMenuDelegate, Auth, User, Database) {
   $scope.showMenu = function() {
   $ionicSideMenuDelegate.toggleLeft();
   };
@@ -270,7 +281,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
     if (firebaseUser) {
       if (firebaseUser.providerData[0].providerId == "facebook.com") {
         console.log("facebook provider");
-        $scope.firebaseUser = firebaseUser.displayName;
+        $scope.firebaseUser = firebaseUser;
         $scope.photoURL = firebaseUser.providerData[0].photoURL;
       } else { //providerId == password
         console.log("email provider");
@@ -281,5 +292,19 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
         $scope.firebaseUser = User.auth();
       }
     }
+    else {
+      console.log("NOT LOGGED IN")
+    }
   });
 })
+
+.controller('TabsCtrl', function($scope, Auth) {
+  Auth.$onAuthStateChanged(function(firebaseUser) {
+    if (firebaseUser) {
+      $scope.firebaseUser = firebaseUser;
+    }
+    else {
+      console.log("NOT LOGGED IN SA TABS")
+    }
+  });
+});

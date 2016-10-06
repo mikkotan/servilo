@@ -1,4 +1,4 @@
-<ion-tabs class="tabs-icon-top tabs-stable">
+<ion-tabs class="tabs-icon-top tabs-stable" ng-controller="TabsCtrl" >
   <ion-tab title="Home" icon="ion-home" href="#/tab/home">
     <ion-nav-view name="home-tab"></ion-nav-view>
   </ion-tab>
@@ -14,19 +14,19 @@
   <ion-tab title="SignUp" icon="ion-ios-world" ui-sref="tabs.signup">
     <ion-nav-view name="signup-tab"></ion-nav-view>
   </ion-tab> -->
-  <ion-tab title="Restaurants" icon="ion-spoon" ui-sref="tabs.restaurant">
+  <ion-tab ng-if="firebaseUser" title="Restaurants" icon="ion-spoon" ui-sref="tabs.restaurant">
     <ion-nav-view name="restaurant-tab"></ion-nav-view>
   </ion-tab>
-  <ion-tab title="Cart" icon="ion-android-cart" ui-sref="tabs.cart">
+  <ion-tab ng-if="firebaseUser" title="Cart" icon="ion-android-cart" ui-sref="tabs.cart">
     <ion-nav-view name="cart-tab"></ion-nav-view>
   </ion-tab>
-  <ion-tab title="Restaurantmenus" icon="ion-spoon" ui-sref="tabs.restaurantMenus">
+  <ion-tab ng-if="firebaseUser" title="Restaurantmenus" icon="ion-spoon" ui-sref="tabs.restaurantMenus">
     <ion-nav-view name="restaurantmenus-tab"></ion-nav-view>
   </ion-tab>
-  <ion-tab title="Orders" icon="ion-android-list" ui-sref="tabs.orders">
+  <ion-tab ng-if="firebaseUser" title="Orders" icon="ion-android-list" ui-sref="tabs.orders">
     <ion-nav-view name="order-tab"></ion-nav-view>
   </ion-tab>
-  <ion-tab title="Notifications" icon="ion-android-notifications" ui-sref="tabs.notifications">
+  <ion-tab ng-if="firebaseUser" title="Notifications" icon="ion-android-notifications" ui-sref="tabs.notifications">
     <ion-nav-view name="notifications-tab"></ion-nav-view>
   </ion-tab>
 </ion-tabs>

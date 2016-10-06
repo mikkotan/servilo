@@ -12,8 +12,8 @@
   <script src="lib/ionic/js/ionic.bundle.js"></script>
   <script src="lib/ionic-material/dist/ionic.material.min.js"></script>
   <script src="lib/ion-md-input/js/ion-md-input.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/3.0.3/firebase.js"></script>
-  <script src="https://cdn.firebase.com/libs/angularfire/2.0.1/angularfire.min.js"></script>
+  <script src="lib/firebase/firebase.js"></script>
+  <script src="lib/angularfire/dist/angularfire.min.js"></script>
   <script src="lib/ion-datetime-picker/release/ion-datetime-picker.min.js"></script>
   <script src="lib/ionic-rating/ionic-rating.min.js"></script>
   <script src="lib/angular-simple-logger/dist/angular-simple-logger.min.js"></script>
@@ -76,13 +76,14 @@
     <ion-side-menu side="left" enable-menu-with-back-views="false">
       <ion-header-bar class="bar-profile bar-stable">
         <div ng-show="firebaseUser" class="profile">
+          <img class="profile-picture" ng-show="photoURL" ng-src="{{photoURL}}">
+          <img class="profile-picture" ng-show="!photoURL" ng-src="img/ionic.png" style="width: 50px; height: 50px">
+          <h3 class="name">{{firebaseUser.displayName}}</h3>
+        </div>
+        <!-- <div ng-hide="firebaseUser" class="profile">
           <img class="profile-picture" src="{{photoURL}}" ng-show="photoURL != undefined">
           <h3 class="name">{{firebaseUser.firstName}} {{firebaseUser.lastName}}</h3>
-        </div>
-        <div ng-hide="firebaseUser" class="profile">
-          <img class="profile-picture" src="{{photoURL}}" ng-show="photoURL != undefined">
-          <h3 class="name">{{firebaseUser.firstName}} {{firebaseUser.lastName}}</h3>
-        </div>
+        </div> -->
       </ion-header-bar>
 
       <ion-content has-header="true">

@@ -192,7 +192,7 @@ app.controller("ViewRestaurantCtrl",["$scope","$firebaseArray","$firebaseObject"
 
   $scope.direction =[];
   $scope.currentLocation ={};
-  $scope.marker ={id: 0};
+  $scope.restaurantMarkers = [];
   var options = {timeout: 10000, enableHighAccuracy: true};
   $cordovaGeolocation.getCurrentPosition(options).then(function(position){
     $scope.currentLocation = {latitude: position.coords.latitude,longitude: position.coords.longitude};
@@ -203,12 +203,6 @@ app.controller("ViewRestaurantCtrl",["$scope","$firebaseArray","$firebaseObject"
       $scope.restaurantMarkers.push({id: Date.now(),
         coords:{latitude:restaurant.latitude, longitude:restaurant.longitude}
       });
-  };
-
-  $scope.addMarker = function(restaurant){
-    $scope.markers.push({id: restaurant.$id,
-      coords: {latitude:restaurant.latitude, longitude:restaurant.longitude}
-    });
   };
 
   $scope.markerEvents = {
@@ -226,6 +220,11 @@ app.controller("ViewRestaurantCtrl",["$scope","$firebaseArray","$firebaseObject"
       travelMode: google.maps.DirectionsTravelMode['DRIVING'],
       optimizeWaypoints: true
     };
+
+    $scope.restaurantMarkers.push({id: Date.now(),
+     coords:{latitude:$scope.currentLocation.latitude, longitude:$scope.currentLocation.longitude}
+    });
+
     direction.route(request, function(response, status){
       var steps = response.routes[0].legs[0].steps;
 
@@ -239,8 +238,10 @@ app.controller("ViewRestaurantCtrl",["$scope","$firebaseArray","$firebaseObject"
             color: strokeColor,
             weight: 5
         }});
-        }
-        $scope.$apply();
+      }
+      $scope.restaurantMarkers[0].icon = new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_bubble_icon_texts_big&chld=restaurant|edge_bc|FFBB00|000000|'
+        + restaurant.name +'|Distance: '+ distance + 'km');
+      $scope.$apply();
     });
   };
 }]);
