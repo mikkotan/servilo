@@ -263,8 +263,6 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
       }).catch(function(err){
         console.log(err)
       })
-    }).catch(err => {
-      console.log(err)
     })
   }
 

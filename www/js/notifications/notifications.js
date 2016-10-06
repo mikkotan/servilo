@@ -6,6 +6,7 @@ app.controller("NotificationsCtrl", ["$scope", "$firebaseArray", "User", "Restau
     $scope.$watchCollection('notifs', function(newNotifs) {
       $scope.newNotifs = newNotifs.map(function(notification) {
         return {
+          sender_id : notification.sender_id,
           sender : User.getUserFullname(notification.sender_id),
           restaurant : Restaurant.get(notification.restaurant_id).name,
           timestamp : notification.timestamp,
