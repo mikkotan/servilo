@@ -190,7 +190,7 @@ app.controller("ViewRestaurantCtrl",["$scope","$firebaseArray","$firebaseObject"
     })
   }
 
-  $scope.direction =[];
+  $scope.mapDirection =[];
   $scope.currentLocation ={};
   $scope.restaurantMarkers = [];
   var options = {timeout: 10000, enableHighAccuracy: true};
@@ -213,7 +213,7 @@ app.controller("ViewRestaurantCtrl",["$scope","$firebaseArray","$firebaseObject"
 
   $scope.showPath =  function(restaurant){
     $scope.map.zoom = 12;
-    var direction = new google.maps.DirectionsService();
+    var mapDirection = new google.maps.DirectionsService();
     var request = {
       origin: {lat:$scope.currentLocation.latitude,lng:$scope.currentLocation.longitude},
       destination: {lat: restaurant.latitude, lng: restaurant.longitude},
@@ -225,16 +225,16 @@ app.controller("ViewRestaurantCtrl",["$scope","$firebaseArray","$firebaseObject"
      coords:{latitude:$scope.currentLocation.latitude, longitude:$scope.currentLocation.longitude}
     });
 
-    direction.route(request, function(response, status){
+    mapDirection.route(request, function(response, status){
       var steps = response.routes[0].legs[0].steps;
-
       var distance =response.routes[0].legs[0].distance.value/1000;
+      distance = distance.toFixed(2);
       for(i=0; i<steps.length; i++){
         var strokeColor = '#049ce5';
         if((i%2)==0){
           strokeColor = '#FF9E00';
         }
-        $scope.direction.push({id:i,paths:steps[i].path, stroke: {
+        $scope.mapDirection.push({id:i,paths:steps[i].path, stroke: {
             color: strokeColor,
             weight: 5
         }});
