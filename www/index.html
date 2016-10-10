@@ -21,7 +21,7 @@
   <script src="lib/angular-ui-mask/dist/mask.js"></script>
   <script src="lib/lodash/lodash.js"></script>
   <script src="lib/angular-timeago/dist/angular-timeago.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3B5hB3NN1q1_9ro_Rfge5g-25phvvp7c&libries=geometry,visualization"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3B5hB3NN1q1_9ro_Rfge5g-25phvvp7c&amp;libries=geometry,visualization"></script>
   <script src="js/app.js"></script>
   <script src="js/database/databaseFactory.js"></script>
   <script src="js/home/home.js"></script>
@@ -78,8 +78,8 @@
         <div ng-show="firebaseUser" class="profile">
           <img class="profile-picture" ng-show="photoURL" ng-src="{{photoURL}}">
           <img class="profile-picture" ng-show="!photoURL" ng-src="img/ionic.png" style="width: 50px; height: 50px">
-          <h3 class="name" ng-if="firebaseUser.provider === 'facebook'">{{firebaseUser.displayName}}</h3>
-          <h3 class="name" ng-if="firebaseUser.provider !== 'facebook'">{{firebaseUser.firstName}} {{firebaseUser.lastName}}</h3>
+          <h3 class="name" ng-if="firebaseUser.provider === &apos;facebook&apos;">{{firebaseUser.displayName}}</h3>
+          <h3 class="name" ng-if="firebaseUser.provider !== &apos;facebook&apos;">{{firebaseUser.firstName}} {{firebaseUser.lastName}}</h3>
         </div>
         <!-- <div ng-hide="firebaseUser" class="profile">
           <img class="profile-picture" src="{{photoURL}}" ng-show="photoURL != undefined">
@@ -89,13 +89,13 @@
 
       <ion-content has-header="true">
         <ion-list>
-          <ion-item menu-close href="#/tab/home" class="item-sidelist">
+          <ion-item menu-close="" href="#/tab/home" class="item-sidelist">
             Home
           </ion-item>
-          <ion-item menu-close ui-sref="login" ng-hide="firebaseUser">
+          <ion-item menu-close="" ui-sref="login" ng-hide="firebaseUser">
             Login or Signup
           </ion-item>
-          <ion-item menu-close ui-sref="signup" ng-hide="firebaseUser">
+          <ion-item menu-close="" ui-sref="signup" ng-hide="firebaseUser">
             Sign Up
           </ion-item>
           <!-- <li>

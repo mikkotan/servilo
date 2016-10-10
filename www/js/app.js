@@ -5,9 +5,9 @@
 // the 2nd parameter is an array of 'requires'
 var app = angular.module('app', ['ui.mask','ionic', 'ionMdInput', 'ionic-material', 'firebase', 'ionic.rating', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker', 'yaru22.angular-timeago'])
 
-app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', function($ionicPlatform, $rootScope, $state, $templateCache) {
+app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', ($ionicPlatform, $rootScope, $state, $templateCache) => {
   $rootScope.$on("$stateChangeError",
-    function(event, toState, toParams, fromState, fromParams, error) {
+    (event, toState, toParams, fromState, fromParams, error) => {
       if (error === "AUTH_REQUIRED") {
         event.preventDefault();
         $state.go("login")
@@ -15,7 +15,7 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', function($i
     })
 
   $templateCache.put('template.tpl.html', '');
-  $ionicPlatform.ready(function() {
+  $ionicPlatform.ready(() => {
     if (window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
@@ -32,7 +32,7 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', function($i
   });
 }]);
 
-app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+app.config(($stateProvider, $urlRouterProvider, $ionicConfigProvider) => {
   var config = {
     apiKey: "AIzaSyA9E-lSM2WKmonVkHCShv_ErYuvobxgb40",
     authDomain: "jepsrestaurantdev.firebaseapp.com",
@@ -60,7 +60,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             // currentAuth : function(Auth) {
             //   return Auth.$requireSignIn();
             // },
-            restaurants : function(Database) {
+            restaurants : (Database) => {
               return Database.restaurants().$loaded();
             }
           }
@@ -103,10 +103,10 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             templateUrl: "templates/restaurantMenus.html",
             controller: "ViewRestaurantMenuOrder",
             resolve: {
-              restaurantMenus : function(Menu , $stateParams){
+              restaurantMenus : (Menu , $stateParams) => {
                   return Menu.getRestaurantMenus($stateParams.restaurantId).$loaded();
               },
-              restaurantId : function($stateParams){
+              restaurantId : ($stateParams) => {
                 return $stateParams.restaurantId
               }
             }
@@ -120,7 +120,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             templateUrl: "templates/view-restaurant-menus.html",
             controller: "ViewRestaurantMenu",
             resolve: {
-              restaurantMenu : function(Menu , $stateParams){
+              restaurantMenu : (Menu , $stateParams) => {
                   return Menu.getRestaurantMenus($stateParams.restaurantId).$loaded();
               }
             }
@@ -134,10 +134,10 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             templateUrl: "templates/add-menu.html",
             controller: "AddMenuCtrl",
             resolve: {
-              menus : function(Menu){
+              menus : (Menu) => {
                   return Menu.all().$loaded();
               },
-              restaurantId : function($stateParams){
+              restaurantId : ($stateParams) => {
                 return $stateParams.restaurantId
               }
             }
@@ -151,7 +151,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             templateUrl: "templates/menus.html",
             controller:"MenuCtrl",
             resolve: {
-              menus : function(Menu){
+              menus : (Menu) => {
                 return Menu.all().$loaded();
               }
             }
@@ -177,13 +177,13 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
           templateUrl: "templates/cart.html",
           controller: "CartCtrl",
           resolve : {
-            orders : function(Order){
+            orders : (Order) => {
               return Order.all().$loaded();
             },
-            authUser : function(User){
+            authUser : (User) => {
               return User.auth().$loaded();
             },
-            restaurantId : function($stateParams){
+            restaurantId : ($stateParams) => {
               return $stateParams.restaurantId
             }
           }
@@ -198,7 +198,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
           templateUrl:"templates/order.html",
           controller:"OrderCtrl",
           resolve: {
-            restaurants : function(Restaurant){
+            restaurants : (Restaurant) => {
               return Restaurant.getAuthUserRestaurants().$loaded();
             }
           }
@@ -221,7 +221,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
           templateUrl: 'templates/notifications.html',
           controller: "NotificationsCtrl",
           resolve : {
-            notifications : function(User) {
+            notifications : (User) => {
               return User.getAuthNotifications().$loaded();
             }
           }
@@ -240,7 +240,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
           templateUrl: "templates/restaurant.html",
           controller: "RestaurantCtrl",
           resolve: {
-            "currentAuth": ["Auth", function(Auth) {
+            "currentAuth": ["Auth", (Auth) => {
               return Auth.$requireSignIn();
             }]
           }
@@ -258,26 +258,26 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 })
 
 
-.controller('AppCtrl', function($scope, $ionicSideMenuDelegate, Auth, User, Database) {
-  $scope.showMenu = function() {
+.controller('AppCtrl', ($scope, $ionicSideMenuDelegate, Auth, User, Database) => {
+  $scope.showMenu = () => {
   $ionicSideMenuDelegate.toggleLeft();
   };
-  $scope.showRightMenu = function() {
+  $scope.showRightMenu = () => {
     $ionicSideMenuDelegate.toggleRight();
   };
-  $scope.signOut = function() {
-    Database.userOnlineTrue().$loaded().then(function(loaded){
-      loaded.$remove(0).then(function(ref){
+  $scope.signOut = () => {
+    Database.userOnlineTrue().$loaded().then( (loaded) => {
+      loaded.$remove(0).then( (ref) => {
         console.log("success")
         Auth.$signOut();
         location.reload();
-      }).catch(function(err){
+      }).catch( (err) => {
         console.log(err)
       })
     })
   }
 
-  Auth.$onAuthStateChanged(function(firebaseUser) {
+  Auth.$onAuthStateChanged((firebaseUser) => {
     if (firebaseUser) {
       if (firebaseUser.providerData[0].providerId == "facebook.com") {
         console.log("facebook provider");
@@ -298,8 +298,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
   });
 })
 
-.controller('TabsCtrl', function($scope, Auth) {
-  Auth.$onAuthStateChanged(function(firebaseUser) {
+.controller('TabsCtrl', ($scope, Auth) => {
+  Auth.$onAuthStateChanged((firebaseUser) => {
     if (firebaseUser) {
       $scope.firebaseUser = firebaseUser;
     }
