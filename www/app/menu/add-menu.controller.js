@@ -1,8 +1,9 @@
-app.controller("AddMenuCtrl",["$scope","$stateParams","menus","$firebaseArray","$firebaseObject","$state","restaurantId","$cordovaCamera",
-  function($scope ,$stateParams,menus,$firebaseArray,$firebaseObject,$state,restaurantId, $cordovaCamera){
+app.controller("AddMenuCtrl",["$scope","$stateParams","menus","$firebaseArray","$firebaseObject","$state","restaurantId","$cordovaCamera","Database",
+  function($scope ,$stateParams,menus,$firebaseArray,$firebaseObject,$state,restaurantId, $cordovaCamera, Database){
 
     $scope.menus = menus;
 
+    //WET CODE restaurants.controller.js
     $scope.imageURL = "";
 
     $scope.upload = function(index) {
@@ -39,6 +40,7 @@ app.controller("AddMenuCtrl",["$scope","$stateParams","menus","$firebaseArray","
       name : menu.name,
       price : menu.price,
       restaurant_id : restaurantId,
+      availability : false,
       prevPrice : menu.price,
       image : $scope.imageURL,
       timestamp : firebase.database.ServerValue.TIMESTAMP

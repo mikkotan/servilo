@@ -147,22 +147,22 @@ app.controller('HomeTabCtrl',
     $scope.images = [];
   };
 
-  $ionicModal.fromTemplateUrl('templates/new-review.html', function(reviewModal) {
-    $scope.reviewModal = reviewModal;
-  }, {
-    scope: $scope
-  });
-  $ionicModal.fromTemplateUrl('templates/edit-review.html', function(editReviewModal) {
-    $scope.editReviewModal = editReviewModal;
-  }, {
-    scope: $scope
-  });
+  // $ionicModal.fromTemplateUrl('app/review/new-review.html', function(reviewModal) {
+  //   $scope.reviewModal = reviewModal;
+  // }, {
+  //   scope: $scope
+  // });
+  // $ionicModal.fromTemplateUrl('app/review/edit-review.html', function(editReviewModal) {
+  //   $scope.editReviewModal = editReviewModal;
+  // }, {
+  //   scope: $scope
+  // });
 
-  $ionicModal.fromTemplateUrl('templates/edit-review.html', function(editModalReview) {
-    $scope.editReviewModal = editModalReview;
-  }, {
-    scope: $scope
-  });
+  // $ionicModal.fromTemplateUrl('templates/edit-review.html', function(editModalReview) {
+  //   $scope.editReviewModal = editModalReview;
+  // }, {
+  //   scope: $scope
+  // });
 
   $scope.showConfirmDelete = function(review) {
     var reviewObj = review;
@@ -214,7 +214,7 @@ app.controller('HomeTabCtrl',
         $state.go("tabs.viewRestaurant",{restaurantId:model.id});
     }
   };
-  
+
   $scope.CallNumber = function(number){
      window.plugins.CallNumber.callNumber(function(){
       console.log("call success");

@@ -1,4 +1,0 @@
-app.factory("Transaction",function(){
-
-
-});

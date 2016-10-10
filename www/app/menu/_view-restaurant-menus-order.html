@@ -4,7 +4,8 @@
     <ion-list>
       <h1>{{status}}</h3>
       <ion-item ng-repeat="menu in restaurantMenus">
-          <h3>{{menu.name}}</h3><button class="button button-calm" ng-disabled="!getRestaurantStatus" ng-click="addToCart(menu)">Buy</button>
+          <h3>{{menu.name}}</h3><button class="button button-calm" ng-disabled="!getRestaurantStatus || !menu.availability" ng-click="addToCart(menu)">Buy</button>
+          <p>{{availability(menu)}}</p>
           <p>
             P {{menu.price}}
           </p>

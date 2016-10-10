@@ -8,16 +8,18 @@ $scope.restaurantMenus = restaurantMenus;
 $scope.restaurantStatus = Restaurant.getRestaurantStatus(Restaurant.get($scope.restaurantId).owner_id);
 
 $scope.restaurantStatus.on('value' , function(snap){
-    $scope.getRestaurantStatus = snap.val() ? true : false;
+    $scope.getRestaurantStatus = snap.val();
     $scope.status = Restaurant.get(restaurantId).name + " is " + (snap.val() ? "Online" : "Offline");
 
 })
-console.log($scope.status)
+
+  $scope.availability = function(menu){
+    return menu.availability ? "Available" : "Currently not available"
+  }
 
 
   $scope.addToCart = function(menu) {
     if($scope.getRestaurantStatus){
-      console.log("Cliked!!");
       $scope.id = menu.$id;
       $scope.menuName = menu.name;
       $scope.menuPrice = menu.price;
@@ -26,7 +28,6 @@ console.log($scope.status)
     else{
       alert('sorry the restaurant is offline')
     }
-
   };
 
   $scope.viewCart = function(){
@@ -39,7 +40,7 @@ console.log($scope.status)
 
   $scope.back = function(){
     if(CartData.get().length > 0 ){
-      var confirmation = confirm("Leaving this restaurant will cancel all your orders, Are you sure you want to leave?")
+      let confirmation = confirm("Leaving this restaurant will cancel all your orders, Are you sure you want to leave?")
       if(confirmation === true){
         CartData.get().length = 0;
         CartData.totalPrice().length = 0;
@@ -58,27 +59,45 @@ console.log($scope.status)
   }
 
   $scope.sendToCart = function(menu){
-    var menuOrder = Cart.menuId(CartData.get(),"id",$scope.id);
 
-    if( menuOrder === null){
-      var menuCart = { id:$scope.id, name:$scope.menuName, price : $scope.menuPrice ,
-        quantity:menu.quantity};
-      CartData.add(menuCart);
-      $state.go("tabs.restaurantMenus");
-      closeModal();
+    let menuOrder = Cart.menuId(CartData.get(),"id",$scope.id);
+
+    if(menu.quantity){
+      if(menu.quantity > 0){
+        let menuCart = { id:$scope.id, name:$scope.menuName, price : $scope.menuPrice ,
+              quantity:menu.quantity};
+        $scope.error = false;
+
+        if( menuOrder === null){
+          CartData.add(menuCart);
+          $state.go("tabs.restaurantMenus");
+          closeModal();
+        }
+        else {
+          var cartMenu = CartData.get()[menuOrder];
+          cartMenu.quantity = cartMenu.quantity + menu.quantity;
+          closeModal();
+        }
+      }else{
+        $scope.error = true;
+        console.log("error : "+ $scope.error)
+        $scope.errorMessage = menu.quantity + " is invalid"
+      }
+
+    }else{
+      $scope.error = true;
+      console.log("error : "+ $scope.error)
+      $scope.errorMessage = "Quantity is undefined"
     }
-    else {
-      var cartMenu = CartData.get()[menuOrder];
-      cartMenu.quantity = cartMenu.quantity + menu.quantity;
-      closeModal();
-    }
+
   }
 
-  $ionicModal.fromTemplateUrl('templates/add-to-cart-modal.html', function(addToCartModal) {
+  $ionicModal.fromTemplateUrl('app/menu/_add-cart-modal.html', function(addToCartModal) {
     $scope.addToCartModal = addToCartModal;
   }, {
     scope: $scope
   });
+
 
 
 

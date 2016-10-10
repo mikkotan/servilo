@@ -27,8 +27,14 @@ app.controller("ViewRestaurantMenu",["$scope","$stateParams","restaurantMenu", "
     })
   }
 
+  $scope.changeAvailability = function(menu){
+    console.log("update " + menu.availability)
+    Database.menusReference().child(menu.$id).update({
+      availability : menu.availability,
+    })
+  }
 
-  $ionicModal.fromTemplateUrl('templates/edit-menu.html', function(modalEditMenu) {
+  $ionicModal.fromTemplateUrl('app/menu/_edit-menu.html', function(modalEditMenu) {
     $scope.menuEditModal = modalEditMenu;
   }, {
     scope: $scope

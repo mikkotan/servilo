@@ -22,6 +22,13 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       }
     });
 
+  $scope.changeAvailability = function(restaurant){
+    var resRef = firebase.database().ref().child("restaurants").child(restaurant.$id);
+    resRef.update({
+      availability: restaurant.availability
+    })
+  }
+
   $scope.imageURL = "";
   $scope.upload = function(index) {
     var source = "";
@@ -55,6 +62,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
   $scope.addRestaurant = function(restaurant){
     $scope.pendingRestaurants.$add({
       name: restaurant.name,
+      availability : false,
       location: restaurant.location,
       latitude: $scope.marker.coords.latitude,
       longitude: $scope.marker.coords.longitude,
@@ -98,13 +106,13 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
     $ionicListDelegate.closeOptionButtons();
   }
 
-  $ionicModal.fromTemplateUrl('templates/new-restaurant.html', function(restaurantModal) {
+  $ionicModal.fromTemplateUrl('app/restaurant/_new-restaurant.html', function(restaurantModal) {
     $scope.restaurantModal = restaurantModal;
   }, {
     scope: $scope
   });
 
-  $ionicModal.fromTemplateUrl('templates/edit-restaurant.html', function(restaurantEditModal) {
+  $ionicModal.fromTemplateUrl('app/restaurant/_edit-restaurant.html', function(restaurantEditModal) {
     $scope.restaurantEditModal = restaurantEditModal;
   }, {
     scope: $scope

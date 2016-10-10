@@ -5,9 +5,9 @@
 // the 2nd parameter is an array of 'requires'
 var app = angular.module('app', ['ui.mask','ionic', 'ionMdInput', 'ionic-material', 'firebase', 'ionic.rating', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker', 'yaru22.angular-timeago'])
 
-app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', ($ionicPlatform, $rootScope, $state, $templateCache) => {
+app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', function($ionicPlatform, $rootScope, $state, $templateCache) {
   $rootScope.$on("$stateChangeError",
-    (event, toState, toParams, fromState, fromParams, error) => {
+    function(event, toState, toParams, fromState, fromParams, error) {
       if (error === "AUTH_REQUIRED") {
         event.preventDefault();
         $state.go("login")
@@ -15,7 +15,7 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', ($ionicPlat
     })
 
   $templateCache.put('template.tpl.html', '');
-  $ionicPlatform.ready(() => {
+  $ionicPlatform.ready(function() {
     if (window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
@@ -32,252 +32,26 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', ($ionicPlat
   });
 }]);
 
-app.config(($stateProvider, $urlRouterProvider, $ionicConfigProvider) => {
-  var config = {
-    apiKey: "AIzaSyA9E-lSM2WKmonVkHCShv_ErYuvobxgb40",
-    authDomain: "jepsrestaurantdev.firebaseapp.com",
-    databaseURL: "https://jepsrestaurantdev.firebaseio.com",
-    storageBucket: "jepsrestaurantdev.appspot.com",
-  };
-  firebase.initializeApp(config);
-  $urlRouterProvider.otherwise("/home");
-  $ionicConfigProvider.tabs.position('bottom');
-
-  $stateProvider
-    .state('tabs', {
-      url: "/tab",
-      cache: false,
-      abstract: true,
-      templateUrl: "templates/tabs.html"
-    })
-    .state('tabs.home', {
-      url: "/home",
-      views: {
-        'home-tab': {
-          templateUrl: "templates/home.html",
-          controller: 'HomeTabCtrl',
-          resolve : {
-            // currentAuth : function(Auth) {
-            //   return Auth.$requireSignIn();
-            // },
-            restaurants : (Database) => {
-              return Database.restaurants().$loaded();
-            }
-          }
-        }
-      }
-    })
-    .state('tabs.viewRestaurant', {
-      url: "/viewRestaurant/:restaurantId",
-      views: {
-        'home-tab': {
-          templateUrl: "templates/viewRestaurant.html",
-          controller: "ViewRestaurantCtrl",
-          resolve: {
-            // currentAuth : function(Auth) {
-            //   return Auth.$requireSignIn();
-            // },
-            // currentUser : function(User) {
-            //   return User.auth();
-            // }
-            // review : function(Review , $stateParams){
-            //   return {
-            //     userReview : Review.userReview($stateParams.restaurantId).$loaded(),
-            //     restaurantReview : Review.userReview($stateParams.restaurantId).$loaded()
-            //     }
-            //   }
-            // userReview : function($stateParams , Review){
-            //   return Review.userReview($stateParams.restaurantId).$loaded();
-            // },
-            // restaurantReview : function($stateParams , Review){
-            //   return Review.restaurantReview($stateParams.restaurantId).$loaded();
-            // }
-          }
-        }
-      }
-      })
-      .state('tabs.restaurantMenus', {
-        url: "/restaurantName/menus/:restaurantId",
-        views: {
-          'restaurantmenus-tab' : {
-            templateUrl: "templates/restaurantMenus.html",
-            controller: "ViewRestaurantMenuOrder",
-            resolve: {
-              restaurantMenus : (Menu , $stateParams) => {
-                  return Menu.getRestaurantMenus($stateParams.restaurantId).$loaded();
-              },
-              restaurantId : ($stateParams) => {
-                return $stateParams.restaurantId
-              }
-            }
-          }
-        }
-      })
-      .state('tabs.viewRestaurantMenus', {
-        url: "/restaurant/menus/:restaurantId",
-        views: {
-          'restaurant-tab': {
-            templateUrl: "templates/view-restaurant-menus.html",
-            controller: "ViewRestaurantMenu",
-            resolve: {
-              restaurantMenu : (Menu , $stateParams) => {
-                  return Menu.getRestaurantMenus($stateParams.restaurantId).$loaded();
-              }
-            }
-          }
-        }
-        })
-      .state('tabs.addMenu',{
-        url: "/menu/add/:restaurantId",
-        views:{
-          'restaurant-tab':{
-            templateUrl: "templates/add-menu.html",
-            controller: "AddMenuCtrl",
-            resolve: {
-              menus : (Menu) => {
-                  return Menu.all().$loaded();
-              },
-              restaurantId : ($stateParams) => {
-                return $stateParams.restaurantId
-              }
-            }
-          }
-        }
-    })
-      .state('tabs.menu', {
-        url: "/menu",
-        views: {
-          'menu-tab': {
-            templateUrl: "templates/menus.html",
-            controller:"MenuCtrl",
-            resolve: {
-              menus : (Menu) => {
-                return Menu.all().$loaded();
-              }
-            }
-          }
-      }
-    })
-    .state('tabs.contact', {
-      url: "/contact",
-      views: {
-        'contact-tab': {
-          templateUrl: "templates/contact.html",
-          controller: "UsersCtrl"
-        }
-      }
-    })
-    .state('tabs.cart', {
-      url: "/cart",
-      params : {
-        restaurantId : null
-      },
-      views: {
-        'cart-tab': {
-          templateUrl: "templates/cart.html",
-          controller: "CartCtrl",
-          resolve : {
-            orders : (Order) => {
-              return Order.all().$loaded();
-            },
-            authUser : (User) => {
-              return User.auth().$loaded();
-            },
-            restaurantId : ($stateParams) => {
-              return $stateParams.restaurantId
-            }
-          }
-        }
-      }
-    })
-
-    .state('tabs.orders',{
-      url: "/orders",
-      views:{
-        'order-tab':{
-          templateUrl:"templates/order.html",
-          controller:"OrderCtrl",
-          resolve: {
-            restaurants : (Restaurant) => {
-              return Restaurant.getAuthUserRestaurants().$loaded();
-            }
-          }
-        }
-      }
-    })
-    .state('tabs.signup',{
-      url:"/signup",
-      views: {
-        'signup-tab': {
-          templateUrl: "templates/signup.html",
-          controller: "SignUpCtrl"
-        }
-      }
-    })
-    .state('tabs.notifications', {
-      url:"/notifications",
-      views : {
-        'notifications-tab' : {
-          templateUrl: 'templates/notifications.html',
-          controller: "NotificationsCtrl",
-          resolve : {
-            notifications : (User) => {
-              return User.getAuthNotifications().$loaded();
-            }
-          }
-        }
-      }
-    })
-    .state('login', {
-      url: "/login",
-      templateUrl: "templates/login.html",
-      controller: "LoginCtrl"
-    })
-    .state('tabs.restaurant', {
-      url: "/restaurant",
-      views: {
-        'restaurant-tab': {
-          templateUrl: "templates/restaurant.html",
-          controller: "RestaurantCtrl",
-          resolve: {
-            "currentAuth": ["Auth", (Auth) => {
-              return Auth.$requireSignIn();
-            }]
-          }
-        }
-      }
-    })
-    .state('signup', {
-      url: "/signup",
-      templateUrl: "templates/signup.html",
-      controller: "SignUpCtrl"
-    });
-
-
-  $urlRouterProvider.otherwise("/tab/home");
-})
-
-
-.controller('AppCtrl', ($scope, $ionicSideMenuDelegate, Auth, User, Database) => {
-  $scope.showMenu = () => {
+app.controller('AppCtrl', function($scope, $ionicSideMenuDelegate, Auth, User, Database,$state) {
+  $scope.showMenu = function() {
   $ionicSideMenuDelegate.toggleLeft();
   };
-  $scope.showRightMenu = () => {
+  $scope.showRightMenu = function() {
     $ionicSideMenuDelegate.toggleRight();
   };
-  $scope.signOut = () => {
-    Database.userOnlineTrue().$loaded().then( (loaded) => {
-      loaded.$remove(0).then( (ref) => {
+  $scope.signOut = function() {
+    Database.userOnlineTrue().$loaded().then(function(loaded) {
+      loaded.$remove(0).then(function(ref) {
         console.log("success")
         Auth.$signOut();
         location.reload();
-      }).catch( (err) => {
+      }).catch(function(err) {
         console.log(err)
       })
     })
   }
 
-  Auth.$onAuthStateChanged((firebaseUser) => {
+  Auth.$onAuthStateChanged(function(firebaseUser) {
     if (firebaseUser) {
       if (firebaseUser.providerData[0].providerId == "facebook.com") {
         console.log("facebook provider");
@@ -298,8 +72,8 @@ app.config(($stateProvider, $urlRouterProvider, $ionicConfigProvider) => {
   });
 })
 
-.controller('TabsCtrl', ($scope, Auth) => {
-  Auth.$onAuthStateChanged((firebaseUser) => {
+.controller('TabsCtrl', function($scope, Auth) {
+  Auth.$onAuthStateChanged(function(firebaseUser) {
     if (firebaseUser) {
       $scope.firebaseUser = firebaseUser;
     }

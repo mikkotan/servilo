@@ -3,7 +3,8 @@
 
       <ion-list>
         <ion-item ng-repeat="menu in restaurantMenus">
-            <h3>{{menu.name}}</h3>
+          <ion-toggle ng-model="menu.availability" ng-change="changeAvailability(menu)" toggle-class="toggle-calm"><h3>{{menu.name}}</h3></ion-toggle>
+
             <p>
               P {{menu.price}}
             </p>

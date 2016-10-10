@@ -1,5 +1,5 @@
-app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserFactory", "Database",
-  function($firebaseObject ,$firebaseAuth, $firebaseArray , UserFactory, Database){
+app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserFactory", "Database","$ionicLoading",
+  function($firebaseObject ,$firebaseAuth, $firebaseArray , UserFactory, Database,$ionicLoading){
 
   var rootRef = firebase.database().ref();
   var users = rootRef.child("users");
@@ -37,7 +37,13 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
       conRef.on('value', function(data) {
         if(data.val() === true){
           var con = online.push(true);
-          con.onDisconnect().remove();
+          con.onDisconnect().remove(function(err){
+            console.log((err?err:"success"));
+            $ionicLoading.hide();
+          });
+        }
+        else{
+          $ionicLoading.show();
         }
       })
     }
