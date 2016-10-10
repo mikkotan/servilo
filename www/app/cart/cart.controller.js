@@ -78,6 +78,7 @@ $scope.buy = function(cart , location){
         location : location,
         menus : scanCart(cart),
         totalprice : $scope.total,
+        timestamp: firebase.database.ServerValue.TIMESTAMP
       }).then(function(){
           CartData.get().length = 0;
           CartData.totalPrice().length = 0;

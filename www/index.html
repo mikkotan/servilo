@@ -22,37 +22,60 @@
   <script src="lib/lodash/lodash.js"></script>
   <script src="lib/angular-timeago/dist/angular-timeago.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3B5hB3NN1q1_9ro_Rfge5g-25phvvp7c&libries=geometry,visualization"></script>
+
+  <!-- app -->
   <script src="js/app.js"></script>
-  <script src="js/database/databaseFactory.js"></script>
-  <script src="js/home/home.js"></script>
-  <script src="js/home/searchFilter.js"></script>
-  <script src="js/home/viewRestaurant.js"></script>
-  <script src="js/home/homeFactory.js"></script>
-  <script src="js/cart/cart.js"></script>
-  <script src="js/cart/cartDataService.js"></script>
-  <script src="js/cart/cartService.js"></script>
-  <script src="js/order/order.js"></script>
-  <script src="js/order/orderService.js"></script>
-  <script src="js/menu/menu.js"></script>
-  <script src="js/menu/menuFactory.js"></script>
-  <script src="js/menu/menusWithAvg.js"></script>
-  <script src="js/menu/addMenu.js"></script>
-  <script src="js/menu/viewRestaurantMenuOrder.js"></script>
-  <script src="js/menu/viewRestaurantMenu.js"></script>
-  <script src="js/notifications/notifications.js"></script>
-  <script src="js/login/login.js"></script>
-  <script src="js/login/loginFactory.js"></script>
-  <script src="js/login/authProvider.js"></script>
-  <script src="js/signup/signup.js"></script>
-  <script src="js/restaurant/restaurant.js"></script>
-  <script src="js/restaurant/restaurantFactory.js"></script>
-  <script src="js/review/reviewFactory.js"></script>
-  <script src="js/users/users.js"></script>
-  <script src="js/users/userFactory.js"></script>
-  <script src="js/users/userService.js"></script>
+  <script src="js/app.routes.js"></script>
+  <!-- config -->
+  <script src="js/firebase.config.js"></script>
+  <!-- user -->
+  <script src="app/cart/cart.controller.js"></script>
+  <script src="app/cart/cart.data.service.js"></script>
+  <script src="app/cart/cart.service.js"></script>
+  <!-- database -->
+  <script src="app/database/database.factory.js"></script>
+  <!-- home -->
+  <script src="app/home/home.controller.js"></script>
+  <script src="app/home/home.factory.js"></script>
+  <script src="app/home/search.filter.js"></script>
+  <!-- login -->
+  <script src="app/login/auth.provider.js"></script>
+  <script src="app/login/login.controller.js"></script>
+  <script src="app/login/login.factory.js"></script>
+  <!-- menu -->
+  <script src="app/menu/add-menu.controller.js"></script>
+  <script src="app/menu/menu-avg.controller.js"></script>
+  <script src="app/menu/menus.controller.js"></script>
+  <script src="app/menu/menu.factory.js"></script>
+  <script src="app/menu/view-restaurant-menus.controller.js"></script>
+  <script src="app/menu/view-restaurant-menus-order.controller.js"></script>
+  <!-- notification -->
+  <script src="app/notification/notifications.controller.js"></script>
+  <!-- order -->
+  <script src="app/order/orders.controller.js"></script>
+  <script src="app/order/order.service.js"></script>
+  <!-- restaurant -->
+  <script src="app/restaurant/restaurants.controller.js"></script>
+  <script src="app/restaurant/restaurant.factory.js"></script>
+  <script src="app/restaurant/restaurant.module.js"></script>
+  <script src="app/restaurant/restaurant.service.js"></script>
+  <script src="app/restaurant/view-restaurant.controller.js"></script>
+  <!-- review -->
+  <script src="app/review/review.factory.js"></script>
+  <!-- signup -->
+  <script src="app/signup/signup.controller.js"></script>
+  <!-- user -->
+  <script src="app/user/users.controller.js"></script>
+  <script src="app/user/user.factory.js"></script>
+  <script src="app/user/user.module.js"></script>
+  <script src="app/user/user.service.js"></script>
+  <!-- cordova -->
   <script src="lib/ngCordova/dist/ng-cordova.min.js"></script>
   <script src="lib/ng-cordova-oauth/dist/ng-cordova-oauth.js"></script>
   <script src="cordova.js"></script>
+
+  <!-- end of data -->
+
 </head>
 
 <body ng-app="app">
@@ -65,6 +88,11 @@
         </ion-nav-back-button>
         <ion-nav-buttons side="left">
           <button class="button button-icon button-clear ion-navicon" ng-click="showMenu()">
+          </button>
+
+        </ion-nav-buttons>
+        <ion-nav-buttons side="right">
+          <button ng-click="cart()">Cart
           </button>
 
         </ion-nav-buttons>

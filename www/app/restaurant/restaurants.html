@@ -11,7 +11,10 @@
 
     <ion-list>
       <ion-item ng-repeat="restaurant in displayRestaurants">
-        <h3><icon class="ion-spoon"></icon> {{restaurant.name}}</h3>
+
+        <ion-toggle ng-model="restaurant.availability" ng-change="changeAvailability(restaurant)" toggle-class="toggle-calm">
+          <h3><icon class="ion-spoon"></icon> {{restaurant.name}}</h3>
+        </ion-toggle>
         <p>
           <icon class="ion-ios-location-outline"></icon> {{restaurant.location}}
         </p>

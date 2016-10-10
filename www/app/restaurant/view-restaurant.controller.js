@@ -1,5 +1,5 @@
-app.controller("ViewRestaurantCtrl",["$scope","$firebaseArray","$firebaseObject","Database","$ionicLoading","$ionicModal", "$ionicPopup","$cordovaGeolocation", "$stateParams", "Restaurant", "User", "Review",
-  function($scope,$firebaseArray,$firebaseObject,Database, $ionicLoading, $ionicModal, $ionicPopup, $cordovaGeolocation, $stateParams, Restaurant, User, Review){
+app.controller("ViewRestaurantCtrl",["$scope","$state","$firebaseArray","$firebaseObject","Database","$ionicLoading","$ionicModal", "$ionicPopup","$cordovaGeolocation", "$stateParams", "Restaurant", "User", "Review",
+  function($scope,$state,$firebaseArray,$firebaseObject,Database, $ionicLoading, $ionicModal, $ionicPopup, $cordovaGeolocation, $stateParams, Restaurant, User, Review){
 
   console.log("View Restaurant Ctrl")
 
@@ -26,6 +26,10 @@ app.controller("ViewRestaurantCtrl",["$scope","$firebaseArray","$firebaseObject"
       $scope.exists = (snapshot.val() !== null );
       $scope.review = $firebaseObject(Database.reviewsReference().child(snapshot.val()));
     })
+  }
+
+  $scope.goToMenus = function(){
+      $state.go("tabs.restaurantMenus",{restaurantId:id})
   }
 
   $scope.restaurantOpenStatus = Restaurant.getRestaurantOpenStatus(id)

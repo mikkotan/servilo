@@ -1,5 +1,5 @@
-app.controller("AddMenuCtrl",["$scope","$stateParams","menus","$firebaseArray","$firebaseObject","$state","restaurantId",
-  function($scope ,$stateParams,menus,$firebaseArray,$firebaseObject,$state,restaurantId){
+app.controller("AddMenuCtrl",["$scope","$stateParams","menus","$firebaseArray","$firebaseObject","$state","restaurantId","Database",
+  function($scope ,$stateParams,menus,$firebaseArray,$firebaseObject,$state,restaurantId,Database){
 
     $scope.menus = menus;
 
@@ -8,6 +8,7 @@ app.controller("AddMenuCtrl",["$scope","$stateParams","menus","$firebaseArray","
       name : menu.name,
       price : menu.price,
       restaurant_id : restaurantId,
+      availability : false,
       prevPrice : menu.price,
       timestamp : firebase.database.ServerValue.TIMESTAMP
     }).then(function(menuObj){

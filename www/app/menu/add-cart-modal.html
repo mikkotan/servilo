@@ -9,6 +9,9 @@
       <ion-list>
         <ion-item >
           <form ng-submit="sendToCart(menu)">
+            <div ng-if="error" class="alert alert-danger">
+              {{errorMessage}}
+            </div>
             <div class="list">
               <label class="item item-input">
                 Name:{{menuName}}
