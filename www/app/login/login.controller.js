@@ -11,10 +11,10 @@ app.controller("LoginCtrl",["$scope" , "$firebaseArray", "$firebaseAuth", "$fire
     console.log(user.password);
     $ionicLoading.show();
     Auth.$signInWithEmailAndPassword(user.email, user.password).then(function(authUser){
+      $state.go("tabs.home")
       $ionicLoading.hide();
       user.password = "";
       user.email = ""
-      $state.go("tabs.home")
     }).catch(function(err){
       $ionicLoading.hide();
       console.log(err)
@@ -40,12 +40,30 @@ app.controller("LoginCtrl",["$scope" , "$firebaseArray", "$firebaseAuth", "$fire
     // });
     $cordovaOauth.facebook("1697524080497035", ["email", "public_profile"], {redirect_uri: "http://localhost/callback"}).then(function(result){
       $scope.detailsfb = result.access_token;
+      $ionicLoading.show();
       Auth.$signInWithCredential(firebase.auth.FacebookAuthProvider.credential(result.access_token)).then(
         function(succes){
+          var ref = firebase.database().ref().child("users").child(succes.uid);
+          ref.set({
+            displayName : succes.displayName,
+            provider: "facebook",
+            startedAt : firebase.database.ServerValue.TIMESTAMP
+          },function(error) {
+            if(error) {
+              $ionicLoading.hide();
+              console.log("hello error" + error);
+            }
+            else {
+              console.log("no error means succues");
+            }
+          })
           console.log(succes.displayName);
           console.log('Firebase Facebook login success');
+          $ionicLoading.hide();
+          $state.go("tabs.home")
         },
         function(error){
+          $ionicLoading.hide();
           console.log("error!!");
           console.log(error);
         });

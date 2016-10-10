@@ -19,12 +19,12 @@
             <button type="submit" class="button button-block button-assertive ink">Login</button>
           </div>
         </form>
-        <div>
+        <div ng-hide="firebaseUser">
           <button class="button button-block button-positive" ng-click="fbLogin()">
             Login with Facebook
           </button>
         </div>
-        <div>
+        <div ng-hide="firebaseUser">
           <button class="button button-block button-energized" ui-sref="signup">
             Sign up
           </button>

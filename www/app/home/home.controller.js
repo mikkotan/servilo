@@ -1,17 +1,17 @@
 app.controller('HomeTabCtrl',
-  ["$scope","$ionicModal","$firebaseArray","currentAuth", "Restaurant", "Home" ,"$stateParams", "$state", "User",
+  ["$scope","$ionicModal","$firebaseArray","Auth", "Restaurant", "Home" ,"$stateParams", "$state", "User",
     "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation", "$ionicLoading", "$cordovaImagePicker",
      "Database", "Review", "restaurants",
-        function($scope, $ionicModal, $firebaseArray, currentAuth, Restaurant, Home, $stateParams, $state,
+        function($scope, $ionicModal, $firebaseArray, Auth, Restaurant, Home, $stateParams, $state,
             User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, $ionicLoading,
              $cordovaImagePicker, Database, Review, restaurants) {
 
-
-
   console.log('HomeTabCtrl');
 
-
   $scope.usersRefObj = Database.users(); //new
+  // Database.restaurants().$loaded().then(function() {
+  //   console.log($scope.restaurants.length);
+  // }); //try
   $scope.restaurants = restaurants; //new
   $scope.getAvg = Restaurant.getAveragePrice;
   $scope.getAvgRating = Restaurant.getAverageRating;
@@ -19,11 +19,11 @@ app.controller('HomeTabCtrl',
   $scope.RestaurantService = Restaurant;
   $scope.openRestaurant = Restaurant.getRestaurantOpenStatus;
 
-  User.setOnline(currentAuth.uid);
-
-
-
-
+  Auth.$onAuthStateChanged(function(firebaseUser) {
+    if(firebaseUser) {
+      User.setOnline(firebaseUser.uid);
+    }
+  })
 
   ionicMaterialInk.displayEffect();
 
@@ -63,40 +63,23 @@ app.controller('HomeTabCtrl',
       quality: 80
     };
     window.imagePicker.getPictures(
-        function(results) {
-            for (var i = 0; i < results.length; i++) {
-                console.log('Image URI: ' + results[i]);
-                window.plugins.Base64.encodeFile(results[i], function(base64){
-                    $scope.images.push(base64);
-                    $scope.$apply();
-                });
-            }
-        }, function (error) {
-            console.log('Error: ' + error);
-        }, {
-            maximumImagesCount: 10,
-            width: 800,
-            quality: 80,
-          // output type, defaults to FILE_URIs.
-          // available options are
-          // window.imagePicker.OutputType.FILE_URI (0) or
-          // window.imagePicker.OutputType.BASE64_STRING (1)
-            // outputType: window.imagePicker.OutputType.BASE64_STRING
+      function(results) {
+        for (var i = 0; i < results.length; i++) {
+          console.log('Image URI: ' + results[i]);
+          window.plugins.Base64.encodeFile(results[i], function(base64){
+            $scope.images.push(base64);
+            $scope.$apply();
+          });
         }
+      }, function (error) {
+        console.log('Error: ' + error);
+      }, {
+        maximumImagesCount: 10,
+        width: 800,
+        quality: 80,
+        // outputType: window.imagePicker.OutputType.BASE64_STRING or 1
+      }
     );
-
-    // $cordovaImagePicker.getPictures(options)
-    // .then(function (results) {
-    //   for (var i = 0; i < results.length; i++) {
-    //     window.plugins.Base64.encodeFile(results[i], function(base64){
-    //       $scope.images.push(base64);
-    //       $scope.$apply();
-    //     });
-    //     console.log('Image URI: ' + results[i]);
-    //   }
-    // }, function(error) {
-    //   // error getting photos
-    // });
   };
 
   $scope.addReview = function(review) {
@@ -127,8 +110,6 @@ app.controller('HomeTabCtrl',
       $scope.review.rating = 0;
       $scope.rating.rate = 0;
       $scope.images = [];
-
-
     })
     var restaurant_owner = Restaurant.getOwner(id);
     Database.notifications().$add({
@@ -208,16 +189,8 @@ app.controller('HomeTabCtrl',
     })
   }
 
-  $scope.direction =[];
-  $scope.currentLocation ={};
   $scope.markers =[];
-  $scope.restaurantMarkers =[];
   $scope.map =  {center: { latitude: 10.729984, longitude: 122.549298 }, zoom: 12, options: {scrollwheel: false}, bounds: {}};
-
-  var options = {timeout: 10000, enableHighAccuracy: true};
-  $cordovaGeolocation.getCurrentPosition(options).then(function(position){
-    $scope.currentLocation = {latitude: position.coords.latitude,longitude: position.coords.longitude};
-  });
 
   $scope.setMap = function(restaurant){
       $scope.map =  {center:{latitude: restaurant.latitude, longitude: restaurant.longitude}, zoom: 14, options: {scrollwheel: false}, bounds: {}};
@@ -226,10 +199,14 @@ app.controller('HomeTabCtrl',
       });
   };
 
-  $scope.addMarker = function(restaurant){
-    $scope.markers.push({id: restaurant.$id,
-      coords: {latitude:restaurant.latitude, longitude:restaurant.longitude}
-    });
+  $scope.addMarkers = function(items){
+     $scope.markers.length = 0;
+     for (var i = 0; i < items.length; i++) {
+      $scope.markers.push({id: items[i].$id,
+        coords: {latitude:items[i].latitude, longitude:items[i].longitude}
+      });
+    }
+
   };
 
   $scope.markerEvents = {
@@ -237,40 +214,7 @@ app.controller('HomeTabCtrl',
         $state.go("tabs.viewRestaurant",{restaurantId:model.id});
     }
   };
-
-  $scope.showPath =  function(restaurant){
-    $scope.map.zoom = 12;
-    var direction = new google.maps.DirectionsService();
-    var request = {
-      origin: {lat:$scope.currentLocation.latitude,lng:$scope.currentLocation.longitude},
-      destination: {lat: restaurant.latitude, lng: restaurant.longitude},
-      travelMode: google.maps.DirectionsTravelMode['DRIVING'],
-      optimizeWaypoints: true
-    };
-
-    $scope.restaurantMarkers.push({id: Date.now(),
-      coords:{latitude:$scope.currentLocation.latitude, longitude:$scope.currentLocation.longitude}
-    });
-
-    direction.route(request, function(response, status){
-      var steps = response.routes[0].legs[0].steps;
-      var distance =response.routes[0].legs[0].distance.value/1000;
-      for(i=0; i<steps.length; i++){
-        var strokeColor = '#049ce5';
-        if((i%2) === 0){
-          strokeColor = '#FF9E00';
-        }
-        $scope.direction.push({id:i,paths:steps[i].path, stroke: {
-            color: strokeColor,
-            weight: 5
-        }});
-        }
-        $scope.restaurantMarkers[0].icon = new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_bubble_icon_texts_big&chld=restaurant|edge_bc|FFBB00|000000|'
-            + restaurant.name +'|Distance: '+ distance + 'km');
-        $scope.$apply();
-    });
-  };
-
+  
   $scope.CallNumber = function(number){
      window.plugins.CallNumber.callNumber(function(){
       console.log("call success");

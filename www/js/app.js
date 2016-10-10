@@ -32,7 +32,9 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', function($i
   });
 }]);
 
+
 app.controller('AppCtrl', function($scope, $ionicSideMenuDelegate, Auth, User, Database,$state) {
+
   $scope.showMenu = function() {
   $ionicSideMenuDelegate.toggleLeft();
   };
@@ -57,7 +59,7 @@ app.controller('AppCtrl', function($scope, $ionicSideMenuDelegate, Auth, User, D
     if (firebaseUser) {
       if (firebaseUser.providerData[0].providerId == "facebook.com") {
         console.log("facebook provider");
-        $scope.firebaseUser = firebaseUser.displayName;
+        $scope.firebaseUser = firebaseUser;
         $scope.photoURL = firebaseUser.providerData[0].photoURL;
       } else { //providerId == password
         console.log("email provider");
@@ -68,5 +70,19 @@ app.controller('AppCtrl', function($scope, $ionicSideMenuDelegate, Auth, User, D
         $scope.firebaseUser = User.auth();
       }
     }
+    else {
+      console.log("NOT LOGGED IN")
+    }
   });
 })
+
+.controller('TabsCtrl', function($scope, Auth) {
+  Auth.$onAuthStateChanged(function(firebaseUser) {
+    if (firebaseUser) {
+      $scope.firebaseUser = firebaseUser;
+    }
+    else {
+      console.log("NOT LOGGED IN SA TABS")
+    }
+  });
+});

@@ -1,7 +1,7 @@
 app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "User", "MenusWithAvg", "Database",
   function($firebaseAuth , $firebaseArray , $firebaseObject, User, MenusWithAvg, Database){
 
-  var authUserId = User.auth().$id;
+  
 
   var restaurants = Database.restaurantsReference();
   var pendingRestaurants = Database.pendingsReference();
@@ -20,6 +20,7 @@ app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "U
         return restaurantsArray;
     },
     getAuthUserRestaurants : function() {
+      var authUserId = User.auth().$id;
         return $firebaseArray(restaurants.orderByChild("owner_id").equalTo(authUserId))
     },
     get : function(restaurantId) {
