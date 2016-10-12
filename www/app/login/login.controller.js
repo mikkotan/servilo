@@ -5,6 +5,101 @@ app.controller("LoginCtrl",["$scope" , "$firebaseArray", "$firebaseAuth", "$fire
 
   ionicMaterialInk.displayEffect();
 
+  $scope.googleLogin = function() {
+    window.plugins.googleplus.login(
+      {
+        // 'scopes': '... ', // optional, space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
+        // 'webClientId': 'client id of the web app/server side', // optional clientId of your Web application from Credentials settings of your project - On Android, this MUST be included to get an idToken. On iOS, it is not required.
+        'webClientId': '155324175920-s00ut5rm6o0jjv7bhltb7l88tgevcjlt.apps.googleusercontent.com'
+        // 'offline': true, // optional, but requires the webClientId - if set to true the plugin will also return a serverAuthCode, which can be used to grant offline access to a non-Google server
+      },
+      function (obj) {
+        alert(JSON.stringify(obj)); // do something useful instead of alerting
+        console.log(obj.idToken);
+        console.log(obj.email);
+        console.log(obj.imageURL);
+        console.log(obj.displayName);
+        Auth.$signInWithCredential(firebase.auth.GoogleAuthProvider.credential(obj.idToken)).then(
+        function(succes){
+          var ref = firebase.database().ref().child("users").child(succes.uid);
+          ref.set({
+            displayName : succes.displayName,
+            provider: "google",
+            startedAt : firebase.database.ServerValue.TIMESTAMP
+          },function(error) {
+            if(error) {
+              $ionicLoading.hide();
+              console.log("hello error" + error);
+            }
+            else {
+              console.log("no error means succues");
+            }
+          })
+        },
+        function(error) {
+
+        })
+      },
+      function (msg) {
+        alert('error: ' + msg);
+      }
+    );
+  }
+
+  $scope.disconnect = function() {
+    window.plugins.googleplus.disconnect(
+      function (msg) {
+        alert(msg); // do something useful instead of alerting
+      }
+    );
+  }
+
+  $scope.glogout = function() {
+    window.plugins.googleplus.logout(
+      function (msg) {
+        alert(msg); // do something useful instead of alerting
+      }
+    );
+  }
+
+  $scope.twitterLogin = function() {
+    TwitterConnect.login(
+      function(result) {
+        console.log('Successful login!');
+        console.log(result.userName);
+        Auth.$signInWithCredential(firebase.auth.TwitterAuthProvider.credential(result.token, result.secret)).then(
+        function(succes){
+          var ref = firebase.database().ref().child("users").child(succes.uid);
+          ref.set({
+            displayName : succes.displayName,
+            provider: "twitter",
+            startedAt : firebase.database.ServerValue.TIMESTAMP
+          },function(error) {
+            if(error) {
+              $ionicLoading.hide();
+              console.log("hello error" + error);
+            }
+            else {
+              console.log("no error means succues");
+            }
+          })
+          console.log(succes.displayName);
+          console.log('Firebase Twitter login success');
+          $ionicLoading.hide();
+          // $state.go("tabs.home")
+        },
+        function(error){
+          $ionicLoading.hide();
+          console.log("error firebase login!!");
+          console.log(error);
+        })
+      }, function(error) {
+        console.log('Error logging in');
+        console.log(error);
+      }
+    );
+  }
+
   $scope.auth = Auth;
 
   $scope.login = function(user){
@@ -38,6 +133,7 @@ app.controller("LoginCtrl",["$scope" , "$firebaseArray", "$firebaseAuth", "$fire
     //   var credential = error.credential;
     //   // ...
     // });
+
     $cordovaOauth.facebook("1697524080497035", ["email", "public_profile"], {redirect_uri: "http://localhost/callback"}).then(function(result){
       $scope.detailsfb = result.access_token;
       $ionicLoading.show();
@@ -71,6 +167,15 @@ app.controller("LoginCtrl",["$scope" , "$firebaseArray", "$firebaseAuth", "$fire
           console.log("errrr!!");
           alert("Error: " + error);
       });
+
+    // facebookConnectPlugin.login(["public_profile", "user_birthday"], 
+    //   function(success) {
+    //     console.log("FB CONNECT GOOD!");
+    //     console.log(success);
+    // }, function(error) {
+    //     console.log("ERROR FB CONNECT");
+    //     console.log(error);
+    // })
   }
 
   Auth.$onAuthStateChanged(function(firebaseUser){
