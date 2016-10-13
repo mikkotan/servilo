@@ -4,7 +4,13 @@
     <div class="padding">
       <h3>{{restaurant.name}}</h3>
 
-      <button class="button button-calm" ng-click="goToMenus()">Menus</button>
+          <button ng-repeat="service in restaurant.services" class="button button-calm"  ng-disabled="!service.status" ng-click="goToMenus(restaurant, service)">
+              {{service.name}}
+          </button>
+      </div>
+
+
+
 
       <p>{{getRestaurantStatus}}</p>
       <p>Restaurant is: {{restaurantOpenStatus}}</p>
