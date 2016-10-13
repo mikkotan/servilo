@@ -165,19 +165,19 @@ app.controller("ViewRestaurantCtrl",["$scope","$state","$firebaseArray","$fireba
     $scope.images = [];
   };
 
-  $ionicModal.fromTemplateUrl('templates/new-review.html', function(reviewModal) {
+  $ionicModal.fromTemplateUrl('app/review/_new-review.html', function(reviewModal) {
     $scope.reviewModal = reviewModal;
   }, {
     scope: $scope
   });
 
-  $ionicModal.fromTemplateUrl('templates/edit-review.html', function(editReviewModal) {
+  $ionicModal.fromTemplateUrl('app/review/_edit-review.html', function(editReviewModal) {
     $scope.editReviewModal = editReviewModal;
   }, {
     scope: $scope
   });
 
-  $ionicModal.fromTemplateUrl('templates/edit-review.html', function(editModalReview) {
+  $ionicModal.fromTemplateUrl('app/review/_edit-review.html', function(editModalReview) {
     $scope.editReviewModal = editModalReview;
   }, {
     scope: $scope

@@ -16,8 +16,8 @@ app.controller('HomeTabCtrl',
   $scope.getAvg = Restaurant.getAveragePrice;
   $scope.getAvgRating = Restaurant.getAverageRating;
   $scope.getReviewer = Review.reviewer;
-  $scope.RestaurantService = Restaurant;
   $scope.openRestaurant = Restaurant.getRestaurantOpenStatus;
+  $scope.RestaurantService = Restaurant;
 
   Auth.$onAuthStateChanged(function(firebaseUser) {
     if(firebaseUser) {
@@ -147,16 +147,16 @@ app.controller('HomeTabCtrl',
     $scope.images = [];
   };
 
-  $ionicModal.fromTemplateUrl('app/review/new-review.html', function(reviewModal) {
-    $scope.reviewModal = reviewModal;
-  }, {
-    scope: $scope
-  });
-  $ionicModal.fromTemplateUrl('app/review/edit-review.html', function(editReviewModal) {
-    $scope.editReviewModal = editReviewModal;
-  }, {
-    scope: $scope
-  });
+  // $ionicModal.fromTemplateUrl('app/review/new-review.html', function(reviewModal) {
+  //   $scope.reviewModal = reviewModal;
+  // }, {
+  //   scope: $scope
+  // });
+  // $ionicModal.fromTemplateUrl('app/review/edit-review.html', function(editReviewModal) {
+  //   $scope.editReviewModal = editReviewModal;
+  // }, {
+  //   scope: $scope
+  // });
 
   // $ionicModal.fromTemplateUrl('templates/edit-review.html', function(editModalReview) {
   //   $scope.editReviewModal = editModalReview;
@@ -214,7 +214,7 @@ app.controller('HomeTabCtrl',
         $state.go("tabs.viewRestaurant",{restaurantId:model.id});
     }
   };
-  
+
   $scope.CallNumber = function(number){
      window.plugins.CallNumber.callNumber(function(){
       console.log("call success");

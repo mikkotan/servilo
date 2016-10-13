@@ -92,7 +92,7 @@ $scope.restaurantStatus.on('value' , function(snap){
 
   }
 
-  $ionicModal.fromTemplateUrl('app/menu/add-cart-modal.html', function(addToCartModal) {
+  $ionicModal.fromTemplateUrl('app/menu/_add-cart-modal.html', function(addToCartModal) {
     $scope.addToCartModal = addToCartModal;
   }, {
     scope: $scope

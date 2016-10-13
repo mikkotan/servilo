@@ -131,13 +131,13 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
     $ionicListDelegate.closeOptionButtons();
   }
 
-  $ionicModal.fromTemplateUrl('app/restaurant/new-restaurant.html', function(restaurantModal) {
+  $ionicModal.fromTemplateUrl('app/restaurant/_new-restaurant.html', function(restaurantModal) {
     $scope.restaurantModal = restaurantModal;
   }, {
     scope: $scope
   });
 
-  $ionicModal.fromTemplateUrl('app/restaurant/edit-restaurant.html', function(restaurantEditModal) {
+  $ionicModal.fromTemplateUrl('app/restaurant/_edit-restaurant.html', function(restaurantEditModal) {
     $scope.restaurantEditModal = restaurantEditModal;
   }, {
     scope: $scope

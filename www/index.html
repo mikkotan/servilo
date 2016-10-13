@@ -83,7 +83,6 @@
 <body ng-app="app">
 
   <ion-side-menus ng-controller="AppCtrl">
-
     <ion-side-menu-content>
       <ion-nav-bar class="bar-assertive">
         <ion-nav-back-button class="button-icon ion-arrow-left-c">
@@ -91,7 +90,6 @@
         <ion-nav-buttons side="left">
           <button class="button button-icon button-clear ion-navicon" ng-click="showMenu()">
           </button>
-
         </ion-nav-buttons>
         <ion-nav-buttons side="right">
           <button ng-click="cart()">Cart
@@ -110,7 +108,8 @@
         <div ng-show="firebaseUser" class="profile">
           <img class="profile-picture" ng-show="photoURL" ng-src="{{photoURL}}">
           <img class="profile-picture" ng-show="!photoURL" ng-src="img/ionic.png" style="width: 50px; height: 50px">
-          <h3 class="name">{{firebaseUser.displayName}}</h3>
+          <h3 class="name" ng-if="firebaseUser.provider === &apos;facebook&apos;">{{firebaseUser.displayName}}</h3>
+          <h3 class="name" ng-if="firebaseUser.provider !== &apos;facebook&apos;">{{firebaseUser.firstName}} {{firebaseUser.lastName}}</h3>
         </div>
         <!-- <div ng-hide="firebaseUser" class="profile">
           <img class="profile-picture" src="{{photoURL}}" ng-show="photoURL != undefined">
@@ -120,13 +119,13 @@
 
       <ion-content has-header="true">
         <ion-list>
-          <ion-item menu-close href="#/tab/home" class="item-sidelist">
+          <ion-item menu-close="" href="#/tab/home" class="item-sidelist">
             Home
           </ion-item>
-          <ion-item menu-close ui-sref="login" ng-hide="firebaseUser">
+          <ion-item menu-close="" ui-sref="login" ng-hide="firebaseUser">
             Login or Signup
           </ion-item>
-          <ion-item menu-close ui-sref="signup" ng-hide="firebaseUser">
+          <ion-item menu-close="" ui-sref="signup" ng-hide="firebaseUser">
             Sign Up
           </ion-item>
           <!-- <li>

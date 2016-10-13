@@ -32,9 +32,7 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', function($i
   });
 }]);
 
-
 app.controller('AppCtrl', function($scope, $ionicSideMenuDelegate, Auth, User, Database,$state) {
-
   $scope.showMenu = function() {
   $ionicSideMenuDelegate.toggleLeft();
   };
@@ -42,16 +40,14 @@ app.controller('AppCtrl', function($scope, $ionicSideMenuDelegate, Auth, User, D
     $ionicSideMenuDelegate.toggleRight();
   };
   $scope.signOut = function() {
-    Database.userOnlineTrue().$loaded().then(function(loaded){
-      loaded.$remove(0).then(function(ref){
+    Database.userOnlineTrue().$loaded().then(function(loaded) {
+      loaded.$remove(0).then(function(ref) {
         console.log("success")
         Auth.$signOut();
         location.reload();
-      }).catch(function(err){
+      }).catch(function(err) {
         console.log(err)
       })
-    }).catch(err => {
-      console.log(err)
     })
   }
 

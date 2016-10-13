@@ -34,7 +34,7 @@ app.controller("ViewRestaurantMenu",["$scope","$stateParams","restaurantMenu", "
     })
   }
 
-  $ionicModal.fromTemplateUrl('app/menu/edit-menu.html', function(modalEditMenu) {
+  $ionicModal.fromTemplateUrl('app/menu/_edit-menu.html', function(modalEditMenu) {
     $scope.menuEditModal = modalEditMenu;
   }, {
     scope: $scope

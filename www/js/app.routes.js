@@ -15,7 +15,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,fir
       url: "/home",
       views: {
         'home-tab': {
-          templateUrl: "app/home/home.html",
+          templateUrl: "app/home/_home.html",
           controller: 'HomeTabCtrl',
           resolve : {
             currentAuth : function(Auth) {
@@ -32,7 +32,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,fir
       url: "/viewRestaurant/:restaurantId",
       views: {
         'home-tab': {
-          templateUrl: "app/restaurant/view-restaurant.html",
+          templateUrl: "app/restaurant/_view-restaurant.html",
           controller: "ViewRestaurantCtrl",
           resolve: {
             currentAuth : function(Auth) {
@@ -53,7 +53,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,fir
         // url: "/restaurantName/menus/:restaurantId",
         views: {
           'restaurantmenus-tab' : {
-            templateUrl: "app/menu/view-restaurant-menus-order.html",
+            templateUrl: "app/menu/_view-restaurant-menus-order.html",
             controller: "ViewRestaurantMenuOrder",
             resolve: {
               restaurantMenus : function(Menu , $stateParams){
@@ -70,7 +70,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,fir
         url: "/restaurant/menus/:restaurantId",
         views: {
           'restaurant-tab': {
-            templateUrl: "app/menu/view-restaurant-menus.html",
+            templateUrl: "app/menu/_view-restaurant-menus.html",
             controller: "ViewRestaurantMenu",
             resolve: {
               restaurantMenu : function(Menu , $stateParams){
@@ -84,7 +84,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,fir
         url: "/menu/add/:restaurantId",
         views:{
           'restaurant-tab':{
-            templateUrl: "app/menu/add-menu.html",
+            templateUrl: "app/menu/_add-menu.html",
             controller: "AddMenuCtrl",
             resolve: {
               menus : function(Menu){
@@ -101,7 +101,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,fir
         url: "/menu",
         views: {
           'menu-tab': {
-            templateUrl: "app/menu/menus.html",
+            templateUrl: "app/menu/_menus.html",
             controller:"MenuCtrl",
             resolve: {
               menus : function(Menu){
@@ -115,7 +115,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,fir
       url: "/contact",
       views: {
         'contact-tab': {
-          templateUrl: "app/user/users.html",
+          templateUrl: "app/user/_users.html",
           controller: "UsersCtrl"
         }
       }
@@ -127,7 +127,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,fir
       },
       views: {
         'cart-tab': {
-          templateUrl: "app/cart/cart.html",
+          templateUrl: "app/cart/_cart.html",
           controller: "CartCtrl",
           resolve : {
             orders : function(Order){
@@ -147,7 +147,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,fir
       url: "/orders",
       views:{
         'order-tab':{
-          templateUrl:"app/order/orders.html",
+          templateUrl:"app/order/_orders.html",
           controller:"OrderCtrl",
           resolve: {
             restaurants : function(Restaurant){
@@ -161,7 +161,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,fir
       url:"/signup",
       views: {
         'signup-tab': {
-          templateUrl: "app/signup/signup.html",
+          templateUrl: "app/signup/_signup.html",
           controller: "SignUpCtrl"
         }
       }
@@ -170,7 +170,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,fir
       url:"/notifications",
       views : {
         'notifications-tab' : {
-          templateUrl: 'app/notification/notifications.html',
+          templateUrl: 'app/notification/_notifications.html',
           controller: "NotificationsCtrl",
           resolve : {
             notifications : function(User) {
@@ -182,14 +182,14 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,fir
     })
     .state('login', {
       url: "/login",
-      templateUrl: "app/login/login.html",
+      templateUrl: "app/login/_login.html",
       controller: "LoginCtrl"
     })
     .state('tabs.restaurant', {
       url: "/restaurant",
       views: {
         'restaurant-tab': {
-          templateUrl: "app/restaurant/restaurants.html",
+          templateUrl: "app/restaurant/_restaurants.html",
           controller: "RestaurantCtrl",
           resolve: {
             "currentAuth": ["Auth", function(Auth) {
@@ -201,7 +201,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,fir
     })
     .state('signup', {
       url: "/signup",
-      templateUrl: "app/signup/signup.html",
+      templateUrl: "app/signup/_signup.html",
       controller: "SignUpCtrl"
     });
 
