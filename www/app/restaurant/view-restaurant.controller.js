@@ -28,8 +28,22 @@ app.controller("ViewRestaurantCtrl",["$scope","$state","$firebaseArray","$fireba
     })
   }
 
-  $scope.goToMenus = function(){
-      $state.go("tabs.restaurantMenus",{restaurantId:id})
+  $scope.goToMenus = function(restaurant,service){
+      transaction  = {}
+      switch (service.name) {
+        case "online" :
+            $state.go("tabs.restaurantMenus",{restaurantId:id})
+            transaction.serviceType = "online"
+            transaction.restaurant_id = restaurant.$id
+            transaction.customer_id = "myId"
+          break;
+        case "reserve" :
+            console.log("wala pa sir")
+          break;
+        default:
+
+      }
+
   }
 
   $scope.restaurantOpenStatus = Restaurant.getRestaurantOpenStatus(id)
