@@ -1,4 +1,5 @@
-app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera", "$cordovaGeolocation",
+app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate",
+  "Restaurant", "$cordovaCamera", "$cordovaGeolocation",
   function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, $cordovaGeolocation) {
     var total = 123;
     $scope.modalControl = {};
@@ -21,6 +22,16 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
         console.log("NOT LOGGED IN");
       }
     });
+
+  $scope.changeServiceStatus = function(restaurant,service){
+
+    var resRef = firebase.database().ref().child("restaurants").child(restaurant.$id).child('services').child(service.name);
+
+    resRef.update({
+        status : service.status
+    })
+
+  };
 
   $scope.changeAvailability = function(restaurant){
     var resRef = firebase.database().ref().child("restaurants").child(restaurant.$id);
@@ -62,6 +73,20 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
   $scope.addRestaurant = function(restaurant){
     $scope.pendingRestaurants.$add({
       name: restaurant.name,
+      services : {
+        online : {
+          name : "online",
+          status : false
+        },
+        reserve : {
+          name : "reserve",
+          status : false
+        },
+        cater : {
+          name : "cater",
+          status : false
+        }
+      },
       availability : false,
       location: restaurant.location,
       latitude: $scope.marker.coords.latitude,
