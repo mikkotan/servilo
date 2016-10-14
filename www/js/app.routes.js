@@ -217,6 +217,24 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,fir
       url: "/signup",
       templateUrl: "app/signup/_signup.html",
       controller: "SignUpCtrl"
+    })
+    .state('tabs.profile', {
+      url: "/profile",
+      views: {
+        'profile-tab': {
+          templateUrl: "app/profile/_profile.html",
+          controller: "ProfileCtrl"
+        }
+      }
+    })
+    .state('tabs.edit-profile', {
+      url: "/edit-profile",
+      views: {
+        'profile-tab': {
+          templateUrl: "app/profile/_edit-profile.html",
+          controller: "ProfileCtrl"
+        }
+      }
     });
 
 

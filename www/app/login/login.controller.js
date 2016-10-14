@@ -1,5 +1,5 @@
-app.controller("LoginCtrl",["$scope", "Auth", "ionicMaterialInk", "ionicMaterialMotion", "User", "$state", "$cordovaOauth", "$ionicLoading", "$ionicModal", "Database",
-    function($scope, Auth, ionicMaterialInk, ionicMaterialMotion, User, $state, $cordovaOauth, $ionicLoading, $ionicModal, Database){
+app.controller("LoginCtrl",["$scope", "Auth", "ionicMaterialInk", "ionicMaterialMotion", "User", "$state", "$ionicLoading", "$ionicModal", "Database",
+  function($scope, Auth, ionicMaterialInk, ionicMaterialMotion, User, $state, $ionicLoading, $ionicModal, Database){
 
   ionicMaterialInk.displayEffect();
 
@@ -90,34 +90,6 @@ app.controller("LoginCtrl",["$scope", "Auth", "ionicMaterialInk", "ionicMaterial
     });
   };
   $scope.fbLogin = function() {
-    // $cordovaOauth.facebook("1697524080497035", ["email", "public_profile"], {redirect_uri: "http://localhost/callback"})
-    // .then(function(result){
-    //   $ionicLoading.show();
-    //   Auth.$signInWithCredential(firebase.auth.FacebookAuthProvider.credential(result.access_token)).then(
-    //     function(succes){
-    //       var ref = firebase.database().ref().child("users").child(succes.uid);
-    //       ref.set({
-    //         displayName : succes.displayName,
-    //         provider: "facebook",
-    //         startedAt : firebase.database.ServerValue.TIMESTAMP
-    //       },function(error) {
-    //         $ionicLoading.hide();
-    //         console.log("hello error" + error);
-    //       })
-    //       console.log(succes.displayName);
-    //       console.log('Firebase Facebook login success');
-    //       $ionicLoading.hide();
-    //       $state.go("tabs.home")
-    //     },
-    //     function(error){
-    //       $ionicLoading.hide();
-    //       console.log('error!!: ' + error);
-    //     });
-    //   }, function(error){
-    //       $ionicLoading.hide();
-    //       console.log('errrr!!' + error);
-    //   });
-
     facebookConnectPlugin.login(["public_profile", "user_birthday"], 
       function(result) {
         Auth.$signInWithCredential(firebase.auth.FacebookAuthProvider.credential(result.authResponse.accessToken)).then(

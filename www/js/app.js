@@ -43,21 +43,19 @@ app.controller('AppCtrl', function($scope, $ionicSideMenuDelegate, Auth, User, D
     Database.userOnlineTrue().$loaded().then(function(loaded) {
       loaded.$remove(0).then(function(ref) {
         console.log("success")
+        var firebaseUser = Auth.$getAuth();
+        if(firebaseUser){
+          console.log(firebaseUser);
+        }
         Auth.$signOut();
         location.reload();
       }).catch(function(err) {
         console.log(err)
       })
     });
-    // TwitterConnect.logout(function() {
-    //   console.log('Successful logout!');
-    //   }, function() {
-    //     console.log('Error logging out');
-    //   }
-    // );
-    facebookConnectPlugin.logout();
-    TwitterConnect.logout();
-    window.plugins.googleplus.disconnect();
+    // facebookConnectPlugin.logout();
+    // TwitterConnect.logout();
+    // window.plugins.googleplus.disconnect();
   }
 
   Auth.$onAuthStateChanged(function(firebaseUser) {
