@@ -1,7 +1,8 @@
-app.controller("AddMenuCtrl",["$scope","$stateParams","menus","$firebaseArray","$firebaseObject","$state","restaurantId","$cordovaCamera","Database",
-  function($scope ,$stateParams,menus,$firebaseArray,$firebaseObject,$state,restaurantId, $cordovaCamera, Database){
+app.controller("AddMenuCtrl",["$scope","$stateParams","menus","$firebaseArray","$firebaseObject","$state","restaurantId","$cordovaCamera","Database", "Restaurant",
+  function($scope ,$stateParams,menus,$firebaseArray,$firebaseObject,$state,restaurantId, $cordovaCamera, Database, Restaurant){
 
     $scope.menus = menus;
+    $scope.restaurant = Restaurant.get(restaurantId);
 
     //WET CODE restaurants.controller.js
     $scope.imageURL = "";

@@ -6,6 +6,38 @@ $scope.restaurantId = restaurantId
 $scope.cartData = CartData.get();
 $scope.totalPrice = CartData.totalPrice();
 
+$scope.orderTypeList = [
+  {
+    text : 'Delivery',
+    value: {
+      type : 'delivery',
+      status : {
+        cancelled : false,
+        confirmed : false,
+        done : false,
+        onDelivery : false,
+        delivered : false
+      }
+    }
+  },
+  {
+    text : 'Pick up',
+    pickupTime : new Date(),
+    value: {
+      type : 'pickup',
+      status : {
+        cancelled : false,
+        confirmed : false,
+        done : false,
+        readyToPickup : false
+      }
+    }
+  }
+]
+
+$scope.data = {
+  orderVal : ''
+}
 
 $scope.add = function(orderMenu){
   var order = $scope.cartData.indexOf(orderMenu);
@@ -49,6 +81,11 @@ $scope.$watch('cartData',function(newArray){
   })
 },true);
 
+$scope.$watch('data.orderVal.pickupTime', function(newValue){
+  console.log("NEW VALUE OKAY++ "+newValue);
+  $scope.data.orderVal.pickupTime = newValue.getTime();
+})
+
 
 $scope.$watch('totalPrice',function(newValue){
       var price = 0;
@@ -78,10 +115,12 @@ $scope.buy = function(cart , location){
         location : location,
         menus : scanCart(cart),
         totalprice : $scope.total,
+        orderType : $scope.data.orderVal,
         timestamp: firebase.database.ServerValue.TIMESTAMP
       }).then(function(){
           CartData.get().length = 0;
           CartData.totalPrice().length = 0;
+          console.log($scope.data.orderVal);
           var restaurant_owner = Restaurant.getOwner(restaurantId);
           Database.notifications().$add({
             sender_id : authUser.$id,
@@ -90,6 +129,8 @@ $scope.buy = function(cart , location){
             type : 'order',
             timestamp: firebase.database.ServerValue.TIMESTAMP
           });
+          $scope.data.orderVal = '',
+          $scope.data.pickupTime = '',
           alert("success")
       }).catch(function(error){
             alert(error);
