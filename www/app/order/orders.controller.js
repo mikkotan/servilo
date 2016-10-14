@@ -11,4 +11,7 @@ app.controller("OrderCtrl",["$scope","restaurants","Restaurant","User","Menu",
     $scope.customer_name = User.getUserFullname;
     $scope.orderMenu = Menu.get;
 
+    $scope.changeOrderStatus = function(restaurantId, key) {
+      console.log('toggled');
+    }
 }]);

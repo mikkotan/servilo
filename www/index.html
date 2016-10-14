@@ -108,8 +108,8 @@
         <div ng-show="firebaseUser" class="profile">
           <img class="profile-picture" ng-show="photoURL" ng-src="{{photoURL}}">
           <img class="profile-picture" ng-show="!photoURL" ng-src="img/ionic.png" style="width: 50px; height: 50px">
-          <h3 class="name" ng-if="firebaseUser.provider !== &apos;email&apos;">{{firebaseUser.displayName}}</h3> 
-          <h3 class="name" ng-if="firebaseUser.provider === &apos;email&apos;">{{firebaseUser.firstName}} {{firebaseUser.lastName}}</h3>
+          <h3 class="name" ng-if="firebaseUser.provider !== &apos;email&apos;">{{firebaseUser.displayName}}</h3>
+          <h3 class="name" ng-if="firebaseUser.provider === email">{{firebaseUser.firstName}} {{firebaseUser.lastName}}</h3>
         </div>
         <!-- <div ng-hide="firebaseUser" class="profile">
           <img class="profile-picture" src="{{photoURL}}" ng-show="photoURL != undefined">

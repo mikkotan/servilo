@@ -28,6 +28,9 @@
               <p>
                 Total : {{order.totalprice}}
               </p>
+              <ion-checkbox ng-repeat="(key, val) in order.orderStatus" ng-model="order.orderStatus[key]" ng-change="changeOrderStatus(data.restaurant.$id, key)">
+                {{key}} : {{val}}
+              </ion-checkbox>
             </ion-item>
         </ion-item>
       </ion-list>
