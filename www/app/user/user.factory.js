@@ -6,6 +6,7 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
   var usersObj = $firebaseArray(users);
   var restaurantsRef = Database.restaurantsReference();
   var notificationsRef = Database.notificationsReference();
+  var ordersRef = Database.ordersReference();
 
   return {
     auth : function() {
@@ -23,6 +24,9 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
     },
     getAuthNotifications : function() {
       return $firebaseArray(notificationsRef.orderByChild('receiver_id').equalTo(firebase.auth().currentUser.uid));
+    },
+    getAuthOrders : function() {
+      return $firebaseArray(ordersRef.orderByChild('customer_id').equalTo(firebase.auth().currentUser.uid));
     },
     getUserFullname : function(id){
       return  usersObj.$getRecord(id).firstName + " " + usersObj.$getRecord(id).lastName;

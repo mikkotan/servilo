@@ -199,6 +199,20 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,fir
         }
       }
     })
+    .state('tabs.myOrders', {
+      url: "/myorders",
+      views: {
+        'myorders-tab': {
+          templateUrl: "app/order/_my-orders.html",
+          controller: "MyOrdersCtrl",
+          resolve: {
+            orders : function(User) {
+              return User.getAuthOrders().$loaded();
+            }
+          }
+        }
+      }
+    })
     .state('signup', {
       url: "/signup",
       templateUrl: "app/signup/_signup.html",
