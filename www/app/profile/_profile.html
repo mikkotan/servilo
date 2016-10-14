@@ -1,0 +1,21 @@
+<ion-view view-title="Profile">
+  <ion-content class="padding">
+    <ion-list>
+      <div ng-show="firebaseUser">
+        <img class="profile-picture" ng-show="photoURL" ng-src="{{photoURL}}">
+        <img class="profile-picture" ng-show="!photoURL" ng-src="img/ionic.png" style="width: 50px; height: 50px">
+        <h3>{{firebaseUser.displayName}}</h3>
+        <div ng-if="firebaseUser.description">
+          {{ firebaseUser.description }}
+        </div>
+        <div ng-if="!firebaseUser.description">
+          <a href="#">Add a description</a>
+        </div>
+        <button class="button" ui-sref="tabs.edit-profile">Edit Profile</button>
+      </div>
+      <div>
+        <h2>Activities</h2>
+      </div>
+    </ion-list>
+  </ion-content>
+</ion-view>
