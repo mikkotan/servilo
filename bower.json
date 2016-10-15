@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "ion-datetime-picker": "^0.3.1",
-    "angular-timeago": "^0.4.3"
+    "angular-timeago": "^0.4.3",
+    "ionic-social-buttons": "~1.1.1"
   }
 }

@@ -199,10 +199,42 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,fir
         }
       }
     })
+    .state('tabs.myOrders', {
+      url: "/myorders",
+      views: {
+        'myorders-tab': {
+          templateUrl: "app/order/_my-orders.html",
+          controller: "MyOrdersCtrl",
+          resolve: {
+            orders : function(User) {
+              return User.getAuthOrders().$loaded();
+            }
+          }
+        }
+      }
+    })
     .state('signup', {
       url: "/signup",
       templateUrl: "app/signup/_signup.html",
       controller: "SignUpCtrl"
+    })
+    .state('tabs.profile', {
+      url: "/profile",
+      views: {
+        'profile-tab': {
+          templateUrl: "app/profile/_profile.html",
+          controller: "ProfileCtrl"
+        }
+      }
+    })
+    .state('tabs.edit-profile', {
+      url: "/edit-profile",
+      views: {
+        'profile-tab': {
+          templateUrl: "app/profile/_edit-profile.html",
+          controller: "ProfileCtrl"
+        }
+      }
     });
 
 

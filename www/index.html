@@ -52,6 +52,7 @@
   <!-- notification -->
   <script src="app/notification/notifications.controller.js"></script>
   <!-- order -->
+  <script src="app/order/my-orders.controller.js"></script>
   <script src="app/order/orders.controller.js"></script>
   <script src="app/order/order.service.js"></script>
   <!-- restaurant -->
@@ -69,6 +70,10 @@
   <script src="app/user/user.factory.js"></script>
   <!-- <script src="app/user/user.module.js"></script> -->
   <script src="app/user/user.service.js"></script>
+  <!-- service -->
+  <script src="app/service/service.factory.js"></script>
+  <!-- profile -->
+  <script src="app/profile/profile.controller.js"></script>
   <!-- cordova -->
   <script src="lib/ngCordova/dist/ng-cordova.min.js"></script>
   <script src="lib/ng-cordova-oauth/dist/ng-cordova-oauth.js"></script>
@@ -80,7 +85,7 @@
 
 <body ng-app="app">
 
-  <ion-side-menus ng-controller="AppCtrl">
+  <ion-side-menus ng-controller="AppCtrl" ng-cloak>
     <ion-side-menu-content>
       <ion-nav-bar class="bar-assertive">
         <ion-nav-back-button class="button-icon ion-arrow-left-c">
@@ -106,13 +111,9 @@
         <div ng-show="firebaseUser" class="profile">
           <img class="profile-picture" ng-show="photoURL" ng-src="{{photoURL}}">
           <img class="profile-picture" ng-show="!photoURL" ng-src="img/ionic.png" style="width: 50px; height: 50px">
-          <h3 class="name" ng-if="firebaseUser.provider === &apos;facebook&apos;">{{firebaseUser.displayName}}</h3>
-          <h3 class="name" ng-if="firebaseUser.provider !== &apos;facebook&apos;">{{firebaseUser.firstName}} {{firebaseUser.lastName}}</h3>
+          <h3 class="name" ng-if="firebaseUser.provider !== &apos;email&apos;">{{firebaseUser.displayName}}</h3>
+          <h3 class="name" ng-if="firebaseUser.provider === email">{{firebaseUser.firstName}} {{firebaseUser.lastName}}</h3>
         </div>
-        <!-- <div ng-hide="firebaseUser" class="profile">
-          <img class="profile-picture" src="{{photoURL}}" ng-show="photoURL != undefined">
-          <h3 class="name">{{firebaseUser.firstName}} {{firebaseUser.lastName}}</h3>
-        </div> -->
       </ion-header-bar>
 
       <ion-content has-header="true">

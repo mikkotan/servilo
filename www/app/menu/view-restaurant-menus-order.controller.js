@@ -81,7 +81,7 @@ $scope.restaurantStatus.on('value' , function(snap){
       }else{
         $scope.error = true;
         console.log("error : "+ $scope.error)
-        $scope.errorMessage = menu.quantity + " is invalid"
+        $scope.errorMessage = "Invalid Input "
       }
 
     }else{

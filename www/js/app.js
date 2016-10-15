@@ -43,31 +43,27 @@ app.controller('AppCtrl', function($scope, $ionicSideMenuDelegate, Auth, User, D
     Database.userOnlineTrue().$loaded().then(function(loaded) {
       loaded.$remove(0).then(function(ref) {
         console.log("success")
+        var firebaseUser = Auth.$getAuth();
+        if(firebaseUser){
+          console.log(firebaseUser);
+        }
         Auth.$signOut();
         location.reload();
       }).catch(function(err) {
         console.log(err)
       })
-    })
+    });
+    // facebookConnectPlugin.logout();
+    // TwitterConnect.logout();
+    // window.plugins.googleplus.disconnect();
   }
 
   Auth.$onAuthStateChanged(function(firebaseUser) {
     if (firebaseUser) {
-      if (firebaseUser.providerData[0].providerId == "facebook.com") {
-        console.log("facebook provider");
-        $scope.firebaseUser = firebaseUser;
-        $scope.photoURL = firebaseUser.providerData[0].photoURL;
-      } else { //providerId == password
-        console.log("email provider");
-        // var user = User.auth();
-        // user.$loaded().then(function() {
-        //   $scope.firebaseUser = user.firstName + " " + user.lastName;
-        // })
-        $scope.firebaseUser = User.auth();
+      $scope.firebaseUser = User.auth();
+      if(firebaseUser.displayName) {
+        $scope.photoURL = firebaseUser.photoURL;
       }
-    }
-    else {
-      console.log("NOT LOGGED IN")
     }
   });
 })
@@ -76,9 +72,6 @@ app.controller('AppCtrl', function($scope, $ionicSideMenuDelegate, Auth, User, D
   Auth.$onAuthStateChanged(function(firebaseUser) {
     if (firebaseUser) {
       $scope.firebaseUser = firebaseUser;
-    }
-    else {
-      console.log("NOT LOGGED IN SA TABS")
     }
   });
 });
