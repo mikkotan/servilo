@@ -3,15 +3,28 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var app = angular.module('app', ['ui.mask','ionic', 'ionMdInput', 'ionic-material', 'firebase', 'ionic.rating', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker', 'yaru22.angular-timeago'])
+var app = angular.module('app', ['ui.mask','ionic', 'ionic.cloud', 'ionMdInput', 'ionic-material', 'firebase', 'ionic.rating', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker', 'yaru22.angular-timeago'])
 
-app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', function($ionicPlatform, $rootScope, $state, $templateCache) {
+app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "$ionicPush", function($ionicPlatform, $rootScope, $state, $templateCache, $ionicPush) {
+  $ionicPush.register()
+    .then(function(t) {
+      return $ionicPush.saveToken(t);
+    })
+    .then(function(t) {
+      console.log("Token saved: " + t.token);
+    })
+
   $rootScope.$on("$stateChangeError",
     function(event, toState, toParams, fromState, fromParams, error) {
       if (error === "AUTH_REQUIRED") {
         event.preventDefault();
         $state.go("login")
       }
+    })
+
+    $rootScope.$on('cloud:push:notification', function(event, data) {
+      var msg = data.message;
+      alert(msg.title + ': ' + msg.text);
     })
 
   $templateCache.put('template.tpl.html', '');

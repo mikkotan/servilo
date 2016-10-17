@@ -1,8 +1,26 @@
-app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,firebaseConfigProvider) {
+app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,firebaseConfigProvider, $ionicCloudProvider) {
 
   firebase.initializeApp(firebaseConfigProvider.config);
   $urlRouterProvider.otherwise("/home");
   $ionicConfigProvider.tabs.position('bottom');
+
+  $ionicCloudProvider.init({
+    "core": {
+      "app_id": "dd588ad9"
+    },
+    "push": {
+      "sender_id": "155324175920",
+      "pluginConfig": {
+        "ios": {
+          "badge": true,
+          "sound": true
+        },
+        "android": {
+          "iconColor": "#343434"
+        }
+      }
+    }
+  })
 
   $stateProvider
     .state('tabs', {
