@@ -1,5 +1,5 @@
-app.controller("LoginCtrl",["$scope", "Auth", "ionicMaterialInk", "ionicMaterialMotion", "User", "$state", "$ionicLoading", "$ionicModal", "Database",
-  function($scope, Auth, ionicMaterialInk, ionicMaterialMotion, User, $state, $ionicLoading, $ionicModal, Database){
+app.controller("LoginCtrl",["$scope", "Auth", "ionicMaterialInk", "ionicMaterialMotion", "User", "$state", "$ionicLoading", "$ionicModal", "Database", "$ionicPush",
+  function($scope, Auth, ionicMaterialInk, ionicMaterialMotion, User, $state, $ionicLoading, $ionicModal, Database, $ionicPush){
 
   ionicMaterialInk.displayEffect();
 
@@ -80,6 +80,16 @@ app.controller("LoginCtrl",["$scope", "Auth", "ionicMaterialInk", "ionicMaterial
     // console.log(user.password);
     $ionicLoading.show();
     Auth.$signInWithEmailAndPassword(user.email, user.password).then(function(authUser){
+      $ionicPush.register()
+        .then(function(t) {
+          return $ionicPush.saveToken(t);
+        })
+        .then(function(t) {
+          var currentAuthRef = Database.usersReference().child(User.auth().$id).child('device_token');
+          currentAuthRef.set(t.token);
+          console.log("Token saved: " + t.token);
+        })
+        
       $state.go("tabs.home")
       $ionicLoading.hide();
       user.password = "";
@@ -90,7 +100,7 @@ app.controller("LoginCtrl",["$scope", "Auth", "ionicMaterialInk", "ionicMaterial
     });
   };
   $scope.fbLogin = function() {
-    facebookConnectPlugin.login(["public_profile", "user_birthday"], 
+    facebookConnectPlugin.login(["public_profile", "user_birthday"],
       function(result) {
         Auth.$signInWithCredential(firebase.auth.FacebookAuthProvider.credential(result.authResponse.accessToken)).then(
         function(success){

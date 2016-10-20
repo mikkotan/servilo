@@ -5,12 +5,14 @@
 // the 2nd parameter is an array of 'requires'
 var app = angular.module('app', ['ui.mask','ionic', 'ionic.cloud', 'ionMdInput', 'ionic-material', 'firebase', 'ionic.rating', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker', 'yaru22.angular-timeago'])
 
-app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "$ionicPush", function($ionicPlatform, $rootScope, $state, $templateCache, $ionicPush) {
+app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "$ionicPush", "User", "Database", function($ionicPlatform, $rootScope, $state, $templateCache, $ionicPush, User, Database) {
   $ionicPush.register()
     .then(function(t) {
       return $ionicPush.saveToken(t);
     })
     .then(function(t) {
+      var currentAuthRef = Database.usersReference().child(User.auth().$id).child('device_token');
+      currentAuthRef.set(t.token);
       console.log("Token saved: " + t.token);
     })
 
