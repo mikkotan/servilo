@@ -28,6 +28,13 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
     getAuthOrders : function() {
       return $firebaseArray(ordersRef.orderByChild('customer_id').equalTo(firebase.auth().currentUser.uid));
     },
+    getAuthDeviceTokens : function() {
+      var authId = firebase.auth().currentUser.uid;
+      var usrRef = firebase.database().ref().child('users').child(firebase.auth().currentUser.uid).child('device_token');
+      console.log('calling auth device tokens method ref: '+usrRef);
+      console.log(usrRef);
+      return $firebaseArray(usrRef);
+    },
     getUserFullname : function(id){
       return  usersObj.$getRecord(id).firstName + " " + usersObj.$getRecord(id).lastName;
     },
