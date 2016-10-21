@@ -1,10 +1,10 @@
 app.controller('HomeTabCtrl',
   ["$scope","$ionicModal","$firebaseArray","Auth", "Restaurant", "Home" ,"$stateParams", "$state", "User",
     "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation", "$ionicLoading", "$cordovaImagePicker",
-     "Database", "Review", "restaurants","uiGmapIsReady",
+     "Database", "Review", "restaurants",
         function($scope, $ionicModal, $firebaseArray, Auth, Restaurant, Home, $stateParams, $state,
             User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, $ionicLoading,
-             $cordovaImagePicker, Database, Review, restaurants, IsReady) {
+             $cordovaImagePicker, Database, Review, restaurants) {
 
   console.log('HomeTabCtrl');
 
@@ -189,7 +189,8 @@ app.controller('HomeTabCtrl',
     })
   }
   $scope.currentLocation ={};
-  $scope.markers =[];
+  $scope.markers = [];
+
   $scope.isMarkerCanChange = true;
   $scope.map =  {center: { latitude: 10.729984, longitude: 122.549298 }, zoom: 12, options: {scrollwheel: false}, bounds: {}, control:{}};
 
@@ -198,12 +199,12 @@ app.controller('HomeTabCtrl',
     $scope.currentLocation = {latitude: position.coords.latitude,longitude: position.coords.longitude};
   });
 
-  $scope.setMap = function(restaurant){
-      $scope.map =  {center:{latitude: restaurant.latitude, longitude: restaurant.longitude}, zoom: 14, options: {scrollwheel: false}, bounds: {}, control: {}};
-      $scope.restaurantMarkers.push({id: Date.now(),
-        coords:{latitude:restaurant.latitude, longitude:restaurant.longitude}
-      });
-  };
+  // $scope.setMap = function(restaurant){
+  //     $scope.map =  {center:{latitude: restaurant.latitude, longitude: restaurant.longitude}, zoom: 14, options: {scrollwheel: false}, bounds: {}, control: {}};
+  //     $scope.restaurantMarkers.push({id: Date.now(),
+  //       coords:{latitude:restaurant.latitude, longitude:restaurant.longitude}
+  //     });
+  // };
 
   $scope.addMarkers = function(items){
     if(  $scope.isMarkerCanChange){
@@ -213,13 +214,8 @@ app.controller('HomeTabCtrl',
           coords: {latitude:items[i].latitude, longitude:items[i].longitude}
         });
       }
-      console.log($scope.markers.length);
     }
   };
-
-  IsReady.promise().then(function (maps) {
-      $scope.map.control.refresh();
-  });
 
   $scope.markerEvents = {
     click: function(marker, eventName, model){
@@ -245,8 +241,10 @@ app.controller('HomeTabCtrl',
     $scope.markers = $scope.tempMarkers;
     $scope.markers.push({id:0,
       coords:{latitude: $scope.currentLocation.latitude, longitude:$scope.currentLocation.longitude},
-      icon: new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|0000FF')
+      icon: new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=glyphish_user|FFFFFF')
     });
+    $scope.map.zoom = 15;
+    $scope.map .center ={latitude: $scope.currentLocation.latitude, longitude:$scope.currentLocation.longitude };
     $scope.isMarkerCanChange = false;
   };
 
