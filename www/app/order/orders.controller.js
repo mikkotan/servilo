@@ -19,7 +19,7 @@ app.controller("OrderCtrl",["$scope","restaurants","Restaurant","User","Menu", "
       if (val === true) {
         Database.ordersReference().child(orderId).child('status').set(key);
       }
-      
+
       console.log('Order Reference :' + orderRef);
     }
 }]);
