@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 var app = angular.module('app', ['ui.mask','ionic', 'ionic.cloud', 'ionMdInput', 'ionic-material', 'firebase', 'ionic.rating', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker', 'yaru22.angular-timeago'])
 
-app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "$ionicPush", function($ionicPlatform, $rootScope, $state, $templateCache, $ionicPush) {
+app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "$ionicPush", "User", "Database", function($ionicPlatform, $rootScope, $state, $templateCache, $ionicPush, User, Database) {
   $ionicPush.register()
     .then(function(t) {
       return $ionicPush.saveToken(t);
@@ -45,7 +45,7 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "$ionicPush
   });
 }]);
 
-app.controller('AppCtrl', function($scope, $ionicSideMenuDelegate, Auth, User, Database,$state) {
+app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate, Auth, User, Database, $state, $ionicPush) {
   $scope.showMenu = function() {
   $ionicSideMenuDelegate.toggleLeft();
   };
@@ -53,15 +53,20 @@ app.controller('AppCtrl', function($scope, $ionicSideMenuDelegate, Auth, User, D
     $ionicSideMenuDelegate.toggleRight();
   };
   $scope.signOut = function() {
+    $ionicLoading.show();
+    var ionicTok = $ionicPush.token.token; //comment when testing in browser
+    var res = ionicTok.split(':'); //comment when testing in browser
     Database.userOnlineTrue().$loaded().then(function(loaded) {
       loaded.$remove(0).then(function(ref) {
         console.log("success")
         var firebaseUser = Auth.$getAuth();
-        if(firebaseUser){
-          console.log(firebaseUser);
+        if (firebaseUser) {
+          Database.usersReference().child(firebaseUser.uid).child('device_token').child(res[0]).set(null);
+          // comment line above when testing in browser to prevent error
         }
         Auth.$signOut();
         location.reload();
+        $ionicLoading.hide();
       }).catch(function(err) {
         console.log(err)
       })

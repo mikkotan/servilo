@@ -1,7 +1,8 @@
-app.controller("LoginCtrl",["$scope", "Auth", "ionicMaterialInk", "ionicMaterialMotion", "User", "$state", "$ionicLoading", "$ionicModal", "Database",
-  function($scope, Auth, ionicMaterialInk, ionicMaterialMotion, User, $state, $ionicLoading, $ionicModal, Database){
+app.controller("LoginCtrl",["$scope", "Auth", "ionicMaterialInk", "ionicMaterialMotion", "User", "$state", "$ionicLoading", "$ionicModal", "Database", "$ionicPush",
+  function($scope, Auth, ionicMaterialInk, ionicMaterialMotion, User, $state, $ionicLoading, $ionicModal, Database, $ionicPush){
 
   ionicMaterialInk.displayEffect();
+
 
   $scope.googleLogin = function() {
     window.plugins.googleplus.login(
@@ -78,8 +79,13 @@ app.controller("LoginCtrl",["$scope", "Auth", "ionicMaterialInk", "ionicMaterial
 
   $scope.login = function(user){
     // console.log(user.password);
+    var ionicTok = $ionicPush.token.token; //comment if testing in browser
+    var res = ionicTok.split(':'); //comment if testing in browser
     $ionicLoading.show();
     Auth.$signInWithEmailAndPassword(user.email, user.password).then(function(authUser){
+      var currentAuthRef = Database.usersReference().child(User.auth().$id).child('device_token').child(res[0]); //remove if testing in browser
+      currentAuthRef.set(res[1]); //comment if testing in browser
+
       $state.go("tabs.home")
       $ionicLoading.hide();
       user.password = "";
@@ -90,7 +96,7 @@ app.controller("LoginCtrl",["$scope", "Auth", "ionicMaterialInk", "ionicMaterial
     });
   };
   $scope.fbLogin = function() {
-    facebookConnectPlugin.login(["public_profile", "user_birthday"], 
+    facebookConnectPlugin.login(["public_profile", "user_birthday"],
       function(result) {
         Auth.$signInWithCredential(firebase.auth.FacebookAuthProvider.credential(result.authResponse.accessToken)).then(
         function(success){
