@@ -17,7 +17,7 @@ app.controller("OrderCtrl",["$scope","restaurants","Restaurant","User","Menu", "
       console.log('Key : ' + key + '\nVal : ' + val)
       var orderRef = Database.ordersReference().child(orderId).child('orderStatus').child(key).set(val);
       if (val === true) {
-        Database.ordersReference().child(orderId).child('status').set(key);
+        Database.ordersReference().child(orderId).child('order_details').child('status').set(key);
       }
 
       console.log('Order Reference :' + orderRef);

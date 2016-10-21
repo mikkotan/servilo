@@ -1,10 +1,10 @@
 <ion-view view-title="My Orders">
   <ion-content class="padding">
     <h3>My Orders</h3>
-    <ion-item ng-repeat="order in orders | orderBy:'-timestamp'">
-      <h4>Order #{{order.timestamp}}</h4>
-      <p ng-show="order.status">
-        Status: {{order.status}}
+    <ion-item ng-repeat="order in orders | orderBy:'-order_details.timestamp'">
+      <h4>Order #{{order.order_details.timestamp}}</h4>
+      <p ng-show="order.order_details.status">
+        Status: {{order.order_details.status}}
       </p>
     </ion-item>
   </ion-content>

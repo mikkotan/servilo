@@ -8,7 +8,7 @@
               <p>
               Customer Name: {{customer_name(order.customer_id)}}
               </p>
-              <ion-item ng-repeat="menu in order.menus">
+              <ion-item ng-repeat="menu in order.order_details.menus">
                 <p>
                 Name : {{orderMenu(menu.id).name}}
                 </p>
@@ -23,10 +23,10 @@
                 </p>
               </ion-item>
               <p>
-                Location: {{order.location}}
+                Location: {{order.order_details.location}}
               </p>
               <p>
-                Total : {{order.totalprice}}
+                Total : {{order.order_details.totalprice}}
               </p>
               <ion-checkbox ng-repeat="(key, val) in order.orderStatus" ng-model="order.orderStatus[key]" ng-change="changeOrderStatus(order.$id, key, order.orderStatus[key])">
                 {{key}} : {{val}} {{order.orderStatus[key]}}
