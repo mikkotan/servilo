@@ -42,11 +42,11 @@ app.controller('AppCtrl', function($scope, $ionicSideMenuDelegate, Auth, User, D
   $scope.signOut = function() {
     Database.userOnlineTrue().$loaded().then(function(loaded) {
       loaded.$remove(0).then(function(ref) {
-        console.log("success")
-        var firebaseUser = Auth.$getAuth();
-        if(firebaseUser){
-          console.log(firebaseUser);
-        }
+        console.log("success logout")
+        // var firebaseUser = Auth.$getAuth();
+        // if(firebaseUser){
+        //   console.log(firebaseUser);
+        // }
         Auth.$signOut();
         location.reload();
       }).catch(function(err) {
