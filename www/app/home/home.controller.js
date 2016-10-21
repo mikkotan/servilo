@@ -188,32 +188,73 @@ app.controller('HomeTabCtrl',
       }
     })
   }
+  $scope.currentLocation ={};
+  $scope.markers = [];
 
-  $scope.markers =[];
-  $scope.map =  {center: { latitude: 10.729984, longitude: 122.549298 }, zoom: 12, options: {scrollwheel: false}, bounds: {}};
+  $scope.isMarkerCanChange = true;
+  $scope.map =  {center: { latitude: 10.729984, longitude: 122.549298 }, zoom: 12, options: {scrollwheel: false}, bounds: {}, control:{}};
 
-  $scope.setMap = function(restaurant){
-      $scope.map =  {center:{latitude: restaurant.latitude, longitude: restaurant.longitude}, zoom: 14, options: {scrollwheel: false}, bounds: {}};
-      $scope.restaurantMarkers.push({id: Date.now(),
-        coords:{latitude:restaurant.latitude, longitude:restaurant.longitude}
-      });
-  };
+  var options = {timeout: 10000, enableHighAccuracy: true};
+  $cordovaGeolocation.getCurrentPosition(options).then(function(position){
+    $scope.currentLocation = {latitude: position.coords.latitude,longitude: position.coords.longitude};
+  });
+
+  // $scope.setMap = function(restaurant){
+  //     $scope.map =  {center:{latitude: restaurant.latitude, longitude: restaurant.longitude}, zoom: 14, options: {scrollwheel: false}, bounds: {}, control: {}};
+  //     $scope.restaurantMarkers.push({id: Date.now(),
+  //       coords:{latitude:restaurant.latitude, longitude:restaurant.longitude}
+  //     });
+  // };
 
   $scope.addMarkers = function(items){
-     $scope.markers.length = 0;
-     for (var i = 0; i < items.length; i++) {
-      $scope.markers.push({id: items[i].$id,
-        coords: {latitude:items[i].latitude, longitude:items[i].longitude}
-      });
+    if(  $scope.isMarkerCanChange){
+      $scope.markers.length = 0;
+      for (var i = 0; i < items.length; i++) {
+        $scope.markers.push({id: items[i].$id,
+          coords: {latitude:items[i].latitude, longitude:items[i].longitude}
+        });
+      }
     }
-
   };
 
   $scope.markerEvents = {
     click: function(marker, eventName, model){
+      if(model.id != '0'){
         $state.go("tabs.viewRestaurant",{restaurantId:model.id});
+      }
     }
   };
+
+  $scope.showNear =function(){
+    $scope.tempMarkers = [];
+    for (var i = 0; i < $scope.markers.length; i++) {
+      var p1 = new google.maps.LatLng($scope.markers[i].coords.latitude, $scope.markers[i].coords.longitude);
+      var p2 = new google.maps.LatLng($scope.currentLocation.latitude, $scope.currentLocation.longitude);
+
+      if(calculateDistance(p1,p2)<= 1){
+        $scope.tempMarkers.push({id: $scope.markers[i].id,
+          coords: $scope.markers[i].coords
+        });
+      }
+    }
+    $scope.markers.length =0;
+    $scope.markers = $scope.tempMarkers;
+    $scope.markers.push({id:0,
+      coords:{latitude: $scope.currentLocation.latitude, longitude:$scope.currentLocation.longitude},
+      icon: new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=glyphish_user|FFFFFF')
+    });
+    $scope.map.zoom = 15;
+    $scope.map .center ={latitude: $scope.currentLocation.latitude, longitude:$scope.currentLocation.longitude };
+    $scope.isMarkerCanChange = false;
+  };
+
+  var calculateDistance = function(point1, point2){
+    return(google.maps.geometry.spherical.computeDistanceBetween(point1, point2) / 1000).toFixed(2);
+  };
+
+  $scope.allowMarkerChange = function(){
+    $scope.isMarkerCanChange = true;
+  }
 
   $scope.CallNumber = function(number){
      window.plugins.CallNumber.callNumber(function(){

@@ -1,8 +1,26 @@
-app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,firebaseConfigProvider) {
+app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,firebaseConfigProvider, $ionicCloudProvider) {
 
   firebase.initializeApp(firebaseConfigProvider.config);
   $urlRouterProvider.otherwise("/home");
   $ionicConfigProvider.tabs.position('bottom');
+
+  $ionicCloudProvider.init({
+    "core": {
+      "app_id": "dd588ad9"
+    },
+    "push": {
+      "sender_id": "155324175920",
+      "pluginConfig": {
+        "ios": {
+          "badge": true,
+          "sound": true
+        },
+        "android": {
+          "iconColor": "#343434"
+        }
+      }
+    }
+  })
 
   $stateProvider
     .state('tabs', {
@@ -195,6 +213,20 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,fir
             "currentAuth": ["Auth", function(Auth) {
               return Auth.$requireSignIn();
             }]
+          }
+        }
+      }
+    })
+    .state('tabs.myOrders', {
+      url: "/myorders",
+      views: {
+        'myorders-tab': {
+          templateUrl: "app/order/_my-orders.html",
+          controller: "MyOrdersCtrl",
+          resolve: {
+            orders : function(User) {
+              return User.getAuthOrders().$loaded();
+            }
           }
         }
       }

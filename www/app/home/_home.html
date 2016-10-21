@@ -3,17 +3,21 @@
 
     <label class="item-input-wrapper">
       <i class="icon ion-search placeholder-icon"></i>
-      <input placeholder="Search..." type="search" ng-model="searchRestaurant" >
+      <input placeholder="Search..." type="search" ng-model="searchRestaurant" ng-change="allowMarkerChange()">
     </label>
   </ion-header-bar>
   <ion-content class="padding has-subheader">
     <ion-list>
-      <ui-gmap-google-map zoom='map.zoom' center="map.center" options='map.options' bounds='map.bounds'>
-        <ui-gmap-markers models="markers" coords="'coords'" icon="'icon'" events="markerEvents">
-        </ui-gmap-markers>
-      </ui-gmap-google-map>
+      <div>
+        <ui-gmap-google-map zoom='map.zoom' center="map.center" options='map.options' bounds='map.bounds' control='map.control' refresh=true>
+          <ui-gmap-markers models="markers" coords="'coords'" icon="'icon'" events="markerEvents" doRebuildAll="true"></ui-gmap-markers>
+          <ui-gmap-map-control position="top-right">
+            <button class="button button-small button-balanced" ng-click="showNear()">Nearest restaurant in 1km</button>
+          </ui-gmap-map-control>
+        </ui-gmap-google-map>
+      </div>
       <h3>Restaurants</h3>
-      <div class="card padding" ng-repeat="restaurant in (filteredItems = (restaurants | restaurantFilter:searchRestaurant  | orderBy:'name'))" ng-init="addMarkers(filteredItems)">
+      <div class="card padding" ng-repeat="restaurant in (filteredItems = (restaurants | restaurantFilter:searchRestaurant  | orderBy:'name'))">
         <div class="item item-thumbnail-left">
           <img class="img-thumbnail" ng-if="restaurant.image" ng-src="data:image/jpeg;base64,{{restaurant.image}}"/>
           <img ng-if="!restaurant.image" ng-src="img/wow.jpg">
@@ -34,7 +38,7 @@
           </button>
         </div>
     </div>
-    {{addMarkers(filteredItems)}}
+    <div ng-cloak>{{addMarkers(filteredItems)}}</div>
     </ion-list>
   </ion-content>
 </ion-view>
