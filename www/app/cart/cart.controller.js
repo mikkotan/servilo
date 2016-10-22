@@ -88,10 +88,10 @@ $scope.buy = function(cart , location) {
         },
         orderStatus : {
           cancelled : false,
-          confirmed : false,
-          done : false,
-          onDelivery : false,
-          delivered : false
+          confirmed : false
+          // done : false,
+          // onDelivery : false,
+          // delivered : false
         },
       }).then(function() {
           CartData.get().length = 0;
