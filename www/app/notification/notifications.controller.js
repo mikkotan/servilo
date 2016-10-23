@@ -2,10 +2,17 @@ app.controller("NotificationsCtrl", ["$scope", "$firebaseArray", "User", "Restau
   function($scope, $firebaseArray, User, Restaurant, notifications){
 
     $scope.notifs = notifications;
-
+    console.log($scope.notifs);
     $scope.markReadAll = function() {
       angular.forEach(notifications, function(notif) {
         console.log(notif);
+        notifications.$remove(notif)
+          .then(() => {
+            console.log("success")
+          })
+          .catch((err) => {
+            console.log(err)
+          })
       })
     }
 

@@ -1,5 +1,6 @@
 <ion-view view-title="{{ notifCount }} Notifications">
-  <ion-content overflow-scroll="true">
+  <ion-content overflow-scroll="true" class="padding">
+    <button class="button button-block button-balanced" ng-show="notifs.length != 0" ng-click="markReadAll()">Mark Read All</button>
     <div class="list">
       <a class="item item-icon-left item-icon-right" ng-repeat="notif in newNotifs | orderBy:'-timestamp'" >
         <i ng-if="notif.type === 'review'" class="icon ion-thumbsup balanced"></i>
