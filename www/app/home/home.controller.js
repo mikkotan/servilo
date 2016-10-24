@@ -241,9 +241,12 @@ app.controller('HomeTabCtrl',
     $scope.markers = $scope.tempMarkers;
     $scope.markers.push({id:0,
       coords:{latitude: $scope.currentLocation.latitude, longitude:$scope.currentLocation.longitude},
-      icon: new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=glyphish_user|FFFFFF')
+      icon: {
+        url: 'http://chart.apis.google.com/chart?chst=d_bubble_icon_texts_big&chld=glyphish_user|edge_bc|FFBB00|000000|You+Are+Here',
+        scaledSize: new google.maps.Size(83, 30)
+      }
     });
-    $scope.map.zoom = 15;
+    $scope.map.zoom = 14;
     $scope.map .center ={latitude: $scope.currentLocation.latitude, longitude:$scope.currentLocation.longitude };
     $scope.isMarkerCanChange = false;
   };
