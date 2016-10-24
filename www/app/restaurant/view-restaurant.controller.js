@@ -13,6 +13,7 @@ app.controller("ViewRestaurantCtrl",["$scope","$state","$firebaseArray","$fireba
   var restaurantReviewsRef = Database.reviewsReference().orderByChild('restaurant_id').equalTo(id); //new subs above
   $scope.getReviewer = Review.reviewer;
   $scope.restaurant = Restaurant.get(id);
+  $scope.datetimeValue = new Date();
 
   $scope.restaurantStatus = Restaurant.getRestaurantStatus(Restaurant.get(id).owner_id);
 
@@ -38,7 +39,8 @@ app.controller("ViewRestaurantCtrl",["$scope","$state","$firebaseArray","$fireba
             transaction.customer_id = "myId"
           break;
         case "reserve" :
-            console.log("wala pa sir")
+            console.log("reserve clicked");
+            $scope.addReservationModal.show();
           break;
         default:
 
@@ -182,6 +184,12 @@ app.controller("ViewRestaurantCtrl",["$scope","$state","$firebaseArray","$fireba
   }, {
     scope: $scope
   });
+
+  $ionicModal.fromTemplateUrl('app/reservation/_add-reservation.html', function(addReservationModal) {
+    $scope.addReservationModal = addReservationModal;
+  }, {
+    scope: $scope
+  })
 
   $scope.showConfirmDelete = function(review) {
     var reviewObj = review;
