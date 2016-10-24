@@ -79,17 +79,20 @@ $scope.buy = function(cart , location) {
       $scope.order.$add({
         restaurant_id : restaurantId,
         customer_id : authUser.$id,
-        location : location,
-        menus : scanCart(cart),
-        totalprice : $scope.total,
+        order_details: {
+          location : location,
+          menus : scanCart(cart),
+          totalprice : $scope.total,
+          timestamp: firebase.database.ServerValue.TIMESTAMP,
+          status: 'pending',
+        },
         orderStatus : {
           cancelled : false,
-          confirmed : false,
-          done : false,
-          onDelivery : false,
-          delivered : false
+          confirmed : false
+          // done : false,
+          // onDelivery : false,
+          // delivered : false
         },
-        timestamp: firebase.database.ServerValue.TIMESTAMP
       }).then(function() {
           CartData.get().length = 0;
           CartData.totalPrice().length = 0;
@@ -104,6 +107,7 @@ $scope.buy = function(cart , location) {
           alert("success")
       }).catch(function(error) {
             alert(error);
+            console.log(error);
       });
     }
     else {

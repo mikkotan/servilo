@@ -1,7 +1,7 @@
 app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "User", "MenusWithAvg", "Database",
   function($firebaseAuth , $firebaseArray , $firebaseObject, User, MenusWithAvg, Database){
 
-  
+
 
   var restaurants = Database.restaurantsReference();
   var pendingRestaurants = Database.pendingsReference();

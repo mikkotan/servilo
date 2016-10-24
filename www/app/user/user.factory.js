@@ -25,14 +25,15 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
     getAuthNotifications : function() {
       return $firebaseArray(notificationsRef.orderByChild('receiver_id').equalTo(firebase.auth().currentUser.uid));
     },
+    getAuthNotificationsRef : function() {
+      return notificationsRef.orderByChild('receiver_id').equalTo(firebase.auth().currentUser.uid);
+    },
     getAuthOrders : function() {
       return $firebaseArray(ordersRef.orderByChild('customer_id').equalTo(firebase.auth().currentUser.uid));
     },
     getAuthDeviceTokens : function() {
       var authId = firebase.auth().currentUser.uid;
       var usrRef = firebase.database().ref().child('users').child(firebase.auth().currentUser.uid).child('device_token');
-      console.log('calling auth device tokens method ref: '+usrRef);
-      console.log(usrRef);
       return $firebaseArray(usrRef);
     },
     getUserFullname : function(id){

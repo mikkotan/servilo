@@ -54,14 +54,14 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
   };
   $scope.signOut = function() {
     $ionicLoading.show();
-    var ionicTok = $ionicPush.token.token; //comment when testing in browser
-    var res = ionicTok.split(':'); //comment when testing in browser
+    // var ionicTok = $ionicPush.token.token; //comment when testing in browser
+    // var res = ionicTok.split(':'); //comment when testing in browser
     Database.userOnlineTrue().$loaded().then(function(loaded) {
       loaded.$remove(0).then(function(ref) {
         console.log("success")
         var firebaseUser = Auth.$getAuth();
         if (firebaseUser) {
-          Database.usersReference().child(firebaseUser.uid).child('device_token').child(res[0]).set(null);
+          // Database.usersReference().child(firebaseUser.uid).child('device_token').child(res[0]).set(null);
           // comment line above when testing in browser to prevent error
         }
         Auth.$signOut();
