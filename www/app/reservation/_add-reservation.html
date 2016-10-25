@@ -4,19 +4,19 @@
     <button class="button button-clear button-primary" ng-click="addReservationModal.hide()"><i class="icon ion-ios-close"></i></button>
   </ion-header-bar>
   <ion-content>
-    <form>
+    <form ng-submit="bookReservation(reservation)">
       <div class="list">
         <label class="item item-input">
-          How many person/s:<input type="number" ng-model="menu.price">
+          How many person/s: <input type="number" ng-model="reservation.number_of_persons">
         </label>
-      </div>
-      <div class="item item-icon-left" ion-datetime-picker seconds am-pm ng-model="datetimeValue">
-        <i class="icon ion-ios-barcode-outline positive"></i>
-        With seconds and 12-hour clock:
-        <strong>{{datetimeValue| date: "yyyy-MM-dd h:mm:ss a"}}</strong>
+        <div class="item item-icon-left" ion-datetime-picker am-pm ng-model="reservation.datetime" only-valid="{'after' : 'today', 'inclusive': 'true'}">
+          <i class="icon ion-ios-barcode-outline positive"></i>
+          Date and Time of Reservation
+          <strong>{{reservation.datetime| date: "MMM d, y h:mm a"}}</strong>
+        </div>
       </div>
       <div class="padding">
-        <button type="submit" class="button button-block button-positive">Book</button>
+        <button type="submit" class="button button-block button-positive">Book Now</button>
       </div>
     </form>
   </ion-content>
