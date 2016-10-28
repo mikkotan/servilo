@@ -1,5 +1,5 @@
-app.controller("ViewRestaurantCtrl",["$scope","$state","$firebaseArray","$firebaseObject","Database","$ionicLoading","$ionicModal", "$ionicPopup","$cordovaGeolocation", "$stateParams", "Restaurant", "User", "Review",
-  function($scope,$state,$firebaseArray,$firebaseObject,Database, $ionicLoading, $ionicModal, $ionicPopup, $cordovaGeolocation, $stateParams, Restaurant, User, Review){
+app.controller("ViewRestaurantCtrl",["$scope","$state","$firebaseArray","$firebaseObject","Database","$ionicLoading","$ionicModal", "$ionicPopup","$cordovaGeolocation", "$stateParams", "Restaurant", "User", "Review", "Reservation",
+  function($scope,$state,$firebaseArray,$firebaseObject,Database, $ionicLoading, $ionicModal, $ionicPopup, $cordovaGeolocation, $stateParams, Restaurant, User, Review, Reservation){
 
   console.log("View Restaurant Ctrl")
 
@@ -30,15 +30,15 @@ app.controller("ViewRestaurantCtrl",["$scope","$state","$firebaseArray","$fireba
   }
 
   $scope.bookReservation = function(reservation) {
-    console.log("Booking is clicked");
-    Database.reservations().$add({
+    var reservationObject = {
       datetime: reservation.datetime.getTime(),
       number_of_persons : reservation.number_of_persons,
       status : 'pending',
       user_id : User.auth().$id,
       restaurant_id : id,
       timestamp : firebase.database.ServerValue.TIMESTAMP
-    })
+    }
+    Reservation.create(reservationObject);
     $scope.addReservationModal.hide();
   }
 

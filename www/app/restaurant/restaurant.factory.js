@@ -51,7 +51,9 @@ app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "U
       return $firebaseArray(reviews.orderByChild('restaurant_id').equalTo(restaurantId));
     },
     getOwner : function(restaurantId) {
+      console.log('get owner method');
       var restaurant = restaurantsArray.$getRecord(restaurantId);
+      console.log(restaurant);
       return usersArray.$getRecord(restaurant.owner_id);
     },
     getOrders : function(restaurantId) {
