@@ -22,6 +22,7 @@ app.controller("LoginCtrl",["$scope", "Auth", "ionicMaterialInk", "ionicMaterial
             provider: "google",
             startedAt : firebase.database.ServerValue.TIMESTAMP
           })
+          IonicPushService.registerToAuth();
           console.log('Firebase Google login success');
           $state.go("tabs.home");
         },
@@ -62,6 +63,7 @@ app.controller("LoginCtrl",["$scope", "Auth", "ionicMaterialInk", "ionicMaterial
             provider: "twitter",
             startedAt : firebase.database.ServerValue.TIMESTAMP
           })
+          IonicPushService.registerToAuth();
           console.log(success.displayName);
           console.log('Firebase Twitter login success');
           $state.go("tabs.home");
@@ -106,6 +108,7 @@ app.controller("LoginCtrl",["$scope", "Auth", "ionicMaterialInk", "ionicMaterial
             provider: "facebook",
             startedAt : firebase.database.ServerValue.TIMESTAMP
           })
+          IonicPushService.registerToAuth();
           console.log(success.displayName);
           console.log('Firebase Facebook login success');
           $ionicLoading.hide();
