@@ -1,5 +1,5 @@
-app.controller("LoginCtrl",["$scope", "Auth", "ionicMaterialInk", "ionicMaterialMotion", "User", "$state", "$ionicLoading", "$ionicModal", "Database", "$ionicPush",
-  function($scope, Auth, ionicMaterialInk, ionicMaterialMotion, User, $state, $ionicLoading, $ionicModal, Database, $ionicPush){
+app.controller("LoginCtrl",["$scope", "Auth", "ionicMaterialInk", "ionicMaterialMotion", "User", "$state", "$ionicLoading", "$ionicModal", "Database", "IonicPushService",
+  function($scope, Auth, ionicMaterialInk, ionicMaterialMotion, User, $state, $ionicLoading, $ionicModal, Database, IonicPushService){
 
   ionicMaterialInk.displayEffect();
 
@@ -85,7 +85,7 @@ app.controller("LoginCtrl",["$scope", "Auth", "ionicMaterialInk", "ionicMaterial
     Auth.$signInWithEmailAndPassword(user.email, user.password).then(function(authUser){
       // var currentAuthRef = Database.usersReference().child(User.auth().$id).child('device_token').child(res[0]); //remove if testing in browser
       // currentAuthRef.set(res[1]); //comment if testing in browser
-
+      IonicPushService.registerToAuth();
       $state.go("tabs.home")
       $ionicLoading.hide();
       user.password = "";
