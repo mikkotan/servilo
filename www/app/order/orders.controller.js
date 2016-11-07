@@ -1,5 +1,5 @@
 app.controller("OrderCtrl",["$scope","restaurants","Restaurant","User","Menu", "Database", "Order",
-  function($scope ,restaurants, Restaurant, User, Menu, Database, Order){
+  function($scope, restaurants, Restaurant, User, Menu, Database, Order){
 
     $scope.restaurants = restaurants.map(function(restaurant){
       return {

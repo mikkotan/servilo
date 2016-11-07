@@ -1,19 +1,15 @@
 app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "User", "MenusWithAvg", "Database",
   function($firebaseAuth , $firebaseArray , $firebaseObject, User, MenusWithAvg, Database){
 
-
-
   var restaurants = Database.restaurantsReference();
   var pendingRestaurants = Database.pendingsReference();
   var users = Database.usersReference();
   var menus = Database.menusReference();
   var reviews = Database.reviewsReference();
   var orders = Database.ordersReference();
-
   var pendingRestaurantsArray = Database.pendings();
   var restaurantsArray = Database.restaurants();
   var usersArray = Database.users();
-
 
   var Restaurant = {
     all : function() {

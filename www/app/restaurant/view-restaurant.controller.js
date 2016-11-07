@@ -1,5 +1,5 @@
-app.controller("ViewRestaurantCtrl",["$scope","$state","$firebaseArray","$firebaseObject","Database","$ionicLoading","$ionicModal", "$ionicPopup","$cordovaGeolocation", "$stateParams", "Restaurant", "User", "Review", "Reservation",
-  function($scope,$state,$firebaseArray,$firebaseObject,Database, $ionicLoading, $ionicModal, $ionicPopup, $cordovaGeolocation, $stateParams, Restaurant, User, Review, Reservation){
+app.controller("ViewRestaurantCtrl",["$scope","$state","$firebaseArray","$firebaseObject","Database","$ionicLoading","$ionicModal", "$ionicPopup","$cordovaGeolocation", "$stateParams", "Restaurant", "User", "Review", "Reservation", "$ionicLoading",
+  function($scope,$state,$firebaseArray,$firebaseObject,Database, $ionicLoading, $ionicModal, $ionicPopup, $cordovaGeolocation, $stateParams, Restaurant, User, Review, Reservation, $ionicLoading){
 
   console.log("View Restaurant Ctrl")
 
@@ -30,6 +30,7 @@ app.controller("ViewRestaurantCtrl",["$scope","$state","$firebaseArray","$fireba
   }
 
   $scope.bookReservation = function(reservation) {
+    $ionicLoading.show();
     var reservationObject = {
       datetime: reservation.datetime.getTime(),
       number_of_persons : reservation.number_of_persons,

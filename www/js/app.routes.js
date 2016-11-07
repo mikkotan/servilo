@@ -231,6 +231,20 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,fir
         }
       }
     })
+    .state('tabs.myReservations', {
+      url: "/myreservations",
+      views: {
+        'myreservations-tab': {
+          templateUrl: "app/reservation/_my-reservations.html",
+          controller: "MyReservationsCtrl",
+          resolve: {
+            reservations : function(User) {
+              return User.getAuthReservations().$loaded();
+            }
+          }
+        }
+      }
+    })
     .state('signup', {
       url: "/signup",
       templateUrl: "app/signup/_signup.html",

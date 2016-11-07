@@ -1,4 +1,4 @@
-app.factory('Reservation', function($firebaseObject, $firebaseArray, Database, User, Restaurant){
+app.factory('Reservation', function($firebaseObject, $firebaseArray, Database, User, Restaurant, $ionicLoading){
 
   var Reservation = {
     all : function() {
@@ -19,10 +19,20 @@ app.factory('Reservation', function($firebaseObject, $firebaseArray, Database, U
             type: 'reservation',
             timestamp: firebase.database.ServerValue.TIMESTAMP
           })
-            .then(() => { console.log('success promise notification') })
-            .catch((err) => { console.log(err) })
+            .then(() => {
+              console.log('success promise notification')
+              $ionicLoading.hide();
+              alert('success');
+            })
+            .catch((err) => {
+              console.log(err);
+              alert(err);
+            })
         })
-        .catch((err) => { console.log(err) })
+        .catch((err) => {
+          alert(err);
+          console.log(err)
+        })
     }
   }
 
