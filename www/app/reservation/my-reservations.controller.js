@@ -16,6 +16,10 @@ app.controller('MyReservationsCtrl',["$scope", "reservations", "Restaurant",
       })
     })
 
+    $scope.cancel = function(reservation) {
+      alert(reservation.$id);
+    }
+
     // $scope.reservations = reservations.map(function(reservation) {
     //   return {
     //     details: reservation,

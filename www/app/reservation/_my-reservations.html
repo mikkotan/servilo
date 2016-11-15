@@ -17,9 +17,9 @@
       <p ng-show="reservation.details.status">
         Status: {{reservation.details.status}}
       </p>
-      <!-- <button class="button button-small button-outline button-assertive" ng-click="cancel(order)" ng-show="order.order_details.status !== 'cancelled'">
+      <button class="button button-small button-outline button-assertive" ng-click="cancel(reservation.details)" ng-show="reservation.details.status !== 'cancelled'">
         Cancel
-      </button> -->
+      </button>
     </ion-item>
   </ion-content>
 </ion-view>
