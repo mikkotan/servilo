@@ -243,7 +243,15 @@ app.controller("ViewRestaurantCtrl",["$scope","$state","$firebaseArray","$fireba
   });
 
   $scope.setMap = function(restaurant){
-      $scope.map =  {center:{latitude: restaurant.latitude, longitude: restaurant.longitude}, zoom: 14, options: {scrollwheel: false}, bounds: {}};
+      $scope.map =  {center:{latitude: restaurant.latitude, longitude: restaurant.longitude}, zoom: 14, options: {scrollwheel: false}, bounds: {},
+        events:{
+          tilesloaded: function (map) {
+            $scope.$apply(function () {
+                google.maps.event.trigger(map, "resize");
+            });
+          }
+        }
+      };
       $scope.restaurantMarkers.push({id: Date.now(),
         coords:{latitude:restaurant.latitude, longitude:restaurant.longitude}
       });

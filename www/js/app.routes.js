@@ -3,7 +3,6 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,fir
   firebase.initializeApp(firebaseConfigProvider.config);
   $urlRouterProvider.otherwise("/home");
   $ionicConfigProvider.tabs.position('bottom');
-
   $ionicCloudProvider.init({
     "core": {
       "app_id": "dd588ad9"
