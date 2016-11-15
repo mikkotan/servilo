@@ -61,71 +61,71 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,fir
           }
         }
       }
-      })
-      .state('tabs.restaurantMenus', {
-        url: "/restaurantName/menus",
-        params : {
-          restaurantId : null
-        },
-        // url: "/restaurantName/menus/:restaurantId",
-        views: {
-          'restaurantmenus-tab' : {
-            templateUrl: "app/menu/_view-restaurant-menus-order.html",
-            controller: "ViewRestaurantMenuOrder",
-            resolve: {
-              restaurantMenus : function(Menu , $stateParams){
-                  return Menu.getRestaurantMenus($stateParams.restaurantId).$loaded();
-              },
-              restaurantId : function($stateParams){
-                return $stateParams.restaurantId
-              }
-            }
-          }
-        }
-      })
-      .state('tabs.viewRestaurantMenus', {
-        url: "/restaurant/menus/:restaurantId",
-        views: {
-          'restaurant-tab': {
-            templateUrl: "app/menu/_view-restaurant-menus.html",
-            controller: "ViewRestaurantMenu",
-            resolve: {
-              restaurantMenu : function(Menu , $stateParams){
-                  return Menu.getRestaurantMenus($stateParams.restaurantId).$loaded();
-              }
-            }
-          }
-        }
-        })
-      .state('tabs.addMenu',{
-        url: "/menu/add/:restaurantId",
-        views:{
-          'restaurant-tab':{
-            templateUrl: "app/menu/_add-menu.html",
-            controller: "AddMenuCtrl",
-            resolve: {
-              menus : function(Menu){
-                  return Menu.all().$loaded();
-              },
-              restaurantId : function($stateParams){
-                return $stateParams.restaurantId
-              }
-            }
-          }
-        }
     })
-      .state('tabs.menu', {
-        url: "/menu",
-        views: {
-          'menu-tab': {
-            templateUrl: "app/menu/_menus.html",
-            controller:"MenuCtrl",
-            resolve: {
-              menus : function(Menu){
-                return Menu.all().$loaded();
-              }
+    .state('tabs.restaurantMenus', {
+      url: "/restaurantName/menus",
+      params : {
+        restaurantId : null
+      },
+      // url: "/restaurantName/menus/:restaurantId",
+      views: {
+        'restaurantmenus-tab' : {
+          templateUrl: "app/menu/_view-restaurant-menus-order.html",
+          controller: "ViewRestaurantMenuOrder",
+          resolve: {
+            restaurantMenus : function(Menu , $stateParams){
+                return Menu.getRestaurantMenus($stateParams.restaurantId).$loaded();
+            },
+            restaurantId : function($stateParams){
+              return $stateParams.restaurantId
             }
           }
+        }
+      }
+    })
+    .state('tabs.viewRestaurantMenus', {
+      url: "/restaurant/menus/:restaurantId",
+      views: {
+        'restaurant-tab': {
+          templateUrl: "app/menu/_view-restaurant-menus.html",
+          controller: "ViewRestaurantMenu",
+          resolve: {
+            restaurantMenu : function(Menu , $stateParams){
+                return Menu.getRestaurantMenus($stateParams.restaurantId).$loaded();
+            }
+          }
+        }
+      }
+    })
+    .state('tabs.addMenu',{
+      url: "/menu/add/:restaurantId",
+      views:{
+        'restaurant-tab':{
+          templateUrl: "app/menu/_add-menu.html",
+          controller: "AddMenuCtrl",
+          resolve: {
+            menus : function(Menu){
+                return Menu.all().$loaded();
+            },
+            restaurantId : function($stateParams){
+              return $stateParams.restaurantId
+            }
+          }
+        }
+      }
+    })
+    .state('tabs.menu', {
+      url: "/menu",
+      views: {
+        'menu-tab': {
+          templateUrl: "app/menu/_menus.html",
+          controller:"MenuCtrl",
+          resolve: {
+            menus : function(Menu){
+              return Menu.all().$loaded();
+            }
+          }
+        }
       }
     })
     .state('tabs.contact', {

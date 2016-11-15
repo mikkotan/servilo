@@ -21,13 +21,14 @@ app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "U
     },
     getAuthUserRestaurants : function() {
       var authUserId = User.auth().$id;
-        return $firebaseArray(restaurants.orderByChild("owner_id").equalTo(authUserId))
+      return $firebaseArray(restaurants.orderByChild("owner_id").equalTo(authUserId))
     },
     get : function(restaurantId) {
-        return restaurantsArray.$getRecord(restaurantId);
+      console.log("getting function " + restaurantId);
+      return restaurantsArray.$getRecord(restaurantId);
     },
     getPendingRestaurants : function() {
-        return pendingRestaurantsArray;
+      return pendingRestaurantsArray;
     },
     getAveragePrice : function(restaurantId) {
       var res = restaurantsArray.$getRecord(restaurantId);
@@ -50,7 +51,9 @@ app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "U
       return $firebaseArray(reviews.orderByChild('restaurant_id').equalTo(restaurantId));
     },
     getOwner : function(restaurantId) {
+      console.log('get owner method');
       var restaurant = restaurantsArray.$getRecord(restaurantId);
+      console.log(restaurant);
       return usersArray.$getRecord(restaurant.owner_id);
     },
     getOrders : function(restaurantId) {

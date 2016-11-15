@@ -1,5 +1,5 @@
-app.controller("ViewRestaurantCtrl",["$scope","$state","$firebaseArray","$firebaseObject","Database","$ionicLoading","$ionicModal", "$ionicPopup","$cordovaGeolocation", "$stateParams", "Restaurant", "User", "Review",
-  function($scope,$state,$firebaseArray,$firebaseObject,Database, $ionicLoading, $ionicModal, $ionicPopup, $cordovaGeolocation, $stateParams, Restaurant, User, Review){
+app.controller("ViewRestaurantCtrl",["$scope","$state","$firebaseArray","$firebaseObject","Database","$ionicLoading","$ionicModal", "$ionicPopup","$cordovaGeolocation", "$stateParams", "Restaurant", "User", "Review", "Reservation",
+  function($scope,$state,$firebaseArray,$firebaseObject,Database, $ionicLoading, $ionicModal, $ionicPopup, $cordovaGeolocation, $stateParams, Restaurant, User, Review, Reservation){
 
   console.log("View Restaurant Ctrl")
 
@@ -13,6 +13,7 @@ app.controller("ViewRestaurantCtrl",["$scope","$state","$firebaseArray","$fireba
   var restaurantReviewsRef = Database.reviewsReference().orderByChild('restaurant_id').equalTo(id); //new subs above
   $scope.getReviewer = Review.reviewer;
   $scope.restaurant = Restaurant.get(id);
+
 
   $scope.restaurantStatus = Restaurant.getRestaurantStatus(Restaurant.get(id).owner_id);
 
@@ -28,6 +29,19 @@ app.controller("ViewRestaurantCtrl",["$scope","$state","$firebaseArray","$fireba
     })
   }
 
+  $scope.bookReservation = function(reservation) {
+    var reservationObject = {
+      datetime: reservation.datetime.getTime(),
+      number_of_persons : reservation.number_of_persons,
+      status : 'pending',
+      user_id : User.auth().$id,
+      restaurant_id : id,
+      timestamp : firebase.database.ServerValue.TIMESTAMP
+    }
+    Reservation.create(reservationObject);
+    $scope.addReservationModal.hide();
+  }
+
   $scope.goToMenus = function(restaurant,service){
       transaction  = {}
       switch (service.name) {
@@ -38,7 +52,12 @@ app.controller("ViewRestaurantCtrl",["$scope","$state","$firebaseArray","$fireba
             transaction.customer_id = "myId"
           break;
         case "reserve" :
-            console.log("wala pa sir")
+            console.log("reserve clicked");
+            $scope.reservation = {
+              datetime : new Date(),
+              number_of_persons : 2,
+            }
+            $scope.addReservationModal.show();
           break;
         default:
 
@@ -182,6 +201,12 @@ app.controller("ViewRestaurantCtrl",["$scope","$state","$firebaseArray","$fireba
   }, {
     scope: $scope
   });
+
+  $ionicModal.fromTemplateUrl('app/reservation/_add-reservation.html', function(addReservationModal) {
+    $scope.addReservationModal = addReservationModal;
+  }, {
+    scope: $scope
+  })
 
   $scope.showConfirmDelete = function(review) {
     var reviewObj = review;
