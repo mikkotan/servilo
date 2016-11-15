@@ -7,7 +7,6 @@ app.controller('HomeTabCtrl',
              $cordovaImagePicker, Database, Review, restaurants) {
 
   console.log('HomeTabCtrl');
-
   $scope.usersRefObj = Database.users(); //new
   // Database.restaurants().$loaded().then(function() {
   //   console.log($scope.restaurants.length);
@@ -192,10 +191,18 @@ app.controller('HomeTabCtrl',
   $scope.markers = [];
 
   $scope.isMarkerCanChange = true;
-  $scope.map =  {center: { latitude: 10.729984, longitude: 122.549298 }, zoom: 12, options: {scrollwheel: false}, bounds: {}, control:{}};
+  $scope.map =  {center: { latitude: 10.729984, longitude: 122.549298 }, zoom: 12, options: {scrollwheel: false}, bounds: {}, control:{}, refresh: true,
+   events : {
+    tilesloaded: function (map) {
+            $scope.$apply(function () {
+                google.maps.event.trigger(map, "resize");
+            });
+        }
+    }
+  };
 
   var options = {timeout: 10000, enableHighAccuracy: true};
-  $cordovaGeolocation.getCurrentPosition(options).then(function(position){
+    $cordovaGeolocation.getCurrentPosition(options).then(function(position){
     $scope.currentLocation = {latitude: position.coords.latitude,longitude: position.coords.longitude};
   });
 
@@ -247,7 +254,7 @@ app.controller('HomeTabCtrl',
       }
     });
     $scope.map.zoom = 14;
-    $scope.map .center ={latitude: $scope.currentLocation.latitude, longitude:$scope.currentLocation.longitude };
+    $scope.map.center ={latitude: $scope.currentLocation.latitude, longitude:$scope.currentLocation.longitude };
     $scope.isMarkerCanChange = false;
   };
 
@@ -256,6 +263,7 @@ app.controller('HomeTabCtrl',
   };
 
   $scope.allowMarkerChange = function(){
+    $scope.map.zoom = 12;
     $scope.isMarkerCanChange = true;
   }
 
