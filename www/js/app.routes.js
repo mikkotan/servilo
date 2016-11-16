@@ -62,6 +62,38 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,fir
         }
       }
     })
+    .state('tabs.viewRestaurant.main', {
+      url: "/main",
+      views: {
+        'restaurant-page': {
+          templateUrl: "app/restaurant/_view-restaurant-main.html",
+          controller: "ViewRestaurantCtrl",
+          resolve: {
+            "currentAuth": ["Auth", function(Auth) {
+              return Auth.$requireSignIn();
+            }]
+          }
+        }
+      }
+    })
+    .state('tabs.viewRestaurant.menus', {
+      url: "/menus",
+      views: {
+        'restaurant-page': {
+          templateUrl: "app/restaurant/_view-restaurant-menus.html",
+          controller: "ViewRestaurantCtrl"
+        }
+      }
+    })
+    .state('tabs.viewRestaurant.location', {
+      url: "/menus",
+      views: {
+        'restaurant-page': {
+          templateUrl: "app/restaurant/_view-restaurant-location.html",
+          controller: "ViewRestaurantCtrl"
+        }
+      }
+    })
     .state('tabs.restaurantMenus', {
       url: "/restaurantName/menus",
       params : {

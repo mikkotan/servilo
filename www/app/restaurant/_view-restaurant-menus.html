@@ -1,0 +1,18 @@
+<ion-view view-title="{{restaurant.name}}">
+  <ion-content overflow-scroll="true" class="padding has-tabs-top">
+    <ion-list>
+      <ion-item ng-repeat="menu in restaurantMenus">
+        <h3>{{menu.name}}</h3>
+        <p>
+          P {{menu.price}}
+        </p>
+        <ion-option-button class="button-royal" ng-click="deleteMenu(menu)">
+          Delete
+        </ion-option-button>
+        <ion-option-button class="button-calm" ng-click="editMenu(menu)">
+          Edit
+        </ion-option-button>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
