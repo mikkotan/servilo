@@ -81,28 +81,6 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,fir
       views: {
         'restaurant-page': {
           templateUrl: "app/restaurant/_view-restaurant-menus.html",
-          controller: "ViewRestaurantCtrl"
-        }
-      }
-    })
-    .state('tabs.viewRestaurant.location', {
-      url: "/menus",
-      views: {
-        'restaurant-page': {
-          templateUrl: "app/restaurant/_view-restaurant-location.html",
-          controller: "ViewRestaurantCtrl"
-        }
-      }
-    })
-    .state('tabs.restaurantMenus', {
-      url: "/restaurantName/menus",
-      params : {
-        restaurantId : null
-      },
-      // url: "/restaurantName/menus/:restaurantId",
-      views: {
-        'restaurantmenus-tab' : {
-          templateUrl: "app/menu/_view-restaurant-menus-order.html",
           controller: "ViewRestaurantMenuOrder",
           resolve: {
             restaurantMenus : function(Menu , $stateParams){
@@ -115,6 +93,36 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider,fir
         }
       }
     })
+    .state('tabs.viewRestaurant.location', {
+      url: "/menus",
+      views: {
+        'restaurant-page': {
+          templateUrl: "app/restaurant/_view-restaurant-location.html",
+          controller: "ViewRestaurantCtrl"
+        }
+      }
+    })
+    // .state('tabs.restaurantMenus', {
+    //   url: "/restaurantName/menus",
+    //   params : {
+    //     restaurantId : null
+    //   },
+    //   // url: "/restaurantName/menus/:restaurantId",
+    //   views: {
+    //     'restaurantmenus-tab' : {
+    //       templateUrl: "app/menu/_view-restaurant-menus-order.html",
+    //       controller: "ViewRestaurantMenuOrder",
+    //       resolve: {
+    //         restaurantMenus : function(Menu , $stateParams){
+    //             return Menu.getRestaurantMenus($stateParams.restaurantId).$loaded();
+    //         },
+    //         restaurantId : function($stateParams){
+    //           return $stateParams.restaurantId
+    //         }
+    //       }
+    //     }
+    //   }
+    // })
     .state('tabs.viewRestaurantMenus', {
       url: "/restaurant/menus/:restaurantId",
       views: {

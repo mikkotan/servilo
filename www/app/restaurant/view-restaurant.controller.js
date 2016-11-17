@@ -37,6 +37,8 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "$fi
 
     if ($state.is("tabs.viewRestaurant.menus")) {
       $scope.restaurantMenus = Restaurant.getMenus($stateParams.restaurantId);
+
+
     };
 
     $scope.restaurantStatus.on('value', function(snap) {
@@ -68,7 +70,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "$fi
       transaction = {}
       switch (service.name) {
         case "online":
-          $state.go("tabs.restaurantMenus", {
+          $state.go("tabs.viewRestaurant.menus", {
             restaurantId: id
           })
           transaction.serviceType = "online"
