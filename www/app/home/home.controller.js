@@ -231,31 +231,42 @@ app.controller('HomeTabCtrl',
       }
     }
   };
-
+  $scope.mapText = "Nearest restaurant in 1km";
   $scope.showNear =function(){
-    $scope.tempMarkers = [];
-    for (var i = 0; i < $scope.markers.length; i++) {
-      var p1 = new google.maps.LatLng($scope.markers[i].coords.latitude, $scope.markers[i].coords.longitude);
-      var p2 = new google.maps.LatLng($scope.currentLocation.latitude, $scope.currentLocation.longitude);
+    if($scope.mapText == "Nearest restaurant in 1km"){
+      $scope.mapText = "Back to Default";
+      $scope.tempMarkers = [];
+      for (var i = 0; i < $scope.markers.length; i++) {
+        var p1 = new google.maps.LatLng($scope.markers[i].coords.latitude, $scope.markers[i].coords.longitude);
+        var p2 = new google.maps.LatLng($scope.currentLocation.latitude, $scope.currentLocation.longitude);
 
-      if(calculateDistance(p1,p2)<= 1){
-        $scope.tempMarkers.push({id: $scope.markers[i].id,
-          coords: $scope.markers[i].coords
-        });
+        if(calculateDistance(p1,p2)<= 1){
+          $scope.tempMarkers.push({id: $scope.markers[i].id,
+            coords: $scope.markers[i].coords
+          });
+        }
       }
+
+      $scope.markers.length =0;
+      $scope.markers = $scope.tempMarkers;
+      $scope.markers.push({id:0,
+        coords:{latitude: $scope.currentLocation.latitude, longitude:$scope.currentLocation.longitude},
+        icon: {
+          url: 'http://chart.apis.google.com/chart?chst=d_bubble_icon_texts_big&chld=glyphish_user|edge_bc|FFBB00|000000|You+Are+Here',
+          scaledSize: new google.maps.Size(83, 30)
+        }
+      });
+      $scope.map.zoom = 14;
+      $scope.map.center ={latitude: $scope.currentLocation.latitude, longitude:$scope.currentLocation.longitude };
+      $scope.isMarkerCanChange = false;
+      if( $scope.tempMarkers.length == 1){
+        alert("There are no restaruant nearby!!");
+      }
+    }else
+    {
+      $scope.allowMarkerChange();
+      $scope.mapText = "Nearest restaurant in 1km";
     }
-    $scope.markers.length =0;
-    $scope.markers = $scope.tempMarkers;
-    $scope.markers.push({id:0,
-      coords:{latitude: $scope.currentLocation.latitude, longitude:$scope.currentLocation.longitude},
-      icon: {
-        url: 'http://chart.apis.google.com/chart?chst=d_bubble_icon_texts_big&chld=glyphish_user|edge_bc|FFBB00|000000|You+Are+Here',
-        scaledSize: new google.maps.Size(83, 30)
-      }
-    });
-    $scope.map.zoom = 14;
-    $scope.map.center ={latitude: $scope.currentLocation.latitude, longitude:$scope.currentLocation.longitude };
-    $scope.isMarkerCanChange = false;
   };
 
   var calculateDistance = function(point1, point2){
