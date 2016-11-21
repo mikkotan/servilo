@@ -5,49 +5,70 @@
 // the 2nd parameter is an array of 'requires'
 var app = angular.module('app', ['ui.mask','ionic', 'ionic.cloud', 'ionMdInput', 'ionic-material', 'firebase', 'ionic.rating', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker', 'yaru22.angular-timeago'])
 
-app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushService", "User", "Database", function($ionicPlatform, $rootScope, $state, $templateCache, IonicPushService, User, Database) {
-  // $ionicPush.register()
-  //   .then(function(t) {
-  //     return $ionicPush.saveToken(t);
-  //   })
-  //   .then(function(t) {
-  //     console.log("Token saved: " + t.token);
-  //   })
-  console.log('app run has run');
-  if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
-    IonicPushService.registerDevice();
-  }
+app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushService", "User", "Database", "$cordovaGeolocation",
+  function($ionicPlatform, $rootScope, $state, $templateCache, IonicPushService, User, Database, $cordovaGeolocation) {
 
-  $rootScope.$on("$stateChangeError",
-    function(event, toState, toParams, fromState, fromParams, error) {
-      if (error === "AUTH_REQUIRED") {
-        event.preventDefault();
-        $state.go("login")
+    $ionicPlatform.ready()
+      .then(() => {
+        console.log('ready ionic');
+
+        if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
+          IonicPushService.registerDevice();
+        }
+
+        var posOptions = {
+          timeout: 10000,
+          enableHighAccuracy: true
+        }
+
+        $cordovaGeolocation.getCurrentPosition(posOptions)
+          .then((position) => {
+            console.log('Position: ' + position.coords.latitude + ',' + position.coords.longitude);
+          })
+          .catch((err) => {
+            if (window.cordova) {
+              cordova.dialogGPS();
+            }
+            console.log(err);
+          })
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+
+
+
+
+    $rootScope.$on("$stateChangeError",
+      function(event, toState, toParams, fromState, fromParams, error) {
+        if (error === "AUTH_REQUIRED") {
+          event.preventDefault();
+          $state.go("login")
+        }
+      })
+
+      $rootScope.$on('cloud:push:notification', function(event, data) {
+        var msg = data.message;
+        alert(msg.title + ': ' + msg.text);
+      })
+
+    $templateCache.put('template.tpl.html', '');
+    $ionicPlatform.ready(function() {
+      if (window.cordova && window.cordova.plugins.Keyboard) {
+        // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+        // for form inputs)
+        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+
+        // Don't remove this line unless you know what you are doing. It stops the viewport
+        // from snapping when text inputs are focused. Ionic handles this internally for
+        // a much nicer keyboard experience.
+        cordova.plugins.Keyboard.disableScroll(true);
       }
-    })
-
-    $rootScope.$on('cloud:push:notification', function(event, data) {
-      var msg = data.message;
-      alert(msg.title + ': ' + msg.text);
-    })
-
-  $templateCache.put('template.tpl.html', '');
-  $ionicPlatform.ready(function() {
-    if (window.cordova && window.cordova.plugins.Keyboard) {
-      // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-      // for form inputs)
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-
-      // Don't remove this line unless you know what you are doing. It stops the viewport
-      // from snapping when text inputs are focused. Ionic handles this internally for
-      // a much nicer keyboard experience.
-      cordova.plugins.Keyboard.disableScroll(true);
-    }
-    if (window.StatusBar) {
-      StatusBar.styleDefault();
-    }
-  });
-}]);
+      if (window.StatusBar) {
+        StatusBar.styleDefault();
+      }
+    });
+  }]);
 
 app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate, Auth, User, Database, $state, $ionicPush, IonicPushService) {
   $scope.showMenu = function() {
@@ -69,7 +90,7 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
         if (ionic.Platform.isIOS() || ionic.Platform.isAndroid()) {
           console.log("hi hello this is ios or android platform");
           var ionicToken = IonicPushService.getToken();
-          var results = ionicTok.split(':');
+          var results = ionicToken.split(':');
           Database.usersReference().child(firebaseUser.uid).child('device_token').child(results[0]).set(null);
         }
         Auth.$signOut();
