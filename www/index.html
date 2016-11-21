@@ -40,7 +40,10 @@
   <!-- home -->
   <script src="app/home/home.controller.js"></script>
   <script src="app/home/home.factory.js"></script>
-  <script src="app/home/search.filter.js"></script>
+  <!-- search -->
+  <script src="app/search/search.controller.js"></script>
+  <script src="app/search/search.factory.js"></script>
+  <script src="app/search/search.filter.js"></script>
   <!-- login -->
   <script src="app/login/auth.provider.js"></script>
   <script src="app/login/login.controller.js"></script>
@@ -111,7 +114,6 @@
       </ion-nav-bar>
 
       <ion-nav-view animation="slide-left"></ion-nav-view>
-      <!-- <ion-nav-view animation="slide-left-right" name="logins"></ion-nav-view> -->
 
     </ion-side-menu-content>
 
@@ -127,25 +129,32 @@
 
       <ion-content has-header="true">
         <ion-list>
-          <ion-item menu-close="" href="#/tab/home" class="item-sidelist">
+          <!-- <a class="item" href="#/tab/home">Home</a>
+            <a class="item" href="#/tab/home">Search</a>
+            <a class="item" href="#/tab/home">Profile</a>
+            <div class="item item-divider"></div>
+            <a class="item" href="#/tab/home">Profile</a> -->
+          <ion-item menu-close href="#/tab/home" class="item-borderless">
             Home
           </ion-item>
-          <ion-item menu-close="" ui-sref="login" ng-hide="firebaseUser">
+          <ion-item menu-close ui-sref="login" class="item-borderless" ng-hide="firebaseUser">
             Login or Signup
           </ion-item>
-          <ion-item menu-close="" ui-sref="signup" ng-hide="firebaseUser">
+          <ion-item menu-close ui-sref="signup" class="item-borderless" ng-hide="firebaseUser">
             Sign Up
           </ion-item>
-          <!-- <li>
-                    <a class="item" menu-close nav-clear href="#/tab/home">Home</a>
-                </li>
-                <li>
-                    <a class="item" menu-close ui-sref="login" ng-hide="firebaseUser">Login or Sign up</a>
-                </li>
-                <li>
-                    <a class="item" menu-close ui-sref="signup" ng-hide="firebaseUser">Sign up</a>
-                </li> -->
-          <ion-item ng-show="firebaseUser" ng-click="signOut()">
+          <ion-item menu-close ui-sref="profile" ng-show="firebaseUser" class="item-borderless">
+            Profile
+          </ion-item>
+          <hr ng-show="firebaseUser">
+          <ion-item menu-close ng-show="firebaseUser" class="item-borderless" ng-click="signOut()">
+            Notifications
+          </ion-item>
+          <ion-item menu-close ng-show="firebaseUser" class="item-borderless" ng-click="signOut()">
+            Orders
+          </ion-item>
+          <hr ng-show="firebaseUser">
+          <ion-item menu-close ng-show="firebaseUser" class="item-borderless" ui-sref="login" ng-click="signOut()">
             Sign Out
           </ion-item>
         </ion-list>

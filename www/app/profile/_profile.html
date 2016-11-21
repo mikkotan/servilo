@@ -1,7 +1,35 @@
 <ion-view view-title="Profile">
-  <ion-content class="padding">
-    <ion-list>
-      <div ng-show="firebaseUser">
+  <ion-content>
+    <div id="content">
+      <div id="profile-info">
+        <img id="profile-image" ng-show="photoURL" ng-src="{{photoURL}}">
+        <img id="profile-image" ng-show="!photoURL" ng-src="img/ionic.png">
+        <h3 id="profile-name" ng-if="firebaseUser.provider !== email">{{firebaseUser.displayName}}</h3>
+        <h3 id="profile-name" ng-if="firebaseUser.provider === email">{{firebaseUser.firstName}} {{firebaseUser.lastName}}</h3>
+        <!-- <span id="profile-description" ng-if="firebaseUser.description"> {{ firebaseUser.description }} </span>
+        <span id="profile-description" ng-if="!firebaseUser.description">  <a href="#">Add a description</a> </span> -->
+        <span id="profile-description" ng-if="!firebaseUser.description">  hello i am description, add me later as firbaseUser.description, just uncomment the code in _profile.html </span>
+        <div>
+          <button class="button button-small button-light" ui-sref="edit-profile">Edit Profile</button>
+        </div>
+      </div>
+      <ion-list>
+        <!-- <ion-item ng-repeat="post in posts">
+            <img class="post-profile-image" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/94311/me.png">
+            {{post.text}}
+            <div class="post-time">{{post.created_at | relativets }}</div>
+            <div class="post-options">
+              <i class="icon-reply"></i>
+              <i class="icon-shuffle"></i>
+            </div>
+          </ion-item> -->
+      </ion-list>
+    </div>
+  </ion-content>
+
+  <!-- <ion-content class="padding">
+
+      <div ng-show="firebaseUser" class="center">
         <img class="profile-picture" ng-show="photoURL" ng-src="{{photoURL}}">
         <img class="profile-picture" ng-show="!photoURL" ng-src="img/ionic.png" style="width: 50px; height: 50px">
         <h3>{{firebaseUser.displayName}}</h3>
@@ -11,11 +39,11 @@
         <div ng-if="!firebaseUser.description">
           <a href="#">Add a description</a>
         </div>
-        <button class="button" ui-sref="tabs.edit-profile">Edit Profile</button>
+
       </div>
       <div>
         <h2>Activities</h2>
       </div>
-    </ion-list>
-  </ion-content>
+
+  </ion-content> -->
 </ion-view>
