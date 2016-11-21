@@ -46,7 +46,7 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
   });
 }]);
 
-app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate, Auth, User, Database, $state, $ionicPush) {
+app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate, Auth, User, Database, $state, $ionicPush, IonicPushService) {
   $scope.showMenu = function() {
   $ionicSideMenuDelegate.toggleLeft();
   };
@@ -54,21 +54,26 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
     $ionicSideMenuDelegate.toggleRight();
   };
   $scope.signOut = function() {
-    $ionicLoading.show();
-    var ionicTok = $ionicPush.token.token; //comment when testing in browser
-    var res = ionicTok.split(':'); //comment when testing in browser
+    $ionicLoading.show({
+      template: '<p>Signing out . . .</p><ion-spinner></ion-spinner>',
+      duration: 2000
+    });
     Database.userOnlineTrue().$loaded().then(function(loaded) {
-      loaded.$remove(0).then(function(ref) {
-        console.log("success")
+      loaded.$remove(0)
+      .then(function(ref) {
+        console.log("success user loaded deleted");
         var firebaseUser = Auth.$getAuth();
-        if (firebaseUser) {
-          Database.usersReference().child(firebaseUser.uid).child('device_token').child(res[0]).set(null);
-          // comment line above when testing in browser to prevent error
+        if (ionic.Platform.isIOS() || ionic.Platform.isAndroid()) {
+          console.log("hi hello this is ios or android platform");
+          var ionicToken = IonicPushService.getToken();
+          var results = ionicTok.split(':');
+          Database.usersReference().child(firebaseUser.uid).child('device_token').child(results[0]).set(null);
         }
         Auth.$signOut();
         location.reload();
         $ionicLoading.hide();
-      }).catch(function(err) {
+      })
+      .catch(function(err) {
         console.log(err)
       })
     });
