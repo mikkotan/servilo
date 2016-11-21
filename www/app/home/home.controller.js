@@ -1,10 +1,10 @@
 app.controller('HomeTabCtrl',
   ["$scope","$ionicModal","$firebaseArray","Auth", "Restaurant", "Home" ,"$stateParams", "$state", "User",
     "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation", "$ionicLoading", "$cordovaImagePicker",
-     "Database", "Review", "restaurants",
+     "Database", "Review", "restaurants", "$cordovaCamera",
         function($scope, $ionicModal, $firebaseArray, Auth, Restaurant, Home, $stateParams, $state,
             User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, $ionicLoading,
-             $cordovaImagePicker, Database, Review, restaurants) {
+             $cordovaImagePicker, Database, Review, restaurants, $cordovaCamera) {
 
   console.log('HomeTabCtrl');
 

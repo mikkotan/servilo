@@ -9,7 +9,9 @@
         <a class="button button-icon icon ion-camera" ng-click="upload(1)">CAM</a>
         <a class="button button-icon icon ion-camera" ng-click="upload(2)">ALBUM</a>
         <div>
-          <img ng-src="data:image/jpeg;base64,{{imageURL}}" width="100%"/>
+          <div>{{progress}}%</div>
+          <img ng-show="imageURL" ng-src="{{imageURL}}" width="100%"/>
+          
         </div>
         <label class="item item-input">
           <input type="text" placeholder="Name of Restaurant" ng-model="restaurant.name">
