@@ -13,7 +13,10 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
   //   .then(function(t) {
   //     console.log("Token saved: " + t.token);
   //   })
-  IonicPushService.registerDevice();
+  console.log('app run has run');
+  if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
+    IonicPushService.registerDevice();
+  }
 
   $rootScope.$on("$stateChangeError",
     function(event, toState, toParams, fromState, fromParams, error) {

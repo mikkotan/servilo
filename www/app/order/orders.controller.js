@@ -47,7 +47,9 @@ app.controller("OrderCtrl",["$scope","restaurants","Restaurant","User","Menu", "
               ref.set(null);
             }
 
-            orderStatusRef.set(key);
+            if (val === true) {
+              orderStatusRef.set(key);
+            }
 
             Database.notifications().$add({
               sender_id : User.auth().$id,
@@ -68,6 +70,7 @@ app.controller("OrderCtrl",["$scope","restaurants","Restaurant","User","Menu", "
           }
           else {
             console.log('Update order cancel');
+            $scope.order.orderStatus[key] = false;
           }
         })
         .catch((err) => {
