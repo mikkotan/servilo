@@ -21,7 +21,7 @@
         <div class="item item-thumbnail-left">
           <img class="img-thumbnail" ng-if="restaurant.image" ng-src="data:image/jpeg;base64,{{restaurant.image}}"/>
           <img ng-if="!restaurant.image" ng-src="img/wow.jpg">
-          <h3 ui-sref="tabs.viewRestaurant({restaurantId:restaurant.$id})">
+          <h3 ui-sref="tabs.viewRestaurant.main({restaurantId:restaurant.$id})">
             <icon class="ion-spoon"></icon> {{restaurant.name}}
             <span style="color:green">
               <icon class="ion-android-star-outline"></icon> {{restaurant.secured_data.avgRate.toFixed(1)}}

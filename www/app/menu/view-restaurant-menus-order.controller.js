@@ -54,7 +54,7 @@ $scope.restaurantStatus.on('value' , function(snap){
 
 
   var closeModal = function(){
-    $state.go("tabs.restaurantMenus");
+    $state.go("tabs.viewRestaurant.menus");
     $scope.addToCartModal.hide();
   }
 
@@ -70,7 +70,7 @@ $scope.restaurantStatus.on('value' , function(snap){
 
         if( menuOrder === null){
           CartData.add(menuCart);
-          $state.go("tabs.restaurantMenus");
+          $state.go("tabs.viewRestaurant.menus");
           closeModal();
         }
         else {
