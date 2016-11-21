@@ -1,19 +1,15 @@
 app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "User", "MenusWithAvg", "Database",
   function($firebaseAuth , $firebaseArray , $firebaseObject, User, MenusWithAvg, Database){
 
-
-
   var restaurants = Database.restaurantsReference();
   var pendingRestaurants = Database.pendingsReference();
   var users = Database.usersReference();
   var menus = Database.menusReference();
   var reviews = Database.reviewsReference();
   var orders = Database.ordersReference();
-
   var pendingRestaurantsArray = Database.pendings();
   var restaurantsArray = Database.restaurants();
   var usersArray = Database.users();
-
 
   var Restaurant = {
     all : function() {
@@ -21,13 +17,14 @@ app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "U
     },
     getAuthUserRestaurants : function() {
       var authUserId = User.auth().$id;
-        return $firebaseArray(restaurants.orderByChild("owner_id").equalTo(authUserId))
+      return $firebaseArray(restaurants.orderByChild("owner_id").equalTo(authUserId))
     },
     get : function(restaurantId) {
-        return restaurantsArray.$getRecord(restaurantId);
+      console.log("getting function " + restaurantId);
+      return restaurantsArray.$getRecord(restaurantId);
     },
     getPendingRestaurants : function() {
-        return pendingRestaurantsArray;
+      return pendingRestaurantsArray;
     },
     getAveragePrice : function(restaurantId) {
       var res = restaurantsArray.$getRecord(restaurantId);
@@ -50,7 +47,9 @@ app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "U
       return $firebaseArray(reviews.orderByChild('restaurant_id').equalTo(restaurantId));
     },
     getOwner : function(restaurantId) {
+      console.log('get owner method');
       var restaurant = restaurantsArray.$getRecord(restaurantId);
+      console.log(restaurant);
       return usersArray.$getRecord(restaurant.owner_id);
     },
     getOrders : function(restaurantId) {

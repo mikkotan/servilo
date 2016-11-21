@@ -7,6 +7,7 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
   var restaurantsRef = Database.restaurantsReference();
   var notificationsRef = Database.notificationsReference();
   var ordersRef = Database.ordersReference();
+  var reservationsRef = Database.reservationsReference();
 
   return {
     auth : function() {
@@ -35,6 +36,10 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
       var authId = firebase.auth().currentUser.uid;
       var usrRef = firebase.database().ref().child('users').child(firebase.auth().currentUser.uid).child('device_token');
       return $firebaseArray(usrRef);
+    },
+    getAuthReservations : function() {
+      console.log('Getting auth reservations');
+      return $firebaseArray(reservationsRef.orderByChild('user_id').equalTo(firebase.auth().currentUser.uid));
     },
     getUserFullname : function(id){
       return  usersObj.$getRecord(id).firstName + " " + usersObj.$getRecord(id).lastName;

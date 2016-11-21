@@ -1,5 +1,5 @@
-app.controller("CartCtrl",["$scope","CartData","orders","authUser","restaurantId","Cart", "Database", "Restaurant",
-  function($scope , CartData ,orders,authUser,restaurantId,Cart, Database, Restaurant){
+app.controller("CartCtrl",["$scope","CartData","orders","authUser","restaurantId","Cart", "Database", "Restaurant", "$cordovaGeolocation",
+  function($scope , CartData ,orders,authUser,restaurantId,Cart, Database, Restaurant, $cordovaGeolocation){
 
 $scope.order = orders;
 $scope.restaurantId = restaurantId
@@ -81,6 +81,8 @@ $scope.buy = function(cart , location) {
         customer_id : authUser.$id,
         order_details: {
           location : location,
+          latitude: $scope.marker.coords.latitude,
+          longitude: $scope.marker.coords.longitude,
           menus : scanCart(cart),
           totalprice : $scope.total,
           timestamp: firebase.database.ServerValue.TIMESTAMP,
@@ -113,6 +115,89 @@ $scope.buy = function(cart , location) {
     else {
       alert("please fill up Location");
     }
+  }
+  //GeoLocation stuff
+  var options = {
+    timeout: 10000,
+    enableHighAccuracy: true
+  };
+
+  $cordovaGeolocation.getCurrentPosition(options).then(function(position) {
+    $scope.currentLocation = {
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude
+    };
+  });
+
+  //Setting the map
+  $scope.marker = {
+    id: 0
+  };
+
+  $scope.map = {
+    center: {
+      latitude: 10.73016704689235,
+      longitude: 122.54616022109985
+    },
+    zoom: 14,
+    options: {
+      scrollwheel: false
+    },
+    bounds: {},
+    events: {
+      tilesloaded: function (map) {
+          $scope.$apply(function () {
+              google.maps.event.trigger(map, "resize");
+          });
+      },
+      click: function(map, eventName, originalEventArgs) {
+        var e = originalEventArgs[0];
+        var lat = e.latLng.lat(),
+          lon = e.latLng.lng();
+        var m = {
+          id: Date.now(),
+          coords: {
+            latitude: lat,
+            longitude: lon
+          }
+        };
+        $scope.marker = m;
+        $scope.placeName($scope.marker.coords.latitude ,$scope.marker.coords.longitude);
+        $scope.$apply();
+      }
+    }
+  };
+
+ //Mark the current location function here !!!
+  $scope.markLocation = function() {
+    $scope.marker = {
+      id: Date.now(),
+      coords: {
+        latitude: $scope.currentLocation.latitude,
+        longitude: $scope.currentLocation.longitude
+      }
+    };
+    $scope.map.center = {
+      latitude: $scope.currentLocation.latitude,
+      longitude: $scope.currentLocation.longitude
+    };
+    $scope.placeName($scope.marker.coords.latitude ,$scope.marker.coords.longitude);
+  }
+
+  //function that converts LatLng coordinates to word
+  $scope.placeName = function(latitude, longitude){
+    var geocoder = new google.maps.Geocoder;
+    var latLng = {lat: latitude, lng: longitude};
+    // var address =
+    geocoder.geocode({'location': latLng}, function(results, status) {
+      if (status === 'OK') {
+        $scope.location = results[0].formatted_address;
+        $scope.$apply();
+      } else {
+        alert('Geocoder failed due to: ' + status);
+      }
+    });
+    // $scope.location ="locate";
   }
 
 }]);

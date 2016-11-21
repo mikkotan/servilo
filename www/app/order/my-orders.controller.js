@@ -1,5 +1,11 @@
-app.controller("MyOrdersCtrl",["$scope","orders",
-  function($scope, orders){
+app.controller("MyOrdersCtrl",["$scope","orders", "Database",
+  function($scope, orders, Database){
+
     $scope.orders = orders;
-    console.log("hey my orders");
+
+    $scope.cancel = function(order) {
+      var orderRef = Database.ordersReference().child(order.$id);
+      orderRef.child('order_details').child('status').set('cancelled');
+      orderRef.child('orderStatus').set(null);
+    }
   }]);

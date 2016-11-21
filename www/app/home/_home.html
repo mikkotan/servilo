@@ -7,11 +7,11 @@
   </ion-header-bar>
   <ion-content class="padding has-subheader">
     <ion-list>
-      <div>
-        <ui-gmap-google-map zoom='map.zoom' center="map.center" options='map.options' bounds='map.bounds' control='map.control' refresh=true>
+        <div>
+        <ui-gmap-google-map zoom='map.zoom' center="map.center" options='map.options' bounds='map.bounds' control='map.control' refresh=map.refresh events=map.events ng-cloak>
           <ui-gmap-markers models="markers" coords="'coords'" icon="'icon'" events="markerEvents" doRebuildAll="true"></ui-gmap-markers>
           <ui-gmap-map-control position="top-right">
-            <button class="button button-small button-balanced" ng-click="showNear()">Nearest restaurant in 1km</button>
+            <button class="button button-small button-balanced" ng-click="showNear()">{{mapText}}</button>
           </ui-gmap-map-control>
         </ui-gmap-google-map>
       </div> 
@@ -20,7 +20,7 @@
         <div class="item item-thumbnail-left">
           <img class="img-thumbnail" ng-if="restaurant.photoURL" ng-src="{{restaurant.photoURL}}"/>
           <img ng-if="!restaurant.photoURL" ng-src="img/wow.jpg">
-          <h3 ui-sref="tabs.viewRestaurant({restaurantId:restaurant.$id})">
+          <h3 ui-sref="tabs.viewRestaurant.main({restaurantId:restaurant.$id})">
             <icon class="ion-spoon"></icon> {{restaurant.name}}
             <span style="color:green">
               <icon class="ion-android-star-outline"></icon> {{restaurant.secured_data.avgRate.toFixed(1)}}

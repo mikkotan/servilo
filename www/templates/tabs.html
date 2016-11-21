@@ -5,9 +5,9 @@
   <ion-tab title="Menu" icon="ion-ios-information" ui-sref="tabs.menu">
     <ion-nav-view name="menu-tab"></ion-nav-view>
   </ion-tab>
-  <ion-tab title="Contact" icon="ion-ios-world" ui-sref="tabs.contact">
+  <!-- <ion-tab title="Contact" icon="ion-ios-world" ui-sref="tabs.contact">
     <ion-nav-view name="contact-tab"></ion-nav-view>
-  </ion-tab>
+  </ion-tab> -->
   <!-- <ion-tab title="Login" icon="ion-ios-world" ui-sref="tabs.login">
     <ion-nav-view name="login-tab"></ion-nav-view>
   </ion-tab>
@@ -20,18 +20,21 @@
   <ion-tab ng-if="firebaseUser" title="Cart" icon="ion-android-cart" ui-sref="tabs.cart">
     <ion-nav-view name="cart-tab"></ion-nav-view>
   </ion-tab>
-  <ion-tab ng-if="firebaseUser" title="Restaurantmenus" icon="ion-spoon" ui-sref="tabs.restaurantMenus">
+  <!-- <ion-tab ng-if="firebaseUser" title="Restaurantmenus" icon="ion-spoon" ui-sref="tabs.restaurantMenus">
     <ion-nav-view name="restaurantmenus-tab"></ion-nav-view>
-  </ion-tab>
+  </ion-tab> -->
   <ion-tab ng-if="firebaseUser" title="Orders" icon="ion-android-list" ui-sref="tabs.orders">
     <ion-nav-view name="order-tab"></ion-nav-view>
   </ion-tab>
-  <ion-tab ng-if="firebaseUser" title="Notifications" icon="ion-android-notifications" ui-sref="tabs.notifications">
+  <!-- <ion-tab ng-if="firebaseUser" title="Notifications" icon="ion-android-notifications" ui-sref="tabs.notifications">
     <ion-nav-view name="notifications-tab"></ion-nav-view>
   </ion-tab>
   <ion-tab ng-if="firebaseUser" title="My Orders" icon="ion-android-notifications" ui-sref="tabs.myOrders">
     <ion-nav-view name="myorders-tab"></ion-nav-view>
   </ion-tab>
+  <ion-tab ng-if="firebaseUser" title="My Reservations" icon="ion-android-notifications" ui-sref="tabs.myReservations">
+    <ion-nav-view name="myreservations-tab"></ion-nav-view>
+  </ion-tab> -->
   <ion-tab ng-if="firebaseUser" title="Profile" icon="ion-person" ui-sref="tabs.profile">
     <ion-nav-view name="profile-tab"></ion-nav-view>
   </ion-tab>

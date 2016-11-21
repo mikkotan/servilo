@@ -1,0 +1,65 @@
+<ion-view view-title="{{restaurant.name}}">
+  <ion-content overflow-scroll="true" class="padding has-tabs-top">
+    <img ng-src="data:image/jpeg;base64,{{restaurant.image}}" width="100%" />
+    <div class="padding">
+      <h3>{{restaurant.name}}</h3>
+
+          <button ng-repeat="service in restaurant.services" class="button button-calm"  ng-disabled="!service.status" ng-click="goToMenus(restaurant, service)">
+              {{service.name}}
+          </button>
+      </div>
+
+      <p>{{getRestaurantStatus}}</p>
+      <p>Restaurant is: {{restaurantOpenStatus}}</p>
+      <p ng-if="restaurantOpenStatus === 'Open'" style="color:green;">
+        Restaurant Hours: {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}
+      </p>
+      <p ng-if="restaurantOpenStatus === 'Closed'" style="color:red;">
+        Opens at {{ restaurant.openTime | date:'shortTime' }}
+      </p>
+      <ion-list>
+        <ion-item>
+          Cuisine: {{restaurant.cuisine}}
+        </ion-item>
+        <ion-item>
+          Location: {{restaurant.location}}
+        </ion-item>
+
+        <div ng-if="exists != true">
+          <button ng-click="reviewModal.show()" class="button button-block button-balanced">
+            <icon class="ion-plus"></icon> Write Review</button>
+        </div>
+        <div class="button-bar" ng-if="exists">
+          <button ng-click="editReviewModal.show()" class="button button-balanced">
+            <icon class="ion-plus"></icon> Edit Review</button>
+          <button ng-click="showConfirmDelete(review)" class="button button-assertive">
+            <icon class="ion-android-delete"></icon> Delete Review</button>
+        </div>
+      </ion-list>
+      <div class="list">
+        <div class="item item-divider">
+          Reviews
+        </div>
+        <ul>
+          <li class="item" ng-repeat="review in restaurantReviews">
+            <h3>
+            {{review.content}} <span class="badge badge-balanced">{{review.rating}}</span>
+          </h3>
+            <p>
+              Reviewed by: {{getReviewer(review).firstName}} {{getReviewer(review).lastName}}
+            </p>
+          </li>
+        </ul>
+
+        <div class="item item-divider">
+          Contact
+        </div>
+        <ul>
+          <li class="item">
+              <p> contact numbers here </p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
