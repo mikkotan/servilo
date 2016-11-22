@@ -3,10 +3,11 @@
     <img ng-src="data:image/jpeg;base64,{{restaurant.image}}" width="100%" />
     <div class="padding">
       <h3>{{restaurant.name}}</h3>
-
-          <button ng-repeat="service in restaurant.services" class="button button-calm"  ng-disabled="!service.status" ng-click="goToMenus(restaurant, service)">
-              {{service.name}}
-          </button>
+        <button ng-repeat="service in restaurant.services" class="button button-calm"  ng-disabled="!service.status" ng-click="goToMenus(restaurant, service)">
+          {{service.name}}
+        </button>
+        <button class="button button-calm" ng-if="restaurant.facilities.Online" ui-sref="tabs.viewRestaurant.menus">Online Order</button>
+        <button class="button button-calm" ng-if="restaurant.facilities.Reservation" ng-click="showAddReservationModal()">Reservation</button>
       </div>
 
       <p>{{getRestaurantStatus}}</p>

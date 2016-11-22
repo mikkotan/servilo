@@ -1,7 +1,6 @@
 app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate",
-  "Restaurant", "$cordovaCamera", "$cordovaGeolocation", "Restaurant",
-  function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, $cordovaGeolocation, Restaurant) {
-    var total = 123;
+  "Restaurant", "$cordovaCamera", "$cordovaGeolocation",
+  function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, $cordovaGeolocation) {
     $scope.modalControl = {};
     $scope.restaurants = Restaurant.all();
     $scope.pendingRestaurants = Restaurant.getPendingRestaurants();
@@ -24,13 +23,11 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
     });
 
   $scope.changeServiceStatus = function(restaurant,service){
-
     var resRef = firebase.database().ref().child("restaurants").child(restaurant.$id).child('services').child(service.name);
 
     resRef.update({
         status : service.status
     })
-
   };
 
   $scope.changeAvailability = function(restaurant){
@@ -151,6 +148,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       location: restaurant.location,
       latitude: $scope.marker.coords.latitude,
       longitude: $scope.marker.coords.longitude,
+      facilities: restaurant.facilities,
       type: restaurant.type,
       cuisine: restaurant.cuisine,
       photoURL: $scope.imageURL,
@@ -180,25 +178,21 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
 
   $scope.deleteRestaurant = function(restaurant) {
     var resObj = restaurant;
-    console.log(resObj);
     $scope.displayRestaurants.$remove(resObj).then(function() {
       console.log('deleted?');
     });
 
     for(var menu in resObj.menus) {
-      console.log(menu);
       var menusRef = firebase.database().ref().child('menus');
       menusRef.child(menu).set(null);
     }
 
     for(var review in resObj.reviews) {
-      console.log(review);
       var reviewsRef = firebase.database().ref().child('reviews');
       reviewsRef.child(review).set(null);
     }
 
     for(var reviewer in resObj.reviewers) {
-      console.log(reviewer);
       var userReviewedRestaurantsRef = firebase.database().ref().child('users').child(reviewer).child('reviewed_restaurants');
       console.log('reviewer ref'+userReviewedRestaurantsRef);
       userReviewedRestaurantsRef.child(resObj.$id).set(null);
@@ -252,16 +246,11 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       $scope.restaurants.$add(restaurant)
         .then((restaurantObject) => {
           var resRef = firebase.database().ref().child('restaurants').child(restaurantObject.key).child('timestamp');
-          var resObj = Restaurant.get(restaurantObject.key);
-          for (var facility in resObj.facilities) {
-            var facilityRef = firebase.database().ref().child('facilities').child(facility).child('restaurants').child(restaurantObject.key);
-            facilityRef.set(true);
-          }
           resRef.transaction(function(currentTimestamp) {
-            var lolpe = firebase.database.ServerValue.TIMESTAMP;
+            var newTimestamp = firebase.database.ServerValue.TIMESTAMP;
             console.log('hello old timestamp ' + currentTimestamp);
             console.log('hello new timestamp ' + firebase.database.ServerValue.TIMESTAMP);
-            return lolpe;
+            return newTimestamp;
           })
         })
         .catch((err) => { console.log(err) })

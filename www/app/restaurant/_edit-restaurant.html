@@ -43,6 +43,16 @@
           <strong>{{eRestaurant.closeTime| date: "h:mm a"}}</strong>
         </div>
       </div>
+      {{eRestaurant.facilities}}
+      <ul class="list">
+        <li class="item item-checkbox" ng-repeat="facility in facilities">
+          <label class="checkbox">
+            <input type="checkbox" ng-model="eRestaurant.facilities[facility.$id]">
+          </label>
+            {{facility.name}}
+        </li>
+      </ul>
+
       <div class="padding">
         <button type="submit" class="button button-block button-positive">Edit Restaurant</button>
       </div>

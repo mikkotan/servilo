@@ -91,6 +91,14 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "$fi
 
     }
 
+    $scope.showAddReservationModal = function() {
+      $scope.reservation = {
+        datetime: new Date(),
+        number_of_persons: 2,
+      }
+      $scope.addReservationModal.show();
+    }
+
     $scope.restaurantOpenStatus = Restaurant.getRestaurantOpenStatus(id)
     $scope.isAlreadyReviewed();
     $scope.restaurantReviews = $firebaseArray(restaurantReviewsRef);
