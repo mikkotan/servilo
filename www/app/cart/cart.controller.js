@@ -1,7 +1,8 @@
-app.controller("CartCtrl",["$scope","User","CartData","Cart", "Database", "Restaurant", "$cordovaGeolocation",
-  function($scope ,User, CartData ,Cart, Database, Restaurant, $cordovaGeolocation){
+app.controller("CartCtrl",["$scope","User","CartData","Cart", "Database", "Restaurant", "CordovaGeolocation",
+  function($scope ,User, CartData ,Cart, Database, Restaurant, CordovaGeolocation){
 
 $scope.order = Database.orders();
+
 
 
 $scope.cartData = CartData.get();
@@ -121,20 +122,10 @@ $scope.buy = function(cart , location) {
       alert("please fill up Location");
     }
   }
-  //GeoLocation stuff
-  var options = {
-    timeout: 10000,
-    enableHighAccuracy: true
-  };
 
-  $cordovaGeolocation.getCurrentPosition(options).then(function(position) {
-    $scope.currentLocation = {
-      latitude: position.coords.latitude,
-      longitude: position.coords.longitude
-    };
-  });
 
   //Setting the map
+  $scope.currentLocation = CordovaGeolocation.get();
   $scope.marker = {
     id: 0
   };
@@ -144,11 +135,12 @@ $scope.buy = function(cart , location) {
       latitude: 10.73016704689235,
       longitude: 122.54616022109985
     },
-    zoom: 14,
+    zoom: 13,
     options: {
       scrollwheel: false
     },
     bounds: {},
+    refresh: true,
     events: {
       tilesloaded: function (map) {
           $scope.$apply(function () {
@@ -175,6 +167,7 @@ $scope.buy = function(cart , location) {
 
  //Mark the current location function here !!!
   $scope.markLocation = function() {
+    $scope.currentLocation = CordovaGeolocation.get();
     $scope.marker = {
       id: Date.now(),
       coords: {
@@ -193,16 +186,14 @@ $scope.buy = function(cart , location) {
   $scope.placeName = function(latitude, longitude){
     var geocoder = new google.maps.Geocoder;
     var latLng = {lat: latitude, lng: longitude};
-    // var address =
     geocoder.geocode({'location': latLng}, function(results, status) {
       if (status === 'OK') {
-        $scope.location = results[0].formatted_address;
+        $scope.$parent.location = results[0].formatted_address;
         $scope.$apply();
       } else {
         alert('Geocoder failed due to: ' + status);
       }
     });
-    // $scope.location ="locate";
   }
 
 }]);

@@ -1,13 +1,14 @@
 <div class="modal">
     <ion-header-bar class="bar bar-header bar-assertive">
       <h1 class="title">Edit {{restaurantName}}</h1>
-      <button class="button button-clear button-primary" ng-click="restaurantEditModal.hide()"><i class="icon ion-ios-close"></i></button>
+      <button class="button button-clear button-primary" ng-click="closeEditRestaurant()"><i class="icon ion-ios-close"></i></button>
     </ion-header-bar>
   <ion-content>
     <form ng-submit="edit(eRestaurant)">
       <div class="list">
         <div>
-          <img ng-show="!imageURL" ng-src="{{eRestaurant.photoURL}}" width="100%"/>
+          <img ng-show="!imageURL && !eRestaurant.photoURL" ng-src="img/ionic.png" width="100%"/>
+          <img ng-show="!imageURL && eRestaurant.photoURL" ng-src="{{eRestaurant.photoURL}}" width="100%"/>
           <img ng-show="imageURL" ng-src="{{imageURL}}" width="100%"/>
         </div>
         <a class="button button-icon icon ion-camera" ng-click="upload(1)">CAM</a>
@@ -43,6 +44,16 @@
           <strong>{{eRestaurant.closeTime| date: "h:mm a"}}</strong>
         </div>
       </div>
+      {{eRestaurant.facilities}}
+      <ul class="list">
+        <li class="item item-checkbox" ng-repeat="facility in facilities">
+          <label class="checkbox">
+            <input type="checkbox" ng-model="eRestaurant.facilities[facility.$id]">
+          </label>
+            {{facility.name}}
+        </li>
+      </ul>
+
       <div class="padding">
         <button type="submit" class="button button-block button-positive">Edit Restaurant</button>
       </div>

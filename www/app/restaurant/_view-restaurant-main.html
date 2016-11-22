@@ -1,12 +1,14 @@
 <ion-view view-title="{{restaurant.name}}">
   <ion-content overflow-scroll="true" class="padding has-tabs-top">
-    <img ng-src="data:image/jpeg;base64,{{restaurant.image}}" width="100%" />
+    <img ng-if="restaurant.photoURL" ng-src="{{restaurant.photoURL}}" width="100%" />
+    <img ng-if="!restaurant.photoURL" ng-src="img/wow.jpg" width="100%">
     <div class="padding">
       <h3>{{restaurant.name}}</h3>
-
-          <button ng-repeat="service in restaurant.services" class="button button-calm"  ng-disabled="!service.status" ng-click="goToMenus(restaurant, service)">
-              {{service.name}}
-          </button>
+        <!-- <button ng-repeat="service in restaurant.services" class="button button-calm"  ng-disabled="!service.status" ng-click="goToMenus(restaurant, service)">
+          {{service.name}}
+        </button> -->
+        <button class="button button-calm" ng-if="restaurant.facilities.Online" ui-sref="tabs.viewRestaurant.menus">Online Order</button>
+        <button class="button button-calm" ng-if="restaurant.facilities.Reservation" ng-click="showAddReservationModal()">Reservation</button>
       </div>
 
       <p>{{getRestaurantStatus}}</p>
@@ -24,13 +26,12 @@
         <ion-item>
           Location: {{restaurant.location}}
         </ion-item>
-
-        <div ng-if="exists != true">
+        <div ng-if="!exists">
           <button ng-click="reviewModal.show()" class="button button-block button-balanced">
             <icon class="ion-plus"></icon> Write Review</button>
         </div>
         <div class="button-bar" ng-if="exists">
-          <button ng-click="editReviewModal.show()" class="button button-balanced">
+          <button ng-click="openEditModal()" class="button button-balanced">
             <icon class="ion-plus"></icon> Edit Review</button>
           <button ng-click="showConfirmDelete(review)" class="button button-assertive">
             <icon class="ion-android-delete"></icon> Delete Review</button>
@@ -43,10 +44,13 @@
         <ul>
           <li class="item" ng-repeat="review in restaurantReviews">
             <h3>
-            {{review.content}} <span class="badge badge-balanced">{{review.rating}}</span>
-          </h3>
+              {{review.content}} <span class="badge badge-balanced">{{review.rating}}</span>
+            </h3>
             <p>
               Reviewed by: {{getReviewer(review).firstName}} {{getReviewer(review).lastName}}
+            </p>
+            <p ng-repeat="img in review.images">
+              <img ng-src="{{img.image}}" style="width:50px">
             </p>
           </li>
         </ul>
