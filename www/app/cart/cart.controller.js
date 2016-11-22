@@ -1,8 +1,10 @@
-app.controller("CartCtrl",["$scope","CartData","orders","authUser","restaurantId","Cart", "Database", "Restaurant", "CordovaGeolocation",
-  function($scope , CartData ,orders,authUser,restaurantId,Cart, Database, Restaurant, CordovaGeolocation){
+app.controller("CartCtrl",["$scope","User","CartData","Cart", "Database", "Restaurant", "CordovaGeolocation",
+  function($scope ,User, CartData ,Cart, Database, Restaurant, CordovaGeolocation){
 
-$scope.order = orders;
-$scope.restaurantId = restaurantId
+$scope.order = Database.orders();
+
+
+
 $scope.cartData = CartData.get();
 $scope.totalPrice = CartData.totalPrice();
 
@@ -73,12 +75,15 @@ var scanCart = function(Cart) {
     }
     return scanMenu;
 }
+$scope.hideCartModal = function(){
+    $scope.restaurantCart.hide();
+}
 
 $scope.buy = function(cart , location) {
-    if (typeof location !== "undefined") {
+    if (location) {
       $scope.order.$add({
-        restaurant_id : restaurantId,
-        customer_id : authUser.$id,
+        restaurant_id : $scope.restaurantId,
+        customer_id : User.auth().$id,
         order_details: {
           location : location,
           latitude: $scope.marker.coords.latitude,
@@ -98,14 +103,15 @@ $scope.buy = function(cart , location) {
       }).then(function() {
           CartData.get().length = 0;
           CartData.totalPrice().length = 0;
-          var restaurant_owner = Restaurant.getOwner(restaurantId);
+          var restaurant_owner = Restaurant.getOwner($scope.restaurantId);
           Database.notifications().$add({
-            sender_id : authUser.$id,
+            sender_id : User.auth().$id,
             receiver_id : restaurant_owner.$id,
-            restaurant_id : restaurantId,
+            restaurant_id : $scope.restaurantId,
             type : 'order',
             timestamp: firebase.database.ServerValue.TIMESTAMP
           });
+            $scope.restaurantCart.hide();
           alert("success")
       }).catch(function(error) {
             alert(error);

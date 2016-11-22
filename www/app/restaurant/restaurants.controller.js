@@ -1,6 +1,7 @@
-app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate",
-  "Restaurant", "$cordovaCamera", "CordovaGeolocation",
+
+app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate",  "Restaurant", "$cordovaCamera", "CordovaGeolocation",
   function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation) {
+
     $scope.modalControl = {};
     $scope.restaurants = Restaurant.all();
     $scope.pendingRestaurants = Restaurant.getPendingRestaurants();
@@ -23,15 +24,14 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
     });
 
   $scope.changeServiceStatus = function(restaurant,service){
-    var resRef = firebase.database().ref().child("restaurants").child(restaurant.$id).child('services').child(service.name);
-
+    var resRef = Database.restaurantsReference().child(restaurant.$id).child('services').child(service.name);
     resRef.update({
         status : service.status
     })
   };
 
   $scope.changeAvailability = function(restaurant){
-    var resRef = firebase.database().ref().child("restaurants").child(restaurant.$id);
+    var resRef = Database.restaurantsReference().child(restaurant.$id);
     resRef.update({
       availability: restaurant.availability
     })
@@ -63,16 +63,17 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       var d = new Date();
       var child = 'restaurants/' + d.getTime() + '.jpg';
       var storageRef = firebase.storage().ref();
-      var mountainsRef = storageRef.child(child).putString(imageData, 'base64', metadata);
-      mountainsRef.on('state_changed', function(snapshot) {
-      var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      var restaurantRef = storageRef.child(child).putString(imageData, 'base64', metadata);
+      restaurantRef.on('state_changed', function(snapshot){
+        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log('Upload is ' + progress + '% done');
         $scope.progress = progress;
       }, function(error) {
         console.log("error in uploading." + error);
       }, function() {
         //success upload
-        $scope.imageURL = mountainsRef.snapshot.downloadURL;
+        $scope.imageURL = restaurantRef.snapshot.downloadURL;
+        $scope.$apply();
       });
 
       }, function(error) {
@@ -100,7 +101,6 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
           status : false
         }
       },
-      availability : false,
       facilities : restaurant.facilities,
       location: restaurant.location,
       latitude: $scope.marker.coords.latitude,
@@ -202,6 +202,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
 
   $scope.closeEditRestaurant = function() {
     $scope.restaurantEditModal.hide();
+    $scope.imageURL = null;
   }
 
   $scope.newRestaurant = function() {
@@ -216,7 +217,12 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
     $scope.restaurantEditModal.show();
     $scope.showMap = false;
     $scope.eRestaurant = restaurant;
-    $scope.imageURL = restaurant.photoURL;
+    if(restaurant.photoURL) {
+      $scope.imageURL = restaurant.photoURL;
+    }
+    else {
+      $scope.imageURL = null;
+    }
     $scope.restaurantName = restaurant.name;
     $scope.marker.coords = {
       latitude: restaurant.latitude,
@@ -348,15 +354,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
   //   }
   // }
   $scope.facilities = $firebaseArray(firebase.database().ref().child('facilities'));
-  $scope.itemArray = [
-        {id: 1, name: 'first'},
-        {id: 2, name: 'second'},
-        {id: 3, name: 'third'},
-        {id: 4, name: 'fourth'},
-        {id: 5, name: 'fifth'},
-    ];
 
-  $scope.selected = { value: $scope.itemArray[0] };
 
 
 
