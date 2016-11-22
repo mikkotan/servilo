@@ -1,6 +1,6 @@
 app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate",
-  "Restaurant", "$cordovaCamera", "$cordovaGeolocation",
-  function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, $cordovaGeolocation) {
+  "Restaurant", "$cordovaCamera", "CordovaGeolocation",
+  function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation) {
     var total = 123;
     $scope.modalControl = {};
     $scope.restaurants = Restaurant.all();
@@ -260,17 +260,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
     id: 0
   };
 
-  var options = {
-    timeout: 10000,
-    enableHighAccuracy: true
-  };
-
-  $cordovaGeolocation.getCurrentPosition(options).then(function(position) {
-    $scope.currentLocation = {
-      latitude: position.coords.latitude,
-      longitude: position.coords.longitude
-    };
-  });
+  $scope.currentLocation = CordovaGeolocation.get();
 
   $scope.map = {
     center: {
@@ -295,11 +285,13 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
           }
         };
         $scope.marker = m;
+        $scope.placeName($scope.marker.coords.latitude ,$scope.marker.coords.longitude);
         $scope.$apply();
       }
     }
   };
   $scope.markLocation = function() {
+    $scope.currentLocation = CordovaGeolocation.get();
     $scope.marker = {
       id: Date.now(),
       coords: {
@@ -311,5 +303,19 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       latitude: $scope.currentLocation.latitude,
       longitude: $scope.currentLocation.longitude
     };
+    $scope.placeName($scope.marker.coords.latitude ,$scope.marker.coords.longitude);
+  }
+
+  $scope.placeName = function(latitude, longitude){
+    var geocoder = new google.maps.Geocoder;
+    var latLng = {lat: latitude, lng: longitude};
+    geocoder.geocode({'location': latLng}, function(results, status) {
+      if (status === 'OK') {
+        $scope.restaurant.location = results[0].formatted_address;
+        $scope.$apply();
+      } else {
+        alert('Geocoder failed due to: ' + status);
+      }
+    });
   }
 }])

@@ -1,5 +1,5 @@
-app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "$firebaseObject", "Database", "$ionicLoading", "$ionicModal", "$ionicPopup", "$cordovaGeolocation", "$stateParams", "Restaurant", "User", "Review", "Reservation", "$ionicLoading",
-  function($scope, $state, $firebaseArray, $firebaseObject, Database, $ionicLoading, $ionicModal, $ionicPopup, $cordovaGeolocation, $stateParams, Restaurant, User, Review, Reservation, $ionicLoading) {
+app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "$firebaseObject", "Database", "$ionicLoading", "$ionicModal", "$ionicPopup", "CordovaGeolocation", "$stateParams", "Restaurant", "User", "Review", "Reservation", "$ionicLoading",
+  function($scope, $state, $firebaseArray, $firebaseObject, Database, $ionicLoading, $ionicModal, $ionicPopup, CordovaGeolocation, $stateParams, Restaurant, User, Review, Reservation, $ionicLoading) {
 
     console.log("View Restaurant Ctrl")
 
@@ -262,18 +262,8 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "$fi
     }
 
     $scope.mapDirection = [];
-    $scope.currentLocation = {};
+    $scope.currentLocation = CordovaGeolocation.get();
     $scope.restaurantMarkers = [];
-    var options = {
-      timeout: 10000,
-      enableHighAccuracy: true
-    };
-    $cordovaGeolocation.getCurrentPosition(options).then(function(position) {
-      $scope.currentLocation = {
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude
-      };
-    });
 
     $scope.setMap = function(restaurant) {
       $scope.map = {
@@ -313,6 +303,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "$fi
 
     $scope.showPath = function(restaurant) {
       $scope.map.zoom = 12;
+      $scope.currentLocation = CordovaGeolocation.get();
       var mapDirection = new google.maps.DirectionsService();
       var request = {
         origin: {
