@@ -1,10 +1,10 @@
 app.controller('SearchTabCtrl',
   ["$scope","$ionicModal","$firebaseArray","Auth", "Restaurant", "Search" ,"$stateParams", "$state", "User",
     "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation", "$ionicLoading", "$cordovaImagePicker",
-     "Database", "Review", "restaurants",
+     "Database", "Review", "restaurants", "$cordovaCamera",
         function($scope, $ionicModal, $firebaseArray, Auth, Restaurant, Search, $stateParams, $state,
             User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, $ionicLoading,
-             $cordovaImagePicker, Database, Review, restaurants) {
+             $cordovaImagePicker, Database, Review, restaurants, $cordovaCamera) {
 
   console.log('SearchTabCtrl');
   $scope.usersRefObj = Database.users(); //new
@@ -31,6 +31,25 @@ app.controller('SearchTabCtrl',
     max: 5
   }
 
+  // if ($state.is("tabs.viewRestaurant")) {
+  //   var id = $stateParams.restaurantId;
+  // var userReviewsRef = Database.usersReference().child(User.auth().$id).child('reviewed_restaurants').child(id); //new subs below
+  // var restaurantReviewsRef = Database.reviewsReference().orderByChild('restaurant_id').equalTo(id); //new subs above
+  //
+  //   $scope.isAlreadyReviewed = function() {
+  //     userReviewsRef.once('value', function(snapshot) {
+  //       $scope.exists = (snapshot.val() !=null );
+  //       $scope.review = $firebaseObject(Database.reviewsReference().child(snapshot.val()));
+  //     })
+  //   }
+  //
+  //   $scope.restaurant = Restaurant.get(id);
+  //   $scope.getRestaurantStatus = Restaurant.getRestaurantStatus(Restaurant.get(id).owner_id);
+  //   $scope.restaurantService = Restaurant.getRestaurantOpenStatus(id)
+  //   $scope.isAlreadyReviewed();
+  //   $scope.restaurantReviews = $firebaseArray(restaurantReviewsRef);
+  //   // $scope.restaurantReviews = $firebaseArray(Database.reviewsReference().orderByChild('restaurant_id').equalTo(id));
+  // }
 
   $scope.images = [];
   // $scope.editImages = [];
@@ -168,17 +187,17 @@ app.controller('SearchTabCtrl',
       }
     })
   }
-  $scope.currentLocation = {};
+  $scope.currentLocation ={};
   $scope.markers = [];
 
   $scope.isMarkerCanChange = true;
   $scope.map =  {center: { latitude: 10.729984, longitude: 122.549298 }, zoom: 12, options: {scrollwheel: false}, bounds: {}, control:{}, refresh: true,
    events : {
-    tilesloaded: function (map) {
-            $scope.$apply(function () {
-                google.maps.event.trigger(map, "resize");
-            });
-        }
+      tilesloaded: function (map) {
+          $scope.$apply(function () {
+              google.maps.event.trigger(map, "resize");
+          });
+      }
     }
   };
 
@@ -195,7 +214,7 @@ app.controller('SearchTabCtrl',
   // };
 
   $scope.addMarkers = function(items){
-    if($scope.isMarkerCanChange){
+    if(  $scope.isMarkerCanChange){
       $scope.markers.length = 0;
       for (var i = 0; i < items.length; i++) {
         $scope.markers.push({id: items[i].$id,

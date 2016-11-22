@@ -8,9 +8,8 @@
   </ion-header-bar>
   <ion-content class="padding has-subheader">
     <ion-list>
-        <div>
-        <ui-gmap-google-map zoom='map.zoom' center="map.center" options='map.options' bounds='map.bounds' control='map.control' refresh=map.refresh events=map.events ng-cloak>
-          <ui-gmap-markers models="markers" coords="'coords'" icon="'icon'" events="markerEvents" doRebuildAll="true"></ui-gmap-markers>
+      <div>
+        <ui-gmap-google-map zoom='map.zoom' center="map.center" options='map.options' bounds='map.bounds' control='map.control' refresh=map.refresh events=map.events ng-cloak>          <ui-gmap-markers models="markers" coords="'coords'" icon="'icon'" events="markerEvents" doRebuildAll="true"></ui-gmap-markers>
           <ui-gmap-map-control position="top-right">
             <button class="button button-small button-balanced" ng-click="showNear()">{{mapText}}</button>
           </ui-gmap-map-control>
@@ -19,7 +18,7 @@
       <h3>Restaurants</h3>
       <div class="card padding" ng-repeat="restaurant in (filteredItems = (restaurants | restaurantFilter:searchRestaurant  | orderBy:'name'))">
         <div class="item item-thumbnail-left">
-          <img class="img-thumbnail" ng-if="restaurant.image" ng-src="data:image/jpeg;base64,{{restaurant.image}}"/>
+          <img class="img-thumbnail" ng-if="restaurant.image" ng-src="data:image/jpeg;base64,{{restaurant.image}}" />
           <img ng-if="!restaurant.image" ng-src="img/wow.jpg">
           <h3 ui-sref="tabs.viewRestaurant.main({restaurantId:restaurant.$id})">
             <icon class="ion-spoon"></icon> {{restaurant.name}}
@@ -37,8 +36,8 @@
             <icon class="ion-android-call"></icon> Call Us
           </button>
         </div>
-    </div>
-    <div ng-cloak>{{addMarkers(filteredItems)}}</div>
+      </div>
+      <div ng-cloak>{{addMarkers(filteredItems)}}</div>
     </ion-list>
   </ion-content>
 </ion-view>

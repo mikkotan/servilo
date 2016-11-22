@@ -1,5 +1,5 @@
-app.controller("LoginCtrl",["$scope", "Auth", "ionicMaterialInk", "ionicMaterialMotion", "User", "$state", "$ionicLoading", "$ionicModal", "Database", "IonicPushService",
-  function($scope, Auth, ionicMaterialInk, ionicMaterialMotion, User, $state, $ionicLoading, $ionicModal, Database, IonicPushService){
+app.controller("LoginCtrl",["$scope", "Auth", "ionicMaterialInk", "ionicMaterialMotion", "User", "$state", "$ionicLoading", "$ionicModal", "Database", "IonicPushService", "$ionicPopup",
+  function($scope, Auth, ionicMaterialInk, ionicMaterialMotion, User, $state, $ionicLoading, $ionicModal, Database, IonicPushService, $ionicPopup){
 
   ionicMaterialInk.displayEffect();
 
@@ -22,7 +22,10 @@ app.controller("LoginCtrl",["$scope", "Auth", "ionicMaterialInk", "ionicMaterial
             provider: "google",
             startedAt : firebase.database.ServerValue.TIMESTAMP
           })
-          IonicPushService.registerToAuth();
+          if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
+            IonicPushService.registerToAuth();
+          }
+          // IonicPushService.registerToAuth();
           console.log('Firebase Google login success');
           $state.go("tabs.home");
         },
@@ -63,7 +66,10 @@ app.controller("LoginCtrl",["$scope", "Auth", "ionicMaterialInk", "ionicMaterial
             provider: "twitter",
             startedAt : firebase.database.ServerValue.TIMESTAMP
           })
-          IonicPushService.registerToAuth();
+          if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
+            IonicPushService.registerToAuth();
+          }
+          // IonicPushService.registerToAuth();
           console.log(success.displayName);
           console.log('Firebase Twitter login success');
           $state.go("tabs.home");
@@ -83,18 +89,34 @@ app.controller("LoginCtrl",["$scope", "Auth", "ionicMaterialInk", "ionicMaterial
     // console.log(user.password);
     // var ionicTok = $ionicPush.token.token; //comment if testing in browser
     // var res = ionicTok.split(':'); //comment if testing in browser
-    $ionicLoading.show();
-    Auth.$signInWithEmailAndPassword(user.email, user.password).then(function(authUser){
-      // var currentAuthRef = Database.usersReference().child(User.auth().$id).child('device_token').child(res[0]); //remove if testing in browser
-      // currentAuthRef.set(res[1]); //comment if testing in browser
-      IonicPushService.registerToAuth();
-      $state.go("tabs.home")
-      $ionicLoading.hide();
-      user.password = "";
-      user.email = "";
-    }).catch(function(err){
-      $ionicLoading.hide();
-      console.log(err);
+    $ionicLoading.show({
+      template: '<p>Logging in . . .</p><ion-spinner></ion-spinner>',
+      duration: 2000
+    });
+    Auth.$signInWithEmailAndPassword(user.email, user.password)
+      .then(function(authUser) {
+        // var currentAuthRef = Database.usersReference().child(User.auth().$id).child('device_token').child(res[0]); //remove if testing in browser
+        // currentAuthRef.set(res[1]); //comment if testing in browser
+        if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
+          console.log("android or ios platform");
+          IonicPushService.registerToAuth();
+        }
+        // IonicPushService.registerToAuth();
+        $ionicLoading.hide();
+        $state.go("tabs.home")
+        user.password = "";
+        user.email = "";
+      })
+      .catch(function(err) {
+        $ionicLoading.hide();
+        $ionicPopup.alert({
+          title: 'Authentication Failed',
+          template: 'Incorrect username or password.'
+        })
+        .then((res) => {
+          console.log('tapped '+res);
+        })
+        console.log(err);
     });
   };
   $scope.fbLogin = function() {
@@ -108,7 +130,10 @@ app.controller("LoginCtrl",["$scope", "Auth", "ionicMaterialInk", "ionicMaterial
             provider: "facebook",
             startedAt : firebase.database.ServerValue.TIMESTAMP
           })
-          IonicPushService.registerToAuth();
+          if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
+            IonicPushService.registerToAuth();
+          }
+          // IonicPushService.registerToAuth();
           console.log(success.displayName);
           console.log('Firebase Facebook login success');
           $ionicLoading.hide();

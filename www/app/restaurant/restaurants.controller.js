@@ -63,12 +63,28 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       saveToPhotoAlbum: false
     };
     $cordovaCamera.getPicture(options).then(function(imageData) {
-      $scope.imageURL = imageData;
+      var d = new Date();
+      var child = 'restaurants/' + d.getTime() + '.jpg';
+      var storageRef = firebase.storage().ref();
+      var mountainsRef = storageRef.child(child).putString(imageData, 'base64', metadata);
+      mountainsRef.on('state_changed', function(snapshot){
+      var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+        $scope.progress = progress;
+      }, function(error) {
+        console.log("error in uploading." + error);
+      }, function() {
+        //success upload
+        $scope.imageURL = mountainsRef.snapshot.downloadURL;
+      });
 
       }, function(error) {
         console.error(error);
       });
   }
+  var metadata = {
+    contentType: 'image/jpeg',
+  };
 
   $scope.addRestaurant = function(restaurant){
     $scope.pendingRestaurants.$add({
@@ -94,7 +110,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       type: restaurant.type,
       cuisine: restaurant.cuisine,
       owner_id: User.auth().$id,
-      image: $scope.imageURL,
+      photoURL: $scope.imageURL,
       phonenumber: restaurant.phonenumber,
       openTime: restaurant.openTime.getTime(),
       closeTime: restaurant.closeTime.getTime(),
@@ -107,24 +123,36 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
         totalRatingCount: 0,
         avgRate: 0
       }
-    })
-
-    restaurant.name = "";
-    restaurant.location = "";
-    restaurant.type = "";
-    restaurant.cuisine = "";
-    $scope.restaurantModal.hide();
+    }).then(function() {
+      $scope.restaurantModal.hide();
+      restaurant.name = "";
+      restaurant.location = "";
+      restaurant.type = "";
+      restaurant.cuisine = "";
+      restaurant.phonenumber = "";
+      restaurant.closeTime = "";
+      $scope.imageURL = null;
+      $scope.progress = null;
+    });
   }
 
   $scope.edit = function(restaurant) {
     var resRef = firebase.database().ref().child("restaurants").child(restaurant.$id);
+    var OT = new Date(restaurant.openTime);
+    var CT = new Date(restaurant.closeTime);
     resRef.update({
       name: restaurant.name,
       location: restaurant.location,
       latitude: $scope.marker.coords.latitude,
       longitude: $scope.marker.coords.longitude,
       type: restaurant.type,
-      cuisine: restaurant.cuisine
+      cuisine: restaurant.cuisine,
+      photoURL: $scope.imageURL,
+      phonenumber: restaurant.phonenumber,
+      openTime: OT.getTime(),
+      closeTime: CT.getTime(),
+    }).then(function() {
+      $scope.imageURL = null;
     })
 
     $scope.restaurantEditModal.hide();
@@ -185,10 +213,11 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
   }
 
   $scope.editRestaurant = function(restaurant) {
-
     $scope.restaurantEditModal.show();
     $scope.showMap = false;
-    $scope.restaurant = restaurant;
+    $scope.eRestaurant = restaurant;
+    $scope.imageURL = restaurant.photoURL;
+    $scope.restaurantName = restaurant.name;
     $scope.marker.coords = {
       latitude: restaurant.latitude,
       longitude: restaurant.longitude

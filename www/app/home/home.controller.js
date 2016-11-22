@@ -1,10 +1,10 @@
 app.controller('HomeTabCtrl',
   ["$scope","$ionicModal","$firebaseArray","Auth", "Restaurant", "Home" ,"$stateParams", "$state", "User",
     "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation", "$ionicLoading", "$cordovaImagePicker",
-     "Database", "Review", "restaurants",
+     "Database", "Review", "restaurants", "$cordovaCamera",
         function($scope, $ionicModal, $firebaseArray, Auth, Restaurant, Home, $stateParams, $state,
             User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, $ionicLoading,
-             $cordovaImagePicker, Database, Review, restaurants) {
+             $cordovaImagePicker, Database, Review, restaurants, $cordovaCamera) {
 
   console.log('HomeTabCtrl');
   $scope.usersRefObj = Database.users(); //new
@@ -193,11 +193,11 @@ app.controller('HomeTabCtrl',
   $scope.isMarkerCanChange = true;
   $scope.map =  {center: { latitude: 10.729984, longitude: 122.549298 }, zoom: 12, options: {scrollwheel: false}, bounds: {}, control:{}, refresh: true,
    events : {
-    tilesloaded: function (map) {
-            $scope.$apply(function () {
-                google.maps.event.trigger(map, "resize");
-            });
-        }
+      tilesloaded: function (map) {
+          $scope.$apply(function () {
+              google.maps.event.trigger(map, "resize");
+          });
+      }
     }
   };
 

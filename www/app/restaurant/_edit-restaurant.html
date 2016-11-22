@@ -1,16 +1,25 @@
 <div class="modal">
     <ion-header-bar class="bar bar-header bar-assertive">
-      <h1 class="title">Edit {{restaurant.name}}</h1>
+      <h1 class="title">Edit {{restaurantName}}</h1>
       <button class="button button-clear button-primary" ng-click="restaurantEditModal.hide()"><i class="icon ion-ios-close"></i></button>
     </ion-header-bar>
   <ion-content>
-    <form ng-submit="edit(restaurant)">
+    <form ng-submit="edit(eRestaurant)">
       <div class="list">
+        <div>
+          <img ng-show="!imageURL" ng-src="{{eRestaurant.photoURL}}" width="100%"/>
+          <img ng-show="imageURL" ng-src="{{imageURL}}" width="100%"/>
+        </div>
+        <a class="button button-icon icon ion-camera" ng-click="upload(1)">CAM</a>
+        <a class="button button-icon icon ion-camera" ng-click="upload(2)">ALBS</a>
         <label class="item item-input">
-          <input type="text" placeholder="Name of Restaurant" ng-model="restaurant.name">
+          <input type="text" placeholder="Name of Restaurant" ng-model="eRestaurant.name">
         </label>
         <label class="item item-input">
-          <input type="text" placeholder="Location of Restaurant" ng-model="restaurant.location">
+          <input type="text" placeholder="Location of Restaurant" ng-model="eRestaurant.location">
+        </label>
+        <label class="item item-input">
+          <input type="text" ng-model="eRestaurant.phonenumber" ui-mask="(999) 999-9999"  ui-mask-placeholder ui-mask-placeholder-char="_"/>
         </label>
         <div>
           <ui-gmap-google-map zoom='map.zoom' events= 'map.events' center='map.center' options='map.options' bounds='map.bounds' control="modalControl">
@@ -18,11 +27,21 @@
           </ui-gmap-google-map>
         </div>
         <label class="item item-input">
-          <input type="text" placeholder="Type of Restaurant" ng-model="restaurant.type">
+          <input type="text" placeholder="Type of Restaurant" ng-model="eRestaurant.type">
         </label>
         <label class="item item-input">
-          <input type="text" placeholder="Cuisine of Restaurant" ng-model="restaurant.cuisine">
+          <input type="text" placeholder="Cuisine of Restaurant" ng-model="eRestaurant.cuisine">
         </label>
+        <div class="item item-icon-left" ion-datetime-picker time am-pm ng-model="eRestaurant.openTime">
+          <i class="icon ion-ios-clock positive"></i>
+          Open Time:
+          <strong>{{eRestaurant.openTime| date: "h:mm a"}}</strong>
+        </div>
+        <div class="item item-icon-left" ion-datetime-picker time am-pm ng-model="eRestaurant.closeTime">
+          <i class="icon ion-ios-clock positive"></i>
+          Close Time:
+          <strong>{{eRestaurant.closeTime| date: "h:mm a"}}</strong>
+        </div>
       </div>
       <div class="padding">
         <button type="submit" class="button button-block button-positive">Edit Restaurant</button>
