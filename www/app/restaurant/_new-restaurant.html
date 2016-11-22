@@ -45,6 +45,18 @@
         Close Time:
         <strong>{{restaurant.closeTime| date: "h:mm a"}}</strong>
       </div>
+      <p ng-repeat="facility in facilities">
+        {{facility.name}}
+      </p>
+      {{restaurant.facilities}}
+      <ul class="list">
+        <li class="item item-checkbox" ng-repeat="facility in facilities">
+          <label class="checkbox">
+            <input type="checkbox" ng-model="restaurant.facilities[facility.$id]">
+          </label>
+            {{facility.name}}
+        </li>
+      </ul>
 
       <div class="padding">
         <button type="submit" class="button button-block button-positive">Add Restaurant</button>

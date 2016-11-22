@@ -1,12 +1,12 @@
-app.controller('HomeTabCtrl',
-  ["$scope","$ionicModal","$firebaseArray","Auth", "Restaurant", "Home" ,"$stateParams", "$state", "User",
+app.controller('SearchTabCtrl',
+  ["$scope","$ionicModal","$firebaseArray","Auth", "Restaurant", "Search" ,"$stateParams", "$state", "User",
     "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation", "$ionicLoading", "$cordovaImagePicker",
-     "Database", "Review", "restaurants",
-        function($scope, $ionicModal, $firebaseArray, Auth, Restaurant, Home, $stateParams, $state,
+     "Database", "Review", "restaurants", "$cordovaCamera",
+        function($scope, $ionicModal, $firebaseArray, Auth, Restaurant, Search, $stateParams, $state,
             User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, $ionicLoading,
-             $cordovaImagePicker, Database, Review, restaurants) {
+             $cordovaImagePicker, Database, Review, restaurants, $cordovaCamera) {
 
-  console.log('HomeTabCtrl');
+  console.log('SearchTabCtrl');
   $scope.usersRefObj = Database.users(); //new
   // Database.restaurants().$loaded().then(function() {
   //   console.log($scope.restaurants.length);
@@ -187,8 +187,9 @@ app.controller('HomeTabCtrl',
       }
     })
   }
+  $scope.currentLocation ={};
   $scope.markers = [];
-  $scope.currentLocation =CordovaGeolocation.get();
+
   $scope.isMarkerCanChange = true;
   $scope.map =  {center: { latitude: 10.729984, longitude: 122.549298 }, zoom: 12, options: {scrollwheel: false}, bounds: {}, control:{}, refresh: true,
    events : {
@@ -199,6 +200,18 @@ app.controller('HomeTabCtrl',
       }
     }
   };
+
+  var options = {timeout: 10000, enableHighAccuracy: true};
+    $cordovaGeolocation.getCurrentPosition(options).then(function(position){
+    $scope.currentLocation = {latitude: position.coords.latitude,longitude: position.coords.longitude};
+  });
+
+  // $scope.setMap = function(restaurant){
+  //     $scope.map =  {center:{latitude: restaurant.latitude, longitude: restaurant.longitude}, zoom: 14, options: {scrollwheel: false}, bounds: {}, control: {}};
+  //     $scope.restaurantMarkers.push({id: Date.now(),
+  //       coords:{latitude:restaurant.latitude, longitude:restaurant.longitude}
+  //     });
+  // };
 
   $scope.addMarkers = function(items){
     if(  $scope.isMarkerCanChange){
@@ -221,7 +234,6 @@ app.controller('HomeTabCtrl',
   $scope.mapText = "Nearest restaurant in 1km";
   $scope.showNear =function(){
     if($scope.mapText == "Nearest restaurant in 1km"){
-      $scope.currentLocation = CordovaGeolocation.get();
       $scope.mapText = "Back to Default";
       $scope.tempMarkers = [];
       for (var i = 0; i < $scope.markers.length; i++) {
@@ -262,7 +274,6 @@ app.controller('HomeTabCtrl',
   };
 
   $scope.allowMarkerChange = function(){
-    $scope.map.center = { latitude: 10.729984, longitude: 122.549298 };
     $scope.map.zoom = 12;
     $scope.isMarkerCanChange = true;
   }

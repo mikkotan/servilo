@@ -1,43 +1,8 @@
 <ion-view view-title="Home">
   <ion-header-bar class="bar bar-subheader bar-light item-input-inset">
-    <label class="item-input-wrapper">
-      <i class="icon ion-search placeholder-icon"></i>
-      <input placeholder="Search..." type="search" ng-model="searchRestaurant" ng-change="allowMarkerChange()">
-    </label>
   </ion-header-bar>
-  <ion-content class="padding has-subheader">
-    <ion-list>
-        <div>
-        <ui-gmap-google-map zoom='map.zoom' center="map.center" options='map.options' bounds='map.bounds' control='map.control' refresh=map.refresh events=map.events ng-cloak>
-          <ui-gmap-markers models="markers" coords="'coords'" icon="'icon'" events="markerEvents" doRebuildAll="true"></ui-gmap-markers>
-          <ui-gmap-map-control position="top-right">
-            <button class="button button-small button-balanced" ng-click="showNear()">{{mapText}}</button>
-          </ui-gmap-map-control>
-        </ui-gmap-google-map>
-      </div> 
-      <h3>Restaurants</h3>
-      <div class="card padding" ng-repeat="restaurant in (filteredItems = (restaurants | restaurantFilter:searchRestaurant  | orderBy:'name'))">
-        <div class="item item-thumbnail-left">
-          <img class="img-thumbnail" ng-if="restaurant.photoURL" ng-src="{{restaurant.photoURL}}"/>
-          <img ng-if="!restaurant.photoURL" ng-src="img/wow.jpg">
-          <h3 ui-sref="tabs.viewRestaurant.main({restaurantId:restaurant.$id})">
-            <icon class="ion-spoon"></icon> {{restaurant.name}}
-            <span style="color:green">
-              <icon class="ion-android-star-outline"></icon> {{restaurant.secured_data.avgRate.toFixed(1)}}
-            </span>
-          </h3>
-          <p>
-            {{restaurant.secured_data.avgPrice.toFixed(2) | currency:"₱"}}
-          </p>
-          <p>
-            <icon class="ion-ios-location-outline"></icon> {{restaurant.location}}
-          </p>
-          <button class="button button-balanced button-small button-outline" ng-click="CallNumber(restaurant.phonenumber)">
-            <icon class="ion-android-call"></icon> Call Us
-          </button>
-        </div>
-    </div>
-    <div ng-cloak>{{addMarkers(filteredItems)}}</div>
-    </ion-list>
+  <ion-content>
+    HOME HERE
+
   </ion-content>
 </ion-view>
