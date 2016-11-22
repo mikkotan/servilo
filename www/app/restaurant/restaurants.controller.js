@@ -203,6 +203,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
 
   $scope.closeEditRestaurant = function() {
     $scope.restaurantEditModal.hide();
+    $scope.imageURL = null;
   }
 
   $scope.newRestaurant = function() {
@@ -219,6 +220,9 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
     $scope.eRestaurant = restaurant;
     if(restaurant.photoURL) {
       $scope.imageURL = restaurant.photoURL;
+    }
+    else {
+      $scope.imageURL = null;
     }
     $scope.restaurantName = restaurant.name;
     $scope.marker.coords = {
