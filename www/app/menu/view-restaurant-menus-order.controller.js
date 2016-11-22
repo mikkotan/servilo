@@ -31,10 +31,10 @@ $scope.restaurantStatus.on('value' , function(snap){
   };
 
   $scope.viewCart = function(){
-    if(CartData.get().length <= 0 ){
-      alert("No food in your cart");
+    if(CartData.get().length > 0 ){
+      $scope.restaurantCart.show();
     }else {
-      $state.go("tabs.cart",{restaurantId:$scope.restaurantId})
+      alert("No food in your cart");
     }
   }
 
@@ -70,7 +70,6 @@ $scope.restaurantStatus.on('value' , function(snap){
 
         if( menuOrder === null){
           CartData.add(menuCart);
-          $state.go("tabs.viewRestaurant.menus");
           closeModal();
         }
         else {
@@ -94,6 +93,12 @@ $scope.restaurantStatus.on('value' , function(snap){
 
   $ionicModal.fromTemplateUrl('app/menu/_add-cart-modal.html', function(addToCartModal) {
     $scope.addToCartModal = addToCartModal;
+  }, {
+    scope: $scope
+  });
+
+  $ionicModal.fromTemplateUrl('app/cart/_cart.html', function(restaurantCart) {
+    $scope.restaurantCart = restaurantCart;
   }, {
     scope: $scope
   });

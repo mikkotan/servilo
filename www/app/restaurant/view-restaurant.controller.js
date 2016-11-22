@@ -25,7 +25,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "$fi
 
       $scope.isAlreadyReviewed = function() {
         userReviewsRef.once('value', function(snapshot) {
-          $scope.exists = (snapshot.val() != null);
+          $scope.exists = (snapshot.val() !== null);
           $scope.review = $firebaseObject(Database.reviewsReference().child(snapshot.val()));
         })
       }
@@ -45,12 +45,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "$fi
       $scope.getRestaurantStatus = snap.val() ? "Online" : "Offline";
     })
 
-    $scope.isAlreadyReviewed = function() {
-      userReviewsRef.once('value', function(snapshot) {
-        $scope.exists = (snapshot.val() !== null);
-        $scope.review = $firebaseObject(Database.reviewsReference().child(snapshot.val()));
-      })
-    }
+
 
     $scope.bookReservation = function(reservation) {
       $ionicLoading.show();
@@ -73,10 +68,6 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "$fi
           $state.go("tabs.viewRestaurant.menus", {
             restaurantId: id
           })
-          transaction.serviceType = "online"
-          transaction.restaurant_id = restaurant.$id
-          transaction.customer_id = "myId"
-          break;
         case "reserve":
           console.log("reserve clicked");
           $scope.reservation = {

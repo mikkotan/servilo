@@ -1,6 +1,6 @@
-app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate",
+app.controller("RestaurantCtrl", ["$scope","Database", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate",
   "Restaurant", "$cordovaCamera", "$cordovaGeolocation",
-  function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, $cordovaGeolocation) {
+  function($scope,Database, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, $cordovaGeolocation) {
     var total = 123;
     $scope.modalControl = {};
     $scope.restaurants = Restaurant.all();
@@ -24,17 +24,14 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
     });
 
   $scope.changeServiceStatus = function(restaurant,service){
-
-    var resRef = firebase.database().ref().child("restaurants").child(restaurant.$id).child('services').child(service.name);
-
+    var resRef = Database.restaurantsReference().child(restaurant.$id).child('services').child(service.name);
     resRef.update({
         status : service.status
     })
-
   };
 
   $scope.changeAvailability = function(restaurant){
-    var resRef = firebase.database().ref().child("restaurants").child(restaurant.$id);
+    var resRef = Database.restaurantsReference().child(restaurant.$id);
     resRef.update({
       availability: restaurant.availability
     })
