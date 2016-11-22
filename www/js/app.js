@@ -70,9 +70,10 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
     });
   }]);
 
+
 app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate, Auth, User, Database, $state, $ionicPush, IonicPushService) {
   $scope.showMenu = function() {
-  $ionicSideMenuDelegate.toggleLeft();
+    $ionicSideMenuDelegate.toggleLeft();
   };
   $scope.showRightMenu = function() {
     $ionicSideMenuDelegate.toggleRight();
@@ -84,32 +85,32 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
     });
     Database.userOnlineTrue().$loaded().then(function(loaded) {
       loaded.$remove(0)
-      .then(function(ref) {
-        console.log("success user loaded deleted");
-        var firebaseUser = Auth.$getAuth();
-        if (ionic.Platform.isIOS() || ionic.Platform.isAndroid()) {
-          console.log("hi hello this is ios or android platform");
-          var ionicToken = IonicPushService.getToken();
-          var results = ionicToken.split(':');
-          Database.usersReference().child(firebaseUser.uid).child('device_token').child(results[0]).set(null);
-        }
-        Auth.$signOut();
-        location.reload();
-        $ionicLoading.hide();
-      })
-      .catch(function(err) {
-        console.log(err)
-      })
+        .then((ref) => {
+          console.log("success user loaded deleted");
+          var firebaseUser = Auth.$getAuth();
+          if (ionic.Platform.isIOS() || ionic.Platform.isAndroid()) {
+            var ionicToken = IonicPushService.getToken();
+            var results = ionicToken.split(':');
+            Database.usersReference().child(firebaseUser.uid).child('device_token').child(results[0]).set(null);
+          }
+          Auth.$signOut();
+          location.reload();
+          $ionicLoading.hide();
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     });
     // facebookConnectPlugin.logout();
     // TwitterConnect.logout();
     // window.plugins.googleplus.disconnect();
   }
 
+
   Auth.$onAuthStateChanged(function(firebaseUser) {
     if (firebaseUser) {
       $scope.firebaseUser = User.auth();
-      if(firebaseUser.displayName) {
+      if (firebaseUser.displayName) {
         $scope.photoURL = firebaseUser.photoURL;
       }
     }

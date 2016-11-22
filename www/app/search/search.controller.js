@@ -1,12 +1,12 @@
-app.controller('HomeTabCtrl',
-  ["$scope","$ionicModal","$firebaseArray","Auth", "Restaurant", "Home" ,"$stateParams", "$state", "User",
+app.controller('SearchTabCtrl',
+  ["$scope","$ionicModal","$firebaseArray","Auth", "Restaurant", "Search" ,"$stateParams", "$state", "User",
     "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation", "$ionicLoading", "$cordovaImagePicker",
      "Database", "Review", "restaurants", "$cordovaCamera",
-        function($scope, $ionicModal, $firebaseArray, Auth, Restaurant, Home, $stateParams, $state,
+        function($scope, $ionicModal, $firebaseArray, Auth, Restaurant, Search, $stateParams, $state,
             User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, $ionicLoading,
              $cordovaImagePicker, Database, Review, restaurants, $cordovaCamera) {
 
-  console.log('HomeTabCtrl');
+  console.log('SearchTabCtrl');
   $scope.usersRefObj = Database.users(); //new
   // Database.restaurants().$loaded().then(function() {
   //   console.log($scope.restaurants.length);

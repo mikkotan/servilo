@@ -99,4 +99,5 @@
     <variable name="SENDER_ID" value="155324175920"/>
   </plugin>
   <plugin name="cl.rmd.cordova.dialoggps" spec="https://github.com/rodrigo-martinezd/cordova-dialog-gps.git"/>
+  <plugin name="cordova-plugin-geolocation" spec="~2.4.0"/>
 </widget>
