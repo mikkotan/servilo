@@ -127,6 +127,23 @@ app.controller('SearchTabCtrl',
     $scope.images = [];
   };
 
+  // $ionicModal.fromTemplateUrl('app/review/new-review.html', function(reviewModal) {
+  //   $scope.reviewModal = reviewModal;
+  // }, {
+  //   scope: $scope
+  // });
+  // $ionicModal.fromTemplateUrl('app/review/edit-review.html', function(editReviewModal) {
+  //   $scope.editReviewModal = editReviewModal;
+  // }, {
+  //   scope: $scope
+  // });
+
+  // $ionicModal.fromTemplateUrl('templates/edit-review.html', function(editModalReview) {
+  //   $scope.editReviewModal = editModalReview;
+  // }, {
+  //   scope: $scope
+  // });
+
   $scope.showConfirmDelete = function(review) {
     var reviewObj = review;
     var reviewRating = review.rating;
@@ -151,7 +168,7 @@ app.controller('SearchTabCtrl',
       }
     })
   }
-  $scope.currentLocation ={};
+  $scope.currentLocation = {};
   $scope.markers = [];
 
   $scope.isMarkerCanChange = true;
@@ -178,7 +195,7 @@ app.controller('SearchTabCtrl',
   // };
 
   $scope.addMarkers = function(items){
-    if(  $scope.isMarkerCanChange){
+    if($scope.isMarkerCanChange){
       $scope.markers.length = 0;
       for (var i = 0; i < items.length; i++) {
         $scope.markers.push({id: items[i].$id,
@@ -191,7 +208,7 @@ app.controller('SearchTabCtrl',
   $scope.markerEvents = {
     click: function(marker, eventName, model){
       if(model.id != '0'){
-        $state.go("tabs.viewRestaurant.main",{restaurantId:model.id});
+        $state.go("tabs.viewRestaurant",{restaurantId:model.id});
       }
     }
   };
