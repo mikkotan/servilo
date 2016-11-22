@@ -66,7 +66,7 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
         if (ionic.Platform.isIOS() || ionic.Platform.isAndroid()) {
           console.log("hi hello this is ios or android platform");
           var ionicToken = IonicPushService.getToken();
-          var results = ionicTok.split(':');
+          var results = ionicToken.split(':');
           Database.usersReference().child(firebaseUser.uid).child('device_token').child(results[0]).set(null);
         }
         Auth.$signOut();

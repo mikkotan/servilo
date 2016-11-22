@@ -7,7 +7,8 @@
     <form ng-submit="edit(eRestaurant)">
       <div class="list">
         <div>
-          <img ng-show="!imageURL" ng-src="{{eRestaurant.photoURL}}" width="100%"/>
+          <img ng-show="!imageURL && !eRestaurant.photoURL" ng-src="img/ionic.png" width="100%"/>
+          <img ng-show="!imageURL && eRestaurant.photoURL" ng-src="{{eRestaurant.photoURL}}" width="100%"/>
           <img ng-show="imageURL" ng-src="{{imageURL}}" width="100%"/>
         </div>
         <a class="button button-icon icon ion-camera" ng-click="upload(1)">CAM</a>

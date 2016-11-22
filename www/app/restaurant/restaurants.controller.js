@@ -66,16 +66,17 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       var d = new Date();
       var child = 'restaurants/' + d.getTime() + '.jpg';
       var storageRef = firebase.storage().ref();
-      var mountainsRef = storageRef.child(child).putString(imageData, 'base64', metadata);
-      mountainsRef.on('state_changed', function(snapshot){
-      var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      var restaurantRef = storageRef.child(child).putString(imageData, 'base64', metadata);
+      restaurantRef.on('state_changed', function(snapshot){
+        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log('Upload is ' + progress + '% done');
         $scope.progress = progress;
       }, function(error) {
         console.log("error in uploading." + error);
       }, function() {
         //success upload
-        $scope.imageURL = mountainsRef.snapshot.downloadURL;
+        $scope.imageURL = restaurantRef.snapshot.downloadURL;
+        $scope.$apply();
       });
 
       }, function(error) {
@@ -216,7 +217,9 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
     $scope.restaurantEditModal.show();
     $scope.showMap = false;
     $scope.eRestaurant = restaurant;
-    $scope.imageURL = restaurant.photoURL;
+    if(restaurant.photoURL) {
+      $scope.imageURL = restaurant.photoURL;
+    }
     $scope.restaurantName = restaurant.name;
     $scope.marker.coords = {
       latitude: restaurant.latitude,

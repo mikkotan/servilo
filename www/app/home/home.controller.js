@@ -1,10 +1,10 @@
 app.controller('HomeTabCtrl',
   ["$scope","$ionicModal","$firebaseArray","Auth", "Restaurant", "Home" ,"$stateParams", "$state", "User",
     "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation", "$ionicLoading", "$cordovaImagePicker",
-     "Database", "Review", "restaurants", "$cordovaCamera",
+     "Database", "Review", "restaurants",
         function($scope, $ionicModal, $firebaseArray, Auth, Restaurant, Home, $stateParams, $state,
             User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, $ionicLoading,
-             $cordovaImagePicker, Database, Review, restaurants, $cordovaCamera) {
+             $cordovaImagePicker, Database, Review, restaurants) {
 
   console.log('HomeTabCtrl');
   $scope.usersRefObj = Database.users(); //new
