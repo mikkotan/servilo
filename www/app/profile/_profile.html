@@ -9,6 +9,7 @@
         <!-- <span id="profile-description" ng-if="firebaseUser.description"> {{ firebaseUser.description }} </span>
         <span id="profile-description" ng-if="!firebaseUser.description">  <a href="#">Add a description</a> </span> -->
         <span id="profile-description" ng-if="!firebaseUser.description">  hello i am description, add me later as firbaseUser.description, just uncomment the code in _profile.html </span>
+        <span id="profile-description" ng-if="firebaseUser.description">{{firebaseUser.description}}</span>
         <div>
           <button class="button button-small button-light" ui-sref="edit-profile">Edit Profile</button>
         </div>
