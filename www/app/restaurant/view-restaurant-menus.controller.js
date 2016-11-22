@@ -1,4 +1,4 @@
-app.controller("ViewRestaurantMenuOrder",["$scope","$state","restaurantMenus","restaurantId", "CartData","$ionicModal","Cart","Restaurant",
+app.controller("ViewRestaurantMenus",["$scope","$state","restaurantMenus","restaurantId", "CartData","$ionicModal","Cart","Restaurant",
   function($scope ,$state , restaurantMenus,restaurantId,CartData,$ionicModal,Cart,Restaurant){
 
 $scope.restaurantId = restaurantId

@@ -1,6 +1,8 @@
-app.controller("RestaurantCtrl", ["$scope","Database", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate",
-  "Restaurant", "$cordovaCamera", "$cordovaGeolocation",
-  function($scope,Database, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, $cordovaGeolocation) {
+
+app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate",
+  "Restaurant", "$cordovaCamera", "$cordovaGeolocation", "Restaurant",
+  function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, $cordovaGeolocation, Restaurant) {
+
     var total = 123;
     $scope.modalControl = {};
     $scope.restaurants = Restaurant.all();
@@ -60,12 +62,28 @@ app.controller("RestaurantCtrl", ["$scope","Database", "$firebaseArray", "$fireb
       saveToPhotoAlbum: false
     };
     $cordovaCamera.getPicture(options).then(function(imageData) {
-      $scope.imageURL = imageData;
+      var d = new Date();
+      var child = 'restaurants/' + d.getTime() + '.jpg';
+      var storageRef = firebase.storage().ref();
+      var mountainsRef = storageRef.child(child).putString(imageData, 'base64', metadata);
+      mountainsRef.on('state_changed', function(snapshot) {
+      var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+        $scope.progress = progress;
+      }, function(error) {
+        console.log("error in uploading." + error);
+      }, function() {
+        //success upload
+        $scope.imageURL = mountainsRef.snapshot.downloadURL;
+      });
 
       }, function(error) {
         console.error(error);
       });
   }
+  var metadata = {
+    contentType: 'image/jpeg',
+  };
 
   $scope.addRestaurant = function(restaurant){
     $scope.pendingRestaurants.$add({
@@ -84,14 +102,14 @@ app.controller("RestaurantCtrl", ["$scope","Database", "$firebaseArray", "$fireb
           status : false
         }
       },
-      availability : false,
+      facilities : restaurant.facilities,
       location: restaurant.location,
       latitude: $scope.marker.coords.latitude,
       longitude: $scope.marker.coords.longitude,
       type: restaurant.type,
       cuisine: restaurant.cuisine,
       owner_id: User.auth().$id,
-      image: $scope.imageURL,
+      photoURL: $scope.imageURL,
       phonenumber: restaurant.phonenumber,
       openTime: restaurant.openTime.getTime(),
       closeTime: restaurant.closeTime.getTime(),
@@ -105,23 +123,40 @@ app.controller("RestaurantCtrl", ["$scope","Database", "$firebaseArray", "$fireb
         avgRate: 0
       }
     })
+    .then(() => {
+      for (var facility in restaurant.facilities) {
+        console.log(facility);
+      }
+    })
 
     restaurant.name = "";
     restaurant.location = "";
     restaurant.type = "";
     restaurant.cuisine = "";
+    restaurant.phonenumber = "";
+    restaurant.closeTime = "";
+    $scope.imageURL = null;
+    $scope.progress = null;
     $scope.restaurantModal.hide();
   }
 
   $scope.edit = function(restaurant) {
     var resRef = firebase.database().ref().child("restaurants").child(restaurant.$id);
+    var OT = new Date(restaurant.openTime);
+    var CT = new Date(restaurant.closeTime);
     resRef.update({
       name: restaurant.name,
       location: restaurant.location,
       latitude: $scope.marker.coords.latitude,
       longitude: $scope.marker.coords.longitude,
       type: restaurant.type,
-      cuisine: restaurant.cuisine
+      cuisine: restaurant.cuisine,
+      photoURL: $scope.imageURL,
+      phonenumber: restaurant.phonenumber,
+      openTime: OT.getTime(),
+      closeTime: CT.getTime(),
+    }).then(function() {
+      $scope.imageURL = null;
     })
 
     $scope.restaurantEditModal.hide();
@@ -182,10 +217,11 @@ app.controller("RestaurantCtrl", ["$scope","Database", "$firebaseArray", "$fireb
   }
 
   $scope.editRestaurant = function(restaurant) {
-
     $scope.restaurantEditModal.show();
     $scope.showMap = false;
-    $scope.restaurant = restaurant;
+    $scope.eRestaurant = restaurant;
+    $scope.imageURL = restaurant.photoURL;
+    $scope.restaurantName = restaurant.name;
     $scope.marker.coords = {
       latitude: restaurant.latitude,
       longitude: restaurant.longitude
@@ -209,19 +245,26 @@ app.controller("RestaurantCtrl", ["$scope","Database", "$firebaseArray", "$fireb
   };
 
   $scope.approveRestaurant = function(restaurant) {
-    $scope.pendingRestaurants.$remove(restaurant).then(function() {
+    $scope.pendingRestaurants.$remove(restaurant)
+    .then(() => {
       $scope.restaurants.$add(restaurant)
-        .then(function(restaurantObject) {
+        .then((restaurantObject) => {
           var resRef = firebase.database().ref().child('restaurants').child(restaurantObject.key).child('timestamp');
-          console.log("THIS IS THE FIRE BASE REF " + resRef);
+          var resObj = Restaurant.get(restaurantObject.key);
+          for (var facility in resObj.facilities) {
+            var facilityRef = firebase.database().ref().child('facilities').child(facility).child('restaurants').child(restaurantObject.key);
+            facilityRef.set(true);
+          }
           resRef.transaction(function(currentTimestamp) {
             var lolpe = firebase.database.ServerValue.TIMESTAMP;
             console.log('hello old timestamp ' + currentTimestamp);
             console.log('hello new timestamp ' + firebase.database.ServerValue.TIMESTAMP);
             return lolpe;
           })
-        });
+        })
+        .catch((err) => { console.log(err) })
     })
+    .catch((err) => { console.log(err) })
   }
 
   $scope.marker = {
@@ -280,4 +323,45 @@ app.controller("RestaurantCtrl", ["$scope","Database", "$firebaseArray", "$fireb
       longitude: $scope.currentLocation.longitude
     };
   }
+
+  // $scope.facilities = [
+  //   {
+  //     id : 'Wifi',
+  //     name : 'Wifi Hotspot'
+  //   },
+  //   {
+  //     id: 'Parking',
+  //     name: 'Parking Area'
+  //   },
+  //   {
+  //     id: 'Reservation',
+  //     name: 'Accepts Reservation'
+  //   }
+  // ];
+
+  // $scope.facilities = {
+  //   "Wifi" : {
+  //     name : "Wifi Hotspot"
+  //   },
+  //   "Parking" : {
+  //     name : "Parking Area"
+  //   },
+  //   "Reservation" : {
+  //     name : "Accepts Reservation"
+  //   }
+  // }
+  $scope.facilities = $firebaseArray(firebase.database().ref().child('facilities'));
+  $scope.itemArray = [
+        {id: 1, name: 'first'},
+        {id: 2, name: 'second'},
+        {id: 3, name: 'third'},
+        {id: 4, name: 'fourth'},
+        {id: 5, name: 'fifth'},
+    ];
+
+  $scope.selected = { value: $scope.itemArray[0] };
+
+
+
+
 }])

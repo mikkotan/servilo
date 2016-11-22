@@ -6,7 +6,7 @@
       <p ng-show="order.order_details.status">
         Status: {{order.order_details.status}}
       </p>
-      <button class="button button-small button-outline button-assertive" ng-click="cancel(order)" ng-show="order.order_details.status !== 'cancelled'">
+      <button class="button button-small button-outline button-assertive" ng-click="cancel(order)" ng-show="!(order.order_details.status === 'cancelled' || order.order_details.status === 'completed')">
         Cancel
       </button>
     </ion-item>

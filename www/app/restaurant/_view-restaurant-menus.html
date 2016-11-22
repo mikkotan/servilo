@@ -16,7 +16,7 @@
     </ion-list> -->
 
 
-        <button class="button button-calm" ng-click="viewCart()">Cart</button>
+        <button class="button button-calm"ng-di ng-click="viewCart()">Cart{{count}}</button>
         <ion-list>
           <h1>{{status}}</h3>
           <ion-item ng-repeat="menu in restaurantMenus">
@@ -29,8 +29,7 @@
 
         </ion-list>
         <p>
-          <a class="button-calm" ng-click="hideCartModal()">back</a>
-          <!-- <a class="button-calm" ui-sref="tabs.cart({restaurantId:restaurantId})">View Cart</a> -->
+          <a class="button-calm" ui-sref="tabs.viewRestaurant.main({restaurantId:restaurant.$id})">Back</a>
         </p>
   </ion-content>
 </ion-view>
