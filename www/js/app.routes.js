@@ -98,7 +98,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
       views: {
         'restaurant-page': {
           templateUrl: "app/restaurant/_view-restaurant-menus.html",
-          controller: "ViewRestaurantMenuOrder",
+          controller: "ViewRestaurantMenus",
           resolve: {
             restaurantMenus: function(Menu, $stateParams) {
               return Menu.getRestaurantMenus($stateParams.restaurantId).$loaded();
@@ -111,11 +111,11 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
       }
     })
     .state('tabs.viewRestaurant.location', {
-      url: "/menus",
+      url: "/location",
       views: {
         'restaurant-page': {
           templateUrl: "app/restaurant/_view-restaurant-location.html",
-          controller: "ViewRestaurantCtrl"
+          controller: "ViewRestaurantLocation"
         }
       }
     })

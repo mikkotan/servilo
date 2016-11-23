@@ -1,7 +1,7 @@
-app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate",
-  "Restaurant", "$cordovaCamera", "$cordovaGeolocation",
-  function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, $cordovaGeolocation) {
-    var total = 123;
+
+app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate",  "Restaurant", "$cordovaCamera", "CordovaGeolocation",
+  function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation) {
+
     $scope.modalControl = {};
     $scope.restaurants = Restaurant.all();
     $scope.pendingRestaurants = Restaurant.getPendingRestaurants();
@@ -24,17 +24,14 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
     });
 
   $scope.changeServiceStatus = function(restaurant,service){
-
-    var resRef = firebase.database().ref().child("restaurants").child(restaurant.$id).child('services').child(service.name);
-
+    var resRef = Database.restaurantsReference().child(restaurant.$id).child('services').child(service.name);
     resRef.update({
         status : service.status
     })
-
   };
 
   $scope.changeAvailability = function(restaurant){
-    var resRef = firebase.database().ref().child("restaurants").child(restaurant.$id);
+    var resRef = Database.restaurantsReference().child(restaurant.$id);
     resRef.update({
       availability: restaurant.availability
     })
@@ -66,16 +63,17 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       var d = new Date();
       var child = 'restaurants/' + d.getTime() + '.jpg';
       var storageRef = firebase.storage().ref();
-      var mountainsRef = storageRef.child(child).putString(imageData, 'base64', metadata);
-      mountainsRef.on('state_changed', function(snapshot){
-      var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      var restaurantRef = storageRef.child(child).putString(imageData, 'base64', metadata);
+      restaurantRef.on('state_changed', function(snapshot){
+        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log('Upload is ' + progress + '% done');
         $scope.progress = progress;
       }, function(error) {
         console.log("error in uploading." + error);
       }, function() {
         //success upload
-        $scope.imageURL = mountainsRef.snapshot.downloadURL;
+        $scope.imageURL = restaurantRef.snapshot.downloadURL;
+        $scope.$apply();
       });
 
       }, function(error) {
@@ -103,7 +101,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
           status : false
         }
       },
-      availability : false,
+      facilities : restaurant.facilities,
       location: restaurant.location,
       latitude: $scope.marker.coords.latitude,
       longitude: $scope.marker.coords.longitude,
@@ -123,17 +121,22 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
         totalRatingCount: 0,
         avgRate: 0
       }
-    }).then(function() {
-      $scope.restaurantModal.hide();
-      restaurant.name = "";
-      restaurant.location = "";
-      restaurant.type = "";
-      restaurant.cuisine = "";
-      restaurant.phonenumber = "";
-      restaurant.closeTime = "";
-      $scope.imageURL = null;
-      $scope.progress = null;
-    });
+    })
+    .then(() => {
+      for (var facility in restaurant.facilities) {
+        console.log(facility);
+      }
+    })
+
+    restaurant.name = "";
+    restaurant.location = "";
+    restaurant.type = "";
+    restaurant.cuisine = "";
+    restaurant.phonenumber = "";
+    restaurant.closeTime = "";
+    $scope.imageURL = null;
+    $scope.progress = null;
+    $scope.restaurantModal.hide();
   }
 
   $scope.edit = function(restaurant) {
@@ -145,6 +148,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       location: restaurant.location,
       latitude: $scope.marker.coords.latitude,
       longitude: $scope.marker.coords.longitude,
+      facilities: restaurant.facilities,
       type: restaurant.type,
       cuisine: restaurant.cuisine,
       photoURL: $scope.imageURL,
@@ -174,25 +178,21 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
 
   $scope.deleteRestaurant = function(restaurant) {
     var resObj = restaurant;
-    console.log(resObj);
     $scope.displayRestaurants.$remove(resObj).then(function() {
       console.log('deleted?');
     });
 
     for(var menu in resObj.menus) {
-      console.log(menu);
       var menusRef = firebase.database().ref().child('menus');
       menusRef.child(menu).set(null);
     }
 
     for(var review in resObj.reviews) {
-      console.log(review);
       var reviewsRef = firebase.database().ref().child('reviews');
       reviewsRef.child(review).set(null);
     }
 
     for(var reviewer in resObj.reviewers) {
-      console.log(reviewer);
       var userReviewedRestaurantsRef = firebase.database().ref().child('users').child(reviewer).child('reviewed_restaurants');
       console.log('reviewer ref'+userReviewedRestaurantsRef);
       userReviewedRestaurantsRef.child(resObj.$id).set(null);
@@ -202,6 +202,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
 
   $scope.closeEditRestaurant = function() {
     $scope.restaurantEditModal.hide();
+    $scope.imageURL = null;
   }
 
   $scope.newRestaurant = function() {
@@ -216,7 +217,12 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
     $scope.restaurantEditModal.show();
     $scope.showMap = false;
     $scope.eRestaurant = restaurant;
-    $scope.imageURL = restaurant.photoURL;
+    if(restaurant.photoURL) {
+      $scope.imageURL = restaurant.photoURL;
+    }
+    else {
+      $scope.imageURL = null;
+    }
     $scope.restaurantName = restaurant.name;
     $scope.marker.coords = {
       latitude: restaurant.latitude,
@@ -241,36 +247,28 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
   };
 
   $scope.approveRestaurant = function(restaurant) {
-    $scope.pendingRestaurants.$remove(restaurant).then(function() {
+    $scope.pendingRestaurants.$remove(restaurant)
+    .then(() => {
       $scope.restaurants.$add(restaurant)
-        .then(function(restaurantObject) {
+        .then((restaurantObject) => {
           var resRef = firebase.database().ref().child('restaurants').child(restaurantObject.key).child('timestamp');
-          console.log("THIS IS THE FIRE BASE REF " + resRef);
           resRef.transaction(function(currentTimestamp) {
-            var lolpe = firebase.database.ServerValue.TIMESTAMP;
+            var newTimestamp = firebase.database.ServerValue.TIMESTAMP;
             console.log('hello old timestamp ' + currentTimestamp);
             console.log('hello new timestamp ' + firebase.database.ServerValue.TIMESTAMP);
-            return lolpe;
+            return newTimestamp;
           })
-        });
+        })
+        .catch((err) => { console.log(err) })
     })
+    .catch((err) => { console.log(err) })
   }
 
   $scope.marker = {
     id: 0
   };
 
-  var options = {
-    timeout: 10000,
-    enableHighAccuracy: true
-  };
-
-  $cordovaGeolocation.getCurrentPosition(options).then(function(position) {
-    $scope.currentLocation = {
-      latitude: position.coords.latitude,
-      longitude: position.coords.longitude
-    };
-  });
+  $scope.currentLocation = CordovaGeolocation.get();
 
   $scope.map = {
     center: {
@@ -295,11 +293,13 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
           }
         };
         $scope.marker = m;
+        $scope.placeName($scope.marker.coords.latitude ,$scope.marker.coords.longitude);
         $scope.$apply();
       }
     }
   };
   $scope.markLocation = function() {
+    $scope.currentLocation = CordovaGeolocation.get();
     $scope.marker = {
       id: Date.now(),
       coords: {
@@ -311,5 +311,52 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       latitude: $scope.currentLocation.latitude,
       longitude: $scope.currentLocation.longitude
     };
+    $scope.placeName($scope.marker.coords.latitude ,$scope.marker.coords.longitude);
   }
+
+  $scope.placeName = function(latitude, longitude){
+    var geocoder = new google.maps.Geocoder;
+    var latLng = {lat: latitude, lng: longitude};
+    geocoder.geocode({'location': latLng}, function(results, status) {
+      if (status === 'OK') {
+        $scope.restaurant.location = results[0].formatted_address;
+        $scope.$apply();
+      } else {
+        alert('Geocoder failed due to: ' + status);
+      }
+    });
+  }
+
+  // $scope.facilities = [
+  //   {
+  //     id : 'Wifi',
+  //     name : 'Wifi Hotspot'
+  //   },
+  //   {
+  //     id: 'Parking',
+  //     name: 'Parking Area'
+  //   },
+  //   {
+  //     id: 'Reservation',
+  //     name: 'Accepts Reservation'
+  //   }
+  // ];
+
+  // $scope.facilities = {
+  //   "Wifi" : {
+  //     name : "Wifi Hotspot"
+  //   },
+  //   "Parking" : {
+  //     name : "Parking Area"
+  //   },
+  //   "Reservation" : {
+  //     name : "Accepts Reservation"
+  //   }
+  // }
+  $scope.facilities = $firebaseArray(firebase.database().ref().child('facilities'));
+
+
+
+
+
 }])

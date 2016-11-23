@@ -19,13 +19,13 @@ app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover
       scope: $scope
     });
 
-    $scope.openEditProfile = function(){
-        $scope.editProfileModal.show();
-        $scope.closePopover();
+    $scope.openEditProfile = function() {
+      $scope.editProfileModal.show();
+      $scope.closePopover();
     };
-    $scope.openEditPhoto = function(){
-        $scope.editPhotoModal.show();
-        $scope.closePopover();
+    $scope.openEditPhoto = function() {
+      $scope.editPhotoModal.show();
+      $scope.closePopover();
     }
 
     $scope.openPopover = function($event) {

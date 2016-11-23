@@ -1,6 +1,5 @@
-<ion-view view-title="Cart">
+<div class="modal" ng-controller="CartCtrl">
   <ion-content class="padding">
-    </button>
     <h3>Cart</h3>
     <ion-list>
       <ion-item ng-repeat="order in menus">
@@ -24,21 +23,24 @@
         </p>
 
       </ion-item>
-
       <p>
         Total : {{total}}
       </p>
-      Address : <input type="text" required ng-trim="false" ng-model="location" size="40">
-        <ui-gmap-google-map zoom='map.zoom' center="map.center" options='map.options' bounds='map.bounds' control='map.control' refresh=map.refresh events=map.events ng-cloak>
+      <p>
+        Address : <input type="text" required ng-trim="false" ng-model="location" size="40">
+      </p>
+      <div>
+        <ui-gmap-google-map zoom='map.zoom' center="map.center" options="map.options" bounds="map.bounds" control="map.control" refresh="map.refresh" events="map.events" ng-cloak>
+          <ui-gmap-marker coords="marker.coords" icon="marker.icon" idkey="marker.id"></ui-gmap-marker>
           <ui-gmap-map-control position="top-right">
               <a class="button button-small button-balanced" ng-click="markLocation()" >Mark Current Location</a>
           </ui-gmap-map-control>
-          <ui-gmap-marker coords="marker.coords" icon="marker.icon" idkey="marker.id"></ui-gmap-marker>
         </ui-gmap-google-map>
+      </div>
       <p>
-        <button class="button button-calm" ui-sref="tabs.restaurantMenus({restaurantId:restaurantId})">back</button>
+        <button class="button button-calm" ng-click="hideCartModal()">back</button>
         <button class="button button-calm" ng-click="buy(menus,location)">Buy</button>
       </p>
     </ion-list>
   </ion-content>
-</ion-view>
+</div>
