@@ -19,17 +19,25 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "ionicMateria
             function(success) {
               console.log("google login success");
               var ref = firebase.database().ref().child("users").child(success.uid);
-              ref.set({
-                displayName: success.displayName,
-                provider: "google",
-                startedAt: firebase.database.ServerValue.TIMESTAMP
+
+              ref.once('value', function(snapshot) {
+                var googleUser = snapshot.val();
+
+                if (googleUser === null) {
+                  ref.set({
+                    displayName: success.displayName,
+                    provider: "google",
+                    startedAt: firebase.database.ServerValue.TIMESTAMP
+                  })
+                }
+
+                if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
+                  IonicPushService.registerToAuth();
+                }
+                // IonicPushService.registerToAuth();
+                console.log('Firebase Google login success');
+                $state.go("tabs.home");
               })
-              if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
-                IonicPushService.registerToAuth();
-              }
-              // IonicPushService.registerToAuth();
-              console.log('Firebase Google login success');
-              $state.go("tabs.home");
             },
             function(error) {
               console.log("google login error");
@@ -138,19 +146,26 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "ionicMateria
           Auth.$signInWithCredential(firebase.auth.FacebookAuthProvider.credential(result.authResponse.accessToken)).then(
             function(success) {
               var ref = firebase.database().ref().child("users").child(success.uid);
-              ref.set({
-                displayName: success.displayName,
-                provider: "facebook",
-                startedAt: firebase.database.ServerValue.TIMESTAMP
+              ref.once('value', function(snapshot) {
+                var fbUser = snapshot.val();
+
+                if (fbUser === null) {
+                  ref.set({
+                    displayName: success.displayName,
+                    provider: "facebook",
+                    startedAt: firebase.database.ServerValue.TIMESTAMP
+                  })
+                }
+
+                if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
+                  IonicPushService.registerToAuth();
+                }
+                // IonicPushService.registerToAuth();
+                console.log(success.displayName);
+                console.log('Firebase Facebook login success');
+                $ionicLoading.hide();
+                $state.go("tabs.home")
               })
-              if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
-                IonicPushService.registerToAuth();
-              }
-              // IonicPushService.registerToAuth();
-              console.log(success.displayName);
-              console.log('Firebase Facebook login success');
-              $ionicLoading.hide();
-              $state.go("tabs.home")
             },
             function(error) {
               $ionicLoading.hide();
