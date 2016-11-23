@@ -5,6 +5,7 @@ app.controller("LoginCtrl",["$scope", "Auth", "ionicMaterialInk", "ionicMaterial
 
 
   $scope.googleLogin = function() {
+    console.log('Google logging in... ');
     window.plugins.googleplus.login(
       {
         // 'scopes': '... ', // optional, space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
@@ -13,6 +14,7 @@ app.controller("LoginCtrl",["$scope", "Auth", "ionicMaterialInk", "ionicMaterial
         // 'offline': true, // optional, but requires the webClientId - if set to true the plugin will also return a serverAuthCode, which can be used to grant offline access to a non-Google server
       },
       function (result) {
+        console.log('result');
         // alert(JSON.stringify(obj)); // do something useful instead of alerting
         Auth.$signInWithCredential(firebase.auth.GoogleAuthProvider.credential(result.idToken)).then(
         function(success){
@@ -61,18 +63,27 @@ app.controller("LoginCtrl",["$scope", "Auth", "ionicMaterialInk", "ionicMaterial
         Auth.$signInWithCredential(firebase.auth.TwitterAuthProvider.credential(result.token, result.secret)).then(
         function(success){
           var ref = firebase.database().ref().child("users").child(success.uid);
-          ref.set({
-            displayName : success.displayName,
-            provider: "twitter",
-            startedAt : firebase.database.ServerValue.TIMESTAMP
+
+          ref.once('value', function(snapshot) {
+            var twitterUser = snapshot.val()
+
+            if (twitterUser === null) {
+              ref.set({
+                displayName : success.displayName,
+                provider: "twitter",
+                startedAt : firebase.database.ServerValue.TIMESTAMP
+              })
+            }
+
+            if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
+              IonicPushService.registerToAuth();
+            }
+
+            console.log(success.displayName);
+            console.log('Firebase Twitter login success');
+            $state.go("tabs.home");
+
           })
-          if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
-            IonicPushService.registerToAuth();
-          }
-          // IonicPushService.registerToAuth();
-          console.log(success.displayName);
-          console.log('Firebase Twitter login success');
-          $state.go("tabs.home");
         },
         function(error){
           console.log('error firebase login!!: ' + error);
