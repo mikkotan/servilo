@@ -5,6 +5,8 @@ app.controller("LoginCtrl",["$scope", "Auth", "ionicMaterialInk", "ionicMaterial
 
 
   $scope.googleLogin = function() {
+
+      console.log("initiated");
     window.plugins.googleplus.login(
       {
         // 'scopes': '... ', // optional, space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
@@ -16,6 +18,7 @@ app.controller("LoginCtrl",["$scope", "Auth", "ionicMaterialInk", "ionicMaterial
         // alert(JSON.stringify(obj)); // do something useful instead of alerting
         Auth.$signInWithCredential(firebase.auth.GoogleAuthProvider.credential(result.idToken)).then(
         function(success){
+            console.log("google login success");
           var ref = firebase.database().ref().child("users").child(success.uid);
           ref.set({
             displayName : success.displayName,
@@ -30,6 +33,7 @@ app.controller("LoginCtrl",["$scope", "Auth", "ionicMaterialInk", "ionicMaterial
           $state.go("tabs.home");
         },
         function(error) {
+            console.log("google login error");
           alert('error' + error);
         })
       },

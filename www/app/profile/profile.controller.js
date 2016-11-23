@@ -1,52 +1,95 @@
-app.controller("ProfileCtrl",["$scope", "Auth", "ionicMaterialInk", "ionicMaterialMotion", "User", "$state", "$cordovaOauth", "$ionicLoading", "$ionicModal", "Database", "$cordovaCamera",
-  function($scope, Auth, ionicMaterialInk, ionicMaterialMotion, User, $state, $ionicLoading, $ionicModal, Database, $cordovaCamera){
+app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover", "$ionicModal", "Database", "$cordovaCamera",
+  function($scope, User, $ionicLoading, $ionicPopover, $ionicModal, Database, $cordovaCamera) {
 
-  Auth.$onAuthStateChanged(function(firebaseUser) {
-    if (firebaseUser) {
-      $scope.firebaseUser = User.auth();
-      if(firebaseUser.displayName) {
-        $scope.photoURL = firebaseUser.photoURL;
-      }
-    }
-  });
+    $ionicPopover.fromTemplateUrl('app/profile/_popover.html', {
+      scope: $scope
+    }).then(function(optionsPopover) {
+      $scope.optionsPopover = optionsPopover;
+    });
 
-  $scope.upload = function(index) {
-    var source = "";
-    switch(index) {
-      case 1:
-        source = Camera.PictureSourceType.CAMERA;
-        break;
-      case 2:
-        source = Camera.PictureSourceType.PHOTOLIBRARY;
-        break;
-    }
-    var options = {
-      quality : 75,
-      destinationType : Camera.DestinationType.DATA_URL,
-      sourceType : source,
-      allowEdit : true,
-      encodingType: Camera.EncodingType.JPEG,
-      popoverOptions: CameraPopoverOptions,
-      targetWidth: 500,
-      targetHeight: 500,
-      saveToPhotoAlbum: false
+    $ionicModal.fromTemplateUrl('app/profile/_edit-profile.html', function(editProfileModal) {
+      $scope.editProfileModal = editProfileModal;
+    }, {
+      scope: $scope
+    });
+
+    $ionicModal.fromTemplateUrl('app/profile/_edit-photo.html', function(editPhotoModal) {
+      $scope.editPhotoModal = editPhotoModal;
+    }, {
+      scope: $scope
+    });
+
+    $scope.openEditProfile = function(){
+        $scope.editProfileModal.show();
+        $scope.closePopover();
     };
-    $cordovaCamera.getPicture(options).then(function(imageData) {
-      $scope.imageURL = imageData;
+    $scope.openEditPhoto = function(){
+        $scope.editPhotoModal.show();
+        $scope.closePopover();
+    }
+
+    $scope.openPopover = function($event) {
+      $scope.optionsPopover.show($event);
+    };
+    $scope.closePopover = function() {
+      $scope.optionsPopover.hide();
+    };
+
+    $scope.upload = function(index) {
+      var source = "";
+      switch (index) {
+        case 1:
+          source = Camera.PictureSourceType.CAMERA;
+          break;
+        case 2:
+          source = Camera.PictureSourceType.PHOTOLIBRARY;
+          break;
+      }
+      var options = {
+        quality: 75,
+        destinationType: Camera.DestinationType.DATA_URL,
+        sourceType: source,
+        allowEdit: true,
+        encodingType: Camera.EncodingType.JPEG,
+        popoverOptions: CameraPopoverOptions,
+        targetWidth: 500,
+        targetHeight: 500,
+        saveToPhotoAlbum: false
+      };
+      $cordovaCamera.getPicture(options).then(function(imageData) {
+        $scope.imageURL = imageData;
 
       }, function(error) {
         console.error(error);
       });
-  }
+    }
 
-  $scope.editProfile = function(user) {
-  	var userRef = Database.usersReference().child(User.auth().$id);
-    userRef.update({
-      firstName: user.firstName,
-      lastName: user.lastName,
-      displayName: user.displayName,
-      description: user.description,
-      image: $scope.imageURL
-    })
+    $scope.editProfile = function(user) {
+      $scope.optionsPopover.hide();
+      var userRef = Database.usersReference().child(User.auth().$id);
+      console.log(user.firstName)
+      console.log(user.lastName)
+      console.log(user.descriptionName)
+      userRef.update({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        displayName: user.displayName,
+        description: user.description,
+        // image: $scope.imageURL
+      })
+      $scope.editProfileModal.hide();
+    }
+
+    $scope.editPhoto = function(user) {
+      $scope.optionsPopover.hide();
+      //   var userRef = firebase.database().ref().child('users').child(User.auth().$id);
+      var userRef = Database.usersReference().child(User.auth().$id);
+      userRef.update({
+        image: $scope.imageURL
+      })
+      $scope.editPhotoModal.hide();
+    }
+
+
   }
-}]);
+]);

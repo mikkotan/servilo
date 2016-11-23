@@ -47,13 +47,14 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
   });
 }]);
 
-app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate, Auth, User, Database, $state, $ionicPush, IonicPushService) {
+app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate, Auth, User, Database, $state, $ionicPush, IonicPushService, $ionicPopover) {
   $scope.showMenu = function() {
     $ionicSideMenuDelegate.toggleLeft();
   };
   $scope.showRightMenu = function() {
     $ionicSideMenuDelegate.toggleRight();
   };
+
   $scope.signOut = function() {
     $ionicLoading.show({
       template: '<p>Signing out . . .</p><ion-spinner></ion-spinner>',
@@ -82,7 +83,6 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
     // TwitterConnect.logout();
     // window.plugins.googleplus.disconnect();
   }
-
 
   Auth.$onAuthStateChanged(function(firebaseUser) {
     if (firebaseUser) {

@@ -107,23 +107,31 @@
           </button>
         </ion-nav-buttons>
         <ion-nav-buttons side="right">
-          <button ng-click="cart()">Cart
-          </button>
+          <!-- <button ng-click="cart()">Cart
+          </button> -->
 
         </ion-nav-buttons>
       </ion-nav-bar>
 
       <ion-nav-view animation="slide-left"></ion-nav-view>
 
+     
+
+      <script id="my-popover.html" type="text/ng-template">
+        <ion-popover-view class="popover">
+          <p>This is a popover</p>
+        </ion-popover-view>
+      </script>
+
     </ion-side-menu-content>
 
     <ion-side-menu side="left" enable-menu-with-back-views="false">
       <ion-header-bar class="bar-profile bar-stable">
         <div ng-show="firebaseUser" class="profile">
-          <img class="profile-picture" ng-show="photoURL" ng-src="{{photoURL}}">
-          <img class="profile-picture" ng-show="!photoURL" ng-src="img/ionic.png" style="width: 50px; height: 50px">
-          <h3 class="name" ng-if="firebaseUser.provider !== email">{{firebaseUser.displayName}}</h3>
-          <h3 class="name" ng-if="firebaseUser.provider === email">{{firebaseUser.firstName}} {{firebaseUser.lastName}}</h3>
+          <img class="sidebar-picture" ng-show="photoURL" ng-src="{{photoURL}}">
+          <img class="sidebar-picture" ng-show="!photoURL" ng-src="img/ionic.png" style="width: 50px; height: 50px">
+          <h3 class="sidebar-name" ng-if="firebaseUser.provider !== email">{{firebaseUser.displayName}}</h3>
+          <h3 class="sidebar-name" ng-if="firebaseUser.provider === email">{{firebaseUser.firstName}} {{firebaseUser.lastName}}</h3>
         </div>
       </ion-header-bar>
 
@@ -169,5 +177,6 @@
 
   </ion-side-menus>
 </body>
+
 
 </html>
