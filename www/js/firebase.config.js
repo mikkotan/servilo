@@ -1,4 +1,4 @@
-app.provider("firebaseConfig",function(){
+app.provider("firebaseConfig", function() {
 
   this.config = {
     apiKey: "AIzaSyA9E-lSM2WKmonVkHCShv_ErYuvobxgb40",
@@ -9,6 +9,6 @@ app.provider("firebaseConfig",function(){
   };
 
   this.$get = function() {
-        return this.config
-    };
+    return this.config
+  };
 })

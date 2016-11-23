@@ -1,24 +1,33 @@
-<ion-view view-title="Edit Profile">
+<ion-modal-view view-title="Edit Profile">
+  <ion-header-bar class="bar bar-header bar-assertive">
+    <h1 class="title">Edit Your Profile</h1>
+    <button class="button button-clear button-primary" ng-click="editProfileModal.hide()"><i class="icon ion-ios-close"></i></button>
+  </ion-header-bar>
   <ion-content class="padding">
     <ion-list>
-      <ion-item id="form-input">
-      <img class="profile-picture" ng-show="photoURL" ng-src="{{photoURL}}">
-      <img class="profile-picture" ng-show="!photoURL" ng-src="img/ionic.png" style="width: 50px; height: 50px">
-        <form ng-submit="editProfile(firebaseUser)">
-          <div ng-if="!photoURL">
-            Add Profile Picture
-            <div>
-              <a class="button button-icon icon ion-camera" ng-click="upload(1)">Cam</a>
-              <a class="button button-icon icon ion-camera" ng-click="upload(2)">Album</a>
+      <div class="card">
+        <ion-item id="form-input">
+          <form ng-submit="editProfile(firebaseUser)">
+            <div class="list">
+              <ion-md-input-cus placeholder="Display Name" highlight-color="balanced" type="text" ng-model="firebaseUser.displayName"></ion-md-input-cus>
             </div>
-          </div>
-          <ion-md-input-cus placeholder="Display Name" highlight-color="balanced" type="text" ng-model="firebaseUser.displayName"></ion-md-input-cus>
-          <ion-md-input-cus placeholder="First Name" highlight-color="balanced" type="text" ng-model="firebaseUser.firstName"></ion-md-input-cus>
-          <ion-md-input-cus placeholder="Last Name" highlight-color="balanced" type="text" ng-model="firebaseUser.lastName"></ion-md-input-cus>
-          <ion-md-input-cus placeholder="Description" highlight-color="balanced" type="text" ng-model="firebaseUser.description"></ion-md-input-cus>
-          <button class="button button-assertive">Submit</button>
-        </form>
-      </ion-item>
+            <div class="list">
+              <ion-md-input-cus placeholder="First Name" highlight-color="balanced" type="text" ng-model="firebaseUser.firstName"></ion-md-input-cus>
+            </div>
+            <div class="list">
+              <ion-md-input-cus placeholder="Last Name" highlight-color="balanced" type="text" ng-model="firebaseUser.lastName"></ion-md-input-cus>
+            </div>
+            <div class="list">
+              <ion-md-input-cus placeholder="Description" highlight-color="balanced" type="text" ng-model="firebaseUser.description"></ion-md-input-cus>
+            </div>
+            <div class="row">
+              <div class="col text-right">
+                <button class="button button-assertive">Submit</button>
+              </div>
+            </div>
+          </form>
+        </ion-item>
+      </div>
     </ion-list>
   </ion-content>
-</ion-view>
+</ion-modal-view>

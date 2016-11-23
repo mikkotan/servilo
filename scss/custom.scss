@@ -2,40 +2,43 @@
 @media only screen and (min-width: 320px) and (max-width: 640px), only screen and (max-width: 740px) and (-webkit-device-pixel-ratio: 2), only screen and (max-width: 740px) and (-webkit-device-pixel-ratio: 3) {
   .hide-on-mobile,
   .hom {
-    display: none !important; } }
-
+    display: none !important;
+  }
+}
 @media only screen and (min-width: 641px) and (max-width: 991px) {
   .hide-on-tablet,
   .hot {
-    display: none !important; } }
-
+    display: none !important;
+  }
+}
 @media only screen and (min-width: 991px) {
   .hide-on-desktop {
-    display: none !important; } }
-
+    display: none !important;
+  }
+}
 ul.rating li {
   display: inline;
   border: 0;
   background: none;
-  padding: 5px 10px; }
-
+  padding: 5px 10px;
+}
 ul.rating li i {
-  font-size: 30px; }
-
+  font-size: 30px;
+}
 .tab-item.activated,
 .tab-item.active,
 .tab-item.tab-item-active {
-  color: #ef473a; }
-
+  color: #ef473a;
+}
 .angular-google-map-container {
-  height: 375px; }
-
+  height: 375px;
+}
 .angular-google-map {
-  height: 375px; }
-
+  height: 375px;
+}
 .bar.bar-profile {
-  height: 170px; }
-
+  height: 170px;
+}
 .bar .profile {
   top: 0;
   right: 0;
@@ -46,88 +49,101 @@ ul.rating li i {
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 100%;
-  padding-top: 15px; }
-
-.profile .name {
+  padding-top: 15px;
+}
+.profile .sidebar-name {
   color: #444;
   margin-top: 10px !important;
-  margin-bottom: 10px !important; }
-
-.profile-picture {
-  border-radius: 50%; }
-
+  margin-bottom: 10px !important;
+}
+.sidebar-picture {
+  border-radius: 50%;
+}
 .menu .has-header {
-  top: 169px; }
+  top: 169px;
+}
+#content {
+  position: relative;
+  margin-top: 75px;
+  background-color: white;
+  box-shadow: 0 -1px 10px rgba(0,0,0,0.4);
+  padding-top: 200px;
+}
+#profile-info {
+  position: absolute;
+  top: -95px;
+  width: 100%;
+  z-index: 2;
+  text-align: center;
+}
+#profile-name {
+  color: #444;
+  font-size: 26px;
+}
+#profile-description {
+  font-size: 15px;
+  color: #888;
+}
+#profile-description a {
+  color: #888;
+}
+#profile-image {
+  display: block;
+  border-radius: 100px;
+  border: 1px solid #fff;
+  width: 128px;
+  height: 128px;
+  margin: 30px auto 0;
+  box-shadow: 0 0 4px rgba(0,0,0,0.7);
+  background-color: white;
+}
+#profile-preview {
+  display: block;
+  border-radius: 100px;
+  border: 1px solid #fff;
+  width: 128px;
+  height: 128px;
+  margin: auto;
+  box-shadow: 0 0 4px rgba(0,0,0,0.7);
+  background-color: white;
+}
 
-      #content {
-        position: relative;
-        margin-top: 75px;
-        background-color: white;
-        box-shadow: 0px -1px 10px rgba(0,0,0,0.4);
-        padding-top: 200px;
-      }
-
-      #profile-info {
-        position: absolute;
-        top: -95px;
-        width: 100%;
-        z-index: 2;
-        text-align: center;
-      }
-      #profile-name {
-        color: #444;
-        font-size: 26px;
-      }
-      #profile-description {
-        font-size: 15px;
-        color: #888;
-      }
-      #profile-description a {
-        color: #888;
-      }
-
-      #profile-image {
-        display: block;
-        border-radius: 100px;
-        border: 1px solid #fff;
-        width: 128px;
-        height: 128px;
-        margin: 30px auto 0;
-        box-shadow: 0px 0px 4px rgba(0,0,0,0.7);
-        background-color:white;
-      }
-
-      .list-item-content {
-        padding: 5px;
-      }
-
-      .list-item {
-        color: #666666;
-      }
-
-      .post {
-        color: #444;
-      }
-
-      .post-time {
-        position: absolute;
-        right: 5px;
-        top: 5px;
-        font-size: 11px;
-        color: #888;
-      }
-
-      .post-profile-image {
-        display: inline-block;
-        vertical-align: top;
-        width: 48px;
-        height: 48px;
-        margin-right: 10px;
-      }
-      .post-options {
-        position: absolute;
-        font-size: 16px;
-        right: 5px;
-        bottom: 5px;
-        color: #888;
-      }
+.list-item-content {
+  padding: 5px;
+}
+.list-item {
+  color: #666666;
+}
+.post {
+  color: #444;
+}
+.post-time {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  font-size: 11px;
+  color: #888;
+}
+.post-profile-image {
+  display: inline-block;
+  vertical-align: top;
+  width: 48px;
+  height: 48px;
+  margin-right: 10px;
+}
+.post-options {
+  position: absolute;
+  font-size: 16px;
+  right: 5px;
+  bottom: 5px;
+  color: #888;
+}
+ion-popover-view.fit {
+  height: auto !important;
+}
+ion-popover-view.fit ion-content {
+  position: relative !important;
+}
+.platform-android ion-popover-view.fit {
+  margin-top: 10px !important;
+}
