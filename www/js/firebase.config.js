@@ -5,7 +5,8 @@ app.provider("firebaseConfig",function(){
     authDomain: "jepsrestaurantdev.firebaseapp.com",
     databaseURL: "https://jepsrestaurantdev.firebaseio.com",
     storageBucket: "jepsrestaurantdev.appspot.com",
-  }
+    messagingSenderId: "155324175920"
+  };
 
   this.$get = function() {
         return this.config

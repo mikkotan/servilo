@@ -32,13 +32,14 @@ app.controller('ProfileCtrl', ['$scope', 'User', 'Database', '$cordovaCamera', '
 
     $scope.editProfile = function(user) {
       var userRef = Database.usersReference().child(User.auth().$id);
-      userRef.update({
+      userRef.set({
         firstName: user.firstName,
         lastName: user.lastName,
         displayName: user.displayName,
         description: user.description
         // image: $scope.imageURL
       })
+      $scope.editProfileModal.hide();
     }
 
     $ionicModal.fromTemplateUrl('app/profile/_edit-profile.html', function(editProfileModal) {
