@@ -8,7 +8,7 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
   // var reviews = Database.reviewsReference();
   // var orders = Database.ordersReference();
   // var pendingRestaurantsArray = Database.pendings();
-  // var restaurantsArray = Database.restaurants();
+  var restaurantsArray = Database.restaurants();
   // var usersArray = Database.users();
 
   var Restaurant = {
@@ -46,12 +46,12 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
     getReviews : function(restaurantId) {
       return $firebaseArray(Database.reviewsReference().orderByChild('restaurant_id').equalTo(restaurantId));
     },
-    getOwner : function(restaurant) {
+    getOwner : function(restaurantId) {
       // console.log('get owner method');
-      // var restaurant = Database.restaurants().$getRecord(restaurantId);
-      // console.log(restaurant);
-      // return Database.users().$getRecord(restaurant.owner_id);
-      return $firebaseObject(users.child(restaurant.owner_id))
+      console.log(restaurantId);
+      var res = restaurantsArray.$getRecord(restaurantId);
+      console.log(res);
+      return $firebaseObject(users.child(res.owner_id))
     },
     getOrders : function(restaurantId) {
       return $firebaseArray(Database.ordersReference().orderByChild("restaurant_id").equalTo(restaurantId));
