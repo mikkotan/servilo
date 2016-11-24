@@ -101,4 +101,7 @@
   <plugin name="com-badrit-base64" spec="~0.2.0"/>
   <plugin name="cl.rmd.cordova.dialoggps" spec="https://github.com/rodrigo-martinezd/cordova-dialog-gps.git"/>
   <plugin name="cordova-plugin-geolocation" spec="~2.4.0"/>
+  <plugin name="cordova-plugin-customurlscheme" source="npm">
+    <param name="URL_SCHEME" value="servilothesis"/>
+  </plugin>
 </widget>
