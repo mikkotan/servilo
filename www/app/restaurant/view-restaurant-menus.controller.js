@@ -1,17 +1,18 @@
 app.controller("ViewRestaurantMenus",["$scope","$state","restaurantMenus","restaurantId", "CartData","$ionicModal","Cart","Restaurant",
-  function($scope ,$state , restaurantMenus,restaurantId,CartData,$ionicModal,Cart,Restaurant){
+  function($scope, $state, restaurantMenus, restaurantId, CartData, $ionicModal, Cart, Restaurant){
 
-$scope.restaurantId = restaurantId
-$scope.restaurantMenus = restaurantMenus;
+  $scope.restaurantId = restaurantId
+  $scope.restaurantMenus = restaurantMenus;
+  var restaurant = Restaurant.get(restaurantId);
 
+  restaurant.$loaded().then(function() {
+    var restaurantStatus = Restaurant.getRestaurantStatus(restaurant.owner_id);
+    restaurantStatus.on('value' , function(snap){
+        $scope.getRestaurantStatus = snap.val();
+        $scope.status = restaurant.name + " is " + (snap.val() ? "Online" : "Offline");
+    })
+  })
 
-$scope.restaurantStatus = Restaurant.getRestaurantStatus(Restaurant.get($scope.restaurantId).owner_id);
-
-$scope.restaurantStatus.on('value' , function(snap){
-    $scope.getRestaurantStatus = snap.val();
-    $scope.status = Restaurant.get(restaurantId).name + " is " + (snap.val() ? "Online" : "Offline");
-
-})
 
   $scope.availability = function(menu){
     return menu.availability ? "Available" : "Currently not available"

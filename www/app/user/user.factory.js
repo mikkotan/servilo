@@ -55,12 +55,12 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
         if(data.val() === true){
           var con = online.push(true);
           con.onDisconnect().remove(function(err){
-            console.log((err?err:"success"));
-            $ionicLoading.hide();
+            console.log(err?err:"success");
+            // $ionicLoading.hide();
           });
         }
         else{
-          $ionicLoading.show();
+          // $ionicLoading.show();
         }
       })
     }

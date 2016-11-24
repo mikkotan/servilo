@@ -1,5 +1,5 @@
 <ion-view view-title="{{restaurant.name}}">
-  <ion-content overflow-scroll="true" class="padding has-tabs-top">
+  <ion-content class="padding has-tabs-top">
     <img ng-if="restaurant.photoURL" ng-src="{{restaurant.photoURL}}" width="100%" />
     <img ng-if="!restaurant.photoURL" ng-src="img/wow.jpg" width="100%">
     <div class="padding">
@@ -11,12 +11,16 @@
         <button class="button button-calm" ng-if="restaurant.facilities.Reservation" ng-click="showAddReservationModal()">Reservation</button>
       </div>
 
-      <p>{{getRestaurantStatus}}</p>
-      <p>Restaurant is: {{restaurantOpenStatus}}</p>
-      <p ng-if="restaurantOpenStatus === 'Open'" style="color:green;">
+      <p ng-if="getRestaurantStatus">ONLINE</p>
+      <p ng-if="!getRestaurantStatus">OFFLINE</p>
+
+      <p ng-if="restaurantOpenStatus">Restaurant is: Open</p>
+      <p ng-if="!restaurantOpenStatus">Restaurant is: Closed</p>
+
+      <p ng-if="restaurantOpenStatus" style="color:green;">
         Restaurant Hours: {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}
       </p>
-      <p ng-if="restaurantOpenStatus === 'Closed'" style="color:red;">
+      <p ng-if="!restaurantOpenStatus" style="color:red;">
         Opens at {{ restaurant.openTime | date:'shortTime' }}
       </p>
       <ion-list>
@@ -31,7 +35,7 @@
             <icon class="ion-plus"></icon> Write Review</button>
         </div>
         <div class="button-bar" ng-if="exists">
-          <button ng-click="openEditModal()" class="button button-balanced">
+          <button ng-click="openEditModal(review)" class="button button-balanced">
             <icon class="ion-plus"></icon> Edit Review</button>
           <button ng-click="showConfirmDelete(review)" class="button button-assertive">
             <icon class="ion-android-delete"></icon> Delete Review</button>
@@ -49,7 +53,7 @@
             <p>
               Reviewed by: {{getReviewer(review).firstName}} {{getReviewer(review).lastName}}
             </p>
-            <p ng-repeat="img in review.images">
+            <p ng-if="review.images" ng-repeat="img in review.images">
               <img ng-src="{{img.image}}" style="width:50px">
             </p>
           </li>
