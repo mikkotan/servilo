@@ -1,9 +1,9 @@
 app.controller('SearchTabCtrl',
   ["$scope","$ionicModal","$firebaseArray","Auth", "Restaurant", "Search" ,"$stateParams", "$state", "User",
-    "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "$cordovaGeolocation", "$ionicLoading", "$cordovaImagePicker",
+    "$firebaseObject", "ionicMaterialInk", "MenusWithAvg", "$ionicPopup", "CordovaGeolocation", "$ionicLoading", "$cordovaImagePicker",
      "Database", "Review", "restaurants", "$cordovaCamera",
         function($scope, $ionicModal, $firebaseArray, Auth, Restaurant, Search, $stateParams, $state,
-            User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, $cordovaGeolocation, $ionicLoading,
+            User, $firebaseObject, ionicMaterialInk, MenusWithAvg, $ionicPopup, CordovaGeolocation, $ionicLoading,
              $cordovaImagePicker, Database, Review, restaurants, $cordovaCamera) {
 
   console.log('SearchTabCtrl');
@@ -201,11 +201,8 @@ app.controller('SearchTabCtrl',
     }
   };
 
-  var options = {timeout: 10000, enableHighAccuracy: true};
-    $cordovaGeolocation.getCurrentPosition(options).then(function(position){
-    $scope.currentLocation = {latitude: position.coords.latitude,longitude: position.coords.longitude};
-  });
 
+  $scope.currentLocation = CordovaGeolocation.get();
   // $scope.setMap = function(restaurant){
   //     $scope.map =  {center:{latitude: restaurant.latitude, longitude: restaurant.longitude}, zoom: 14, options: {scrollwheel: false}, bounds: {}, control: {}};
   //     $scope.restaurantMarkers.push({id: Date.now(),
@@ -235,6 +232,7 @@ app.controller('SearchTabCtrl',
   $scope.showNear =function(){
     if($scope.mapText == "Nearest restaurant in 1km"){
       $scope.mapText = "Back to Default";
+      $scope.currentLocation = CordovaGeolocation.get();
       $scope.tempMarkers = [];
       for (var i = 0; i < $scope.markers.length; i++) {
         var p1 = new google.maps.LatLng($scope.markers[i].coords.latitude, $scope.markers[i].coords.longitude);
