@@ -1,5 +1,5 @@
-app.controller("SignUpCtrl" , ["$scope" , "Auth" , "$firebaseArray", "$firebaseObject","User","$state",
-  function($scope, Auth , $firebaseArray, $firebaseObject , User,$state){
+app.controller("SignUpCtrl" , ["$scope", "Auth", "$firebaseArray", "$firebaseObject", "User", "$state", "IonicPushService",
+  function($scope, Auth, $firebaseArray, $firebaseObject, User, $state, IonicPushService) {
 
   $scope.createUser = function(user) {
     Auth.$createUserWithEmailAndPassword(user.email , user.password)
@@ -12,6 +12,7 @@ app.controller("SignUpCtrl" , ["$scope" , "Auth" , "$firebaseArray", "$firebaseO
           firstName : user.firstName,
           lastName : user.lastName,
           displayName : user.firstName + " " + user.lastName,
+          description: "",
           provider: "email",
           startedAt : firebase.database.ServerValue.TIMESTAMP
         },function(error) {
@@ -20,6 +21,9 @@ app.controller("SignUpCtrl" , ["$scope" , "Auth" , "$firebaseArray", "$firebaseO
           }
           else {
             console.log("no error means succues");
+            if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
+              IonicPushService.registerToAuth();
+            }
           }
         })
         console.log("done")
