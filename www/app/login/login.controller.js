@@ -27,6 +27,9 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "ionicMateria
                   ref.set({
                     displayName: success.displayName,
                     provider: "google",
+                    firstName: "",
+                    lastName: "",
+                    description: "",
                     startedAt: firebase.database.ServerValue.TIMESTAMP
                   })
                 }
@@ -80,6 +83,9 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "ionicMateria
                   ref.set({
                     displayName: success.displayName,
                     provider: "twitter",
+                    firstName: "",
+                    lastName: "",
+                    description: "",
                     startedAt: firebase.database.ServerValue.TIMESTAMP
                   })
                 }
@@ -153,6 +159,9 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "ionicMateria
                   ref.set({
                     displayName: success.displayName,
                     provider: "facebook",
+                    firstName: "",
+                    lastName: "",
+                    description: "",
                     startedAt: firebase.database.ServerValue.TIMESTAMP
                   })
                 }

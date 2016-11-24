@@ -136,7 +136,7 @@ app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover
       $scope.optionsPopover.hide();
 
       var userRef = Database.usersReference().child(User.auth().$id);
-      userRef.set({
+      userRef.update({
         firstName: user.firstName,
         lastName: user.lastName,
         displayName: user.displayName,
