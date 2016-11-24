@@ -2,28 +2,16 @@ app.factory("Home",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "Datab
   function($firebaseObject ,$firebaseAuth, $firebaseArray, Database){
   var rootRef = firebase.database().ref();
 
-  // var menus = rootRef.child("menus");
-  var menusRef = Database.menusReference();
-
-  // var restaurant = rootRef.child('restaurants');
-  var restaurantRef = Database.restaurantsReference();
-  // var usersRef = rootRef.child('users');
-  var usersRef = Database.usersReference();
-  var usersObj = $firebaseArray(usersRef);
+  var restaurantsRef = Database.restaurantsReference();
 
   return {
-    restaurants : function(){
-      return $firebaseArray(restaurant);
+    nextRestaurants : function(key) {
+      var query = restaurantsRef.orderByKey().startAt(key+1).limitToFirst(5);
+      return $firebaseArray(query);
     },
-    getRestaurant : function(restaurantId){
-      return $firebaseObject(restaurant.child(restaurantId));
+    srestaurants : function() {
+      var query = restaurantsRef.orderByKey().limitToFirst(10);
+      return $firebaseArray(query);
     },
-    getUserName : function(uid){
-      return usersObj.$getRecord(uid).firstName + " " + usersObj.$getRecord(uid).lastName;
-    },
-    //redundant to menusfactory
-    getRestaurantMenus : function(restaurantId){
-      return $firebaseArray(menusRef.orderByChild("restaurant_id").equalTo(restaurantId))
-    }
   }
 }])

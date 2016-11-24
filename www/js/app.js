@@ -146,10 +146,16 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
 
   Auth.$onAuthStateChanged(function(firebaseUser) {
     if (firebaseUser) {
-      $scope.firebaseUser = User.auth();
-      if (firebaseUser.displayName) {
-        $scope.photoURL = firebaseUser.photoURL;
-      }
+      // $scope.firebaseUser = User.auth();
+      // if (firebaseUser.displayName) {
+      //   $scope.photoURL = firebaseUser.photoURL;
+      // }
+      User.auth().$loaded().then(function(data) {
+        $scope.firebaseUser = data;
+        if(data.photoURL) {
+          $scope.photoURL = data.photoURL;
+        }
+      })
     }
   });
 })

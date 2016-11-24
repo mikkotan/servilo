@@ -1,12 +1,12 @@
 <ion-view view-title="Profile">
   <ion-nav-buttons side="right">
-    <a class="button button-icon icon ion-android-options" ng-click="openPopover($event)"></a>
+    <a class="button button-icon icon ion-android-options" ng-click="openPopover($event, firebaseUser)"></a>
   </ion-nav-buttons>
   <ion-content>
     <div id="content">
       <div id="profile-info">
-        <img id="profile-image" ng-show="photoURL" ng-src="{{photoURL}}">
-        <img id="profile-image" ng-show="!photoURL" ng-src="img/ionic.png">
+        <img id="profile-image" ng-show="firebaseUser.photoURL" ng-src="{{firebaseUser.photoURL}}">
+        <img id="profile-image" ng-show="!firebaseUser.photoURL" ng-src="img/ionic.png">
         <h3 id="profile-name" ng-if="firebaseUser.provider !== email">{{firebaseUser.displayName}}</h3>
         <h3 id="profile-name" ng-if="firebaseUser.provider === email">{{firebaseUser.firstName}} {{firebaseUser.lastName}}</h3>
         <p id="profile-description" ng-if="firebaseUser.description"> {{ firebaseUser.description }} </p>

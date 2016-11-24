@@ -60,10 +60,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       saveToPhotoAlbum: false
     };
     $cordovaCamera.getPicture(options).then(function(imageData) {
-      var d = new Date();
-      var child = 'restaurants/' + d.getTime() + '.jpg';
-      var storageRef = firebase.storage().ref();
-      var restaurantRef = storageRef.child(child).putString(imageData, 'base64', metadata);
+      var restaurantRef = Upload.restaurant(imageData);
       restaurantRef.on('state_changed', function(snapshot){
         var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log('Upload is ' + progress + '% done');

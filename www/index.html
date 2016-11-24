@@ -57,7 +57,7 @@
   <script src="app/menu/menus.controller.js"></script>
   <script src="app/menu/menu.factory.js"></script>
   <script src="app/menu/view-restaurant-menus.controller.js"></script>
-  <script src="app/menu/view-restaurant-menus-order.controller.js"></script>
+  <!-- <script src="app/menu/view-restaurant-menus-order.controller.js"></script> -->
   <!-- notification -->
   <script src="app/notification/notifications.controller.js"></script>
   <!-- order -->
@@ -95,6 +95,7 @@
   <script src="lib/ngCordova/dist/ng-cordova.min.js"></script>
   <script src="lib/ng-cordova-oauth/dist/ng-cordova-oauth.js"></script>
   <script src="app/cordovaService/cordovaGeolocation.service.js"></script>
+  <script src="app/upload/upload.service.js"></script>
   <script src="cordova.js"></script>
 
   <!-- end of data -->
@@ -134,7 +135,7 @@
     <ion-side-menu side="left" enable-menu-with-back-views="false">
       <ion-header-bar class="bar-profile bar-stable">
         <div ng-show="firebaseUser" class="profile">
-          <img class="sidebar-picture" ng-show="photoURL" ng-src="{{photoURL}}">
+          <img class="sidebar-picture" ng-show="photoURL" ng-src="{{photoURL}}" style="width: 50px; height: 50px">
           <img class="sidebar-picture" ng-show="!photoURL" ng-src="img/ionic.png" style="width: 50px; height: 50px">
           <h3 class="sidebar-name" ng-if="firebaseUser.provider !== email">{{firebaseUser.displayName}}</h3>
           <h3 class="sidebar-name" ng-if="firebaseUser.provider === email">{{firebaseUser.firstName}} {{firebaseUser.lastName}}</h3>
