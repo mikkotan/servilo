@@ -16,12 +16,24 @@
               <label class="item item-input">
                 Price:<input type="number" ng-model="menu.price">
               </label>
+              {{menu.category}}
+              <label class="item item-input item-select">
+                <div class="input-label">
+                  Category
+                </div>
+                <select ng-model="menu.category">
+                  <option ng-repeat="category in categories" value="{{category.$id}}">
+                    {{category.name}}
+                  </option>
+                </select>
+              </label>
             </div>
             <div class="padding">
               <button type="submit" class="button button-block button-positive">Add menu</button>
             </div>
           </form>
         </ion-item>
+
         <ion-item>
           <a class="button-calm" ui-sref="tabs.restaurant">back</a>
         </ion-item>

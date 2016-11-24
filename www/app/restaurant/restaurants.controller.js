@@ -1,6 +1,6 @@
 
-app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate",  "Restaurant", "$cordovaCamera", "CordovaGeolocation",
-  function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation) {
+app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate",  "Restaurant", "$cordovaCamera", "CordovaGeolocation", "Database",
+  function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation, Database) {
 
     $scope.modalControl = {};
     $scope.restaurants = Restaurant.all();
@@ -175,6 +175,30 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
     scope: $scope
   });
 
+  $ionicModal.fromTemplateUrl('app/menu/_add-category-modal.html', function(addCategoryModal) {
+    $scope.addCategoryModal = addCategoryModal;
+  }, {
+    scope: $scope
+  })
+
+  $scope.showAddCategoryModal = function(resId) {
+    console.log('show add category');
+    console.log('restaurant id : ' + resId);
+    $scope.category = {
+      restaurant_id: resId
+    }
+    $scope.addCategoryModal.show();
+  }
+
+  $scope.addCategory = function(category) {
+    categoryRef = Database.restaurantsReference().child(category.restaurant_id).child('menu_categories').push();
+    categoryRef.set({
+      name: category.name
+    })
+    $scope.category.name = "";
+    $scope.category.restaurant_id = "";
+    $scope.addCategoryModal.hide();
+  }
 
   $scope.deleteRestaurant = function(restaurant) {
     var resObj = restaurant;
@@ -298,6 +322,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       }
     }
   };
+
   $scope.markLocation = function() {
     $scope.currentLocation = CordovaGeolocation.get();
     $scope.marker = {
@@ -327,32 +352,6 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
     });
   }
 
-  // $scope.facilities = [
-  //   {
-  //     id : 'Wifi',
-  //     name : 'Wifi Hotspot'
-  //   },
-  //   {
-  //     id: 'Parking',
-  //     name: 'Parking Area'
-  //   },
-  //   {
-  //     id: 'Reservation',
-  //     name: 'Accepts Reservation'
-  //   }
-  // ];
-
-  // $scope.facilities = {
-  //   "Wifi" : {
-  //     name : "Wifi Hotspot"
-  //   },
-  //   "Parking" : {
-  //     name : "Parking Area"
-  //   },
-  //   "Reservation" : {
-  //     name : "Accepts Reservation"
-  //   }
-  // }
   $scope.facilities = $firebaseArray(firebase.database().ref().child('facilities'));
 
 

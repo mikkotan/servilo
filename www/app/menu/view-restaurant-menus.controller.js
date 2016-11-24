@@ -4,8 +4,14 @@ app.controller("ViewRestaurantMenu", ["$scope", "$stateParams", "restaurantMenu"
     $scope.restaurantMenus = restaurantMenu
 
     $scope.deleteMenu = function(menu) {
-      Database.restaurantsReference().child(menu.restaurant_id).child('menus').child(menu.$id).set(null);
-      $scope.restaurantMenus.$remove(menu);
+      console.log('Delete called');
+      $scope.restaurantMenus.$remove(menu)
+        .then((ref) => {
+          console.log('Successfully deleted');
+          console.log('This is the menu id '+menu.$id);
+          Database.restaurantsReference().child(menu.restaurant_id).child('menus').child(menu.$id).set(null);
+          Database.restaurantsReference().child(menu.restaurant_id).child('menu_categories').child(menu.category_id).child('menus').child(menu.$id).set(null);
+        })
     }
 
     $scope.editMenu = function(menu) {
