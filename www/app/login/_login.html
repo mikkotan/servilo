@@ -6,9 +6,9 @@
       </ion-item>
       <div class="card">
       <ion-item id="form-input">
-        <form ng-submit="login(user)" ng-hide="firebaseUser">
+        <form ng-submit="login(user)" ng-hide="firebaseUser" name="myForm">
           <div class="list">
-            <ion-md-input-cus placeholder="Username" highlight-color="balanced" type="text" ng-model="user.email"></ion-md-input-cus>
+            <ion-md-input-cus placeholder="Username" highlight-color="balanced" type="text" ng-model="user.email" required></ion-md-input-cus>
           </div>
           <div class="list">
             <ion-md-input-cus placeholder="Password" highlight-color="energized" type="password" ng-model="user.password"></ion-md-input-cus>

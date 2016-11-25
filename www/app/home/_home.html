@@ -1,5 +1,9 @@
 <ion-view view-title="Home">
   <ion-header-bar class="bar bar-subheader bar-light item-input-inset">
+    <label class="item-input-wrapper">
+      <i class="icon ion-search placeholder-icon"></i>
+      <input placeholder="Search..." type="search" ng-model="name" ng-model-options="{ debounce: 1000 }" ng-change="searchChange(name)">
+    </label>
   </ion-header-bar>
   <ion-content>
     HOME HERE
@@ -8,13 +12,12 @@
 	  on-refresh="doRefresh()">
 	</ion-refresher>
     <ion-list>
-	  <ion-item ng-repeat="rest in restaurants" item="rest">
+	  <ion-item ng-repeat="rest in home.restaurants" item="rest">
 	    {{rest.name}}
 	  </ion-item>
     </ion-list>
 
-    <ion-infinite-scroll ng-if="!noMoreItemsAvailable" on-infinite="loadMore()" distance="1%">
-    </ion-infinite-scroll>
-
+    <!-- <ion-infinite-scroll ng-if="!home.noMoreItemsAvailable" on-infinite="loadMore()" distance="1%">
+    </ion-infinite-scroll> -->
   </ion-content>
 </ion-view>

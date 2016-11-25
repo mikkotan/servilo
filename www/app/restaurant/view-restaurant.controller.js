@@ -119,7 +119,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
         $scope.images = [];
         $ionicLoading.hide();
 
-        var restaurant_owner = Restaurant.getOwner($scope.restaurant);
+        var restaurant_owner = Restaurant.getOwner($scope.restaurant.$id);
         Database.notifications().$add({
           sender_id: User.auth().$id,
           receiver_id: restaurant_owner.$id,

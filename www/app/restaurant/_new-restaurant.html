@@ -9,7 +9,7 @@
         <a class="button button-icon icon ion-camera" ng-click="upload(1)">CAM</a>
         <a class="button button-icon icon ion-camera" ng-click="upload(2)">ALBUM</a>
         <div>
-          <div>{{progress}}%</div>
+          <progress ng-show="progress" max="100" value="{{progress}}"></progress>
           <img ng-show="imageURL" ng-src="{{imageURL}}" width="100%"/>
           
         </div>

@@ -61,6 +61,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
     };
     $cordovaCamera.getPicture(options).then(function(imageData) {
       var restaurantRef = Upload.restaurant(imageData);
+      $scope.progress = 1;
       restaurantRef.on('state_changed', function(snapshot){
         var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log('Upload is ' + progress + '% done');
@@ -83,7 +84,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
 
   $scope.addRestaurant = function(restaurant){
     $scope.pendingRestaurants.$add({
-      name: restaurant.name,
+      name: restaurant.name.toLowerCase(),
       services : {
         online : {
           name : "online",
@@ -228,6 +229,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
 
   $scope.newRestaurant = function() {
     $scope.restaurantModal.show();
+    $scope.imageURL = null;
     $scope.modalControl.refresh({
       latitude: 10.73016704689235,
       longitude: 122.54616022109985
@@ -256,6 +258,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
   }
 
   $scope.closeEditRestaurant = function() {
+    $scope.imageURL = null;
     $scope.restaurantEditModal.hide();
   }
 
