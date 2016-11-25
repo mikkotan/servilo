@@ -7,18 +7,18 @@
     <ion-list>
       <div class="card">
         <ion-item id="form-input">
-          <form ng-submit="editProfile(firebaseUser)">
+          <form ng-submit="editProfile(currentUser)">
             <div class="list">
-              <ion-md-input-cus placeholder="Display Name" highlight-color="balanced" type="text" ng-model="firebaseUser.displayName"></ion-md-input-cus>
+              <ion-md-input-cus placeholder="Display Name" highlight-color="balanced" type="text" ng-model="currentUser.displayName"></ion-md-input-cus>
             </div>
             <div class="list">
-              <ion-md-input-cus placeholder="First Name" highlight-color="balanced" type="text" ng-model="firebaseUser.firstName"></ion-md-input-cus>
+              <ion-md-input-cus placeholder="First Name" highlight-color="balanced" type="text" ng-model="currentUser.firstName"></ion-md-input-cus>
             </div>
             <div class="list">
-              <ion-md-input-cus placeholder="Last Name" highlight-color="balanced" type="text" ng-model="firebaseUser.lastName"></ion-md-input-cus>
+              <ion-md-input-cus placeholder="Last Name" highlight-color="balanced" type="text" ng-model="currentUser.lastName"></ion-md-input-cus>
             </div>
             <div class="list">
-              <ion-md-input-cus placeholder="Description" highlight-color="balanced" type="text" ng-model="firebaseUser.description"></ion-md-input-cus>
+              <ion-md-input-cus placeholder="Description" highlight-color="balanced" type="text" ng-model="currentUser.description"></ion-md-input-cus>
             </div>
             <div class="row">
               <div class="col text-right">

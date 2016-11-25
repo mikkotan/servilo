@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var app = angular.module('app', ['ui.mask','ionic', 'ionic.cloud', 'ionMdInput', 'ionic-material', 'firebase', 'ionic.rating', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker', 'yaru22.angular-timeago', 'ui.select', 'ngSanitize'])
+var app = angular.module('app', ['ui.mask', 'ionic', 'ionic.cloud', 'ionMdInput', 'ionic-material', 'firebase', 'ionic.rating', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker', 'yaru22.angular-timeago', 'ui.select', 'ngSanitize'])
 
 app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushService", "User", "Database", "$cordovaGeolocation",
   function($ionicPlatform, $rootScope, $state, $templateCache, IonicPushService, User, Database, $cordovaGeolocation) {
@@ -47,10 +47,10 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
         }
       })
 
-      $rootScope.$on('cloud:push:notification', function(event, data) {
-        var msg = data.message;
-        alert(msg.title + ': ' + msg.text);
-      })
+    $rootScope.$on('cloud:push:notification', function(event, data) {
+      var msg = data.message;
+      alert(msg.title + ': ' + msg.text);
+    })
 
     $templateCache.put('template.tpl.html', '');
     $ionicPlatform.ready(function() {
@@ -68,7 +68,8 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
         StatusBar.styleDefault();
       }
     });
-  }]);
+  }
+]);
 
 
 app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate, Auth, User, Database, $state, $ionicPush, IonicPushService, $ionicPopover) {
@@ -79,6 +80,11 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
     $ionicSideMenuDelegate.toggleRight();
   };
 
+  // $scope.hasData = function() {
+  //     //get ng-model from input
+  //     //if ng-model has value..add "used" class
+  //     //if ng-model has no value...wala lang
+  // };
   $scope.signOut = function() {
     $ionicLoading.show({
       template: '<p>Signing out . . .</p><ion-spinner></ion-spinner>',

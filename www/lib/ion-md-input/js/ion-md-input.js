@@ -65,7 +65,7 @@ angular.module('ionMdInput', [])
           if (this.value === '') {
             this.className = mdInput.className.replace(reg, ' ');
           } else {
-            this.classList.add(dirtyClass);
+            this.classList.toggle(dirtyClass);
           }
         };
 
@@ -91,12 +91,14 @@ angular.module('ionMdInput', [])
     restrict: 'E',
     replace: true,
     require: '?ngModel',
-    template: '<label class="item item-input item-md-labelCus">' +
-      '<input type="text" class="md-inputCus">' +
-      '<span class="input-labelCus"></span>' +
+    template: '<label class="item item-input item-md-label-cus">' +
+      '<input type="text" class="md-input-cus">' +
+      '<span class="input-label-cus"></span>' +
       '<div class="highlight"></div>' +
       '</label>',
     compile: function(element, attr) {
+
+      console.log(_dirty);
       var highlight = element[0].querySelector('.highlight');
       var highlightColor;
       if (!attr.highlightColor) {
@@ -106,9 +108,14 @@ angular.module('ionMdInput', [])
       }
       highlight.className += ' highlight-' + highlightColor;
 
-      var label = element[0].querySelector('.input-labelCus');
+      var label = element[0].querySelector('.input-label-cus');
       label.innerHTML = attr.placeholder;
 
+      var _dirty = false;
+      console.log(attr.ngValue)
+    //   if (attr.ngModel || attr.ngValue) {
+    //     _dirty = true;
+    //   }
       /*Start From here*/
       var input = element.find('input');
       angular.forEach({
@@ -128,6 +135,9 @@ angular.module('ionMdInput', [])
       }, function(value, name) {
         if (angular.isDefined(value)) {
           input.attr(name, value);
+        //   if (_dirty === true) {
+        //     input.attr('class', 'used');
+        //   }
         }
       });
 
@@ -139,7 +149,8 @@ angular.module('ionMdInput', [])
 
       return function LinkingFunction($scope, $element) {
 
-        var mdInputCus = $element[0].querySelector('.md-inputCus');
+        var mdInputCus = $element[0].querySelector('.md-input-cus');
+        // console.log(mdInputCus);
 
         var dirtyClass = 'used';
 
@@ -147,6 +158,7 @@ angular.module('ionMdInput', [])
 
         //Here is our toggle function
         var toggleClass = function() {
+
           if (this.value === '') {
             this.className = mdInputCus.className.replace(reg, ' ');
           } else {
@@ -163,6 +175,7 @@ angular.module('ionMdInput', [])
           }
         });
         // Here we are saying, on 'blur', call toggleClass, on mdInput
+        // ionic.on('load', toggleClass, mdInputCus);
         ionic.on('blur', toggleClass, mdInputCus);
 
       };

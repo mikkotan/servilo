@@ -112,22 +112,9 @@
           <button class="button button-icon button-clear ion-navicon" ng-click="showMenu()">
           </button>
         </ion-nav-buttons>
-        <ion-nav-buttons side="right">
-          <!-- <button ng-click="cart()">Cart
-          </button> -->
-
-        </ion-nav-buttons>
       </ion-nav-bar>
 
       <ion-nav-view animation="slide-left"></ion-nav-view>
-
-     
-
-      <script id="my-popover.html" type="text/ng-template">
-        <ion-popover-view class="popover">
-          <p>This is a popover</p>
-        </ion-popover-view>
-      </script>
 
     </ion-side-menu-content>
 
@@ -148,15 +135,15 @@
             <a class="item" href="#/tab/home">Profile</a>
             <div class="item item-divider"></div>
             <a class="item" href="#/tab/home">Profile</a> -->
-          <ion-item menu-close ui-sref="tabs.home" class="item-borderless">
+          <!-- <ion-item menu-close ui-sref="tabs.home" class="item-borderless">
             Home
-          </ion-item>
+          </ion-item> -->
           <ion-item menu-close ui-sref="login" class="item-borderless" ng-hide="firebaseUser">
             Login or Signup
           </ion-item>
-          <ion-item menu-close ui-sref="signup" class="item-borderless" ng-hide="firebaseUser">
+          <!-- <ion-item menu-close ui-sref="signup" class="item-borderless" ng-hide="firebaseUser">
             Sign Up
-          </ion-item>
+          </ion-item> -->
           <ion-item menu-close ui-sref="tabs.search" ng-show="firebaseUser" class="item-borderless">
             Search
           </ion-item>
