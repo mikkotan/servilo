@@ -19,7 +19,7 @@ app.factory("Order",["$firebaseAuth","$firebaseArray","$firebaseObject", "Databa
     },
     findOne : function(orderId) {
       console.log("find One order fired");
-      return ordersArray.$getRecord(orderId);
+      return $firebaseObject(Database.ordersReference().child(orderId));
     }
   }
 }]);
