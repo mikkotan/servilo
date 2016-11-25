@@ -1,4 +1,4 @@
-app.factory('IonicPushService', function($ionicPush, User, Database) {
+app.factory('IonicPushService', function($ionicPush, User, Database, $cordovaPushV5) {
 
   var IonicPushService = {
     registerDevice : function() {
@@ -14,7 +14,8 @@ app.factory('IonicPushService', function($ionicPush, User, Database) {
       return $ionicPush.token.token
     },
     registerToAuth : function() {
-      var tempToken = $ionicPush.token.token;
+      console.log("registering this token: "+localStorage.myPush);
+      var tempToken = localStorage.myPush;
       var token = tempToken.split(':');
 
       var currentAuthRef = Database.usersReference().child(User.auth().$id).child('device_token').child(token[0]);

@@ -3,17 +3,38 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var app = angular.module('app', ['ui.mask','ionic', 'ionic.cloud', 'ionMdInput', 'ionic-material', 'firebase', 'ionic.rating', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker', 'yaru22.angular-timeago', 'ui.select', 'ngSanitize'])
+var app = angular.module('app', ['ui.mask', 'ionic', 'ionic.cloud', 'ionMdInput', 'ionic-material', 'firebase', 'ionic.rating', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker', 'yaru22.angular-timeago', 'ui.select', 'ngSanitize'])
 
-app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushService", "User", "Database", "$cordovaGeolocation",
-  function($ionicPlatform, $rootScope, $state, $templateCache, IonicPushService, User, Database, $cordovaGeolocation) {
-
+app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushService", "User", "Database", "$cordovaGeolocation", "$ionicPopup", "$cordovaPushV5",
+  function($ionicPlatform, $rootScope, $state, $templateCache, IonicPushService, User, Database, $cordovaGeolocation, $ionicPopup, $cordovaPushV5) {
     $ionicPlatform.ready()
       .then(() => {
-        console.log('ready ionic');
-
         if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
-          IonicPushService.registerDevice();
+          localStorage.myPush = '';
+          $cordovaPushV5.initialize({
+            android: {
+              senderID: "155324175920"
+            },
+            ios: {
+              alert: 'true',
+              badge: true,
+              sound: 'false',
+              clearBadge: true
+            },
+            windows: {}
+          })
+            .then((result) => {
+              $cordovaPushV5.onNotification();
+              $cordovaPushV5.onError();
+              $cordovaPushV5.register()
+                .then((registerResult) => {
+                  console.log("Register Result: "+registerResult)
+                  localStorage.myPush = registerResult;
+                })
+                .catch((err) => {
+                  console.log(err)
+                })
+            })
         }
 
         var posOptions = {
@@ -31,13 +52,49 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
             }
             console.log(err);
           })
+
+        if (window.cordova && window.cordova.plugins.Keyboard) {
+          // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+          // for form inputs)
+          cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+
+          // Don't remove this line unless you know what you are doing. It stops the viewport
+          // from snapping when text inputs are focused. Ionic handles this internally for
+          // a much nicer keyboard experience.
+          cordova.plugins.Keyboard.disableScroll(true);
+        }
+        if (window.StatusBar) {
+          StatusBar.styleDefault();
+        }
       })
       .catch((err) => {
         console.log(err);
       })
 
+    $rootScope.$on('$cordovaPushV5:notificationReceived', function(event, data) {
+      console.log('received notification');
+      console.log('DATA' + JSON.stringify(data, null, 4));
 
+      console.log(data.additionalData.foreground);
 
+      if (data.additionalData.foreground == true) {
+        console.log('foreground true');
+        $ionicPopup.alert({
+          title: data.title,
+          template: data.message
+        })
+        $state.go('tabs.myReservations');
+      }
+      else {
+        console.log('not in foreground')
+        if (data.additionalData.url === 'reservation') {
+          $state.go('tabs.myReservations');
+        }
+        else if (data.additionalData.url === 'order') {
+          $state.go('tabs.myOrders');
+        }
+      }
+    })
 
     $rootScope.$on("$stateChangeError",
       function(event, toState, toParams, fromState, fromParams, error) {
@@ -46,30 +103,34 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
           $state.go("login")
         }
       })
-
-      $rootScope.$on('cloud:push:notification', function(event, data) {
-        var msg = data.message;
-        alert(msg.title + ': ' + msg.text);
-      })
-
+//
+// <<<<<<< HEAD
+//     $rootScope.$on('cloud:push:notification', function(event, data) {
+//       var msg = data.message;
+//       alert(msg.title + ': ' + msg.text);
+//     })
+//
+//     $templateCache.put('template.tpl.html', '');
+//     $ionicPlatform.ready(function() {
+//       if (window.cordova && window.cordova.plugins.Keyboard) {
+//         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+//         // for form inputs)
+//         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+//
+//         // Don't remove this line unless you know what you are doing. It stops the viewport
+//         // from snapping when text inputs are focused. Ionic handles this internally for
+//         // a much nicer keyboard experience.
+//         cordova.plugins.Keyboard.disableScroll(true);
+//       }
+//       if (window.StatusBar) {
+//         StatusBar.styleDefault();
+//       }
+//     });
+//   }
+// ]);
+// =======
     $templateCache.put('template.tpl.html', '');
-    $ionicPlatform.ready(function() {
-      if (window.cordova && window.cordova.plugins.Keyboard) {
-        // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-        // for form inputs)
-        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-
-        // Don't remove this line unless you know what you are doing. It stops the viewport
-        // from snapping when text inputs are focused. Ionic handles this internally for
-        // a much nicer keyboard experience.
-        cordova.plugins.Keyboard.disableScroll(true);
-      }
-      if (window.StatusBar) {
-        StatusBar.styleDefault();
-      }
-    });
   }]);
-
 
 app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate, Auth, User, Database, $state, $ionicPush, IonicPushService, $ionicPopover) {
   $scope.showMenu = function() {
@@ -79,6 +140,11 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
     $ionicSideMenuDelegate.toggleRight();
   };
 
+  // $scope.hasData = function() {
+  //     //get ng-model from input
+  //     //if ng-model has value..add "used" class
+  //     //if ng-model has no value...wala lang
+  // };
   $scope.signOut = function() {
     $ionicLoading.show({
       template: '<p>Signing out . . .</p><ion-spinner></ion-spinner>',
