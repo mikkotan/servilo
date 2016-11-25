@@ -12,8 +12,8 @@ app.controller("SignUpCtrl" , ["$scope", "Auth", "$firebaseArray", "$firebaseObj
           firstName : user.firstName,
           lastName : user.lastName,
           displayName : user.firstName + " " + user.lastName,
-          description: "",
-          provider: "email",
+          description : "",
+          provider : "email",
           startedAt : firebase.database.ServerValue.TIMESTAMP
         },function(error) {
           if(error) {

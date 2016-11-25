@@ -3,7 +3,6 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "ionicMateria
 
     ionicMaterialInk.displayEffect();
 
-
     $scope.googleLogin = function() {
       console.log("initiated");
       window.plugins.googleplus.login({

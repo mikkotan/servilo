@@ -72,14 +72,14 @@
 
 /* CUSTOM INPUT CLASSES HERE*/
 
-.item-md-labelCus {
+.item-md-label-cus {
   display: block;
   background-color: transparent;
   box-shadow: none;
   padding-top: 30px;
   padding-bottom: 0;
 }
-.item-md-labelCus .input-labelCus {
+.item-md-label-cus .input-label-cus {
   position: absolute;
   padding: 5px 0 0;
   z-index: 2;
@@ -91,12 +91,12 @@
   opacity: 0.5;
   transform-origin: 0;
 }
-.item-md-labelCus input {
+.item-md-label-cus input {
   z-index: 1;
   position: relative;
   bottom: 0;
 }
-.item-md-labelCus .highlight {
+.item-md-label-cus .highlight {
   position: absolute;
   bottom: 0;
   height: 2px;
@@ -107,39 +107,39 @@
   -webkit-transition: all 0.15s ease;
   transition: all 0.15s ease;
 }
-.item-md-labelCus .highlight-light {
+.item-md-label-cus .highlight-light {
   background: #fff;
 }
-.item-md-labelCus .highlight-stable {
+.item-md-label-cus .highlight-stable {
   background: #f8f8f8;
 }
-.item-md-labelCus .highlight-positive {
+.item-md-label-cus .highlight-positive {
   background: #387ef5;
 }
-.item-md-labelCus .highlight-calm {
+.item-md-label-cus .highlight-calm {
   background: #11c1f3;
 }
-.item-md-labelCus .highlight-balanced {
+.item-md-label-cus .highlight-balanced {
   background: #33cd5f;
 }
-.item-md-labelCus .highlight-energized {
+.item-md-label-cus .highlight-energized {
   background: #ffc900;
 }
-.item-md-labelCus .highlight-assertive {
+.item-md-label-cus .highlight-assertive {
   background: #ef473a;
 }
-.item-md-labelCus .highlight-royal {
+.item-md-label-cus .highlight-royal {
   background: #886aea;
 }
-.item-md-labelCus .highlight-dark {
+.item-md-label-cus .highlight-dark {
   background: #444;
 }
-.item-md-labelCus input:focus~ .input-labelCus, .item-md-labelCus input.used~ .input-labelCus {
+.item-md-label-cus input:focus~ .input-label-cus, .item-md-label-cus input.used~ .input-label-cus {
   -webkit-transform: translate3d(0, -60px, 0) scale(0.9);
   transform: translate3d(0, -60px, 0) scale(0.9);
   opacity: 1;
 }
-.item-md-labelCus input:focus~ .highlight {
+.item-md-label-cus input:focus~ .highlight {
   -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }

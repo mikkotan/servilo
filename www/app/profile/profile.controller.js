@@ -1,3 +1,4 @@
+
 app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover", "$ionicModal", "Database", "$cordovaCamera", "Upload", "Auth",
   function($scope, User, $ionicLoading, $ionicPopover, $ionicModal, Database, $cordovaCamera, Upload, Auth) {
 
@@ -35,6 +36,8 @@ app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover
     });
 
     $scope.openEditProfile = function() {
+      $scope.currentUser = User.auth();
+    //   $scope.currentUser = User.auth();
       $scope.editProfileModal.show();
       $scope.closePopover();
     };
