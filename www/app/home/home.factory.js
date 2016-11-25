@@ -6,7 +6,7 @@ app.factory("Home",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "Datab
 
   return {
     nextRestaurants : function(key) {
-      var query = restaurantsRef.orderByKey().startAt(key+1).limitToFirst(2);
+      var query = restaurantsRef.orderByKey().startAt(key+1).limitToFirst(5);
       return $firebaseArray(query);
     },
     srestaurants : function() {

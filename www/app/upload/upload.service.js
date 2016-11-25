@@ -20,8 +20,20 @@ app.factory("Upload", ["Database", "$firebaseArray",
       return reviewsRef;
     },
     multipleUpload : function(reviewId) {
-       var ref = Database.reviewsReference().child(reviewId).child('images');
-       return $firebaseArray(ref);
+      var ref = Database.reviewsReference().child(reviewId).child('images');
+      return $firebaseArray(ref);
+    },
+    restaurant : function(base64) {
+      var d = new Date();
+      var child = 'restaurant/' + d.getTime() + '.jpg';
+      var restaurantRef = storageRef.child(child).putString(base64, 'base64', metadata);
+      return restaurantRef;
+    },
+    profile : function(base64) {
+      var d = new Date();
+      var child = 'profile/' + d.getTime() + '.jpg';
+      var profileRef = storageRef.child(child).putString(base64, 'base64', metadata);
+      return profileRef;
     }
   }
 }]);
