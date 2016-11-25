@@ -1,21 +1,11 @@
-app.controller("ViewRestaurantLocation", ["$scope", "$state", "$firebaseArray", "$firebaseObject", "Database", "$ionicLoading", "$ionicModal", "$ionicPopup", "$cordovaGeolocation", "$stateParams", "Restaurant", "User", "Review", "Reservation", "$ionicLoading",
-  function($scope, $state, $firebaseArray, $firebaseObject, Database, $ionicLoading, $ionicModal, $ionicPopup, $cordovaGeolocation, $stateParams, Restaurant, User, Review, Reservation, $ionicLoading) {
+app.controller("ViewRestaurantLocation", ["$scope", "$state", "$firebaseArray", "$firebaseObject", "Database", "$ionicLoading", "$ionicModal", "$ionicPopup", "CordovaGeolocation", "$stateParams", "Restaurant", "User", "Review", "Reservation", "$ionicLoading",
+  function($scope, $state, $firebaseArray, $firebaseObject, Database, $ionicLoading, $ionicModal, $ionicPopup, CordovaGeolocation, $stateParams, Restaurant, User, Review, Reservation, $ionicLoading) {
 
-var id = $stateParams.restaurantId;
- $scope.restaurant = Restaurant.get(id);
+  var id = $stateParams.restaurantId;
+  // $scope.restaurant = Restaurant.get(id);
   $scope.mapDirection = [];
-  $scope.currentLocation = {};
+  $scope.currentLocation = CordovaGeolocation.get();
   $scope.restaurantMarkers = [];
-  var options = {
-    timeout: 10000,
-    enableHighAccuracy: true
-  };
-  $cordovaGeolocation.getCurrentPosition(options).then(function(position) {
-    $scope.currentLocation = {
-      latitude: position.coords.latitude,
-      longitude: position.coords.longitude
-    };
-  });
 
   $scope.setMap = function(restaurant) {
     $scope.map = {
@@ -36,6 +26,10 @@ var id = $stateParams.restaurantId;
         }
       }
     };
+    $scope.placeName(restaurant);
+    $scope.getDistance(restaurant,'DRIVING');
+    $scope.getDistance(restaurant,'WALKING');
+
     $scope.restaurantMarkers.push({
       id: Date.now(),
       coords: {
@@ -43,6 +37,7 @@ var id = $stateParams.restaurantId;
         longitude: restaurant.longitude
       }
     });
+
   };
 
   $scope.markerEvents = {
@@ -53,8 +48,9 @@ var id = $stateParams.restaurantId;
     }
   };
 
-  $scope.showPath = function(restaurant) {
+  $scope.showPath = function(restaurant, mode) {
     $scope.map.zoom = 12;
+    $scope.currentLocation = CordovaGeolocation.get();
     var mapDirection = new google.maps.DirectionsService();
     var request = {
       origin: {
@@ -65,9 +61,10 @@ var id = $stateParams.restaurantId;
         lat: restaurant.latitude,
         lng: restaurant.longitude
       },
-      travelMode: google.maps.DirectionsTravelMode['DRIVING'],
+      travelMode: google.maps.DirectionsTravelMode[mode],
       optimizeWaypoints: true
     };
+    $scope.restaurantMarkers.length = 1;
 
     $scope.restaurantMarkers.push({
       id: Date.now(),
@@ -97,8 +94,55 @@ var id = $stateParams.restaurantId;
       }
       $scope.restaurantMarkers[0].icon = new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_bubble_icon_texts_big&chld=restaurant|edge_bc|FFBB00|000000|' +
         restaurant.name + '|Distance: ' + distance + 'km');
+        // if(mode == "DRIVING"){
+        //     $scope.drivingD = distance;
+        // }else{
+        //   $scope.walkingD = distance;
+        // };
       $scope.$apply();
     });
   };
-}
-])
+
+  //function that converts LatLng coordinates to word
+  $scope.placeName = function(restaurant){
+    var geocoder = new google.maps.Geocoder;
+    var latLng = {lat: restaurant.latitude, lng: restaurant.longitude};
+    geocoder.geocode({'location': latLng}, function(results, status) {
+      if (status === 'OK') {
+        $scope.location = results[0].formatted_address;
+        $scope.$apply();
+      } else {
+        alert('Geocoder failed due to: ' + status);
+      }
+    });
+  }
+  //getting the distance
+  $scope.getDistance = function(restaurant, mode) {
+    $scope.currentLocation = CordovaGeolocation.get();
+    var mapDirection = new google.maps.DirectionsService();
+    var request = {
+      origin: {
+        lat: $scope.currentLocation.latitude,
+        lng: $scope.currentLocation.longitude
+      },
+      destination: {
+        lat: restaurant.latitude,
+        lng: restaurant.longitude
+      },
+      travelMode: google.maps.DirectionsTravelMode[mode],
+      optimizeWaypoints: true
+    };
+
+    mapDirection.route(request, function(response, status) {
+      var distance = response.routes[0].legs[0].distance.value / 1000;
+      distance = distance.toFixed(2);
+      if(mode == "DRIVING"){
+          $scope.drivingD = distance;
+      }else{
+        $scope.walkingD = distance;
+      };
+      $scope.$apply();
+    });
+  };
+
+}])

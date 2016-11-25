@@ -1,5 +1,6 @@
-app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover", "$ionicModal", "Database", "$cordovaCamera",
-  function($scope, User, $ionicLoading, $ionicPopover, $ionicModal, Database, $cordovaCamera) {
+
+app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover", "$ionicModal", "Database", "$cordovaCamera", "Upload", "Auth",
+  function($scope, User, $ionicLoading, $ionicPopover, $ionicModal, Database, $cordovaCamera, Upload, Auth) {
 
     $ionicPopover.fromTemplateUrl('app/profile/_popover.html', {
       scope: $scope
@@ -19,10 +20,20 @@ app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover
       scope: $scope
     });
 
-    // $scope.checkData = function($element) {
-    //   var mdInputCus = $element[0].querySelector('.md-input-cus');
-    //   console.log(mdInputCus)
-    // }
+    Auth.$onAuthStateChanged(function(firebaseUser) {
+      if (firebaseUser) {
+        // $scope.firebaseUser = User.auth();
+        User.auth().$loaded().then(function(data) {
+          $scope.firebaseUser = data;
+          if(data.photoURL) {
+            $scope.photoURL = data.photoURL;
+          }
+        })
+        // if(firebaseUser.displayName) {
+        //   //it means all social logins
+        // }
+      }
+    });
 
     $scope.openEditProfile = function() {
       $scope.currentUser = User.auth();
@@ -34,8 +45,14 @@ app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover
       $scope.editPhotoModal.show();
       $scope.closePopover();
     }
+    $scope.closeEditPhoto = function() {
+      // $scope.photoURL = null;
+      $scope.progress = null;
+      $scope.editPhotoModal.hide();
+    }
 
-    $scope.openPopover = function($event) {
+    $scope.openPopover = function($event, user) {
+      $scope.photoURL = user.photoURL;
       $scope.optionsPopover.show($event);
     };
     $scope.closePopover = function() {
@@ -64,7 +81,18 @@ app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover
         saveToPhotoAlbum: false
       };
       $cordovaCamera.getPicture(options).then(function(imageData) {
-        $scope.imageURL = imageData;
+        var profileRef = Upload.profile(imageData);
+        $scope.progress = 1;
+        profileRef.on('state_changed', function(snapshot){
+        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+        $scope.progress = progress;
+      }, function(error) {
+        console.log("error in uploading." + error);
+      }, function() {
+        $scope.photoURL = profileRef.snapshot.downloadURL;
+        $scope.$apply();
+      });
 
       }, function(error) {
         console.error(error);
@@ -96,18 +124,18 @@ app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover
         lastName: user.lastName,
         displayName: user.displayName,
         description: user.description
-          // image: $scope.imageURL
       })
 
       $scope.editProfileModal.hide();
     }
 
-    $scope.editPhoto = function(user) {
+    $scope.editPhoto = function() {
       $scope.optionsPopover.hide();
       var userRef = Database.usersReference().child(User.auth().$id);
       userRef.update({
-        image: $scope.imageURL
+        photoURL: $scope.photoURL
       })
+      $scope.progress = null;
       $scope.editPhotoModal.hide();
     }
 

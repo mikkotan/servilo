@@ -8,13 +8,19 @@ app.factory("Review", ["$firebaseObject", "$firebaseArray", "$firebaseAuth", "Da
     var users = Database.usersReference();
 
     var reviewsArray = Database.reviews();
-    var restaurantsArray = Database.restaurants();
+    // var restaurantsArray = Database.restaurants();
     var usersArray = Database.users();
 
     var Review = {
       all : function() {
         return reviewsArray;
       },
+      get : function(reviewId) {
+        return $firebaseObject(reviews.child(reviewId));
+      },
+      getReview : function(reviewId) {
+        return reviews.child(reviewId);
+      }, 
       restaurant : function(review) {
         return Database.restaurants().$getRecord(review.restaurant_id);
       },

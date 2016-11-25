@@ -3,10 +3,18 @@
   </ion-header-bar>
   <ion-content>
     HOME HERE
-    
-    <p class="padding">
-      <button class="button button-positive" ng-click="openPopover($event)">Open Popover</button>
-    </p>
+    <ion-refresher
+	  pulling-text="Pull to refresh..."
+	  on-refresh="doRefresh()">
+	</ion-refresher>
+    <ion-list>
+	  <ion-item ng-repeat="rest in restaurants" item="rest">
+	    {{rest.name}}
+	  </ion-item>
+    </ion-list>
+
+    <ion-infinite-scroll ng-if="!noMoreItemsAvailable" on-infinite="loadMore()" distance="1%">
+    </ion-infinite-scroll>
 
   </ion-content>
 </ion-view>

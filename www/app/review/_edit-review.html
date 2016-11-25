@@ -16,7 +16,7 @@
       </div>
       <div>
         <p ng-repeat="img in editImages">
-          <img src="{{img.image}}" style="width: 100px">
+          <img ng-src="{{img.image}}" style="width: 100px">
           <button ng-click="editImages.$remove(img)">Remove</button>
         </p>
       </div>

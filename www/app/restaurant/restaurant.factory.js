@@ -1,19 +1,19 @@
-app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "User", "MenusWithAvg", "Database",
-  function($firebaseAuth , $firebaseArray , $firebaseObject, User, MenusWithAvg, Database){
+app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject",
+  function($firebaseArray, User, Database, $firebaseObject){
 
   var restaurants = Database.restaurantsReference();
-  var pendingRestaurants = Database.pendingsReference();
-  var users = Database.usersReference();
-  var menus = Database.menusReference();
-  var reviews = Database.reviewsReference();
-  var orders = Database.ordersReference();
-  var pendingRestaurantsArray = Database.pendings();
+  // var pendingRestaurants = Database.pendingsReference(); //not used
+  var users = Database.usersReference(); //not used
+  // var menus = Database.menusReference();
+  // var reviews = Database.reviewsReference();
+  // var orders = Database.ordersReference();
+  // var pendingRestaurantsArray = Database.pendings();
   var restaurantsArray = Database.restaurants();
-  var usersArray = Database.users();
+  // var usersArray = Database.users();
 
   var Restaurant = {
     all : function() {
-        return restaurantsArray;
+        return Database.restaurants();
     },
     getAuthUserRestaurants : function() {
       var authUserId = User.auth().$id;
@@ -21,42 +21,44 @@ app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "U
     },
     get : function(restaurantId) {
       console.log("getting function " + restaurantId);
-      return restaurantsArray.$getRecord(restaurantId);
+      return $firebaseObject(restaurants.child(restaurantId));
     },
     getPendingRestaurants : function() {
-      return pendingRestaurantsArray;
+      return Database.pendings();
     },
-    getAveragePrice : function(restaurantId) {
-      var res = restaurantsArray.$getRecord(restaurantId);
-      return res.secured_data.avgPrice.toFixed(2);
-    },
-    getAverageRating : function(restaurantId) {
-      var res = restaurantsArray.$getRecord(restaurantId);
-      return res.secured_data.avgRate.toFixed(1);
-    },
+    // getAveragePrice : function(restaurantId) {
+    //   var res = Database.restaurants().$getRecord(restaurantId);
+    //   return res.secured_data.avgPrice.toFixed(2);
+    // },
+    // getAverageRating : function(restaurantId) {
+    //   var res = Database.restaurants().$getRecord(restaurantId);
+    //   return res.secured_data.avgRate.toFixed(1);
+    // },
     getMenus : function(restaurantId) {
-      return $firebaseArray(menus.orderByChild("restaurant_id").equalTo(restaurantId));
+      return $firebaseArray(Database.menusReference().orderByChild("restaurant_id").equalTo(restaurantId));
     },
     getRestaurantStatus : function(ownerId) {
-      return Database.usersReference().child(ownerId).child("online")
+      return Database.usersReference().child(ownerId).child("online");
     },
     getRestaurant : function(restaurantId) {
       return $firebaseArray(restaurants.child(restaurantId));
     },
     getReviews : function(restaurantId) {
-      return $firebaseArray(reviews.orderByChild('restaurant_id').equalTo(restaurantId));
+      return $firebaseArray(Database.reviewsReference().orderByChild('restaurant_id').equalTo(restaurantId));
     },
     getOwner : function(restaurantId) {
-      console.log('get owner method');
-      var restaurant = restaurantsArray.$getRecord(restaurantId);
-      console.log(restaurant);
-      return usersArray.$getRecord(restaurant.owner_id);
+      // console.log('get owner method');
+      console.log(restaurantId);
+      var res = restaurantsArray.$getRecord(restaurantId);
+      console.log(res);
+      return $firebaseObject(users.child(res.owner_id))
     },
     getOrders : function(restaurantId) {
-      return $firebaseArray(orders.orderByChild("restaurant_id").equalTo(restaurantId));
+      return $firebaseArray(Database.ordersReference().orderByChild("restaurant_id").equalTo(restaurantId));
     },
-    getRestaurantOpenStatus : function(restaurantId) {
-      var restaurant = restaurantsArray.$getRecord(restaurantId);
+    getRestaurantOpenStatus : function(restaurant) {
+      // var restaurant = $firebaseObject(restaurants.child(restaurantId));
+      // var restaurant = restaurants.$getRecord(restaurantId);
       var restaurantOpenTime = new Date(restaurant.openTime);
       var restaurantCloseTime = new Date(restaurant.closeTime);
       var openTime = new Date();
@@ -71,10 +73,10 @@ app.factory("Restaurant",["$firebaseAuth","$firebaseArray","$firebaseObject", "U
       }
 
       if(openTime.getTime() < now.getTime() && now.getTime() < closeTime.getTime()) {
-        return "Open";
+        return true;
       }
       else{
-        return "Closed"
+        return false;
       }
     }
   }

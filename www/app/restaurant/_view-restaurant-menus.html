@@ -1,5 +1,5 @@
 <ion-view view-title="{{restaurant.name}}">
-  <ion-content overflow-scroll="true" class="padding has-tabs-top">
+  <ion-content class="padding has-tabs-top">
     <!-- <ion-list>
       <ion-item ng-repeat="menu in restaurantMenus">
         <h3>{{menu.name}}</h3>
@@ -18,7 +18,7 @@
 
         <button class="button button-calm"ng-di ng-click="viewCart()">Cart{{count}}</button>
         <ion-list>
-          <h1>{{status}}</h3>
+          <h1>{{status}}</h1>
           <ion-item ng-repeat="menu in restaurantMenus">
               <h3>{{menu.name}}</h3><button class="button button-calm" ng-disabled="!getRestaurantStatus || !menu.availability" ng-click="addToCart(menu)">Buy</button>
               <p>{{availability(menu)}}</p>
