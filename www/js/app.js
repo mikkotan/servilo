@@ -173,8 +173,10 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
     // window.plugins.googleplus.disconnect();
   }
 
+
   Auth.$onAuthStateChanged(function(firebaseUser) {
     if (firebaseUser) {
+      $scope.currentUser = User.auth();
       // $scope.firebaseUser = User.auth();
       // if (firebaseUser.displayName) {
       //   $scope.photoURL = firebaseUser.photoURL;
@@ -184,7 +186,14 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
         if(data.photoURL) {
           $scope.photoURL = data.photoURL;
         }
+
+        $scope.$watch('firebaseUser', function(newUser) {
+          console.log('watching firebaseUser');
+          $scope.newPhotoURL = newUser.photoURL;
+        })
       })
+
+
     }
   });
 })
