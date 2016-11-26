@@ -48,6 +48,7 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
     },
     getOwner : function(restaurantId) {
       // console.log('get owner method');
+      // return $firebaseObject(users.child(ownerId));
       console.log(restaurantId);
       var res = restaurantsArray.$getRecord(restaurantId);
       console.log(res);

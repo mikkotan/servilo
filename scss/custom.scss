@@ -57,7 +57,12 @@ ul.rating li i {
   margin-bottom: 10px !important;
 }
 .sidebar-picture {
-  border-radius: 50%;
+  border-radius: 100px;
+  border: 1px solid #fff;
+  width: 100px;
+  height: 100px;
+  box-shadow: 0 0 4px rgba(0,0,0,0.7);
+  background-color: white;
 }
 .menu .has-header {
   top: 169px;

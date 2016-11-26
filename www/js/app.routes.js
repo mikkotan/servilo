@@ -34,6 +34,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
         'home-tab': {
           templateUrl: "app/home/_home.html",
           controller: 'HomeTabCtrl',
+          controllerAs: 'home',
           resolve: {
             currentAuth: function(Auth) {
               return Auth.$requireSignIn();
