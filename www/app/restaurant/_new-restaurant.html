@@ -11,13 +11,13 @@
         <div>
           <div>{{progress}}%</div>
           <img ng-show="imageURL" ng-src="{{imageURL}}" width="100%"/>
-          
+
         </div>
         <label class="item item-input">
           <input type="text" placeholder="Name of Restaurant" ng-model="restaurant.name">
         </label>
         <label class="item item-input">
-          <input type="text" placeholder="Location of Restaurant" ng-model="restaurant.location">
+          <input type="text" placeholder="Location of Restaurant" ng-model="restaurant.location" details="detail" ng-change="allowDetailToChangeMarker()" googleplace/>
         </label>
         <label class="item item-input">
           <input type="text" ng-model="restaurant.phonenumber" ui-mask="(999) 999-9999"  ui-mask-placeholder ui-mask-placeholder-char="_"/>
@@ -62,5 +62,7 @@
         <button type="submit" class="button button-block button-positive">Add Restaurant</button>
       </div>
     </form>
+    <!-- watch does not work on this function -->
+    <div ng-cloak>{{locationDetail(detail)}}</div>
   </ion-content>
 </ion-modal-view>
