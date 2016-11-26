@@ -10,7 +10,7 @@
         <h3 id="profile-name" ng-if="firebaseUser.provider !== email">{{firebaseUser.displayName}}</h3>
         <h3 id="profile-name" ng-if="firebaseUser.provider === email">{{firebaseUser.firstName}} {{firebaseUser.lastName}}</h3>
         <p id="profile-description" ng-if="firebaseUser.description"> {{ firebaseUser.description }} </p>
-        <p id="profile-description" ng-if="!firebaseUser.description"> <a ng-click="showEditProfile()">Add a description</a> </p>
+        <p id="profile-description" ng-if="!firebaseUser.description"> <a ng-click="openEditProfile()">Add a description</a> </p>
       </div>
       <ion-list>
         <ion-item>
