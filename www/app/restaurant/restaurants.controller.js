@@ -1,6 +1,6 @@
 
-app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate",  "Restaurant", "$cordovaCamera", "CordovaGeolocation", "Database",
-  function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation, Database) {
+app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate",  "Restaurant", "$cordovaCamera", "CordovaGeolocation", "Database", "Upload",
+  function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation, Database, Upload) {
 
     $scope.modalControl = {};
     $scope.restaurants = Restaurant.all();

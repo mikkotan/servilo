@@ -156,7 +156,7 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
           console.log("success user loaded deleted");
           var firebaseUser = Auth.$getAuth();
           if (ionic.Platform.isIOS() || ionic.Platform.isAndroid()) {
-            var ionicToken = IonicPushService.getToken();
+            var ionicToken = localStorage.myPush;
             var results = ionicToken.split(':');
             Database.usersReference().child(firebaseUser.uid).child('device_token').child(results[0]).set(null);
           }
