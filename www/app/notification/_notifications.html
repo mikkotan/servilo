@@ -7,10 +7,10 @@
         <i ng-if="notif.type === 'order_status'" class="icon ion-android-list assertive"></i>
         <i ng-if="notif.type === 'order'" class="icon ion-android-list positive"></i>
         <i ng-if="notif.type === 'reservation'" class="icon ion-calendar royal"></i>
-        <h6 class="balanced" ng-if="notif.type === 'review'">{{notif.sender}} reviewed your restaurant {{notif.restaurant}} <span style="color:grey">{{notif.timestamp | timeAgo }}</span></h6>
-        <h6 class="positive" ng-if="notif.type === 'order'">{{notif.sender}} ordered at {{notif.restaurant}} <span style="color:grey">{{notif.timestamp | timeAgo }}</span></h6>
-        <h6 class="assertive" ng-if="notif.type === 'order_status'">{{notif.restaurant}} Order #{{notif.order_no}} update {{notif.status}} <span style="color:grey">{{notif.timestamp | timeAgo }}</span></h6>
-        <h6 class="royal" ng-if="notif.type === 'reservation'">{{notif.sender}} book a reservation at {{notif.restaurant}} <span style="color:grey">{{notif.timestamp | timeAgo }}</span></h6>
+        <h6 class="balanced" ng-if="notif.type === 'review'">{{notif.sender}} reviewed your restaurant {{notif.restaurant_name}} <span style="color:grey">{{notif.timestamp | timeAgo }}</span></h6>
+        <h6 class="positive" ng-if="notif.type === 'order'">{{notif.sender}} ordered at {{notif.restaurant_name}} <span style="color:grey">{{notif.timestamp | timeAgo }}</span></h6>
+        <h6 class="assertive" ng-if="notif.type === 'order_status'">{{notif.restaurant_name}} Order #{{notif.order_no}} update {{notif.status}} <span style="color:grey">{{notif.timestamp | timeAgo }}</span></h6>
+        <h6 class="royal" ng-if="notif.type === 'reservation'">{{notif.sender}} book a reservation at {{notif.restaurant_name}} <span style="color:grey">{{notif.timestamp | timeAgo }}</span></h6>
         <span class="item-note">
           <button class="icon button  assertive button-small ion-android-delete" ng-click="markRead(notif.self)"></button>
         </span>
