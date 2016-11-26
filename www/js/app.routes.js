@@ -56,9 +56,9 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
             currentAuth: function(Auth) {
               return Auth.$requireSignIn();
             },
-            restaurants: function(Database) {
-              return Database.restaurants().$loaded();
-            }
+            // restaurants: function(Database) {
+            //   return Database.restaurants().$loaded();
+            // }
           }
         }
       }

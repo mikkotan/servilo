@@ -23,9 +23,7 @@ app.factory("Home",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "Datab
     //   })
     // }
     search : function(input) {
-      var end = input.substring(0, 1);
-      var query = restaurantsRef.orderByChild('name').startAt(input).endAt(end + "\uf8ff");
-      // return query;
+      var query = restaurantsRef.orderByChild('name').startAt(input).endAt(input + "\uf8ff");
       return $firebaseArray(query);
     }
   }

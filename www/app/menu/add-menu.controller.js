@@ -40,7 +40,7 @@ app.controller("AddMenuCtrl",["$scope","$stateParams","menus","$firebaseArray","
     $scope.addMenu = function(menu) {
       var categoryId = menu.category;
       $scope.menus.$add({
-        name : menu.name,
+        name : menu.name.toLowerCase(),
         price : menu.price,
         restaurant_id : restaurantId,
         category_id : categoryId,
