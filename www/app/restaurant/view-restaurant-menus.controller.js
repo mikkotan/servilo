@@ -5,13 +5,14 @@ app.controller("ViewRestaurantMenus",["$scope","$state","restaurantMenus","resta
   $scope.restaurantMenus = restaurantMenus;
   var restaurant = Restaurant.get(restaurantId);
 
-  restaurant.$loaded().then(function() {
-    var restaurantStatus = Restaurant.getRestaurantStatus(restaurant.owner_id);
-    restaurantStatus.on('value' , function(snap){
-        $scope.getRestaurantStatus = snap.val();
-        $scope.status = restaurant.name + " is " + (snap.val() ? "Online" : "Offline");
+  restaurant
+    .then(function() {
+      var restaurantStatus = Restaurant.getRestaurantStatus(restaurant.owner_id);
+      restaurantStatus.on('value' , function(snap){
+          $scope.getRestaurantStatus = snap.val();
+          $scope.status = restaurant.name + " is " + (snap.val() ? "Online" : "Offline");
+      })
     })
-  })
 
 
   $scope.availability = function(menu){

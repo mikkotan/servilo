@@ -10,7 +10,7 @@ app.factory('Reservation', function($firebaseObject, $firebaseArray, Database, U
       Database.reservations().$add(reservation)
         .then(() => {
           console.log(reservation.restaurant_id);
-         Restaurant.get(reservation.restaurant_id).$loaded()
+         Restaurant.get(reservation.restaurant_id)
           .then((restaurant) => {
             var receiver = restaurant.owner_id
             console.log('success')

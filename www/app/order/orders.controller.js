@@ -15,7 +15,6 @@ app.controller("OrderCtrl",["$scope","restaurants","Restaurant","User","Menu", "
       var orderRef = Database.ordersReference().child(orderId).child('orderStatus').child(key).set(val);
       var orderStatusRef = Database.ordersReference().child(orderId).child('order_details').child('status');
       var ref = Database.ordersReference().child(orderId).child('orderStatus');
-      // var order = Order.findOne(orderId);
       Order.findOne(orderId).$loaded()
         .then((order) => {
           var confirmDelete = $ionicPopup.confirm({
@@ -47,7 +46,7 @@ app.controller("OrderCtrl",["$scope","restaurants","Restaurant","User","Menu", "
               if (val === true) {
                 orderStatusRef.set(key);
               }
-
+              
               Database.notifications().$add({
                 sender_id : User.auth().$id,
                 receiver_id : order.customer_id,

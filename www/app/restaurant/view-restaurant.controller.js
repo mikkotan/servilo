@@ -10,17 +10,18 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
 
     var id = $stateParams.restaurantId;
     var userReviewsRef = Review.userReview(id);
-    Restaurant.get(id).$loaded().then(function(restaurant) {
-      $scope.restaurant = restaurant;
-      $scope.getReviewer = Review.reviewer;
-      var restaurantStatus = Restaurant.getRestaurantStatus(restaurant.owner_id)
-      restaurantStatus.on('value', function(snap) {
-        $scope.getRestaurantStatus = snap.val() ? true : false;
-      })
+    Restaurant.get(id)
+      .then(function(restaurant) {
+        $scope.restaurant = restaurant;
+        $scope.getReviewer = Review.reviewer;
+        var restaurantStatus = Restaurant.getRestaurantStatus(restaurant.owner_id)
+        restaurantStatus.on('value', function(snap) {
+          $scope.getRestaurantStatus = snap.val() ? true : false;
+        })
 
-      $scope.restaurantOpenStatus = Restaurant.getRestaurantOpenStatus(restaurant);
-      $scope.restaurantReviews = Restaurant.getReviews(restaurant.$id);
-    })
+        $scope.restaurantOpenStatus = Restaurant.getRestaurantOpenStatus(restaurant);
+        $scope.restaurantReviews = Restaurant.getReviews(restaurant.$id);
+      })
 
     $scope.isAlreadyReviewed = function() {
       userReviewsRef.once('value', function(snapshot) {

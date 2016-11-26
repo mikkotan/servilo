@@ -83,7 +83,19 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
           title: data.title,
           template: data.message
         })
-        $state.go('tabs.myReservations');
+          .then((res) => {
+            if (res) {
+              if (data.additionalData.url === 'reservation') {
+                $state.go('tabs.myReservations');
+              }
+              else if (data.additionalData.url === 'order') {
+                $state.go('tabs.myOrders');
+              }
+              else if (data.additionalData.url === 'order_status') {
+                $state.go('tabs.myOrders');
+              }
+            }
+          })
       }
       else {
         console.log('not in foreground')
@@ -91,6 +103,9 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
           $state.go('tabs.myReservations');
         }
         else if (data.additionalData.url === 'order') {
+          $state.go('tabs.myOrders');
+        }
+        else if (data.additionalData.url === 'order_status') {
           $state.go('tabs.myOrders');
         }
       }
@@ -103,32 +118,7 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
           $state.go("login")
         }
       })
-//
-// <<<<<<< HEAD
-//     $rootScope.$on('cloud:push:notification', function(event, data) {
-//       var msg = data.message;
-//       alert(msg.title + ': ' + msg.text);
-//     })
-//
-//     $templateCache.put('template.tpl.html', '');
-//     $ionicPlatform.ready(function() {
-//       if (window.cordova && window.cordova.plugins.Keyboard) {
-//         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-//         // for form inputs)
-//         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-//
-//         // Don't remove this line unless you know what you are doing. It stops the viewport
-//         // from snapping when text inputs are focused. Ionic handles this internally for
-//         // a much nicer keyboard experience.
-//         cordova.plugins.Keyboard.disableScroll(true);
-//       }
-//       if (window.StatusBar) {
-//         StatusBar.styleDefault();
-//       }
-//     });
-//   }
-// ]);
-// =======
+
     $templateCache.put('template.tpl.html', '');
   }]);
 

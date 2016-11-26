@@ -20,6 +20,7 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
       return $firebaseArray(restaurants.orderByChild("owner_id").equalTo(authUserId))
     },
     get : function(restaurantId) {
+      console.log('nice restaurant get');
       return Database.restaurantsReference().child(restaurantId).once('value')
         .then((snapshot) => {
           console.log(snapshot.val());
