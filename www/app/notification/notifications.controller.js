@@ -1,44 +1,38 @@
-app.controller("NotificationsCtrl", ["$scope", "$firebaseArray", "User", "Restaurant", "notifications",
-  function($scope, $firebaseArray, User, Restaurant, notifications){
+app.controller("NotificationsCtrl", ["$scope", "$firebaseArray", "User", "Restaurant", "notifications", "Notification",
+  function($scope, $firebaseArray, User, Restaurant, notifications, Notification){
 
     $scope.notifs = notifications;
-    console.log($scope.notifs);
+
     $scope.markReadAll = function() {
-      angular.forEach(notifications, function(notif) {
-        console.log(notif);
-        notifications.$remove(notif)
-          .then(() => {
-            console.log("success")
-          })
-          .catch((err) => {
-            console.log(err)
-          })
-      })
+      return Notification.markReadAll(notifications);
     }
 
     $scope.markRead = function(notif) {
-      notifications.$remove(notif)
-        .then(() => {
-          console.log("success")
-        })
-        .catch((err) => {
-          console.log(err)
-        })
+      console.log(notif.$ref());
+      return Notification.markRead(notif);
     }
 
     $scope.$watchCollection('notifs', function(newNotifs) {
       $scope.newNotifs = newNotifs.map(function(notification) {
-        return {
+        var n =  {
           self : notification,
           id : notification.$id,
           sender_id : notification.sender_id,
           status : notification.status,
           order_no : notification.order_no,
           sender : User.getUserFullname(notification.sender_id),
-          restaurant : Restaurant.get(notification.restaurant_id).name,
+          restaurant : function() {
+            Restaurant.getRestaurantName(notification.restaurant_id)
+              .then((name) => {
+                n.restaurant_name = name;
+              })
+          }(),
           timestamp : notification.timestamp,
-          type : notification.type
+          type : notification.type,
         }
+
+        return n;
       })
     });
+
   }]);

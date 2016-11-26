@@ -1,5 +1,5 @@
-app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject",
-  function($firebaseArray, User, Database, $firebaseObject){
+app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject", "$q",
+  function($firebaseArray, User, Database, $firebaseObject, $q){
 
   var restaurants = Database.restaurantsReference();
   // var pendingRestaurants = Database.pendingsReference(); //not used
@@ -20,8 +20,12 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
       return $firebaseArray(restaurants.orderByChild("owner_id").equalTo(authUserId))
     },
     get : function(restaurantId) {
-      console.log("getting function " + restaurantId);
-      return $firebaseObject(restaurants.child(restaurantId));
+      console.log('nice restaurant get');
+      return Database.restaurantsReference().child(restaurantId).once('value')
+        .then((snapshot) => {
+          console.log(snapshot.val());
+          return snapshot.val();
+        })
     },
     getPendingRestaurants : function() {
       return Database.pendings();
@@ -42,6 +46,12 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
     },
     getRestaurant : function(restaurantId) {
       return $firebaseArray(restaurants.child(restaurantId));
+    },
+    getRestaurantName : function(restaurantId) {
+      return Database.restaurantsReference().child(restaurantId).once('value')
+        .then((snapshot) => {
+          return snapshot.val().name
+        })
     },
     getReviews : function(restaurantId) {
       return $firebaseArray(Database.reviewsReference().orderByChild('restaurant_id').equalTo(restaurantId));

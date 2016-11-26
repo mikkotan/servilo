@@ -10,24 +10,31 @@ app.factory('Reservation', function($firebaseObject, $firebaseArray, Database, U
       Database.reservations().$add(reservation)
         .then(() => {
           console.log(reservation.restaurant_id);
-          var receiver = Restaurant.getOwner(reservation.restaurant_id);
-          console.log('success')
-          Database.notifications().$add({
-            sender_id: User.auth().$id,
-            receiver_id: receiver.$id,
-            restaurant_id: reservation.restaurant_id,
-            type: 'reservation',
-            timestamp: firebase.database.ServerValue.TIMESTAMP
+         Restaurant.get(reservation.restaurant_id)
+          .then((restaurant) => {
+            var receiver = restaurant.owner_id
+            console.log('success')
+            Database.notifications().$add({
+              sender_id: User.auth().$id,
+              receiver_id: receiver,
+              restaurant_id: reservation.restaurant_id,
+              type: 'reservation',
+              timestamp: firebase.database.ServerValue.TIMESTAMP
+            })
+              .then(() => {
+                console.log('success promise notification')
+                $ionicLoading.hide();
+                alert('success');
+              })
+              .catch((err) => {
+                console.log(err);
+                alert(err);
+              })
           })
-            .then(() => {
-              console.log('success promise notification')
-              $ionicLoading.hide();
-              alert('success');
-            })
-            .catch((err) => {
-              console.log(err);
-              alert(err);
-            })
+          .catch((err) => {
+            alert(err);
+            console.log(err)
+          })
         })
         .catch((err) => {
           alert(err);
