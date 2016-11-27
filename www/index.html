@@ -127,6 +127,9 @@
           <h3 class="sidebar-name" ng-if="firebaseUser.provider !== email">{{firebaseUser.displayName}}</h3>
           <h3 class="sidebar-name" ng-if="firebaseUser.provider === email">{{firebaseUser.firstName}} {{firebaseUser.lastName}}</h3>
         </div>
+        <div ng-hide="firebaseUser" class="profile">
+          <img class="sidebar-picture" ng-src="img/ionic.png" style="width: 100px; height: 100px">
+        </div>
       </ion-header-bar>
 
       <ion-content has-header="true">
@@ -136,9 +139,9 @@
             <a class="item" href="#/tab/home">Profile</a>
             <div class="item item-divider"></div>
             <a class="item" href="#/tab/home">Profile</a> -->
-          <!-- <ion-item menu-close ui-sref="tabs.home" class="item-borderless">
+          <ion-item menu-close ui-sref="tabs.home" class="item-borderless" ng-show="firebaseUser">
             Home
-          </ion-item> -->
+          </ion-item>
           <ion-item menu-close ui-sref="login" class="item-borderless" ng-hide="firebaseUser">
             Login or Signup
           </ion-item>

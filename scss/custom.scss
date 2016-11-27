@@ -32,9 +32,11 @@ ul.rating li i {
 }
 .angular-google-map-container {
   height: 375px;
+  width: 100%;
 }
 .angular-google-map {
   height: 375px;
+  width: 100%;
 }
 .bar.bar-profile {
   height: 170px;
@@ -112,7 +114,6 @@ ul.rating li i {
   box-shadow: 0 0 4px rgba(0,0,0,0.7);
   background-color: white;
 }
-
 .list-item-content {
   padding: 5px;
 }
@@ -151,4 +152,9 @@ ion-popover-view.fit ion-content {
 }
 .platform-android ion-popover-view.fit {
   margin-top: 10px !important;
+}
+.custom-popup {
+  .popup {
+    width: 90% !important;
+  }
 }

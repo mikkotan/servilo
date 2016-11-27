@@ -1,62 +1,81 @@
-<div class="modal">
-    <ion-header-bar class="bar bar-header bar-assertive">
-      <h1 class="title">Edit {{restaurantName}}</h1>
-      <button class="button button-clear button-primary" ng-click="closeEditRestaurant()"><i class="icon ion-ios-close"></i></button>
-    </ion-header-bar>
-  <ion-content>
-    <form ng-submit="edit(eRestaurant)">
-      <div class="list">
-        <div>
-          <img ng-show="!imageURL && !eRestaurant.photoURL" ng-src="img/ionic.png" width="100%"/>
-          <img ng-show="!imageURL && eRestaurant.photoURL" ng-src="{{eRestaurant.photoURL}}" width="100%"/>
-          <img ng-show="imageURL" ng-src="{{imageURL}}" width="100%"/>
-        </div>
-        <a class="button button-icon icon ion-camera" ng-click="upload(1)">CAM</a>
-        <a class="button button-icon icon ion-camera" ng-click="upload(2)">ALBS</a>
-        <label class="item item-input">
-          <input type="text" placeholder="Name of Restaurant" ng-model="eRestaurant.name">
-        </label>
-        <label class="item item-input">
-          <input type="text" placeholder="Location of Restaurant" ng-model="eRestaurant.location">
-        </label>
-        <label class="item item-input">
-          <input type="text" ng-model="eRestaurant.phonenumber" ui-mask="(999) 999-9999"  ui-mask-placeholder ui-mask-placeholder-char="_"/>
-        </label>
-        <div>
-          <ui-gmap-google-map zoom='map.zoom' events= 'map.events' center='map.center' options='map.options' bounds='map.bounds' control="modalControl">
-            <ui-gmap-marker coords="marker.coords" icon="marker.icon" idkey="marker.id"></ui-gmap-marker>
-          </ui-gmap-google-map>
-        </div>
-        <label class="item item-input">
-          <input type="text" placeholder="Type of Restaurant" ng-model="eRestaurant.type">
-        </label>
-        <label class="item item-input">
-          <input type="text" placeholder="Cuisine of Restaurant" ng-model="eRestaurant.cuisine">
-        </label>
-        <div class="item item-icon-left" ion-datetime-picker time am-pm ng-model="eRestaurant.openTime">
-          <i class="icon ion-ios-clock positive"></i>
-          Open Time:
-          <strong>{{eRestaurant.openTime| date: "h:mm a"}}</strong>
-        </div>
-        <div class="item item-icon-left" ion-datetime-picker time am-pm ng-model="eRestaurant.closeTime">
-          <i class="icon ion-ios-clock positive"></i>
-          Close Time:
-          <strong>{{eRestaurant.closeTime| date: "h:mm a"}}</strong>
-        </div>
-      </div>
-      {{eRestaurant.facilities}}
-      <ul class="list">
-        <li class="item item-checkbox" ng-repeat="facility in facilities">
-          <label class="checkbox">
-            <input type="checkbox" ng-model="eRestaurant.facilities[facility.$id]">
-          </label>
-            {{facility.name}}
-        </li>
-      </ul>
+<ion-modal-view view-title="Edit Restaurant">
+  <ion-header-bar class="bar bar-header bar-assertive">
+    <h1 class="title">Edit {{restaurantName}}</h1>
+    <button class="button button-clear button-primary" ng-click="closeEditRestaurant()"><i class="icon ion-ios-close"></i></button>
+  </ion-header-bar>
+  <ion-content class="padding">
+    <ion-list>
+      <div class="card">
+        <ion-item id="form-input">
+          <form ng-submit="edit(eRestaurant)">
+            <div class="list">
+              <label class="item item-input item-floating-label">
+                <span class="input-label has-input">Name of Restaurant</span>
+                <input type="text" placeholder="Name of Restaurant" ng-model="eRestaurant.name">
+              </label>
+              <label class="item item-input item-floating-label">
+                <span class="input-label has-input">Contact Number</span>
+                <input type="number" placeholder="Contact Number" ng-model="eRestaurant.phonenumber">
+              </label>
+              <label class="item item-input item-floating-label">
+                <span class="input-label has-input">Type of Restaurant</span>
+                <input type="text" placeholder="Type of Restaurant" ng-model="eRestaurant.type">
+              </label>
+              <label class="item item-input item-floating-label">
+                <span class="input-label has-input">Cuisine of Restaurant</span>
+                <input type="text" placeholder="Cuisine of Restaurant" ng-model="eRestaurant.cuisine">
+              </label>
+              <div class="item">
+                <button class="button button-block button-royal icon-left ion-plus-circled" ng-click="setHours()">Set Hours</button>
+                <div class="col text-center" ng-show="eRestaurant.openTime && eRestaurant.closeTime">
+                  Opening Hours : {{eRestaurant.openTime| date: "h:mm a"}} - {{eRestaurant.closeTime| date: "h:mm a"}}
+                </div>
+              </div>
+              <div class="item">
+                <button class="button button-block button-royal icon-left ion-plus-circled" ng-click="setFacilities()">Set Facilities</button>
+                <div class="col text-center">
 
-      <div class="padding">
-        <button type="submit" class="button button-block button-positive">Edit Restaurant</button>
-      </div>
-    </form>
+                  {{eRestaurant.facilities}}
+
+                  <p ng-repeat="facility in eRestaurant.facilities">
+                    {{eRestaurant.facilities[facility]}}
+                  </p>
+                </div>
+              </div>
+              <div class="item item-input-inset">
+                <label class="item-input item-floating-label">
+                  <span class="input-label has-input">Location of Restaurant</span>
+                  <input type="text" placeholder="Location of Restaurant" ng-model="eRestaurant.location">
+                </label>
+                <button class="button button-royal icon ion-map" ng-click="showMap()"></button>
+              </div>
+              <div class="item">
+                <div class="row">
+                  <div class="col text-center">
+                    Edit image
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <a class="button button-block button-positive icon ion-camera" ng-click="upload(1)"></a>
+                  </div>
+                  <div class="col">
+                    <a class="button button-block button-calm icon ion-image" ng-click="upload(2)"></a>
+                  </div>
+                </div>
+                <div>
+                  <progress ng-show="progress" max="100" value="{{progress}}"></progress>
+                  <img ng-show="!imageURL && !eRestaurant.photoURL" ng-src="img/ionic.png" width="100%" />
+                  <img ng-show="!imageURL && eRestaurant.photoURL" ng-src="{{eRestaurant.photoURL}}" width="100%" />
+                  <img ng-show="imageURL" ng-src="{{imageURL}}" width="100%" />
+                </div>
+              </div>
+              <div class="padding">
+                <button type="submit" class="button button-block button-balanced">Save Changes</button>
+              </div>
+            </div>
+          </form>
+        </ion-item>
+    </ion-list>
   </ion-content>
-</div>
+</ion-modal-view>

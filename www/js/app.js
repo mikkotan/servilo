@@ -12,23 +12,23 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
         if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
           localStorage.myPush = '';
           $cordovaPushV5.initialize({
-            android: {
-              senderID: "155324175920"
-            },
-            ios: {
-              alert: 'true',
-              badge: true,
-              sound: 'false',
-              clearBadge: true
-            },
-            windows: {}
-          })
+              android: {
+                senderID: "155324175920"
+              },
+              ios: {
+                alert: 'true',
+                badge: true,
+                sound: 'false',
+                clearBadge: true
+              },
+              windows: {}
+            })
             .then((result) => {
               $cordovaPushV5.onNotification();
               $cordovaPushV5.onError();
               $cordovaPushV5.register()
                 .then((registerResult) => {
-                  console.log("Register Result: "+registerResult)
+                  console.log("Register Result: " + registerResult)
                   localStorage.myPush = registerResult;
                 })
                 .catch((err) => {
@@ -84,67 +84,62 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
           template: data.message
         })
         $state.go('tabs.myReservations');
-      }
-      else {
+      } else {
         console.log('not in foreground')
         if (data.additionalData.url === 'reservation') {
           $state.go('tabs.myReservations');
-        }
-        else if (data.additionalData.url === 'order') {
+        } else if (data.additionalData.url === 'order') {
           $state.go('tabs.myOrders');
         }
       }
     })
 
     $rootScope.$on("$stateChangeError",
-      function(event, toState, toParams, fromState, fromParams, error) {
-        if (error === "AUTH_REQUIRED") {
-          event.preventDefault();
-          $state.go("login")
-        }
-      })
-//
-// <<<<<<< HEAD
-//     $rootScope.$on('cloud:push:notification', function(event, data) {
-//       var msg = data.message;
-//       alert(msg.title + ': ' + msg.text);
-//     })
-//
-//     $templateCache.put('template.tpl.html', '');
-//     $ionicPlatform.ready(function() {
-//       if (window.cordova && window.cordova.plugins.Keyboard) {
-//         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-//         // for form inputs)
-//         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-//
-//         // Don't remove this line unless you know what you are doing. It stops the viewport
-//         // from snapping when text inputs are focused. Ionic handles this internally for
-//         // a much nicer keyboard experience.
-//         cordova.plugins.Keyboard.disableScroll(true);
-//       }
-//       if (window.StatusBar) {
-//         StatusBar.styleDefault();
-//       }
-//     });
-//   }
-// ]);
-// =======
+        function(event, toState, toParams, fromState, fromParams, error) {
+          if (error === "AUTH_REQUIRED") {
+            event.preventDefault();
+            $state.go("login")
+          }
+        })
+      //
+      // <<<<<<< HEAD
+      //     $rootScope.$on('cloud:push:notification', function(event, data) {
+      //       var msg = data.message;
+      //       alert(msg.title + ': ' + msg.text);
+      //     })
+      //
+      //     $templateCache.put('template.tpl.html', '');
+      //     $ionicPlatform.ready(function() {
+      //       if (window.cordova && window.cordova.plugins.Keyboard) {
+      //         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+      //         // for form inputs)
+      //         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+      //
+      //         // Don't remove this line unless you know what you are doing. It stops the viewport
+      //         // from snapping when text inputs are focused. Ionic handles this internally for
+      //         // a much nicer keyboard experience.
+      //         cordova.plugins.Keyboard.disableScroll(true);
+      //       }
+      //       if (window.StatusBar) {
+      //         StatusBar.styleDefault();
+      //       }
+      //     });
+      //   }
+      // ]);
+      // =======
     $templateCache.put('template.tpl.html', '');
-  }]);
+  }
+]);
 
 app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate, Auth, User, Database, $state, $ionicPush, IonicPushService, $ionicPopover) {
   $scope.showMenu = function() {
     $ionicSideMenuDelegate.toggleLeft();
   };
+
   $scope.showRightMenu = function() {
     $ionicSideMenuDelegate.toggleRight();
   };
 
-  // $scope.hasData = function() {
-  //     //get ng-model from input
-  //     //if ng-model has value..add "used" class
-  //     //if ng-model has no value...wala lang
-  // };
   $scope.signOut = function() {
     $ionicLoading.show({
       template: '<p>Signing out . . .</p><ion-spinner></ion-spinner>',
@@ -175,13 +170,15 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
 
   Auth.$onAuthStateChanged(function(firebaseUser) {
     if (firebaseUser) {
+
+      User.setOnline(firebaseUser.uid);
       // $scope.firebaseUser = User.auth();
       // if (firebaseUser.displayName) {
       //   $scope.photoURL = firebaseUser.photoURL;
       // }
       User.auth().$loaded().then(function(data) {
         $scope.firebaseUser = data;
-        if(data.photoURL) {
+        if (data.photoURL) {
           $scope.photoURL = data.photoURL;
         }
       })

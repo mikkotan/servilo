@@ -45,10 +45,12 @@ ul.rating li i {
   color: #ef473a; }
 
 .angular-google-map-container {
-  height: 375px; }
+  height: 375px;
+  width: 100%; }
 
 .angular-google-map {
-  height: 375px; }
+  height: 375px;
+  width: 100%; }
 
 .bar.bar-profile {
   height: 170px; }
@@ -164,6 +166,9 @@ ion-popover-view.fit ion-content {
 
 .platform-android ion-popover-view.fit {
   margin-top: 10px !important; }
+
+.custom-popup .popup {
+  width: 90% !important; }
 
 /* Directives : MD Label
 ==================================*/
