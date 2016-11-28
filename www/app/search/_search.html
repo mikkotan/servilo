@@ -34,7 +34,7 @@
         <div class="item item-thumbnail-left">
           <img class="img-thumbnail" ng-if="restaurant.photoURL" ng-src="{{restaurant.photoURL}}" />
           <img ng-if="!restaurant.photoURL" ng-src="img/wow.jpg">
-          <h3 ui-sref="tabs.viewRestaurant.main({restaurantId:restaurant.$id})">
+          <h3 ng-init="addMarkers(restaurant)" ui-sref="tabs.viewRestaurant.main({restaurantId:restaurant.$id})">
             <icon class="ion-spoon"></icon> {{restaurant.name}}
             <span style="color:green">
               <icon class="ion-android-star-outline"></icon> {{restaurant.secured_data.avgRate.toFixed(1)}}
@@ -51,8 +51,7 @@
           </button>
         </div>
       </div>
-      <!-- watch does not work on the filtred items -->
-      <div ng-cloak>{{addMarkers(filteredItems)}}</div>
+      <!-- <div ng-cloak>{{addMarkers(filteredItems)}}</div> -->
     </ion-list>
   </ion-content>
 </ion-view>

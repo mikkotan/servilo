@@ -70,18 +70,48 @@ app.factory("Search",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "Dat
       });
       return markers;
     },
-    getMarkers : function(items) {
-      var markers = [];
-      for (var i = 0; i < items.length; i++) {
-        markers.push({
-          id: items[i].$id,
-          coords: {
-            latitude:items[i].latitude, 
-            longitude:items[i].longitude
+    getMap : function() {
+      var map = {
+        center: { 
+          latitude: 10.729984, 
+          longitude: 122.549298 
+        }, 
+        zoom: 12, 
+        options: {
+          scrollwheel: false
+        }, 
+        bounds: {}, 
+        control:{}, 
+        refresh: true,
+        events : {
+          tilesloaded: function (map) {
+            // $scope.$apply(function () {
+              google.maps.event.trigger(map, "resize");
+            // });
           }
-        });
+        }
+      };
+      return map;
+    },
+    getMarker : function(item) {
+      var marker = {
+        id: item.$id,
+        coords: {
+          latitude:item.latitude, 
+          longitude:item.longitude
+        }
       }
-      return markers;
+      // var markers = [];
+      // for (var i = 0; i < items.length; i++) {
+      //   markers.push({
+      //     id: items[i].$id,
+      //     coords: {
+      //       latitude:items[i].latitude, 
+      //       longitude:items[i].longitude
+      //     }
+      //   });
+      // }
+      return marker;
     }
   }
 }])
