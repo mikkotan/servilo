@@ -9,10 +9,16 @@ app.controller('MyReservationsCtrl',["$scope", "reservations", "Restaurant", "Da
 
     $scope.$watchCollection('tempReservations', function(watchedReservations) {
       $scope.reservations = watchedReservations.map(function(reservation) {
-        return {
+        var r = {
           details: reservation,
-          restaurant: Restaurant.get(reservation.restaurant_id)
+          restaurant: function() {
+            Restaurant.getRestaurantName(reservation.restaurant_id)
+              .then((name) => {
+                r.restaurant_name = name
+              })
+          }()
         }
+        return r;
       })
     })
 

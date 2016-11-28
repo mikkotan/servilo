@@ -3,15 +3,17 @@
     <div ng-init='setMap(restaurant)'>
       <h3>{{location}}</h3>
     </div>
-      <div ng-if='restaurant.latitude != null && restaurant.longitude != null'>
-        <ui-gmap-google-map zoom='map.zoom' center="map.center" options='map.options' bounds='map.bounds' events='map.events'>
-          <ui-gmap-markers models="restaurantMarkers" coords="'coords'" icon="'icon'"></ui-gmap-markers>
-          <ui-gmap-polylines models="mapDirection" path="'paths'" stroke="'stroke'"></ui-gmap-polylines>
-        </ui-gmap-google-map>
+      <img ng-src="https://maps.googleapis.com/maps/api/staticmap?center={{restaurant.latitude}},{{restaurant.longitude}}
+          &zoom=16
+          &size=300x300
+          &markers={{restaurant.latitude}},{{restaurant.longitude}}
+          &key=AIzaSyCTNmJQD-Z3qn5QmhC-Jfp4iZr6P6QV_tE" alt="Restaurant Map" ng-click="openMapModal(restaurant)">
+      <div class="row">
+          <h4><b>Driving Path Distance:</b> {{drivingD}} KM</h4>
       </div>
-      <div>
-        <button class="button button-positive" ng-click="showPath(restaurant,'DRIVING')">Driving Path Distance: {{drivingD}}</button>
-        <button class="button button-positive" ng-click="showPath(restaurant,'WALKING')"> Walking Path Distance: {{walkingD}}</button>
+      <div class="row">
+          <h4><b>Walking Path Distance: </b> {{walkingD}} KM</h4>
       </div>
-      </ion-content>
+    </div>
+  </ion-content>
 </ion-view>

@@ -1,0 +1,21 @@
+<ion-modal-view view-title="DynamicMap">
+  <ion-header-bar class="bar bar-header bar-assertive">
+    <h1 class="title">Restaurant Map Location</h1>
+    <button class="button button-clear button-primary" ng-click="mapModal.hide()"><i class="icon ion-ios-close"></i></button>
+  </ion-header-bar>
+  <ion-content class="padding">
+    <div>
+      <h3>{{location}}</h3>
+    </div>
+    <div ng-if='restaurant.latitude != null && restaurant.longitude != null'>
+      <ui-gmap-google-map zoom='map.zoom' center="map.center" options='map.options' bounds='map.bounds' events='map.events' control="modalControl" dorebuildall=true>
+        <ui-gmap-markers models="restaurantMarkers" coords="'coords'" icon="'icon'"></ui-gmap-markers>
+        <ui-gmap-polylines models="mapDirection" path="'paths'" stroke="'stroke'"></ui-gmap-polylines>
+      </ui-gmap-google-map>
+    </div>
+    <div>
+      <button class="button button-positive" ng-click="showPath(restaurant,'DRIVING')">Driving Path Distance: {{drivingD}} KM</button>
+      <button class="button button-positive" ng-click="showPath(restaurant,'WALKING')"> Walking Path Distance: {{walkingD}} KM</button>
+    </div>
+  </ion-content>
+</ion-modal-view>
