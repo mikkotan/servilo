@@ -204,7 +204,12 @@ app.directive('googleplace', function() {
             details: '=?'
         },
         link: function(scope, element, attrs, model) {
+          // this city bounds does not limit the search but biasing the search
+          var cityBounds = new google.maps.LatLngBounds(
+              new google.maps.LatLng(10.689760946107592, 122.43714093987364),
+              new google.maps.LatLng(10.851652605488333, 122.63352155510802));
             var options = {
+              bounds: cityBounds,
               componentRestrictions: {country: 'PH'}
             };
             scope.gPlace = new google.maps.places.Autocomplete(element[0], options);
