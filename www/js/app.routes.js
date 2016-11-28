@@ -59,6 +59,9 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
             // restaurants: function(Database) {
             //   return Database.restaurants().$loaded();
             // }
+            currentGeoLocation: function(CordovaGeolocation) {
+              return CordovaGeolocation.get();
+            }
           }
         }
       }
