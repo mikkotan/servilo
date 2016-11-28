@@ -29,7 +29,27 @@ app.factory("Search",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "Dat
       return $firebaseObject(query);
     },
     getRestaurant : function() {
-      return $firebaseArray(restaurantsRef);
+      // return $firebaseArray(restaurantsRef);
+      return restaurantsRef;
+    },
+    getNear : function(id, restaurant) {
+      var marker = {
+        id: id,
+        coords: {
+          latitude: restaurant.latitude,
+          longitude: restaurant.longitude
+        }
+      }
+      var currentLocation = CordovaGeolocation.get();
+      var point1 = new google.maps.LatLng(marker.coords.latitude, marker.coords.longitude);
+      var point2 = new google.maps.LatLng(currentLocation.latitude, currentLocation.longitude);
+      if(calculateDistance(point1, point2) <= 1) {
+        restaurant["$id"] = id;
+        return {
+          marker: marker,
+          restaurant: restaurant
+        };
+      }
     },
     getNearestRestaurants : function(restaurants) {
       var currentLocation = CordovaGeolocation.get();
@@ -112,6 +132,21 @@ app.factory("Search",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "Dat
       //   });
       // }
       return marker;
+    },
+    getYouAreHere : function() {
+      var currentLocation = CordovaGeolocation.get();
+      var location = {
+        id:0,
+        coords:{
+          latitude: currentLocation.latitude, 
+          longitude: currentLocation.longitude
+        },
+        icon: {
+          url: 'http://chart.apis.google.com/chart?chst=d_bubble_icon_texts_big&chld=glyphish_user|edge_bc|FFBB00|000000|You+Are+Here',
+          scaledSize: new google.maps.Size(83, 30)
+        }
+      };
+      return location;
     }
   }
 }])

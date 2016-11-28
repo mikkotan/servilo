@@ -33,25 +33,33 @@ app.controller('SearchTabCtrl',
     }
   };
 
-  $scope.showNear =function(){
-    if($scope.mapText == "Nearest restaurant in 1km"){
+  $scope.showNear = function() {
+    if($scope.mapText == "Nearest restaurant in 1km") {
       $scope.mapText = "Back to Default";
       var currentLocation = CordovaGeolocation.get();
+      $scope.markers.push(Search.getYouAreHere());
       $scope.loading = true;
-      $ionicLoading.show({
-        template: '<p>Searching. . .</p><ion-spinner icon="lines"></ion-spinner>'
-      });
-      Search.getRestaurant().$loaded().then(function(result) {
-        $scope.loading = false;
-        $ionicLoading.hide();
-        $scope.markers = Search.getNearestRestaurants(result);
-        // $scope.restaurants = $scope.markers;
-        if($scope.markers.length == 1) {
-          alert("There are no restaruant nearby!!");
+      // $ionicLoading.show({
+      //   template: '<p>Searching. . .</p><ion-spinner icon="lines"></ion-spinner>'
+      // });
+      Search.getRestaurant().on("child_added", function(snapshot) {
+        if(Search.getNear(snapshot.key ,snapshot.val())) {
+          $scope.loading = false;
+          $scope.markers.push(Search.getNear(snapshot.key ,snapshot.val()).marker);
+          $scope.restaurants.push(Search.getNear(snapshot.key ,snapshot.val()).restaurant);
         }
       })
+
+      // Search.getRestaurant().$loaded().then(function(result) {
+      //   // $ionicLoading.hide();
+      //   $scope.markers = Search.getNearestRestaurants(result);
+      //   // $scope.restaurants = $scope.markers;
+      //   if($scope.markers.length == 1) {
+      //     alert("There are no restaruant nearby!!");
+      //   }
+      // })
       $scope.map.zoom = 14;
-      $scope.map.center ={
+      $scope.map.center = {
         latitude: currentLocation.latitude, 
         longitude: currentLocation.longitude 
       };

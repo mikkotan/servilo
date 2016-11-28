@@ -11,17 +11,6 @@
   </ion-header-bar>
   <ion-content class="padding has-subheader">
     <ion-list>
-
-      <!-- Loading state -->
-      <div ng-if="loading">
-        LOADING BAYBEH
-      </div>
-
-      <!-- Loaded state -->
-      <div ng-if="!loading">
-        DONE LOADING BAYBEH
-      </div>
-
       <div>
         <ui-gmap-google-map zoom='map.zoom' center="map.center" options='map.options' bounds='map.bounds' control='map.control' refresh=map.refresh events=map.events ng-cloak>          <ui-gmap-markers models="markers" coords="'coords'" icon="'icon'" events="markerEvents" doRebuildAll="true"></ui-gmap-markers>
           <ui-gmap-map-control position="top-right">
@@ -30,6 +19,7 @@
         </ui-gmap-google-map>
       </div>
       <h3>Results</h3>
+      <ion-spinner ng-show="loading" icon="lines"></ion-spinner>
       <div class="card padding" ng-repeat="restaurant in (filteredItems = restaurants)">
         <div class="item item-thumbnail-left">
           <img class="img-thumbnail" ng-if="restaurant.photoURL" ng-src="{{restaurant.photoURL}}" />
