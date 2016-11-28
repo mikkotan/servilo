@@ -104,4 +104,6 @@
   <plugin name="cordova-plugin-customurlscheme" source="npm">
     <param name="URL_SCHEME" value="servilothesis"/>
   </plugin>
+  <allow-navigation href="http://192.168.1.3:8101"/>
+  <allow-navigation href="http://192.168.254.101:8100"/>
 </widget>
