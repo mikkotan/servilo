@@ -186,9 +186,6 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
     })
 
     $scope.showConfirmDelete = function(review) {
-      // var reviewObj = review;
-      // var reviewRating = review.rating;
-      // var reviewContent = review.content;
       var confirmDelete = $ionicPopup.confirm({
         title: "Delete Review",
         template: "Delete '" + review.content + "'?"

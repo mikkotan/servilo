@@ -39,7 +39,7 @@ app.factory("Search",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "Dat
         markers.push({
           id: restaurants[i].$id,
           coords: {
-            latitude:restaurants[i].latitude, 
+            latitude:restaurants[i].latitude,
             longitude:restaurants[i].longitude
           },
           data: restaurants[i]
@@ -60,7 +60,7 @@ app.factory("Search",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "Dat
       markers = tempMarkers;
       markers.push({id:0,
         coords:{
-          latitude: currentLocation.latitude, 
+          latitude: currentLocation.latitude,
           longitude: currentLocation.longitude
         },
         icon: {
@@ -76,7 +76,7 @@ app.factory("Search",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "Dat
         markers.push({
           id: items[i].$id,
           coords: {
-            latitude:items[i].latitude, 
+            latitude:items[i].latitude,
             longitude:items[i].longitude
           }
         });

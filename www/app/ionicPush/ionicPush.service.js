@@ -11,11 +11,14 @@ app.factory('IonicPushService', function($ionicPush, User, Database, $cordovaPus
         })
     },
     getToken : function() {
-      return localStorage.myPush
+      // return localStorage.myPush
+      return $ionicPush.token.token
     },
     registerToAuth : function() {
       console.log("registering this token: "+localStorage.myPush);
       var tempToken = localStorage.myPush;
+      // console.log("registering this token: "+$ionicPush.token.token);
+      // var tempToken = $ionicPush.token.token;
       var token = tempToken.split(':');
 
       var currentAuthRef = Database.usersReference().child(User.auth().$id).child('device_token').child(token[0]);

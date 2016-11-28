@@ -143,7 +143,7 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "ionicMateria
               user.password = '';
               console.log('tapped ' + res);
             })
-          console.log(err);
+          console.log(JSON.stringify(err, null, 4));
         });
     };
     $scope.fbLogin = function() {
