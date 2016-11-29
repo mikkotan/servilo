@@ -134,23 +134,23 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
         }
       }
     })
-    .state('tabs.addMenu', {
-      url: "/menu/add/:restaurantId",
-      views: {
-        'restaurant-tab': {
-          templateUrl: "app/menu/_add-menu.html",
-          controller: "AddMenuCtrl",
-          resolve: {
-            menus: function(Menu) {
-              return Menu.all().$loaded();
-            },
-            restaurantId: function($stateParams) {
-              return $stateParams.restaurantId
-            }
-          }
-        }
-      }
-    })
+    // .state('tabs.addMenu', {
+    //   url: "/menu/add/:restaurantId",
+    //   views: {
+    //     'restaurant-tab': {
+    //       templateUrl: "app/menu/_add-menu.html",
+    //       controller: "AddMenuCtrl",
+    //       resolve: {
+    //         menus: function(Menu) {
+    //           return Menu.all().$loaded();
+    //         },
+    //         restaurantId: function($stateParams) {
+    //           return $stateParams.restaurantId
+    //         }
+    //       }
+    //     }
+    //   }
+    // })
     .state('tabs.menu', {
       url: "/menu",
       views: {

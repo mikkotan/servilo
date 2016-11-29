@@ -1,9 +1,54 @@
-<!-- TODO -->
+
+<ion-modal-view view-title="{{restaurant.name}} - Add Menu">
+  <ion-header-bar class="bar bar-header bar-assertive">
+    <h1 class="title">Add Menu</h1>
+    <button class="button button-clear button-primary" ng-click="addMenuModal.hide()"><i class="icon ion-ios-close"></i></button>
+  </ion-header-bar>
+  <ion-content class="padding">
+    <ion-list>
+      <div class="card">
+        <ion-item id="form-input">
+          <form ng-submit="addMenu(menu)">
+            <label class="item item-input item-floating-label">
+              <span class="input-label has-input">Name</span>
+              <input type="text" placeholder="Name" ng-model="menu.name">
+            </label>
+            <label class="item item-input item-floating-label">
+              <span class="input-label has-input">Price</span>
+              <input type="number" placeholder="Price" ng-model="menu.price">
+            </label>
+            <label class="item item-input item-select">
+              <div class="input-label">
+                Category
+              </div>
+              <select ng-model="menu.category">
+                <option ng-repeat="category in categories" value="{{category.$id}}">
+                  {{category.name}}
+                </option>
+              </select>
+            </label>
+
+            <div class="row">
+              <div class="col">
+                <a class="button button-block button-positive icon ion-camera" ng-click="upload(1)"></a>
+              </div>
+              <div class="col">
+                <a class="button button-block button-calm icon ion-image" ng-click="upload(2)"></a>
+              </div>
+            </div>
+            <img ng-src="data:image/jpeg;base64,{{imageURL}}" width="40%" />
+            <div class="row">
+              <button class="button button-block button-balanced ink">Submit</button>
+            </div>
+          </form>
+        </ion-item>
+      </div>
+    </ion-list>
+  </ion-content>
+</ion-modal-view>
 
 
-
-
-<ion-view view-title="{{restaurant.name}} - Add Menu">
+<!-- <ion-view view-title="{{restaurant.name}} - Add Menu">
   <ion-content class="padding">
     <ion-list>
       <ion-item>
@@ -45,4 +90,4 @@
       </ion-item>
     </ion-list>
   </ion-content>
-</ion-view>
+</ion-view> -->

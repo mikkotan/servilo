@@ -1,5 +1,5 @@
-app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera", "CordovaGeolocation", "Database", "Upload","$ionicPopup",
-  function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation, Database, Upload, $ionicPopup) {
+app.controller("RestaurantCtrl", ["$scope", "Menu", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera", "CordovaGeolocation", "Database", "Upload", "$ionicPopup",
+  function($scope, Menu, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation, Database, Upload, $ionicPopup) {
 
     $scope.modalControl = {};
     $scope.restaurants = Restaurant.all();
@@ -10,6 +10,9 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
     $scope.restaurant = {
       openTime: new Date()
     }
+
+    // $scope.restaurant = Restaurant.get(restaurantId);
+
 
     console.log($scope.AppUser)
     $scope.showMap = function() {
@@ -66,7 +69,9 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       resRef.update({
         availability: restaurant.availability
       })
-    }
+    };
+
+
 
     $scope.imageURL = "";
     $scope.upload = function(index) {
@@ -210,6 +215,42 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       scope: $scope
     })
 
+    $ionicModal.fromTemplateUrl('app/menu/_add-menu.html', function(addMenuModal) {
+      $scope.addMenuModal = addMenuModal;
+    }, {
+      scope: $scope
+    });
+    $scope.showAddMenuModal = function(resId) {
+      console.log("hello");
+      console.log(resId);
+      $scope.menu = {
+        restaurant_id: resId
+      }
+      $scope.categories = $firebaseArray(Database.restaurantsReference().child(resId).child('menu_categories'));
+      $scope.addMenuModal.show();
+    };
+    $scope.addMenu = function(menu) {
+      var categoryId = menu.category;
+      Menu.all().$add({
+          name: menu.name.toLowerCase(),
+          price: menu.price,
+          restaurant_id: $scope.menu.restaurant_id,
+          category_id: categoryId,
+          availability: false,
+          prevPrice: menu.price,
+          photoURL: $scope.photoURL,
+          timestamp: firebase.database.ServerValue.TIMESTAMP
+        })
+        .then(function(menuObj) {
+          var restaurantRef = Database.restaurantsReference().child($scope.menu.restaurant_id);
+          restaurantRef.child('menus').child(menuObj.key).set(true);
+          restaurantRef.child('menu_categories').child(categoryId).child('menus').child(menuObj.key).set(true);
+        })
+        .catch(function(err) {
+            console.log(JSON.stringify(err));
+        } )
+      $scope.addMenuModal.hide();
+    }
     $scope.showAddCategoryModal = function(resId) {
       console.log('show add category');
       console.log('restaurant id : ' + resId);
