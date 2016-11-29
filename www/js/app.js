@@ -83,7 +83,19 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
           title: data.title,
           template: data.message
         })
-        $state.go('tabs.myReservations');
+          .then((res) => {
+            if (res) {
+              if (data.additionalData.url === 'reservation') {
+                $state.go('tabs.myReservations');
+              }
+              else if (data.additionalData.url === 'order') {
+                $state.go('tabs.myOrders');
+              }
+              else if (data.additionalData.url === 'order_status') {
+                $state.go('tabs.myOrders');
+              }
+            }
+          })
       }
       else {
         console.log('not in foreground')
@@ -91,6 +103,9 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
           $state.go('tabs.myReservations');
         }
         else if (data.additionalData.url === 'order') {
+          $state.go('tabs.myOrders');
+        }
+        else if (data.additionalData.url === 'order_status') {
           $state.go('tabs.myOrders');
         }
       }
@@ -103,32 +118,7 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
           $state.go("login")
         }
       })
-//
-// <<<<<<< HEAD
-//     $rootScope.$on('cloud:push:notification', function(event, data) {
-//       var msg = data.message;
-//       alert(msg.title + ': ' + msg.text);
-//     })
-//
-//     $templateCache.put('template.tpl.html', '');
-//     $ionicPlatform.ready(function() {
-//       if (window.cordova && window.cordova.plugins.Keyboard) {
-//         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-//         // for form inputs)
-//         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-//
-//         // Don't remove this line unless you know what you are doing. It stops the viewport
-//         // from snapping when text inputs are focused. Ionic handles this internally for
-//         // a much nicer keyboard experience.
-//         cordova.plugins.Keyboard.disableScroll(true);
-//       }
-//       if (window.StatusBar) {
-//         StatusBar.styleDefault();
-//       }
-//     });
-//   }
-// ]);
-// =======
+
     $templateCache.put('template.tpl.html', '');
   }]);
 
@@ -154,17 +144,19 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
       loaded.$remove(0)
         .then((ref) => {
           console.log("success user loaded deleted");
-          var firebaseUser = Auth.$getAuth();
+          var fUser = Auth.$getAuth();
+
           if (ionic.Platform.isIOS() || ionic.Platform.isAndroid()) {
-            var ionicToken = IonicPushService.getToken();
+            var ionicToken = localStorage.myPush;
             var results = ionicToken.split(':');
-            Database.usersReference().child(firebaseUser.uid).child('device_token').child(results[0]).set(null);
+            Database.usersReference().child(fUser.uid).child('device_token').child(results[0]).set(null);
           }
           Auth.$signOut();
           location.reload();
           $ionicLoading.hide();
         })
         .catch((err) => {
+          Auth.$signOut();
           console.log(err)
         })
     });
@@ -173,8 +165,10 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
     // window.plugins.googleplus.disconnect();
   }
 
+
   Auth.$onAuthStateChanged(function(firebaseUser) {
     if (firebaseUser) {
+      $scope.currentUser = User.auth();
       // $scope.firebaseUser = User.auth();
       // if (firebaseUser.displayName) {
       //   $scope.photoURL = firebaseUser.photoURL;
@@ -184,15 +178,49 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
         if(data.photoURL) {
           $scope.photoURL = data.photoURL;
         }
+
+        $scope.$watch('firebaseUser', function(newUser) {
+          console.log('watching firebaseUser');
+          $scope.newPhotoURL = newUser.photoURL;
+        })
       })
+
+
     }
   });
 })
 
-.controller('TabsCtrl', function($scope, Auth) {
+.controller('TabsCtrl', function($scope, Auth , User) {
   Auth.$onAuthStateChanged(function(firebaseUser) {
     if (firebaseUser) {
+      User.isRestaurantOwner(firebaseUser.uid).then(function(isRestaurantOwner){
+        $scope.isRestaurantOwner = isRestaurantOwner
+        console.log(Auth.$getAuth().uid)
+      })
       $scope.firebaseUser = firebaseUser;
     }
   });
+});
+
+app.directive('googleplace', function() {
+  return {
+        require: 'ngModel',
+        scope: {
+            ngModel: '=',
+            details: '=?'
+        },
+        link: function(scope, element, attrs, model) {
+            var options = {
+              componentRestrictions: {country: 'PH'}
+            };
+            scope.gPlace = new google.maps.places.Autocomplete(element[0], options);
+
+            google.maps.event.addListener(scope.gPlace, 'place_changed', function() {
+              scope.$apply(function() {
+                scope.details = scope.gPlace.getPlace().geometry.location;
+                model.$setViewValue(element.val());
+              });
+            });
+        }
+    };
 });

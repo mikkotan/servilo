@@ -11,9 +11,13 @@ app.factory("Database", ["$firebaseArray", "$firebaseObject", "$firebaseAuth",
     var ordersRef = rootRef.child('orders');
     var serviceRef = rootRef.child('service');
     var reservationsRef = rootRef.child('reservations');
+    var roleRef = rootRef.child('role');
 
 
     var Database = {
+      roleReference : function(){
+        return roleRef;
+      },
       rootReference : function() {
         return rootRef;
       },
@@ -73,6 +77,9 @@ app.factory("Database", ["$firebaseArray", "$firebaseObject", "$firebaseAuth",
       },
       reservations : function() {
         return $firebaseArray(reservationsRef);
+      },
+      firebaseArray : function(ref){
+        return $firebaseArray(ref)
       }
     }
 

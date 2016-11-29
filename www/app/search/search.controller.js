@@ -7,7 +7,9 @@ app.controller('SearchTabCtrl',
   // Database.restaurants().$loaded().then(function() {
   //   console.log($scope.restaurants.length);
   // }); //try
-    $scope.restaurantOrder = "name";
+
+  $scope.restaurantOrder = "name";
+
   $scope.restaurants = []; //new
   // $scope.getAvg = Restaurant.getAveragePrice;
   // $scope.getAvgRating = Restaurant.getAverageRating;
@@ -18,6 +20,10 @@ app.controller('SearchTabCtrl',
   Auth.$onAuthStateChanged(function(firebaseUser) {
     if(firebaseUser) {
       User.setOnline(firebaseUser.uid);
+      User.isAdmin(firebaseUser.uid).then(function(val){console.log("ADMIN: " + val)})
+      User.isUser(firebaseUser.uid).then(function(val){console.log("USER: " + val)})
+      User.isRestaurantOwner(firebaseUser.uid).then(function(val){console.log("RESTAURANT_OWNER: " + val)})
+
     }
   })
 

@@ -11,7 +11,7 @@ app.factory('IonicPushService', function($ionicPush, User, Database, $cordovaPus
         })
     },
     getToken : function() {
-      return $ionicPush.token.token
+      return localStorage.myPush
     },
     registerToAuth : function() {
       console.log("registering this token: "+localStorage.myPush);

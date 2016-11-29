@@ -63,6 +63,34 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
           // $ionicLoading.show();
         }
       })
+    },
+    setAsAdmin : function(id){
+      Database.roleReference().child("admin").child(id).set(true);
+    },
+    setAsUser : function(id){
+      Database.roleReference().child("user").child(id).set(true);
+      console.log("wew")
+    },
+    setAsRestaurantOwner : function(id){
+      Database.roleReference().child("restaurant_owner").child(id).set(true);
+    },
+    setAsRestaurantManager : function(id){
+      Database.roleReference().child("restaurant_manager").child(id).set(true);
+    },
+    isAdmin : function(id){
+      return Database.roleReference().child("admin").child(id).once('value').then(function(snapshot){
+        return snapshot.exists();
+      })
+    },
+    isUser : function(id){
+      return Database.roleReference().child("user").child(id).once('value').then(function(snapshot){
+        return snapshot.exists();
+      })
+    },
+    isRestaurantOwner : function(id){
+      return Database.roleReference().child("restaurant_owner").child(id).once('value').then(function(snapshot){
+        return snapshot.exists();
+      })
     }
   };
 }]);

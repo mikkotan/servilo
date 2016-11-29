@@ -140,6 +140,7 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "ionicMateria
               template: 'Incorrect username or password.'
             })
             .then((res) => {
+              user.password = '';
               console.log('tapped ' + res);
             })
           console.log(err);

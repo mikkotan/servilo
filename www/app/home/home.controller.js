@@ -42,6 +42,9 @@ app.controller('HomeTabCtrl',
 
       // second solution
       Home.search(name).$loaded().then(function(data) {
+        if(data.length <= 0) {
+          console.log('no results found! :(');
+        }
         vm.restaurants = data;
       });
     }

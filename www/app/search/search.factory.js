@@ -1,29 +1,87 @@
-app.factory("Search",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "Database",
-  function($firebaseObject ,$firebaseAuth, $firebaseArray, Database){
-  var rootRef = firebase.database().ref();
+app.factory("Search",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "Database", "CordovaGeolocation",
+  function($firebaseObject ,$firebaseAuth, $firebaseArray, Database, CordovaGeolocation){
 
-  // var menus = rootRef.child("menus");
   var menusRef = Database.menusReference();
-
-  // var restaurant = rootRef.child('restaurants');
-  var restaurantRef = Database.restaurantsReference();
-  // var usersRef = rootRef.child('users');
+  var restaurantsRef = Database.restaurantsReference();
   var usersRef = Database.usersReference();
-  var usersObj = $firebaseArray(usersRef);
+
+  var calculateDistance = function(point1, point2){
+    return(google.maps.geometry.spherical.computeDistanceBetween(point1, point2) / 1000).toFixed(2);
+  };
 
   return {
-    restaurants : function(){
-      return $firebaseArray(restaurant);
+    // restaurants : function(){
+    //   return $firebaseArray(restaurant);
+    // },
+    // getRestaurant : function(restaurantId){
+    //   return $firebaseObject(restaurant.child(restaurantId));
+    // },
+    searchName : function(input) {
+      var query = restaurantsRef.orderByChild('name').startAt(input).endAt(input + "\uf8ff");
+      return $firebaseArray(query);
     },
-    getRestaurant : function(restaurantId){
-      return $firebaseObject(restaurant.child(restaurantId));
+    searchMenu : function(input) {
+      var query = menusRef.orderByChild('name').startAt(input).endAt(input + "\uf8ff");
+      return query;
     },
-    getUserName : function(uid){
-      return usersObj.$getRecord(uid).firstName + " " + usersObj.$getRecord(uid).lastName;
+    getRestaurants : function(id) {
+      var query = restaurantsRef.child(id);
+      return $firebaseObject(query);
     },
-    //redundant to menusfactory
-    getRestaurantMenus : function(restaurantId){
-      return $firebaseArray(menusRef.orderByChild("restaurant_id").equalTo(restaurantId))
+    getRestaurant : function() {
+      return $firebaseArray(restaurantsRef);
+    },
+    getNearestRestaurants : function(restaurants) {
+      var currentLocation = CordovaGeolocation.get();
+      var tempMarkers = [];
+      var markers = [];
+      for (var i = 0; i < restaurants.length; i++) {
+        markers.push({
+          id: restaurants[i].$id,
+          coords: {
+            latitude:restaurants[i].latitude,
+            longitude:restaurants[i].longitude
+          },
+          data: restaurants[i]
+        });
+      }
+      for (var i = 0; i < markers.length; i++) {
+        var p1 = new google.maps.LatLng(markers[i].coords.latitude, markers[i].coords.longitude);
+        var p2 = new google.maps.LatLng(currentLocation.latitude, currentLocation.longitude);
+        if(calculateDistance(p1,p2) <= 1){
+          tempMarkers.push({
+            id: markers[i].id,
+            coords: markers[i].coords,
+            data: markers[i].data
+          });
+        }
+      }
+      markers.length = 0;
+      markers = tempMarkers;
+      markers.push({id:0,
+        coords:{
+          latitude: currentLocation.latitude,
+          longitude: currentLocation.longitude
+        },
+        icon: {
+          url: 'http://chart.apis.google.com/chart?chst=d_bubble_icon_texts_big&chld=glyphish_user|edge_bc|FFBB00|000000|You+Are+Here',
+          scaledSize: new google.maps.Size(83, 30)
+        }
+      });
+      return markers;
+    },
+    getMarkers : function(items) {
+      var markers = [];
+      for (var i = 0; i < items.length; i++) {
+        markers.push({
+          id: items[i].$id,
+          coords: {
+            latitude:items[i].latitude,
+            longitude:items[i].longitude
+          }
+        });
+      }
+      return markers;
     }
   }
 }])
