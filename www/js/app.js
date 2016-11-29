@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var app = angular.module('app', ['ui.mask', 'ionic', 'ionic.cloud', 'ionMdInput', 'ionic-material', 'firebase', 'ionic.rating', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker', 'yaru22.angular-timeago', 'ui.select', 'ngSanitize', 'ionic-toast'])
+var app = angular.module('app', ['ui.mask', 'ionic', 'ionic.cloud', 'ionMdInput', 'ionic-material', 'firebase', 'ionic.rating', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker', 'yaru22.angular-timeago', 'ui.select', 'ngSanitize'])
 
 app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushService", "User", "Database", "$cordovaGeolocation", "$ionicPopup", "$cordovaPushV5",
   function($ionicPlatform, $rootScope, $state, $templateCache, IonicPushService, User, Database, $cordovaGeolocation, $ionicPopup, $cordovaPushV5) {
@@ -13,23 +13,23 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
           // IonicPushService.registerDevice();
           localStorage.myPush = '';
           $cordovaPushV5.initialize({
-              android: {
-                senderID: "155324175920"
-              },
-              ios: {
-                alert: 'true',
-                badge: true,
-                sound: 'false',
-                clearBadge: true
-              },
-              windows: {}
-            })
+            android: {
+              senderID: "155324175920"
+            },
+            ios: {
+              alert: 'true',
+              badge: true,
+              sound: 'false',
+              clearBadge: true
+            },
+            windows: {}
+          })
             .then((result) => {
               $cordovaPushV5.onNotification();
               $cordovaPushV5.onError();
               $cordovaPushV5.register()
                 .then((registerResult) => {
-                  console.log("Register Result: " + registerResult)
+                  console.log("Register Result: "+registerResult)
                   localStorage.myPush = registerResult;
                 })
                 .catch((err) => {
@@ -80,25 +80,29 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
           title: data.title,
           template: data.message
         })
-
-        .then((res) => {
-          if (res) {
-            if (data.additionalData.url === 'reservation') {
-              $state.go('tabs.myReservations');
-            } else if (data.additionalData.url === 'order') {
-              $state.go('tabs.myOrders');
-            } else if (data.additionalData.url === 'order_status') {
-              $state.go('tabs.myOrders');
+          .then((res) => {
+            if (res) {
+              if (data.additionalData.url === 'reservation') {
+                $state.go('tabs.myReservations');
+              }
+              else if (data.additionalData.url === 'order') {
+                $state.go('tabs.myOrders');
+              }
+              else if (data.additionalData.url === 'order_status') {
+                $state.go('tabs.myOrders');
+              }
             }
-          }
-        })
-      } else {
+          })
+      }
+      else {
         console.log('not in foreground')
         if (data.additionalData.url === 'reservation') {
           $state.go('tabs.myReservations');
-        } else if (data.additionalData.url === 'order') {
+        }
+        else if (data.additionalData.url === 'order') {
           $state.go('tabs.myOrders');
-        } else if (data.additionalData.url === 'order_status') {
+        }
+        else if (data.additionalData.url === 'order_status') {
           $state.go('tabs.myOrders');
         }
       }
@@ -110,27 +114,29 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
      });
 
     $rootScope.$on("$stateChangeError",
-
       function(event, toState, toParams, fromState, fromParams, error) {
         if (error === "AUTH_REQUIRED") {
           event.preventDefault();
           $state.go("login")
         }
       })
+
     $templateCache.put('template.tpl.html', '');
-  }
-]);
+  }]);
 
-app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate, Auth, User, Database, $state, $ionicPush, IonicPushService, $ionicPopover, $timeout, $cordovaPushV5) {
-
+app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate, Auth, User, Database, $state, $ionicPush, IonicPushService, $ionicPopover, $cordovaPushV5) {
   $scope.showMenu = function() {
     $ionicSideMenuDelegate.toggleLeft();
   };
-
   $scope.showRightMenu = function() {
     $ionicSideMenuDelegate.toggleRight();
   };
 
+  // $scope.hasData = function() {
+  //     //get ng-model from input
+  //     //if ng-model has value..add "used" class
+  //     //if ng-model has no value...wala lang
+  // };
   $scope.signOut = function() {
     $ionicLoading.show({
       template: '<p>Signing out . . .</p><ion-spinner></ion-spinner>',
@@ -171,7 +177,7 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
       // }
       User.auth().$loaded().then(function(data) {
         $scope.firebaseUser = data;
-        if (data.photoURL) {
+        if(data.photoURL) {
           $scope.photoURL = data.photoURL;
         }
 
@@ -196,29 +202,14 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
 
 app.directive('googleplace', function() {
   return {
-        require: 'ngModel',
-        scope: {
-            ngModel: '=',
-            details: '=?'
-        },
-        link: function(scope, element, attrs, model) {
-          // this city bounds does not limit the search but biasing the search
-          var cityBounds = new google.maps.LatLngBounds(
-              new google.maps.LatLng(10.689760946107592, 122.43714093987364),
-              new google.maps.LatLng(10.851652605488333, 122.63352155510802));
-            var options = {
-              bounds: cityBounds,
-              componentRestrictions: {country: 'PH'}
-            };
-            scope.gPlace = new google.maps.places.Autocomplete(element[0], options);
-
-            google.maps.event.addListener(scope.gPlace, 'place_changed', function() {
-              scope.$apply(function() {
-                scope.details = scope.gPlace.getPlace().geometry.location;
-                model.$setViewValue(element.val());
-              });
-            });
-        }
+    require: 'ngModel',
+    scope: {
+      ngModel: '=',
+      details: '=?'
+    },
+    link: function(scope, element, attrs, model) {
+      var options = {
+        componentRestrictions: {country: 'PH'}
       };
       scope.gPlace = new google.maps.places.Autocomplete(element[0], options);
 

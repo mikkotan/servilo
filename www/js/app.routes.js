@@ -141,9 +141,9 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
           templateUrl: "app/menu/_add-menu.html",
           controller: "AddMenuCtrl",
           resolve: {
-            menus: function(Menu) {
-              return Menu.all().$loaded();
-            },
+            // menus: function(Menu) {
+            //   return Menu.all().$loaded();
+            // },
             restaurantId: function($stateParams) {
               return $stateParams.restaurantId
             }

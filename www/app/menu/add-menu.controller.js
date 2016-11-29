@@ -1,9 +1,9 @@
-app.controller("AddMenuCtrl",["$scope", "$stateParams", "menus", "$firebaseArray","$state", "restaurantId", "$cordovaCamera", "Database", "Restaurant", "Upload",
-  function($scope, $stateParams, menus, $firebaseArray, $state, restaurantId, $cordovaCamera, Database, Restaurant, Upload){
+app.controller("AddMenuCtrl",["$scope", "restaurantId", "$cordovaCamera", "Restaurant", "Menu",
+  function($scope, restaurantId, $cordovaCamera, Restaurant, Menu){
 
-    $scope.menus = menus;
     $scope.restaurant = Restaurant.get(restaurantId);
-    $scope.categories = $firebaseArray(Database.restaurantsReference().child(restaurantId).child('menu_categories'));
+    $scope.categories = Menu.getMenuCategories(restaurantId);
+    $scope.photoURL = "";
 
     $scope.upload = function(index) {
       //disable save button
@@ -30,7 +30,8 @@ app.controller("AddMenuCtrl",["$scope", "$stateParams", "menus", "$firebaseArray
 
     $scope.addMenu = function(menu) {
       var categoryId = menu.category;
-      $scope.menus.$add({
+      var newKey = Menu.generateKey();
+      Menu.menusRef(newKey).set({
         name : menu.name.toLowerCase(),
         price : menu.price,
         restaurant_id : restaurantId,
@@ -40,12 +41,10 @@ app.controller("AddMenuCtrl",["$scope", "$stateParams", "menus", "$firebaseArray
         photoURL : $scope.photoURL,
         timestamp : firebase.database.ServerValue.TIMESTAMP
       })
-      .then(function(menuObj) {
-        var restaurantRef = Database.restaurantsReference().child(restaurantId);
-        restaurantRef.child('menus').child(menuObj.key).set(true);
-        restaurantRef.child('menu_categories').child(categoryId).child('menus').child(menuObj.key).set(true);
+      .then(function() {
+        Menu.getRestaurantRef(restaurantId, categoryId, newKey);
       })
-      $state.go('tabs.restaurant');
+      // $state.go('tabs.restaurant');
   }
 
 }]);
