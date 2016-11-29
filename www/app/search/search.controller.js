@@ -45,8 +45,9 @@ app.controller('SearchTabCtrl',
       Search.getRestaurant().on("child_added", function(snapshot) {
         if(Search.getNear(snapshot.key ,snapshot.val())) {
           $scope.loading = false;
-          $scope.markers.push(Search.getNear(snapshot.key ,snapshot.val()).marker);
-          $scope.restaurants.push(Search.getNear(snapshot.key ,snapshot.val()).restaurant);
+          var getNear = Search.getNear(snapshot.key, snapshot.val());
+          $scope.markers.push(getNear.marker);
+          $scope.restaurants.push(getNear.restaurant);
         }
       })
 
@@ -71,7 +72,8 @@ app.controller('SearchTabCtrl',
     }
   };
 
-  $scope.allowMarkerChange = function(input, filter){
+  $scope.allowMarkerChange = function(inputText, filter){
+    var input = inputText.toLowerCase();
     $scope.markers.length = 0;
     if(input !== '') {
       if(filter == 'name') {

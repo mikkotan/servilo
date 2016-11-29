@@ -59,39 +59,21 @@ app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover
     };
 
     $scope.upload = function(index) {
-      var source = "";
-      switch (index) {
-        case 1:
-          source = Camera.PictureSourceType.CAMERA;
-          break;
-        case 2:
-          source = Camera.PictureSourceType.PHOTOLIBRARY;
-          break;
-      }
-      var options = {
-        quality: 75,
-        destinationType: Camera.DestinationType.DATA_URL,
-        sourceType: source,
-        allowEdit: true,
-        encodingType: Camera.EncodingType.JPEG,
-        popoverOptions: CameraPopoverOptions,
-        targetWidth: 500,
-        targetHeight: 500,
-        saveToPhotoAlbum: false
-      };
+      var source = Upload.getSource(index);
+      var options = Upload.getOptions(source);
       $cordovaCamera.getPicture(options).then(function(imageData) {
         var profileRef = Upload.profile(imageData);
         $scope.progress = 1;
-        profileRef.on('state_changed', function(snapshot) {
-          var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log('Upload is ' + progress + '% done');
-          $scope.progress = progress;
-        }, function(error) {
-          console.log("error in uploading." + error);
-        }, function() {
-          $scope.photoURL = profileRef.snapshot.downloadURL;
-          $scope.$apply();
-        });
+        profileRef.on('state_changed', function(snapshot){
+        var progress = Upload.getProgress(snapshot);
+        console.log('Upload is ' + progress + '% done');
+        $scope.progress = progress;
+      }, function(error) {
+        console.log("error in uploading." + error);
+      }, function() {
+        $scope.photoURL = profileRef.snapshot.downloadURL;
+        $scope.$apply();
+      });
 
       }, function(error) {
         console.error(error);
