@@ -114,6 +114,7 @@ app.controller("RestaurantCtrl", ["$scope", "Menu", "$firebaseArray", "$firebase
         console.error(error);
       });
     }
+
     var metadata = {
       contentType: 'image/jpeg',
     };
@@ -251,6 +252,7 @@ app.controller("RestaurantCtrl", ["$scope", "Menu", "$firebaseArray", "$firebase
     //     } )
     //   $scope.addMenuModal.hide();
     // }
+
     $scope.showAddCategoryModal = function(resId) {
       console.log('show add category');
       console.log('restaurant id : ' + resId);

@@ -21,11 +21,11 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
     },
     get : function(restaurantId) {
       console.log('nice restaurant get');
-      return Database.restaurantsReference().child(restaurantId).once('value')
-        .then((snapshot) => {
-          console.log(snapshot.val());
-          return snapshot.val();
-        })
+      return $firebaseObject(Database.restaurantsReference().child(restaurantId));
+      // return Database.restaurantsReference().child(restaurantId).once('value')
+      //   .then((snapshot) => {
+      //     return snapshot.val();
+      //   })
     },
     getPendingRestaurants : function() {
       return Database.pendings();
@@ -54,6 +54,7 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
         })
     },
     getReviews : function(restaurantId) {
+      console.log('Getting reviews');
       return $firebaseArray(Database.reviewsReference().orderByChild('restaurant_id').equalTo(restaurantId));
     },
     getOwner : function(restaurantId) {

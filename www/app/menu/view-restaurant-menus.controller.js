@@ -8,8 +8,6 @@ app.controller("ViewRestaurantMenu", ["$scope", "$stateParams", "restaurantMenu"
       console.log('Delete called');
       $scope.restaurantMenus.$remove(menu)
         .then((ref) => {
-          console.log('Successfully deleted');
-          console.log('This is the menu id ' + menu.$id);
           Database.restaurantsReference().child(menu.restaurant_id).child('menus').child(menu.$id).set(null);
           Database.restaurantsReference().child(menu.restaurant_id).child('menu_categories').child(menu.category_id).child('menus').child(menu.$id).set(null);
         })
