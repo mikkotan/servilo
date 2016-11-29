@@ -1,0 +1,8 @@
+<ul class="list">
+  <li class="item item-checkbox" ng-repeat="(key, val) in days">
+    <label class="checkbox">
+      <input type="checkbox" ng-model="restaurant.days[key]">
+    </label>
+    {{days[key].name}}
+  </li>
+</ul>

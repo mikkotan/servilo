@@ -49,6 +49,16 @@ app.controller("RestaurantCtrl", ["$scope", "Menu", "$firebaseArray", "$firebase
       });
     };
 
+    $scope.setOpenDays = function() {
+      var openDays = $ionicPopup.confirm({
+        title: 'Set Open Days',
+        templateUrl: 'app/restaurant/_openDaysPopout.html',
+        subTitle: 'Set the days open on your restaurant.',
+        cssClass: 'custom-popup',
+        scope: $scope
+      })
+    }
+
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
         console.log("User:" + user.uid);
@@ -456,5 +466,29 @@ app.controller("RestaurantCtrl", ["$scope", "Menu", "$firebaseArray", "$firebase
     }
 
     $scope.facilities = $firebaseArray(firebase.database().ref().child('facilities'));
+
+    $scope.days = {
+      '0': {
+        name: 'Monday'
+      },
+      '1': {
+        name: 'Tuesday'
+      },
+      '2': {
+        name: 'Wednesday'
+      },
+      '3': {
+        name: 'Thursday'
+      },
+      '4': {
+        name: 'Friday'
+      },
+      '5': {
+        name: 'Saturday'
+      },
+      '6': {
+        name: 'Sunday'
+      }
+    }
   }
 ])
