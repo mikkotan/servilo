@@ -1,5 +1,5 @@
-app.controller("AddMenuCtrl",["$scope", "restaurantId", "$cordovaCamera", "Restaurant", "Menu",
-  function($scope, restaurantId, $cordovaCamera, Restaurant, Menu){
+app.controller("AddMenuCtrl",["$scope", "restaurantId", "$cordovaCamera", "Restaurant", "Menu", "Upload",
+  function($scope, restaurantId, $cordovaCamera, Restaurant, Menu, Upload){
 
     $scope.restaurant = Restaurant.get(restaurantId);
     $scope.categories = Menu.getMenuCategories(restaurantId);
