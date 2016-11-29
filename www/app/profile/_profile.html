@@ -4,7 +4,7 @@
   </ion-nav-buttons>
   <ion-content>
     <div id="content">
-      <div id="profile-info">
+      <div id="profile-info" >
         <img id="profile-image" ng-show="firebaseUser.photoURL" ng-src="{{firebaseUser.photoURL}}">
         <img id="profile-image" ng-show="!firebaseUser.photoURL" ng-src="img/ionic.png">
         <h3 id="profile-name" ng-if="firebaseUser.provider !== email">{{firebaseUser.displayName}}</h3>

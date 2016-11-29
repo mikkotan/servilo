@@ -59,7 +59,7 @@ app.factory("Search",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "Dat
         markers.push({
           id: restaurants[i].$id,
           coords: {
-            latitude:restaurants[i].latitude, 
+            latitude:restaurants[i].latitude,
             longitude:restaurants[i].longitude
           },
           data: restaurants[i]
@@ -80,7 +80,7 @@ app.factory("Search",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "Dat
       markers = tempMarkers;
       markers.push({id:0,
         coords:{
-          latitude: currentLocation.latitude, 
+          latitude: currentLocation.latitude,
           longitude: currentLocation.longitude
         },
         icon: {
@@ -92,16 +92,16 @@ app.factory("Search",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "Dat
     },
     getMap : function() {
       var map = {
-        center: { 
-          latitude: 10.729984, 
-          longitude: 122.549298 
-        }, 
-        zoom: 12, 
+        center: {
+          latitude: 10.729984,
+          longitude: 122.549298
+        },
+        zoom: 12,
         options: {
           scrollwheel: false
-        }, 
-        bounds: {}, 
-        control:{}, 
+        },
+        bounds: {},
+        control:{},
         refresh: true,
         events : {
           tilesloaded: function (map) {
@@ -117,7 +117,7 @@ app.factory("Search",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "Dat
       var marker = {
         id: item.$id,
         coords: {
-          latitude:item.latitude, 
+          latitude:item.latitude,
           longitude:item.longitude
         }
       }
@@ -126,7 +126,7 @@ app.factory("Search",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "Dat
       //   markers.push({
       //     id: items[i].$id,
       //     coords: {
-      //       latitude:items[i].latitude, 
+      //       latitude:items[i].latitude,
       //       longitude:items[i].longitude
       //     }
       //   });
@@ -138,7 +138,7 @@ app.factory("Search",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "Dat
       var location = {
         id:0,
         coords:{
-          latitude: currentLocation.latitude, 
+          latitude: currentLocation.latitude,
           longitude: currentLocation.longitude
         },
         icon: {

@@ -1,4 +1,3 @@
-
 app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover", "$ionicModal", "Database", "$cordovaCamera", "Upload", "Auth",
   function($scope, User, $ionicLoading, $ionicPopover, $ionicModal, Database, $cordovaCamera, Upload, Auth) {
 
@@ -24,20 +23,20 @@ app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover
       if (firebaseUser) {
         // $scope.firebaseUser = User.auth();
         User.auth().$loaded().then(function(data) {
-          $scope.firebaseUser = data;
-          if(data.photoURL) {
-            $scope.photoURL = data.photoURL;
-          }
-        })
-        // if(firebaseUser.displayName) {
-        //   //it means all social logins
-        // }
+            $scope.firebaseUser = data;
+            if (data.photoURL) {
+              $scope.photoURL = data.photoURL;
+            }
+          })
+          // if(firebaseUser.displayName) {
+          //   //it means all social logins
+          // }
       }
     });
 
     $scope.openEditProfile = function() {
       $scope.currentUser = User.auth();
-    //   $scope.currentUser = User.auth();
+      //   $scope.currentUser = User.auth();
       $scope.editProfileModal.show();
       $scope.closePopover();
     };

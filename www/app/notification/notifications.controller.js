@@ -8,7 +8,6 @@ app.controller("NotificationsCtrl", ["$scope", "$firebaseArray", "User", "Restau
     }
 
     $scope.markRead = function(notif) {
-      console.log(notif.$ref());
       return Notification.markRead(notif);
     }
 

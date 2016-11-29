@@ -5,14 +5,17 @@
       <i class="icon ion-search placeholder-icon"></i>
       <input placeholder="Search..." type="search" ng-model="searchRestaurant" ng-model-options="{ debounce: 500 }" ng-change="allowMarkerChange(searchRestaurant, data.filter)">
     </label>
+
+  </ion-header-bar>
+
+  <ion-content class="padding has-subheader">
     <ion-radio ng-repeat="item in searchFilter" ng-value="item.value" ng-model="data.filter" style="width:150px">
       {{ item.text }}
     </ion-radio>
-  </ion-header-bar>
-  <ion-content class="padding has-subheader">
     <ion-list>
       <div>
-        <ui-gmap-google-map zoom='map.zoom' center="map.center" options='map.options' bounds='map.bounds' control='map.control' refresh=map.refresh events=map.events ng-cloak>          <ui-gmap-markers models="markers" coords="'coords'" icon="'icon'" events="markerEvents" doRebuildAll="true"></ui-gmap-markers>
+        <ui-gmap-google-map zoom='map.zoom' center="map.center" options='map.options' bounds='map.bounds' control='map.control' refresh=map.refresh events=map.events ng-cloak>
+          <ui-gmap-markers models="markers" coords="'coords'" icon="'icon'" events="markerEvents" doRebuildAll="true"></ui-gmap-markers>
           <ui-gmap-map-control position="top-right">
             <button class="button button-small button-balanced" ng-click="showNear()">{{mapText}}</button>
           </ui-gmap-map-control>

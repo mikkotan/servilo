@@ -1,30 +1,38 @@
 <ion-view view-title="SignUp">
   <ion-content class="padding">
     <ion-list>
-      <ion-item>
-        Sign Up
-      </ion-item>
       <div class="card">
         <ion-item id="form-input">
           <form ng-submit="createUser(user)" ng-hide="firebaseUser">
             <div class="list">
-              <ion-md-input-cus placeholder="Username" highlight-color="balanced" type="text" ng-model="user.email"></ion-md-input-cus>
+              <label class="item item-input item-floating-label">
+                <span class="input-label has-input">First Name</span>
+                <input type="text" placeholder="First Name" ng-model="user.firstName">
+              </label>
+              <label class="item item-input item-floating-label">
+                <span class="input-label has-input">Last Name</span>
+                <input type="text" placeholder="Last Name" ng-model="user.lastName">
+              </label>
+              <label class="item item-input item-floating-label">
+                <span class="input-label has-input">E-mail Address</span>
+                <input type="text" placeholder="E-mail Address" ng-model="user.email">
+              </label>
+              <label class="item item-input item-floating-label" ng-show="showPasswordIsChecked">
+                <span class="input-label has-input">Password</span>
+                <input type="text" placeholder="Password" ng-model="user.password" ng-focus="onPasswordFocus()" ng-blur="onPasswordBlur()" required>
+              </label>
+              <label class="item item-input item-floating-label" ng-show="!showPasswordIsChecked">
+                <span class="input-label has-input">Password</span>
+                <input type="password" placeholder="Password" ng-model="user.password" required>
+              </label>
+              <ion-checkbox ng-model="showPasswordIsChecked">Show password</ion-checkbox>
             </div>
             <div class="list">
-              <ion-md-input-cus placeholder="Password" highlight-color="energized" type="password" ng-model="user.password"></ion-md-input-cus>
-            </div>
-            <div class="list">
-              <ion-md-input-cus placeholder="First Name" highlight-color="balanced" type="text" ng-model="user.firstName"></ion-md-input-cus>
-            </div>
-            <div class="list">
-              <ion-md-input-cus placeholder="Last Name" highlight-color="balanced" type="text" ng-model="user.lastName"></ion-md-input-cus>
-            </div>
-            <div class="padding">
-              <button type="submit" class="button button-block button-positive">signup</button>
+              <button type="submit" class="button button-block button-energized">Signup</button>
             </div>
           </form>
         </ion-item>
-      </div>  
+      </div>
     </ion-list>
   </ion-content>
 </ion-view>

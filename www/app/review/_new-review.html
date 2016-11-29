@@ -1,26 +1,31 @@
-<div class="modal">
+<ion-modal-view view-title="New Review">
   <ion-header-bar class="bar bar-header bar-assertive">
     <h1 class="title">New Review</h1>
     <button class="button button-clear button-primary" ng-click="reviewModal.hide()"><i class="icon ion-ios-close"></i></button>
   </ion-header-bar>
-  <ion-content>
+  <ion-content class="padding">
     <form ng-submit="addReview(review)">
-      <a class="button button-block button-balanced" ng-click="selImages()" >
-        Select Images
-      </a>
       <div class="list">
-        <label class="item item-input">
-          <textarea placeholder="Write review here . . . " ng-model="review.content"></textarea>
+        <a class="button button-block button-balanced" ng-click="selImages()">
+                    Add Images From Gallery
+                  </a>
+        <label class="item item-input item-floating-label">
+          <span class="input-label has-input">Write review here . . . </span>
+          <textarea type="text" placeholder="Write review here . . . " ng-model="review.content" rows="6" required></textarea>
         </label>
-        Rate us:
-        <rating ng-model="review.rating" max="rating.max"></rating>
-      </div>
-      <div class="padding">
-        <button type="submit" class="button button-block button-positive">Save</button>
+        <label class="item">
+          Rate us:
+          <br>
+          <rating ng-model="review.rating" max="rating.max"></rating>
+
+        </label>
+        <div class="padding row">
+          <button type="submit" class="button button-block button-positive">Save</button>
+        </div>
       </div>
     </form>
     <p ng-repeat="img in images track by $index">
       <img ng-src="{{img}}" style="max-width:200px" />
     </p>
   </ion-content>
-</div>
+</ion-modal-view>
