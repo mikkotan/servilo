@@ -1,5 +1,5 @@
-app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserFactory", "Database","$ionicLoading",
-  function($firebaseObject ,$firebaseAuth, $firebaseArray , UserFactory, Database,$ionicLoading){
+app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserFactory", "Database","$ionicLoading", "$ionicPopup",
+  function($firebaseObject ,$firebaseAuth, $firebaseArray , UserFactory, Database,$ionicLoading, $ionicPopup){
 
   var rootRef = firebase.database().ref();
   var users = rootRef.child("users");
@@ -8,6 +8,7 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
   var notificationsRef = Database.notificationsReference();
   var ordersRef = Database.ordersReference();
   var reservationsRef = Database.reservationsReference();
+
 
   return {
     auth : function() {
@@ -40,6 +41,52 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
     getAuthReservations : function() {
       console.log('Getting auth reservations');
       return $firebaseArray(reservationsRef.orderByChild('user_id').equalTo(firebase.auth().currentUser.uid));
+    },
+    getAuthFavorites : function() {
+      console.log('Getting Auth Favorites');
+      var authId = firebase.auth().currentUser.uid;
+      return $firebaseArray(Database.userFavoritesReference().child(authId));
+    },
+    addToFavorites : function(restaurant) {
+      var authId = firebase.auth().currentUser.uid;
+      $ionicPopup.confirm({
+        title: 'Add to Favorites',
+        template: "Add '" + restaurant.name + "' to favorites?"
+      })
+        .then((res) => {
+          if (res) {
+            Database.userFavoritesReference().child(authId).child(restaurant.$id).set(true);
+            this.hasFavored(restaurant.$id);
+          }
+          else {
+            console.log('Cancel add to favorites');
+          }
+        })
+    },
+    removeFromFavorites : function(restaurant) {
+      var authId = firebase.auth().currentUser.uid;
+      console.log(restaurant.restaurant.$id);
+      console.log(restaurant.name);
+      $ionicPopup.confirm({
+        title: 'Remove from Favorites',
+        template: "Remove '" + restaurant.name + "' from favorites?"
+      })
+        .then((res) => {
+          if (res) {
+            Database.userFavoritesReference().child(authId).child(restaurant.restaurant.$id).set(null);
+          }
+          else {
+            console.log('Cancel remove from favorites');
+          }
+        })
+    },
+    hasFavored : function(restaurantId) {
+      var authId = firebase.auth().currentUser.uid;
+      return Database.userFavoritesReference().child(authId).child(restaurantId).once('value')
+        .then((snapshot) => {
+          console.log('hasFavored from User.service : '+ (snapshot.val() !== null))
+          return (snapshot.val() !== null)
+        })
     },
     getUserFullname : function(id){
       return  usersObj.$getRecord(id).firstName + " " + usersObj.$getRecord(id).lastName;

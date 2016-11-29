@@ -22,6 +22,27 @@
           </div>
         </ion-item>
       </ion-list>
+      <div class="list">
+        <div class="item item-divider">
+          Favorites
+        </div>
+        <ion-list>
+          <ion-item ng-repeat="restaurant in userFavorites">
+            <p>
+              {{restaurant.name}}
+            </p>
+            <ion-option-button class="button-royal" ng-click="remove(restaurant)">
+              Delete
+            </ion-option-button>
+
+          </ion-item>
+        </ion-list>
+
+        <!-- <a class="item" href="#" ng-repeat="restaurant in userFavorites">
+          {{restaurant.name}}
+        </a> -->
+      </div>
+
     </div>
   </ion-content>
 </ion-view>

@@ -29,7 +29,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
       templateUrl: "templates/tabs.html"
     })
     .state('tabs.home', {
-      url: "/home",
+      url: "/tab/home",
       views: {
         'home-tab': {
           templateUrl: "app/home/_home.html",
@@ -298,7 +298,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
           templateUrl: "app/reservation/_my-reservations.html",
           controller: "MyReservationsCtrl",
           resolve: {
-            reservations: function(User) {
+            "reservations": function(User) {
               return User.getAuthReservations().$loaded();
             }
           }

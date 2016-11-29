@@ -19,9 +19,6 @@
           <a class="button button-small button-calm" ui-sref="tabs.viewRestaurantMenus({restaurantId:restaurant.$id})">View Menus</a>
           <a class="button button-small button-calm" ui-sref="tabs.addMenu({restaurantId:restaurant.$id})">Add menu</a>
           <a class="button button-small button-calm" ng-click="showAddCategoryModal(restaurant.$id)">Add Category</a>
-          <ion-checkbox ng-repeat="service in restaurant.services" ng-model="service.status" ng-change="changeServiceStatus(restaurant,service)">
-            {{service.name}}
-          </ion-checkbox>
 
         </p>
         <ion-option-button class="button-royal" ng-click="displayRestaurants.$remove(restaurant)">

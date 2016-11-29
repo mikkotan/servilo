@@ -1,4 +1,3 @@
-
 app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate",  "Restaurant", "$cordovaCamera", "CordovaGeolocation", "Database", "Upload",
   function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation, Database, Upload) {
 
@@ -85,20 +84,6 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
   $scope.addRestaurant = function(restaurant){
     $scope.pendingRestaurants.$add({
       name: restaurant.name.toLowerCase(),
-      services : {
-        online : {
-          name : "online",
-          status : false
-        },
-        reserve : {
-          name : "reserve",
-          status : false
-        },
-        cater : {
-          name : "cater",
-          status : false
-        }
-      },
       facilities : restaurant.facilities,
       location: restaurant.location,
       latitude: $scope.marker.coords.latitude,
@@ -262,13 +247,15 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
     $scope.restaurantEditModal.hide();
   }
 
-  $scope.newRestaurant = function() {
-    $scope.restaurantModal.show();
-    $scope.modalControl.refresh({
-      latitude: 10.73016704689235,
-      longitude: 122.54616022109985
-    });
-  };
+  // $scope.newRestaurant = function() {
+  //   $scope.restaurantModal.show();
+  //   $scope.modalControl.refresh({
+  //     latitude: 10.73016704689235,
+  //     longitude: 122.54616022109985
+  //   });
+  // };
+
+
 
   $scope.approveRestaurant = function(restaurant) {
     $scope.pendingRestaurants.$remove(restaurant)
