@@ -1,6 +1,6 @@
 app.controller("ViewRestaurantLocation", ["$scope", "$state", "$firebaseArray", "$firebaseObject", "Database", "$ionicLoading", "$ionicModal", "$ionicPopup", "CordovaGeolocation", "$stateParams", "Restaurant", "User", "Review", "Reservation", "$ionicLoading",
   function($scope, $state, $firebaseArray, $firebaseObject, Database, $ionicLoading, $ionicModal, $ionicPopup, CordovaGeolocation, $stateParams, Restaurant, User, Review, Reservation, $ionicLoading) {
-
+  $scope.modalControl ={};
   var id = $stateParams.restaurantId;
   // $scope.restaurant = Restaurant.get(id);
   $scope.mapDirection = [];
@@ -94,11 +94,6 @@ app.controller("ViewRestaurantLocation", ["$scope", "$state", "$firebaseArray", 
       }
       $scope.restaurantMarkers[0].icon = new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_bubble_icon_texts_big&chld=restaurant|edge_bc|FFBB00|000000|' +
         restaurant.name + '|Distance: ' + distance + 'km');
-        // if(mode == "DRIVING"){
-        //     $scope.drivingD = distance;
-        // }else{
-        //   $scope.walkingD = distance;
-        // };
       $scope.$apply();
     });
   };
@@ -145,4 +140,17 @@ app.controller("ViewRestaurantLocation", ["$scope", "$state", "$firebaseArray", 
     });
   };
 
+  $ionicModal.fromTemplateUrl('app/restaurant/_view-map-restaurant-location.html', function(mapModal) {
+    $scope.mapModal = mapModal;
+  }, {
+    scope: $scope
+  });
+
+  $scope.openMapModal = function(restaurant){
+    $scope.mapModal.show();
+    $scope.modalControl.refresh({
+      latitude: restaurant.latitude,
+      longitude: restaurant.longitude
+    });
+  }
 }])

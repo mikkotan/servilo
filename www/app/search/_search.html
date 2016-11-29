@@ -13,17 +13,6 @@
       {{ item.text }}
     </ion-radio>
     <ion-list>
-
-      <!-- Loading state -->
-      <div ng-if="loading">
-        LOADING BAYBEH
-      </div>
-
-      <!-- Loaded state -->
-      <div ng-if="!loading">
-        DONE LOADING BAYBEH
-      </div>
-
       <div>
         <ui-gmap-google-map zoom='map.zoom' center="map.center" options='map.options' bounds='map.bounds' control='map.control' refresh=map.refresh events=map.events ng-cloak>
           <ui-gmap-markers models="markers" coords="'coords'" icon="'icon'" events="markerEvents" doRebuildAll="true"></ui-gmap-markers>
@@ -33,11 +22,12 @@
         </ui-gmap-google-map>
       </div>
       <h3>Results</h3>
+      <ion-spinner ng-show="loading" icon="lines"></ion-spinner>
       <div class="card padding" ng-repeat="restaurant in (filteredItems = restaurants)">
         <div class="item item-thumbnail-left">
           <img class="img-thumbnail" ng-if="restaurant.photoURL" ng-src="{{restaurant.photoURL}}" />
           <img ng-if="!restaurant.photoURL" ng-src="img/wow.jpg">
-          <h3 ui-sref="tabs.viewRestaurant.main({restaurantId:restaurant.$id})">
+          <h3 ng-init="addMarkers(restaurant)" ui-sref="tabs.viewRestaurant.main({restaurantId:restaurant.$id})">
             <icon class="ion-spoon"></icon> {{restaurant.name}}
             <span style="color:green">
               <icon class="ion-android-star-outline"></icon> {{restaurant.secured_data.avgRate.toFixed(1)}}
@@ -54,7 +44,7 @@
           </button>
         </div>
       </div>
-      <div ng-cloak>{{addMarkers(filteredItems)}}</div>
+      <!-- <div ng-cloak>{{addMarkers(filteredItems)}}</div> -->
     </ion-list>
   </ion-content>
 </ion-view>

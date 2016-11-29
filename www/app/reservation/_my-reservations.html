@@ -6,7 +6,7 @@
     <ion-item ng-repeat="reservation in reservations | orderBy:'-details.timestamp'">
       <h4>Reference #{{reservation.details.timestamp}}</h4>
       <p>
-        Restaurant: {{reservation.restaurant.name}}
+        Restaurant: {{reservation.restaurant_name}}
       </p>
       <p>
         Pax: {{reservation.details.number_of_persons}}

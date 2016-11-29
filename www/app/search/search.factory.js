@@ -29,7 +29,27 @@ app.factory("Search",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "Dat
       return $firebaseObject(query);
     },
     getRestaurant : function() {
-      return $firebaseArray(restaurantsRef);
+      // return $firebaseArray(restaurantsRef);
+      return restaurantsRef;
+    },
+    getNear : function(id, restaurant) {
+      var marker = {
+        id: id,
+        coords: {
+          latitude: restaurant.latitude,
+          longitude: restaurant.longitude
+        }
+      }
+      var currentLocation = CordovaGeolocation.get();
+      var point1 = new google.maps.LatLng(marker.coords.latitude, marker.coords.longitude);
+      var point2 = new google.maps.LatLng(currentLocation.latitude, currentLocation.longitude);
+      if(calculateDistance(point1, point2) <= 1) {
+        restaurant["$id"] = id;
+        return {
+          marker: marker,
+          restaurant: restaurant
+        };
+      }
     },
     getNearestRestaurants : function(restaurants) {
       var currentLocation = CordovaGeolocation.get();
@@ -39,7 +59,7 @@ app.factory("Search",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "Dat
         markers.push({
           id: restaurants[i].$id,
           coords: {
-            latitude:restaurants[i].latitude, 
+            latitude:restaurants[i].latitude,
             longitude:restaurants[i].longitude
           },
           data: restaurants[i]
@@ -60,7 +80,7 @@ app.factory("Search",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "Dat
       markers = tempMarkers;
       markers.push({id:0,
         coords:{
-          latitude: currentLocation.latitude, 
+          latitude: currentLocation.latitude,
           longitude: currentLocation.longitude
         },
         icon: {
@@ -70,18 +90,63 @@ app.factory("Search",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "Dat
       });
       return markers;
     },
-    getMarkers : function(items) {
-      var markers = [];
-      for (var i = 0; i < items.length; i++) {
-        markers.push({
-          id: items[i].$id,
-          coords: {
-            latitude:items[i].latitude, 
-            longitude:items[i].longitude
+    getMap : function() {
+      var map = {
+        center: {
+          latitude: 10.729984,
+          longitude: 122.549298
+        },
+        zoom: 12,
+        options: {
+          scrollwheel: false
+        },
+        bounds: {},
+        control:{},
+        refresh: true,
+        events : {
+          tilesloaded: function (map) {
+            // $scope.$apply(function () {
+              google.maps.event.trigger(map, "resize");
+            // });
           }
-        });
+        }
+      };
+      return map;
+    },
+    getMarker : function(item) {
+      var marker = {
+        id: item.$id,
+        coords: {
+          latitude:item.latitude,
+          longitude:item.longitude
+        }
       }
-      return markers;
+      // var markers = [];
+      // for (var i = 0; i < items.length; i++) {
+      //   markers.push({
+      //     id: items[i].$id,
+      //     coords: {
+      //       latitude:items[i].latitude,
+      //       longitude:items[i].longitude
+      //     }
+      //   });
+      // }
+      return marker;
+    },
+    getYouAreHere : function() {
+      var currentLocation = CordovaGeolocation.get();
+      var location = {
+        id:0,
+        coords:{
+          latitude: currentLocation.latitude,
+          longitude: currentLocation.longitude
+        },
+        icon: {
+          url: 'http://chart.apis.google.com/chart?chst=d_bubble_icon_texts_big&chld=glyphish_user|edge_bc|FFBB00|000000|You+Are+Here',
+          scaledSize: new google.maps.Size(83, 30)
+        }
+      };
+      return location;
     }
   }
 }])
