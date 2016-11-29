@@ -76,11 +76,13 @@ app.controller("ViewRestaurantMenus", ["$scope", "$state", "restaurantMenus", "r
             CartData.add(menuCart);
             ionicToast.show('Added ' + $scope.menuName + ' to cart', 'bottom', false, 2500);
             closeModal();
+            menu.quantity = 0;
           } else {
             var cartMenu = CartData.get()[menuOrder];
             cartMenu.quantity = cartMenu.quantity + menu.quantity;
             ionicToast.show('Added ' + $scope.menuName + ' to cart', 'bottom', false, 2500);
             closeModal();
+            menu.quantity = 0;
           }
         } else {
           $scope.error = true;

@@ -12,7 +12,7 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
       var order = $scope.cartData.indexOf(orderMenu);
       $scope.cartData[order].quantity += 1;
 
-  };
+    };
     $scope.showMap = function() {
       var mapPopup = $ionicPopup.confirm({
         title: 'Choose Location',
