@@ -6,6 +6,9 @@
       <p ng-show="order.order_details.status">
         Status: {{order.order_details.status}}
       </p>
+      <p ng-show="order.order_details.status_time">
+        time: {{order.order_details.status_time | timeAgo }}
+      </p>
       <button class="button button-small button-outline button-assertive" ng-click="cancel(order)" ng-show="!(order.order_details.status === 'cancelled' || order.order_details.status === 'completed')">
         Cancel
       </button>

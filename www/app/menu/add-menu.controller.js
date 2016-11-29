@@ -1,36 +1,27 @@
-app.controller("AddMenuCtrl",["$scope","$stateParams","menus","$firebaseArray","$firebaseObject","$state","restaurantId","$cordovaCamera","Database", "Restaurant",
-  function($scope ,$stateParams,menus,$firebaseArray,$firebaseObject,$state,restaurantId, $cordovaCamera, Database, Restaurant){
+app.controller("AddMenuCtrl",["$scope", "restaurantId", "$cordovaCamera", "Restaurant", "Menu", "Upload",
+  function($scope, restaurantId, $cordovaCamera, Restaurant, Menu, Upload){
 
-    $scope.menus = menus;
     $scope.restaurant = Restaurant.get(restaurantId);
-    $scope.categories = $firebaseArray(Database.restaurantsReference().child(restaurantId).child('menu_categories'));
-
-    //WET CODE restaurants.controller.js
-    $scope.imageURL = "";
+    $scope.categories = Menu.getMenuCategories(restaurantId);
+    $scope.photoURL = "";
 
     $scope.upload = function(index) {
-      var source = "";
-      switch(index) {
-        case 1:
-          source = Camera.PictureSourceType.CAMERA;
-          break;
-        case 2:
-          source = Camera.PictureSourceType.PHOTOLIBRARY;
-          break;
-      }
-      var options = {
-        quality : 75,
-        destinationType : Camera.DestinationType.DATA_URL,
-        sourceType : source,
-        allowEdit : true,
-        encodingType: Camera.EncodingType.JPEG,
-        popoverOptions: CameraPopoverOptions,
-        targetWidth: 500,
-        targetHeight: 500,
-        saveToPhotoAlbum: false
-      };
+      //disable save button
+      var source = Upload.getSource(index);
+      var options = Upload.getOptions(source);
       $cordovaCamera.getPicture(options).then(function(imageData) {
-        $scope.imageURL = imageData;
+        var menuRef = Upload.menu(imageData);
+        $scope.progress = 1;
+        menuRef.on('state_changed', function(snapshot){
+          $scope.progress = Upload.getProgress(snapshot);
+          console.log('Upload is ' + $scope.progress + '% done');
+        }, function(error) {
+          console.log("error in uploading." + error);
+        }, function() {
+          //enable save button
+          $scope.photoURL = menuRef.snapshot.downloadURL;
+          $scope.$apply();
+        });
 
         }, function(error) {
           console.error(error);
@@ -39,22 +30,21 @@ app.controller("AddMenuCtrl",["$scope","$stateParams","menus","$firebaseArray","
 
     $scope.addMenu = function(menu) {
       var categoryId = menu.category;
-      $scope.menus.$add({
+      var newKey = Menu.generateKey();
+      Menu.menusRef(newKey).set({
         name : menu.name.toLowerCase(),
         price : menu.price,
         restaurant_id : restaurantId,
         category_id : categoryId,
         availability : false,
         prevPrice : menu.price,
-        image : $scope.imageURL,
+        photoURL : $scope.photoURL,
         timestamp : firebase.database.ServerValue.TIMESTAMP
       })
-      .then(function(menuObj) {
-        var restaurantRef = Database.restaurantsReference().child(restaurantId);
-        restaurantRef.child('menus').child(menuObj.key).set(true);
-        restaurantRef.child('menu_categories').child(categoryId).child('menus').child(menuObj.key).set(true);
+      .then(function() {
+        Menu.getRestaurantRef(restaurantId, categoryId, newKey);
       })
-      $state.go('tabs.restaurant');
+      // $state.go('tabs.restaurant');
   }
 
 }]);

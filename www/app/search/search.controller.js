@@ -1,66 +1,30 @@
 app.controller('SearchTabCtrl',
-  ["$scope","Auth", "$state", "User", "ionicMaterialInk", "$ionicPopup", "CordovaGeolocation", "$ionicLoading", "Search",
-    function($scope, Auth, $state, User, ionicMaterialInk, $ionicPopup, CordovaGeolocation, $ionicLoading, Search) {
+  ["$scope", "$state", "User", "ionicMaterialInk", "$ionicPopup", "CordovaGeolocation", "$ionicLoading", "Search", "currentGeoLocation",
+    function($scope, $state, User, ionicMaterialInk, $ionicPopup, CordovaGeolocation, $ionicLoading, Search, currentGeoLocation) {
 
   console.log('SearchTabCtrl');
-  // $scope.usersRefObj = Database.users(); //new
-  // Database.restaurants().$loaded().then(function() {
-  //   console.log($scope.restaurants.length);
-  // }); //try
-
-  $scope.restaurantOrder = "name";
-
-  $scope.restaurants = []; //new
-  // $scope.getAvg = Restaurant.getAveragePrice;
-  // $scope.getAvgRating = Restaurant.getAverageRating;
-  // $scope.getReviewer = Review.reviewer;
-  // $scope.openRestaurant = Restaurant.getRestaurantOpenStatus;
-  // $scope.RestaurantService = Restaurant;
-
-  Auth.$onAuthStateChanged(function(firebaseUser) {
-    if(firebaseUser) {
-      User.setOnline(firebaseUser.uid);
-      User.isAdmin(firebaseUser.uid).then(function(val){console.log("ADMIN: " + val)})
-      User.isUser(firebaseUser.uid).then(function(val){console.log("USER: " + val)})
-      User.isRestaurantOwner(firebaseUser.uid).then(function(val){console.log("RESTAURANT_OWNER: " + val)})
-
-    }
-  })
+  $scope.restaurants = [];
+  $scope.markers = [];
 
   ionicMaterialInk.displayEffect();
+  $scope.map = Search.getMap();
+  var isMarkerCanChange = true;
+  $scope.mapText = "Nearest restaurant in 1km";
 
   $scope.rating = {
     rate : 0,
     max: 5
   }
 
-  $scope.markers = [];
+  // Auth.$onAuthStateChanged(function(firebaseUser) {
+  //   if(firebaseUser) {
+  //     User.setOnline(firebaseUser.uid);
+  //   }
+  // })
 
-  var isMarkerCanChange = true;
-  $scope.map =  {center: { latitude: 10.729984, longitude: 122.549298 }, zoom: 12, options: {scrollwheel: false}, bounds: {}, control:{}, refresh: true,
-    events : {
-      tilesloaded: function (map) {
-        $scope.$apply(function () {
-          google.maps.event.trigger(map, "resize");
-        });
-      }
-    }
-  };
+  $scope.addMarkers = function(item){
+    $scope.markers.push(Search.getMarker(item));
 
-  $scope.currentLocation = CordovaGeolocation.get();
-  $scope.addMarkers = function(items){
-    if(isMarkerCanChange){
-      $scope.markers.length = 0;
-      for (var i = 0; i < items.length; i++) {
-        $scope.markers.push({
-          id: items[i].$id,
-          coords: {
-            latitude:items[i].latitude,
-            longitude:items[i].longitude
-          }
-        });
-      }
-    }
   };
 
   $scope.markerEvents = {
@@ -70,24 +34,37 @@ app.controller('SearchTabCtrl',
       }
     }
   };
-  $scope.mapText = "Nearest restaurant in 1km";
-  $scope.showNear =function(){
-    if($scope.mapText == "Nearest restaurant in 1km"){
+
+  $scope.showNear = function() {
+    if($scope.mapText == "Nearest restaurant in 1km") {
       $scope.mapText = "Back to Default";
-      $scope.currentLocation = CordovaGeolocation.get();
+      var currentLocation = CordovaGeolocation.get();
+      $scope.markers.push(Search.getYouAreHere());
       $scope.loading = true;
-      Search.getRestaurant().$loaded().then(function(result) {
-        $scope.loading = false;
-        $scope.markers = Search.getNearestRestaurants(result);
-        // $scope.restaurants = $scope.markers;
-        if($scope.markers.length == 1) {
-          alert("There are no restaruant nearby!!");
+      // $ionicLoading.show({
+      //   template: '<p>Searching. . .</p><ion-spinner icon="lines"></ion-spinner>'
+      // });
+      Search.getRestaurant().on("child_added", function(snapshot) {
+        if(Search.getNear(snapshot.key ,snapshot.val())) {
+          $scope.loading = false;
+          var getNear = Search.getNear(snapshot.key, snapshot.val());
+          $scope.markers.push(getNear.marker);
+          $scope.restaurants.push(getNear.restaurant);
         }
       })
+
+      // Search.getRestaurant().$loaded().then(function(result) {
+      //   // $ionicLoading.hide();
+      //   $scope.markers = Search.getNearestRestaurants(result);
+      //   // $scope.restaurants = $scope.markers;
+      //   if($scope.markers.length == 1) {
+      //     alert("There are no restaruant nearby!!");
+      //   }
+      // })
       $scope.map.zoom = 14;
-      $scope.map.center ={
-        latitude: $scope.currentLocation.latitude,
-        longitude:$scope.currentLocation.longitude
+      $scope.map.center = {
+        latitude: currentLocation.latitude,
+        longitude: currentLocation.longitude
       };
       isMarkerCanChange = false;
     }
@@ -97,7 +74,9 @@ app.controller('SearchTabCtrl',
     }
   };
 
-  $scope.allowMarkerChange = function(input, filter){
+  $scope.allowMarkerChange = function(inputText, filter){
+    var input = inputText.toLowerCase();
+    $scope.markers.length = 0;
     if(input !== '') {
       if(filter == 'name') {
         Search.searchName(input).$loaded().then(function(data) {

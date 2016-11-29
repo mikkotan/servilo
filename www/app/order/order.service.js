@@ -7,7 +7,7 @@ app.factory("Order",["$firebaseAuth","$firebaseArray","$firebaseObject", "Databa
   var restaurant = Database.restaurantsReference();
 
 
-  return {
+  Order = {
     all : function() {
       return $firebaseArray(orders);
     },
@@ -19,7 +19,6 @@ app.factory("Order",["$firebaseAuth","$firebaseArray","$firebaseObject", "Databa
       return $firebaseObject(Database.ordersReference().child(orderId));
     },
     cancel : function(order) {
-      console.log('CANCEL CLICKED');
       var confirm = $ionicPopup.confirm({
         title: 'Cancel Order',
         template: 'Cancel your Order #' + order.order_details.timestamp + '?',
@@ -28,7 +27,9 @@ app.factory("Order",["$firebaseAuth","$firebaseArray","$firebaseObject", "Databa
         if (res) {
           console.log('ress true');
           var orderRef = Database.ordersReference().child(order.$id);
-          orderRef.child('order_details').child('status').set('cancelled');
+          var orderDetailsRef = orderRef.child('order_details');
+          orderDetailsRef.child('status').set('cancelled');
+          orderDetailsRef.child('status_time').set(firebase.database.ServerValue.TIMESTAMP);
           orderRef.child('orderStatus').set(null);
           Restaurant.get(order.restaurant_id)
             .then((restaurant) => {
@@ -54,6 +55,73 @@ app.factory("Order",["$firebaseAuth","$firebaseArray","$firebaseObject", "Databa
           console.log('Cancel failed');
         }
       })
+    },
+    updateStatus : function(orderId, key, val) {
+      console.log('updating status from Order.service.js');
+      var orderRef = Database.ordersReference().child(orderId).child('orderStatus').child(key).set(val);
+      var orderStatusRef = Database.ordersReference().child(orderId).child('order_details');
+      var ref = Database.ordersReference().child(orderId).child('orderStatus');
+      this.findOne(orderId).$loaded()
+        .then((order) => {
+          var confirmDelete = $ionicPopup.confirm({
+            title: "Update Order",
+            template: "Update Order #" + order.order_details.timestamp + "?"
+          })
+          .then((res) => {
+            if (res) {
+              if (key === 'confirmed' && val === true) {
+                ref.child('done').set(false);
+                ref.child('confirmed').set(null);
+              }
+              else if (key === 'done' && val === true) {
+                ref.child('onDelivery').set(false);
+                ref.child('done').set(null);
+              }
+              else if (key === 'onDelivery' && val === true) {
+                ref.child('delivered').set(false);
+                ref.child('onDelivery').set(null);
+              }
+              else if (key === 'delivered' && val === true) {
+                ref.set(null);
+                key = 'completed';
+              }
+              else if (key === 'cancelled' && val === true) {
+                ref.set(null);
+              }
+
+              if (val === true) {
+                orderStatusRef.child('status').set(key);
+                orderStatusRef.child('status_time').set(firebase.database.ServerValue.TIMESTAMP);
+              }
+
+              Database.notifications().$add({
+                sender_id : User.auth().$id,
+                receiver_id : order.customer_id,
+                restaurant_id : order.restaurant_id,
+                type : 'order_status',
+                status : key,
+                order_no: order.order_details.timestamp,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+              })
+                .then(() => {
+                  console.log("success");
+                })
+                .catch((err) => {
+                  console.log(err);
+                })
+              console.log('Order Reference :' + orderRef);
+            }
+            else {
+              console.log('Update order cancel');
+              // $scope.order.orderStatus[key] = false;
+              return false;
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+        })
     }
   }
+  return Order;
 }]);

@@ -8,22 +8,24 @@
       <div class="card">
         <ion-item id="form-input">
           <form ng-submit="editProfile(currentUser)">
-            <div class="list">
-              <ion-md-input-cus placeholder="Display Name" highlight-color="balanced" type="text" ng-model="currentUser.displayName"></ion-md-input-cus>
-            </div>
-            <div class="list">
-              <ion-md-input-cus placeholder="First Name" highlight-color="balanced" type="text" ng-model="currentUser.firstName"></ion-md-input-cus>
-            </div>
-            <div class="list">
-              <ion-md-input-cus placeholder="Last Name" highlight-color="balanced" type="text" ng-model="currentUser.lastName"></ion-md-input-cus>
-            </div>
-            <div class="list">
-              <ion-md-input-cus placeholder="Description" highlight-color="balanced" type="text" ng-model="currentUser.description"></ion-md-input-cus>
-            </div>
+            <label class="item item-input item-floating-label">
+              <span class="input-label has-input">Display Name</span>
+              <input type="text" placeholder="Display Name" ng-model="currentUser.displayName">
+            </label>
+            <label class="item item-input item-floating-label">
+              <span class="input-label has-input">First Name</span>
+              <input type="text" placeholder="First Name" ng-model="currentUser.firstName">
+            </label>
+            <label class="item item-input item-floating-label">
+              <span class="input-label has-input">Last Name</span>
+              <input type="text" placeholder="Last Name" ng-model="currentUser.lastName">
+            </label>
+            <label class="item item-input item-floating-label">
+              <span class="input-label has-input">Description</span>
+              <input type="text" placeholder="Description" ng-model="currentUser.description">
+            </label>
             <div class="row">
-              <div class="col text-right">
-                <button class="button button-assertive">Submit</button>
-              </div>
+              <button class="button button-block button-balanced ink">Submit</button>
             </div>
           </form>
         </ion-item>

@@ -1,42 +1,96 @@
-<ion-view view-title="{{restaurant.name}} - Add Menu">
+<!-- 
+<ion-modal-view view-title="{{restaurant.name}} - Add Menu">
+  <ion-header-bar class="bar bar-header bar-assertive">
+    <h1 class="title">Add Menu</h1>
+    <button class="button button-clear button-primary" ng-click="addMenuModal.hide()"><i class="icon ion-ios-close"></i></button>
+  </ion-header-bar>
   <ion-content class="padding">
-      <!-- <a class="button icon ion-home" href="#/tab/home">Restaurant</a> -->
-      <ion-list>
-        <ion-item >
+    <ion-list>
+      <div class="card">
+        <ion-item id="form-input">
           <form ng-submit="addMenu(menu)">
-            <a class="button button-icon icon ion-camera" ng-click="upload(1)">CAM</a>
-            <a class="button button-icon icon ion-camera" ng-click="upload(2)">ALBUM</a>
-            <div>
-              <img ng-src="data:image/jpeg;base64,{{imageURL}}" width="40%"/>
+            <label class="item item-input item-floating-label">
+              <span class="input-label has-input">Name</span>
+              <input type="text" placeholder="Name" ng-model="menu.name">
+            </label>
+            <label class="item item-input item-floating-label">
+              <span class="input-label has-input">Price</span>
+              <input type="number" placeholder="Price" ng-model="menu.price">
+            </label>
+            <label class="item item-input item-select">
+              <div class="input-label">
+                Category
+              </div>
+              <select ng-model="menu.category">
+                <option ng-repeat="category in categories" value="{{category.$id}}">
+                  {{category.name}}
+                </option>
+              </select>
+            </label>
+
+            <div class="row">
+              <div class="col">
+                <a class="button button-block button-positive icon ion-camera" ng-click="upload(1)"></a>
+              </div>
+              <div class="col">
+                <a class="button button-block button-calm icon ion-image" ng-click="upload(2)"></a>
+              </div>
             </div>
-            <div class="list">
-              <label class="item item-input">
-                Name:<input type="text" ng-model="menu.name">
-              </label>
-              <label class="item item-input">
-                Price:<input type="number" ng-model="menu.price">
-              </label>
-              {{menu.category}}
-              <label class="item item-input item-select">
-                <div class="input-label">
-                  Category
-                </div>
-                <select ng-model="menu.category">
-                  <option ng-repeat="category in categories" value="{{category.$id}}">
-                    {{category.name}}
-                  </option>
-                </select>
-              </label>
-            </div>
-            <div class="padding">
-              <button type="submit" class="button button-block button-positive">Add menu</button>
+            <img ng-src="data:image/jpeg;base64,{{imageURL}}" width="40%" />
+            <div class="row">
+              <button class="button button-block button-balanced ink">Submit</button>
             </div>
           </form>
         </ion-item>
+      </div>
+    </ion-list>
+  </ion-content>
+</ion-modal-view> -->
 
-        <ion-item>
-          <a class="button-calm" ui-sref="tabs.restaurant">back</a>
-        </ion-item>
-      </ion-list>
+
+<ion-view view-title="{{restaurant.name}} - Add Menu">
+  <ion-content class="padding">
+    <ion-list>
+      <ion-item>
+        <form ng-submit="addMenu(menu)">
+          <label class="item item-input item-floating-label">
+            <span class="input-label has-input">Name</span>
+            <input type="text" placeholder="Name" ng-model="menu.name">
+          </label>
+          <label class="item item-input item-floating-label">
+            <span class="input-label has-input">Price</span>
+            <input type="number" placeholder="Price" ng-model="menu.price">
+          </label>
+          <label class="item item-input item-select">
+            <div class="input-label">
+              Category
+            </div>
+            <select ng-model="menu.category">
+              <option ng-repeat="category in categories" value="{{category.$id}}">
+                {{category.name}}
+              </option>
+            </select>
+          </label>
+
+          <div class="row">
+            <div class="col">
+              <a class="button button-block button-positive icon ion-camera" ng-click="upload(1)"></a>
+            </div>
+            <div class="col">
+              <a class="button button-block button-calm icon ion-image" ng-click="upload(2)"></a>
+            </div>
+          </div>
+          <img ng-src="{{photoURL}}" width="40%" />
+          <progress ngshow="progress" value="{{progress}}" max="100"></progress>
+          <div class="row">
+            <button class="button button-block button-balanced ink">Submit</button>
+          </div>
+        </form>
+      </ion-item>
+
+      <ion-item>
+        <a class="button-calm" ui-sref="tabs.restaurant">back</a>
+      </ion-item>
+    </ion-list>
   </ion-content>
 </ion-view>

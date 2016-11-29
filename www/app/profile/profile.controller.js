@@ -1,4 +1,3 @@
-
 app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover", "$ionicModal", "Database", "$cordovaCamera", "Upload", "Auth",
   function($scope, User, $ionicLoading, $ionicPopover, $ionicModal, Database, $cordovaCamera, Upload, Auth) {
 
@@ -24,20 +23,20 @@ app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover
       if (firebaseUser) {
         // $scope.firebaseUser = User.auth();
         User.auth().$loaded().then(function(data) {
-          $scope.firebaseUser = data;
-          if(data.photoURL) {
-            $scope.photoURL = data.photoURL;
-          }
-        })
-        // if(firebaseUser.displayName) {
-        //   //it means all social logins
-        // }
+            $scope.firebaseUser = data;
+            if (data.photoURL) {
+              $scope.photoURL = data.photoURL;
+            }
+          })
+          // if(firebaseUser.displayName) {
+          //   //it means all social logins
+          // }
       }
     });
 
     $scope.openEditProfile = function() {
       $scope.currentUser = User.auth();
-    //   $scope.currentUser = User.auth();
+      //   $scope.currentUser = User.auth();
       $scope.editProfileModal.show();
       $scope.closePopover();
     };
@@ -60,31 +59,13 @@ app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover
     };
 
     $scope.upload = function(index) {
-      var source = "";
-      switch (index) {
-        case 1:
-          source = Camera.PictureSourceType.CAMERA;
-          break;
-        case 2:
-          source = Camera.PictureSourceType.PHOTOLIBRARY;
-          break;
-      }
-      var options = {
-        quality: 75,
-        destinationType: Camera.DestinationType.DATA_URL,
-        sourceType: source,
-        allowEdit: true,
-        encodingType: Camera.EncodingType.JPEG,
-        popoverOptions: CameraPopoverOptions,
-        targetWidth: 500,
-        targetHeight: 500,
-        saveToPhotoAlbum: false
-      };
+      var source = Upload.getSource(index);
+      var options = Upload.getOptions(source);
       $cordovaCamera.getPicture(options).then(function(imageData) {
         var profileRef = Upload.profile(imageData);
         $scope.progress = 1;
         profileRef.on('state_changed', function(snapshot){
-        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        var progress = Upload.getProgress(snapshot);
         console.log('Upload is ' + progress + '% done');
         $scope.progress = progress;
       }, function(error) {

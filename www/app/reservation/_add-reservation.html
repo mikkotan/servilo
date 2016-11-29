@@ -6,12 +6,13 @@
   <ion-content>
     <form ng-submit="bookReservation(reservation)">
       <div class="list">
-        <label class="item item-input">
-          How many person/s: <input type="number" ng-model="reservation.number_of_persons">
+        <label class="item item-input item-floating-label">
+          <span class="input-label has-input">No. of seats to reserve</span>
+          <input type="number" placeholder="No. of seats to reserve" ng-model="reservation.number_of_persons">
         </label>
         <div class="item item-icon-left" ion-datetime-picker am-pm ng-model="reservation.datetime" only-valid="{'after' : 'today', 'inclusive': 'true'}">
-          <i class="icon ion-ios-barcode-outline positive"></i>
-          Date and Time of Reservation
+          <i class="icon ion-ios-barcode-outline positive"></i> Date and Time of Reservation
+          <br>
           <strong>{{reservation.datetime| date: "MMM d, y h:mm a"}}</strong>
         </div>
       </div>
