@@ -1,30 +1,36 @@
-<div class="modal">
-    <ion-header-bar class="bar bar-header bar-assertive">
-      <h1 class="title">Order Form</h1>
-      <button class="button button-clear button-primary" ng-click="addToCartModal.hide()"><i class="icon ion-ios-close"></i></button>
-    </ion-header-bar>
-    <ion-content class="padding">
-        <!-- <a class="button icon ion-home" href="#/tab/home">Restaurant</a> -->
-      <ion-list>
-        <ion-item >
+<ion-modal-view view-title="Order Form">
+  <ion-header-bar class="bar bar-header bar-assertive">
+    <h1 class="title">Order Form</h1>
+    <button class="button button-clear button-primary" ng-click="addToCartModal.hide()"><i class="icon ion-ios-close"></i></button>
+  </ion-header-bar>
+  <ion-content class="padding">
+    <ion-list>
+      <div class="card">
+        <ion-item id="form-input">
           <form ng-submit="sendToCart(menu)">
-            <div ng-if="error" class="alert alert-danger">
-              {{errorMessage}}
-            </div>
-            <div class="list">
-              <label class="item item-input">
-                Name:{{menuName}}
-              </label>
-              <label class="item item-input">
-                Quantity:<input type="number" ng-model="menu.quantity">
-              </label>
-            </div>
-            <div class="padding">
-              <button type="submit" class="button button-block button-positive">Add to Cart</button>
+            <label class="item item-input item-floating-label">
+              <span class="input-label has-input">Menu Name</span>
+              <input type="text" placeholder="Menu Name" value="{{menuName}}" readonly>
+            </label>
+            <label class="item item-input item-floating-label">
+              <span class="input-label has-input">Price</span>
+              <input type="text" placeholder="Price" value="{{menuPrice}}" readonly>
+            </label>
+            <label class="item item-input item-floating-label">
+              <span class="input-label has-input">Quantity</span>
+              <input type="number" placeholder="Quantity" ng-model="menu.quantity">
+            </label>
+            <label class="item item-input item-floating-label">
+              <span class="input-label has-input">Subtotal</span>
+              <input type="number" placeholder="Subtotal" value={{menuPrice*menu.quantity}}>
+            </label>
+
+            <div class="row">
+              <button class="button button-block button-balanced ink">Add to Cart</button>
             </div>
           </form>
         </ion-item>
-          <a class="button-calm" ng-click="addToCartModal.hide()">back</a>
-      </ion-list>
-    </ion-content>
-</div>
+      </div>
+    </ion-list>
+  </ion-content>
+</ion-modal-view>

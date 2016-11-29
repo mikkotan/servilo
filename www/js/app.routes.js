@@ -39,9 +39,6 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
             currentAuth: function(Auth) {
               return Auth.$requireSignIn();
             },
-            // restaurants: function(Database) {
-            //   return Database.restaurants();
-            // }
           }
         }
       }
@@ -123,27 +120,6 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
         }
       }
     })
-    // .state('tabs.restaurantMenus', {
-    //   url: "/restaurantName/menus",
-    //   params : {
-    //     restaurantId : null
-    //   },
-    //   // url: "/restaurantName/menus/:restaurantId",
-    //   views: {
-    //     'restaurantmenus-tab' : {
-    //       templateUrl: "app/menu/_view-restaurant-menus-order.html",
-    //       controller: "ViewRestaurantMenuOrder",
-    //       resolve: {
-    //         restaurantMenus : function(Menu , $stateParams){
-    //             return Menu.getRestaurantMenus($stateParams.restaurantId).$loaded();
-    //         },
-    //         restaurantId : function($stateParams){
-    //           return $stateParams.restaurantId
-    //         }
-    //       }
-    //     }
-    //   }
-    // })
     .state('tabs.viewRestaurantMenus', {
       url: "/restaurant/menus/:restaurantId",
       views: {
@@ -165,9 +141,9 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
           templateUrl: "app/menu/_add-menu.html",
           controller: "AddMenuCtrl",
           resolve: {
-            menus: function(Menu) {
-              return Menu.all().$loaded();
-            },
+            // menus: function(Menu) {
+            //   return Menu.all().$loaded();
+            // },
             restaurantId: function($stateParams) {
               return $stateParams.restaurantId
             }
@@ -235,15 +211,6 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
         }
       }
     })
-    .state('tabs.signup', {
-      url: "/signup",
-      views: {
-        'signup-tab': {
-          templateUrl: "app/signup/_signup.html",
-          controller: "SignUpCtrl"
-        }
-      }
-    })
     .state('tabs.notifications', {
       url: "/notifications",
       views: {
@@ -257,11 +224,6 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
           }
         }
       }
-    })
-    .state('login', {
-      url: "/login",
-      templateUrl: "app/login/_login.html",
-      controller: "LoginCtrl"
     })
     .state('tabs.restaurant', {
       url: "/restaurant",
@@ -305,6 +267,11 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
         }
       }
     })
+    .state('login', {
+      url: "/login",
+      templateUrl: "app/login/_login.html",
+      controller: "LoginCtrl"
+    })
     .state('signup', {
       url: "/signup",
       templateUrl: "app/signup/_signup.html",
@@ -320,7 +287,5 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
       templateUrl: "app/profile/_edit-profile.html",
       controller: "ProfileCtrl"
     });
-
-
   $urlRouterProvider.otherwise("/tab/home");
 })

@@ -45,10 +45,12 @@ ul.rating li i {
   color: #ef473a; }
 
 .angular-google-map-container {
-  height: 375px; }
+  height: 375px;
+  width: 100%; }
 
 .angular-google-map {
-  height: 375px; }
+  height: 375px;
+  width: 100%; }
 
 .bar.bar-profile {
   height: 170px; }
@@ -164,6 +166,27 @@ ion-popover-view.fit ion-content {
 
 .platform-android ion-popover-view.fit {
   margin-top: 10px !important; }
+
+.custom-popup .popup {
+  width: 90% !important; }
+
+.delete-popup .popup-buttons .button-positive {
+  background-color: #ef473a !important; }
+
+.delete-popup .popup {
+  width: 90% !important; }
+
+.loader {
+  background: #f20d49 !important;
+  border-radius: 100px;
+  height: 20px; }
+  .loader p {
+    text-align: center;
+    color: white !important;
+    text-align: center; }
+
+.capitalize {
+  text-transform: capitalize; }
 
 /* Directives : MD Label
 ==================================*/

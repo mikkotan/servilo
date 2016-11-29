@@ -1,7 +1,7 @@
 app.factory('IonicPushService', function($ionicPush, User, Database, $cordovaPushV5) {
 
   var IonicPushService = {
-    registerDevice : function() {
+    registerDevice: function() {
       $ionicPush.register()
         .then((t) => {
           $ionicPush.saveToken(t)
@@ -10,12 +10,11 @@ app.factory('IonicPushService', function($ionicPush, User, Database, $cordovaPus
           console.log("Token saved: " + t.token)
         })
     },
-    getToken : function() {
-      // return localStorage.myPush
-      return $ionicPush.token.token
+    getToken: function() {
+      return localStorage.myPush
     },
-    registerToAuth : function() {
-      console.log("registering this token: "+localStorage.myPush);
+    registerToAuth: function() {
+      console.log("registering this token: " + localStorage.myPush);
       var tempToken = localStorage.myPush;
       // console.log("registering this token: "+$ionicPush.token.token);
       // var tempToken = $ionicPush.token.token;

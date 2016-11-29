@@ -1,46 +1,44 @@
-<div class="modal" ng-controller="CartCtrl">
+<ion-modal-view view-title="Cart" ng-controller="CartCtrl">
+  <ion-header-bar class="bar bar-header bar-assertive">
+    <h1 class="title">Cart</h1>
+    <button class="button button-clear button-primary" ng-click="hideCartModal()"><i class="icon ion-ios-close"></i></button>
+  </ion-header-bar>
   <ion-content class="padding">
-    <h3>Cart</h3>
-    <ion-list>
-      <ion-item ng-repeat="order in menus">
-        <p>
-          Name: {{order.menu.name}} <button class="button button-calm" ng-click="delete(order.menu)">delete</button>
-        </p>
-        <p>
-          Price: {{order.menu.price}}
-        </p>
-        <p>
-          Quantity: {{order.menu.quantity}}
-        </p>
-        <p>
-          Subtotal : {{order.subtotal}}
-        </p>
 
-        <p>
-        <button class="button button-calm" ng-click="add(order.menu)">+</button>
-        <button class="button button-calm" ng-click="minus(order.menu)">-</button>
-          </form>
-        </p>
+    <div class="card" ng-repeat="order in menus">
+      <div class="item item-text-wrap">
 
-      </ion-item>
-      <p>
-        Total : {{total}}
-      </p>
-      <p>
-        Address : <input type="text" required ng-trim="false" ng-model="location" size="40">
-      </p>
-      <div>
-        <ui-gmap-google-map zoom='map.zoom' center="map.center" options="map.options" bounds="map.bounds" control="map.control" refresh="map.refresh" events="map.events" ng-cloak>
-          <ui-gmap-marker coords="marker.coords" icon="marker.icon" idkey="marker.id"></ui-gmap-marker>
-          <ui-gmap-map-control position="top-right">
-              <a class="button button-small button-balanced" ng-click="markLocation()" >Mark Current Location</a>
-          </ui-gmap-map-control>
-        </ui-gmap-google-map>
+        <img id="profile-image" ng-src="img/ionic.png">
+        <p> Name: {{order.menu.name}} Price: {{order.menu.price}} Quantity: {{order.menu.quantity}} Subtotal : {{order.subtotal}}</p>
+
       </div>
-      <p>
-        <button class="button button-calm" ng-click="hideCartModal()">back</button>
-        <button class="button button-calm" ng-click="buy(menus,location)">Buy</button>
-      </p>
-    </ion-list>
+      <div class="row">
+        <div class="col">
+          <button class="button button-calm" ng-click="add(order.menu)">+</button>
+          <button class="button button-calm" ng-click="minus(order.menu)">-</button>
+        </div>
+        <div class="col">
+          <button class="button icon button-assertive" ng-click="delete(order.menu)"><i class="icon ion-trash-a"></i></button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="list">
+        <label class="item item-input item-floating-label">
+          <span class="input-label has-input">Total</span>
+          <input type="text" placeholder="Total" value="{{total}}">
+        </label>
+
+        <div class="item item-input-inset">
+          <label class="item-input item-floating-label">
+            <span class="input-label has-input">Delivery Address</span>
+            <input type="text" placeholder="Delivery Address" ng-model="location" required>
+          </label>
+          <button class="button button-royal icon ion-map" ng-click="showMap()"></button>
+        </div>
+      </div>
+    </div>
+    <button class="button button-block button-calm" ng-click="buy(menus,location)">Buy</button>
+
   </ion-content>
-</div>
+</ion-modal-view>

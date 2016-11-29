@@ -1,0 +1,6 @@
+<ui-gmap-google-map zoom='map.zoom' events='map.events' center='map.center' options='map.options' bounds='map.bounds' control="modalControl">
+  <ui-gmap-map-control position="top-right">
+    <a class="button button-small button-balanced" ng-click="markLocation()">Mark Current Location</a>
+  </ui-gmap-map-control>
+  <ui-gmap-marker coords="marker.coords" icon="marker.icon" idkey="marker.id"></ui-gmap-marker>
+</ui-gmap-google-map>

@@ -7,6 +7,30 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
       rate: 0,
       max: 5
     }
+    $scope.bookReservation = function(reservation) {
+      //   $ionicLoading.show();
+      var reservationObject = {
+        datetime: reservation.datetime.getTime(),
+        number_of_persons: reservation.number_of_persons,
+        status: 'pending',
+        user_id: User.auth().$id,
+        restaurant_id: id,
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+      }
+
+      var confirmReservation = $ionicPopup.confirm({
+        title: 'Confirm',
+        template: 'Confirm your reservation?',
+        cssClass: 'custom-popup',
+        scope: $scope
+      });
+      confirmReservation.then(function(res) {
+        if (res) {
+          Reservation.create(reservationObject);
+          $scope.addReservationModal.hide();
+        }
+      });
+    }
 
     var id = $stateParams.restaurantId;
     var userReviewsRef = Review.userReview(id);
@@ -38,26 +62,14 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
     $scope.isAlreadyReviewed = function() {
       userReviewsRef.once('value', function(snapshot) {
         $scope.exists = snapshot.val();
-        if($scope.exists !== null) {
+        if ($scope.exists !== null) {
           $scope.review = Review.get(snapshot.val());
         }
       })
     }
     $scope.isAlreadyReviewed();
 
-    $scope.bookReservation = function(reservation) {
-      $ionicLoading.show();
-      var reservationObject = {
-        datetime: reservation.datetime.getTime(),
-        number_of_persons: reservation.number_of_persons,
-        status: 'pending',
-        user_id: User.auth().$id,
-        restaurant_id: id,
-        timestamp: firebase.database.ServerValue.TIMESTAMP
-      }
-      Reservation.create(reservationObject);
-      $scope.addReservationModal.hide();
-    }
+
 
     $scope.addToFavorites = function() {
       User.addToFavorites($scope.restaurant);
@@ -81,7 +93,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
           for (var i = 0; i < results.length; i++) {
             window.plugins.Base64.encodeFile(results[i], function(base64) {
               var reviewsRef = Upload.get(base64);
-              reviewsRef.on('state_changed', function(snapshot){
+              reviewsRef.on('state_changed', function(snapshot) {
                 var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                 console.log('Upload is ' + progress + '% done');
                 // $scope.progress = progress;
@@ -119,10 +131,12 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
         $ionicLoading.hide();
         var list = Upload.multipleUpload(review.key);
         for (var i = 0; i < $scope.images.length; i++) {
-          list.$add({ image: $scope.images[i] })
-          .then(function(ref) {
-            console.log("added..." + ref);
-          });
+          list.$add({
+              image: $scope.images[i]
+            })
+            .then(function(ref) {
+              console.log("added..." + ref);
+            });
         }
         console.log("add review done");
         Review.userReview(id).set(review.key);
@@ -168,11 +182,13 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
         console.log("finished updating review.");
         var list = Upload.multipleUpload(review.$id);
         for (var i = 0; i < $scope.images.length; i++) {
-          list.$add({ image: $scope.images[i] }).then(function(ref) {
+          list.$add({
+            image: $scope.images[i]
+          }).then(function(ref) {
             console.log("added..." + ref);
           });
         }
-      $scope.images = [];
+        $scope.images = [];
       })
       $scope.editReviewModal.hide();
       $scope.isAlreadyReviewed();

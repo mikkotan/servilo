@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var app = angular.module('app', ['ui.mask', 'ionic', 'ionic.cloud', 'ionMdInput', 'ionic-material', 'firebase', 'ionic.rating', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker', 'yaru22.angular-timeago', 'ui.select', 'ngSanitize'])
+var app = angular.module('app', ['ui.mask', 'ionic', 'ionic.cloud', 'ionMdInput', 'ionic-material', 'firebase', 'ionic.rating','ionic-toast', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker', 'yaru22.angular-timeago', 'ui.select', 'ngSanitize'])
 
 app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushService", "User", "Database", "$cordovaGeolocation", "$ionicPopup", "$cordovaPushV5",
   function($ionicPlatform, $rootScope, $state, $templateCache, IonicPushService, User, Database, $cordovaGeolocation, $ionicPopup, $cordovaPushV5) {
@@ -108,10 +108,10 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
       }
     })
 
-    $rootScope.$on('$cordovaPushV5:errorOcurred', function(event, e){
-       // e.message
-       console.log(e.message);
-     });
+    $rootScope.$on('$cordovaPushV5:errorOcurred', function(event, e) {
+      // e.message
+      console.log(e.message);
+    });
 
     $rootScope.$on("$stateChangeError",
       function(event, toState, toParams, fromState, fromParams, error) {
@@ -201,28 +201,39 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
 
 app.directive('googleplace', function() {
   return {
-        require: 'ngModel',
-        scope: {
-            ngModel: '=',
-            details: '=?'
-        },
-        link: function(scope, element, attrs, model) {
-          // this city bounds does not limit the search but biasing the search
-          var cityBounds = new google.maps.LatLngBounds(
-              new google.maps.LatLng(10.689760946107592, 122.43714093987364),
-              new google.maps.LatLng(10.851652605488333, 122.63352155510802));
-            var options = {
-              bounds: cityBounds,
-              componentRestrictions: {country: 'PH'}
-            };
-            scope.gPlace = new google.maps.places.Autocomplete(element[0], options);
-
-            google.maps.event.addListener(scope.gPlace, 'place_changed', function() {
-              scope.$apply(function() {
-                scope.details = scope.gPlace.getPlace().geometry.location;
-                model.$setViewValue(element.val());
-              });
-            });
+    require: 'ngModel',
+    scope: {
+      ngModel: '=',
+      details: '=?'
+    },
+    link: function(scope, element, attrs, model) {
+      // this city bounds does not limit the search but biasing the search
+      var cityBounds = new google.maps.LatLngBounds(
+        new google.maps.LatLng(10.689760946107592, 122.43714093987364),
+        new google.maps.LatLng(10.851652605488333, 122.63352155510802));
+      var options = {
+        bounds: cityBounds,
+        componentRestrictions: {
+          country: 'PH'
         }
-    };
+      };
+      scope.gPlace = new google.maps.places.Autocomplete(element[0], options);
+
+      google.maps.event.addListener(scope.gPlace, 'place_changed', function() {
+        scope.$apply(function() {
+          scope.details = scope.gPlace.getPlace().geometry.location;
+          model.$setViewValue(element.val());
+        });
+      });
+
+    }
+  };
+  scope.gPlace = new google.maps.places.Autocomplete(element[0], options);
+
+  google.maps.event.addListener(scope.gPlace, 'place_changed', function() {
+    scope.$apply(function() {
+      scope.details = scope.gPlace.getPlace().geometry.location;
+      model.$setViewValue(element.val());
+    });
+  });
 });
