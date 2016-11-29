@@ -33,6 +33,7 @@ app.factory("Search",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "Dat
       return restaurantsRef;
     },
     getNear : function(id, restaurant) {
+      var currentLocation = CordovaGeolocation.get();
       var marker = {
         id: id,
         coords: {
@@ -40,7 +41,6 @@ app.factory("Search",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "Dat
           longitude: restaurant.longitude
         }
       }
-      var currentLocation = CordovaGeolocation.get();
       var point1 = new google.maps.LatLng(marker.coords.latitude, marker.coords.longitude);
       var point2 = new google.maps.LatLng(currentLocation.latitude, currentLocation.longitude);
       if(calculateDistance(point1, point2) <= 1) {
@@ -147,6 +147,14 @@ app.factory("Search",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "Dat
         }
       };
       return location;
+    },
+    getMapCenter : function() {
+      var currentLocation = CordovaGeolocation.get();
+      var center = {
+        latitude: currentLocation.latitude, 
+        longitude: currentLocation.longitude 
+      };
+      return center;
     }
   }
 }])

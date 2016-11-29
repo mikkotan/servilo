@@ -7,11 +7,11 @@ app.controller("ViewRestaurantMenus",["$scope","$state","restaurantMenus","resta
 
   restaurant
     .then(function() {
-      var restaurantStatus = Restaurant.getRestaurantStatus(restaurant.owner_id);
-      restaurantStatus.on('value' , function(snap){
-          $scope.getRestaurantStatus = snap.val();
-          $scope.status = restaurant.name + " is " + (snap.val() ? "Online" : "Offline");
-      })
+      // var restaurantStatus = Restaurant.getRestaurantStatus(restaurant.owner_id);
+      // restaurantStatus.on('value' , function(snap){
+      //     $scope.getRestaurantStatus = snap.val();
+      //     $scope.status = restaurant.name + " is " + (snap.val() ? "Online" : "Offline");
+      // })
     })
 
 
