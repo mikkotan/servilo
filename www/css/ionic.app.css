@@ -170,6 +170,24 @@ ion-popover-view.fit ion-content {
 .custom-popup .popup {
   width: 90% !important; }
 
+.delete-popup .popup-buttons .button-positive {
+  background-color: #ef473a !important; }
+
+.delete-popup .popup {
+  width: 90% !important; }
+
+.loader {
+  background: #f20d49 !important;
+  border-radius: 100px;
+  height: 20px; }
+  .loader p {
+    text-align: center;
+    color: white !important;
+    text-align: center; }
+
+.capitalize {
+  text-transform: capitalize; }
+
 /* Directives : MD Label
 ==================================*/
 .item-md-label {

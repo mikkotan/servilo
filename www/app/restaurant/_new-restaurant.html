@@ -64,15 +64,21 @@
                   </div>
                 </div>
                 <div>
+                  <div class="loader" style="width: {{progress}}%;">
+                    <p class="percent">{{progress}}%</p>
+                  </div>
                   <progress ng-show="progress" max="100" value="{{progress}}"></progress>
-                  <img ng-show="imageURL" ng-src="{{imageURL}}" width="100%" />
+                  <img ng-show="imageURL" ng-src="{{imageURL}}" width="50%" />
                 </div>
               </div>
               <div class="padding">
                 <button type="submit" class="button button-block button-balanced">Add Restaurant</button>
               </div>
             </div>
+
           </form>
+          <!-- watch does not work on this function -->
+          <div ng-cloak>{{locationDetail(detail)}}</div>
         </ion-item>
       </div>
     </ion-list>

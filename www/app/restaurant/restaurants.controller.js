@@ -1,5 +1,5 @@
-app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera", "CordovaGeolocation", "Database", "$ionicPopup", "$timeout", "Upload",
-  function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation, Database, $ionicPopup, $timeout, Upload) {
+app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera", "CordovaGeolocation", "Database", "Upload","$ionicPopup",
+  function($scope, $firebaseArray, $firebaseAuth, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation, Database, Upload, $ionicPopup) {
 
     $scope.modalControl = {};
     $scope.restaurants = Restaurant.all();
@@ -9,53 +9,9 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
     $scope.AppUser = User.auth();
     $scope.restaurant = {
       openTime: new Date()
-    };
-    $scope.map = {
-      center: {
-        latitude: 10.73016704689235,
-        longitude: 122.54616022109985
-      },
-      zoom: 14,
-      options: {
-        scrollwheel: false
-      },
-      bounds: {},
-      events: {
-        click: function(map, eventName, originalEventArgs) {
-          var e = originalEventArgs[0];
-          var lat = e.latLng.lat(),
-            lon = e.latLng.lng();
-          var m = {
-            id: Date.now(),
-            coords: {
-              latitude: lat,
-              longitude: lon
-            }
-          };
-          $scope.marker = m;
-          $scope.$apply();
-        }
-      }
-    };
+    }
 
-    $scope.marker = {
-      id: 0
-    };
-
-    $scope.currentLocation = CordovaGeolocation.get();
-
-    // console.log($scope.AppUser);
-    console.log($scope.map);
-
-
-
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        console.log("User:" + user.uid);
-      } else {
-        console.log("NOT LOGGED IN");
-      }
-    });
+    console.log($scope.AppUser)
     $scope.showMap = function() {
       var mapPopup = $ionicPopup.confirm({
         title: 'Choose Location',
@@ -79,7 +35,6 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       });
     };
 
-
     $scope.setFacilities = function() {
       var facilities = $ionicPopup.confirm({
         title: 'Set Facilities Offered',
@@ -87,9 +42,17 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
         subTitle: 'Amenities available for the customers in your restaurant.',
         cssClass: 'custom-popup',
         scope: $scope
+
       });
     };
 
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        console.log("User:" + user.uid);
+      } else {
+        console.log("NOT LOGGED IN");
+      }
+    });
 
     $scope.changeServiceStatus = function(restaurant, service) {
       var resRef = Database.restaurantsReference().child(restaurant.$id).child('services').child(service.name);
@@ -129,6 +92,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       };
       $cordovaCamera.getPicture(options).then(function(imageData) {
         var restaurantRef = Upload.restaurant(imageData);
+        $scope.progress = 1;
         restaurantRef.on('state_changed', function(snapshot) {
           var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           console.log('Upload is ' + progress + '% done');
@@ -151,7 +115,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
 
     $scope.addRestaurant = function(restaurant) {
       $scope.pendingRestaurants.$add({
-          name: restaurant.name,
+          name: restaurant.name.toLowerCase(),
           services: {
             online: {
               name: "online",
@@ -202,9 +166,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       $scope.imageURL = null;
       $scope.progress = null;
       $scope.restaurantModal.hide();
-    };
-
-
+    }
 
     $scope.edit = function(restaurant) {
       var resRef = firebase.database().ref().child("restaurants").child(restaurant.$id);
@@ -298,6 +260,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
 
     $scope.newRestaurant = function() {
       $scope.restaurantModal.show();
+      $scope.imageURL = null;
       $scope.modalControl.refresh({
         latitude: 10.73016704689235,
         longitude: 122.54616022109985
@@ -324,6 +287,19 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
       });
     }
 
+    $scope.closeEditRestaurant = function() {
+      $scope.imageURL = null;
+      $scope.restaurantEditModal.hide();
+    }
+
+    $scope.newRestaurant = function() {
+      $scope.restaurantModal.show();
+      $scope.modalControl.refresh({
+        latitude: 10.73016704689235,
+        longitude: 122.54616022109985
+      });
+    };
+
     $scope.approveRestaurant = function(restaurant) {
       $scope.pendingRestaurants.$remove(restaurant)
         .then(() => {
@@ -346,39 +322,94 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "$firebaseAuth", "
         })
     }
 
+    $scope.marker = {
+      id: 0
+    };
+    $scope.isDetailCanMoveMarker = false;
+    $scope.currentLocation = CordovaGeolocation.get();
+    $scope.map = {
+      center: {
+        latitude: 10.73016704689235,
+        longitude: 122.54616022109985
+      },
+      zoom: 14,
+      options: {
+        scrollwheel: false
+      },
+      bounds: {},
+      events: {
+        click: function(map, eventName, originalEventArgs) {
+          var e = originalEventArgs[0];
+          var lat = e.latLng.lat(),
+            lon = e.latLng.lng();
+          var m = {
+            id: Date.now(),
+            coords: {
+              latitude: lat,
+              longitude: lon
+            }
+          };
+          $scope.marker = m;
+          $scope.isDetailCanMoveMarker = false;
+          $scope.placeName($scope.marker.coords.latitude, $scope.marker.coords.longitude);
+          $scope.$apply();
+        }
+      }
+    };
 
     $scope.markLocation = function() {
       $scope.currentLocation = CordovaGeolocation.get();
-      $scope.marker = {
-        id: Date.now(),
-        coords: {
-          latitude: $scope.currentLocation.latitude,
-          longitude: $scope.currentLocation.longitude
-        }
-      };
-      $scope.map.center = {
-        latitude: $scope.currentLocation.latitude,
-        longitude: $scope.currentLocation.longitude
-      };
-
+      $scope.isDetailCanMoveMarker = false;
+      $scope.setMarker($scope.currentLocation.latitude, $scope.currentLocation.longitude);
+      $scope.placeName($scope.marker.coords.latitude, $scope.marker.coords.longitude);
     }
 
     $scope.placeName = function(latitude, longitude) {
-      var geocoder = new google.maps.Geocoder;
-      var latLng = {
-        lat: latitude,
-        lng: longitude
-      };
-      geocoder.geocode({
-        'location': latLng
-      }, function(results, status) {
-        if (status === 'OK') {
-          $scope.restaurant.location = results[0].formatted_address;
-          $scope.$apply();
-        } else {
-          alert('Geocoder failed due to: ' + status);
+        var geocoder = new google.maps.Geocoder;
+        var latLng = {
+          lat: latitude,
+          lng: longitude
+        };
+        geocoder.geocode({
+          'location': latLng
+        }, function(results, status) {
+          if (status === 'OK') {
+            $scope.restaurant.location = results[0].formatted_address;
+            $scope.$apply();
+          } else {
+            alert('Geocoder failed due to: ' + status);
+          }
+        });
+      }
+      // function that check if you can change the marker and also to remove the digest problem
+    $scope.locationDetail = function(detail) {
+        if (angular.isDefined(detail) && $scope.isDetailCanMoveMarker) {
+          var latitude = detail.lat();
+          var longitude = detail.lng();
+          if ($scope.marker.id == 0) {
+            $scope.setMarker(latitude, longitude);
+          } else if (($scope.marker.coords.latitude !== latitude) && ($scope.marker.coords.longitude !== longitude)) {
+            $scope.setMarker(latitude, longitude);
+          }
         }
-      });
+      }
+      //change the marker location
+    $scope.setMarker = function(latitude, longitude) {
+        $scope.marker = {
+          id: Date.now(),
+          coords: {
+            latitude: latitude,
+            longitude: longitude
+          }
+        };
+        $scope.map.center = {
+          latitude: latitude,
+          longitude: longitude
+        };
+      }
+      //
+    $scope.allowDetailToChangeMarker = function() {
+      $scope.isDetailCanMoveMarker = true;
     }
 
     $scope.facilities = $firebaseArray(firebase.database().ref().child('facilities'));

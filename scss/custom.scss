@@ -158,3 +158,24 @@ ion-popover-view.fit ion-content {
     width: 90% !important;
   }
 }
+.delete-popup {
+  .popup-buttons .button-positive {
+    background-color: #ef473a !important;
+  }
+  .popup {
+    width: 90% !important;
+  }
+}
+.loader {
+  background: #f20d49 !important;
+  border-radius: 100px;
+  height: 20px;
+  p {
+    text-align: center;
+    color: white !important;
+    text-align: center;
+  }
+}
+.capitalize {
+  text-transform: capitalize;
+}

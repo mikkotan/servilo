@@ -34,6 +34,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
         'home-tab': {
           templateUrl: "app/home/_home.html",
           controller: 'HomeTabCtrl',
+          controllerAs: 'home',
           resolve: {
             currentAuth: function(Auth) {
               return Auth.$requireSignIn();
@@ -52,9 +53,9 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
             currentAuth: function(Auth) {
               return Auth.$requireSignIn();
             },
-            restaurants: function(Database) {
-              return Database.restaurants().$loaded();
-            }
+            // restaurants: function(Database) {
+            //   return Database.restaurants().$loaded();
+            // }
           }
         }
       }

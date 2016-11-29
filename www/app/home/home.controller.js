@@ -1,35 +1,56 @@
 app.controller('HomeTabCtrl',
-  ["$scope","$ionicModal", "$state", "ionicMaterialInk", "$ionicPopup", "$ionicLoading", "Home",
-    function($scope, $ionicModal, $state, ionicMaterialInk, $ionicPopup, $ionicLoading, Home) {
+  ["$scope","$ionicModal", "$state", "ionicMaterialInk", "$ionicLoading", "Home", "$timeout",
+    function($scope, $ionicModal, $state, ionicMaterialInk, $ionicLoading, Home, $timeout) {
+
+  var vm = this;
 
   console.log('HomeTabCtrl');
-  $scope.restaurants = Home.srestaurants();
-  
-  var lastKey = "";
-  $scope.noMoreItemsAvailable = false;
+  vm.restaurants = Home.srestaurants();
+  vm.noMoreItemsAvailable = false;
 
   $scope.loadMore = function() {
-    Home.srestaurants().$loaded().then(function() {
-      lastKey = $scope.restaurants[$scope.restaurants.length-1].$id;
-      console.log('lastKey: ' + lastKey)
-      $scope.last = Home.nextRestaurants(lastKey);
-      $scope.last.$loaded().then(function() {
-        console.log($scope.last);
-        if($scope.last.length <= 0) {
-          $scope.noMoreItemsAvailable = true;
+    Home.srestaurants().$loaded().then(function(x) {
+      lastKey = Home.getLastKey(vm.restaurants);
+      Home.nextRestaurants(lastKey).$loaded().then(function(data) {
+        if(data.length <= 0) {
+          vm.noMoreItemsAvailable = true;
         }
         $scope.$broadcast('scroll.infiniteScrollComplete');
-        $scope.restaurants = $scope.restaurants.concat($scope.last);
+        vm.restaurants = vm.restaurants.concat(data);
       })
     })
   };
 
   $scope.doRefresh = function() {
     Home.srestaurants().$loaded().then(function(data) {
-      $scope.restaurants = data;
+      vm.restaurants = data;
       $scope.$broadcast('scroll.refreshComplete');
-      $scope.noMoreItemsAvailable = false;
+      vm.noMoreItemsAvailable = false;
     });
   };
+
+  $scope.searchChange = function(name) {
+    console.log(name);
+    if(name !== '') {
+      // first solution
+      // var results = [];
+      // Home.search(name).on("child_added", function(snapshot) {
+      //   results.push(snapshot.val());
+      //   vm.restaurants = results;
+      //   $scope.$apply();
+      // })
+
+      // second solution
+      Home.search(name).$loaded().then(function(data) {
+        if(data.length <= 0) {
+          console.log('no results found! :(');
+        }
+        vm.restaurants = data;
+      });
+    }
+    else {
+      vm.restaurants = Home.srestaurants();
+    }
+  }
 
 }]);

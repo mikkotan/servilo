@@ -1,4 +1,4 @@
-app.controller('MyReservationsCtrl',["$scope", "reservations", "Restaurant", "Database", "$ionicPopup",
+app.controller('MyReservationsCtrl', ["$scope", "reservations", "Restaurant", "Database", "$ionicPopup",
   function($scope, reservations, Restaurant, Database, $ionicPopup) {
     console.log('my reservations ctrl launched');
     $scope.test = "hello world";
@@ -27,12 +27,12 @@ app.controller('MyReservationsCtrl',["$scope", "reservations", "Restaurant", "Da
           if (res) {
             var ref = Database.reservationsReference().child(reservation.$id).child('status')
             ref.set('cancelled');
-          }
-          else {
+          } else {
             console.log('Cancellation failed');
           }
         })
 
     }
 
-  }])
+  }
+])

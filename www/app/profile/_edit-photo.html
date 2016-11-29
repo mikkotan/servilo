@@ -19,15 +19,17 @@
           <form ng-submit="editPhoto()">
             <div class="row">
               <div class="col text-center">
-                <a class="button button-icon button-positive icon ion-camera" ng-click="upload(1)"> Camera</a>
-                <a class="button button-icon button-calm ion-image" ng-click="upload(2)"> Album</a>
+                <a class="button icon button-positive icon ion-camera" ng-click="upload(1)"> Camera</a>
+                <a class="button icon button-calm ion-image" ng-click="upload(2)"> Album</a>
               </div>
             </div>
             <div class="row">
-              <button class="button button-balanced icon ion-checkmark"> Submit</button>
+              <div class="col text-center">
+                <button class="button button-balanced icon ion-checkmark"> Submit</button>
+                <button class="button button-assertive icon ion-ios-close" ng-click="closeEditPhoto()"> Cancel</button>
+              </div>
             </div>
           </form>
-          <button class="button button-assertive icon ion-ios-close" ng-click="closeEditPhoto()"> Cancel</button>
         </ion-item>
       </div>
     </ion-list>

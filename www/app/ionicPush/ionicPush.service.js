@@ -10,10 +10,6 @@ app.factory('IonicPushService', function($ionicPush, User, Database, $cordovaPus
           console.log("Token saved: " + t.token)
         })
     },
-    // getToken : function() {
-    //   return $ionicPush.token.token
-    // },
-
     getToken: function() {
       return localStorage.myPush
     },

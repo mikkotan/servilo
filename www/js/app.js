@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var app = angular.module('app', ['ui.mask', 'ionic', 'ionic.cloud', 'ionMdInput', 'ionic-material', 'firebase', 'ionic.rating', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker', 'yaru22.angular-timeago', 'ui.select', 'ngSanitize'])
+var app = angular.module('app', ['ui.mask', 'ionic', 'ionic.cloud', 'ionMdInput', 'ionic-material', 'firebase', 'ionic.rating', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker', 'yaru22.angular-timeago', 'ui.select', 'ngSanitize', 'ionic-toast'])
 
 app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushService", "User", "Database", "$cordovaGeolocation", "$ionicPopup", "$cordovaPushV5",
   function($ionicPlatform, $rootScope, $state, $templateCache, IonicPushService, User, Database, $cordovaGeolocation, $ionicPopup, $cordovaPushV5) {
@@ -83,55 +83,43 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
           title: data.title,
           template: data.message
         })
-        $state.go('tabs.myReservations');
+
+        .then((res) => {
+          if (res) {
+            if (data.additionalData.url === 'reservation') {
+              $state.go('tabs.myReservations');
+            } else if (data.additionalData.url === 'order') {
+              $state.go('tabs.myOrders');
+            } else if (data.additionalData.url === 'order_status') {
+              $state.go('tabs.myOrders');
+            }
+          }
+        })
       } else {
         console.log('not in foreground')
         if (data.additionalData.url === 'reservation') {
           $state.go('tabs.myReservations');
         } else if (data.additionalData.url === 'order') {
           $state.go('tabs.myOrders');
+        } else if (data.additionalData.url === 'order_status') {
+          $state.go('tabs.myOrders');
         }
       }
     })
 
     $rootScope.$on("$stateChangeError",
-        function(event, toState, toParams, fromState, fromParams, error) {
-          if (error === "AUTH_REQUIRED") {
-            event.preventDefault();
-            $state.go("login")
-          }
-        })
-      //
-      // <<<<<<< HEAD
-      //     $rootScope.$on('cloud:push:notification', function(event, data) {
-      //       var msg = data.message;
-      //       alert(msg.title + ': ' + msg.text);
-      //     })
-      //
-      //     $templateCache.put('template.tpl.html', '');
-      //     $ionicPlatform.ready(function() {
-      //       if (window.cordova && window.cordova.plugins.Keyboard) {
-      //         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-      //         // for form inputs)
-      //         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-      //
-      //         // Don't remove this line unless you know what you are doing. It stops the viewport
-      //         // from snapping when text inputs are focused. Ionic handles this internally for
-      //         // a much nicer keyboard experience.
-      //         cordova.plugins.Keyboard.disableScroll(true);
-      //       }
-      //       if (window.StatusBar) {
-      //         StatusBar.styleDefault();
-      //       }
-      //     });
-      //   }
-      // ]);
-      // =======
+
+      function(event, toState, toParams, fromState, fromParams, error) {
+        if (error === "AUTH_REQUIRED") {
+          event.preventDefault();
+          $state.go("login")
+        }
+      })
     $templateCache.put('template.tpl.html', '');
   }
 ]);
 
-app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate, Auth, User, Database, $state, $ionicPush, IonicPushService, $ionicPopover) {
+app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate, Auth, User, Database, $state, $ionicPush, IonicPushService, $ionicPopover, $timeout) {
   $scope.showMenu = function() {
     $ionicSideMenuDelegate.toggleLeft();
   };
@@ -151,7 +139,7 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
           console.log("success user loaded deleted");
           var firebaseUser = Auth.$getAuth();
           if (ionic.Platform.isIOS() || ionic.Platform.isAndroid()) {
-            var ionicToken = IonicPushService.getToken();
+            var ionicToken = localStorage.myPush;
             var results = ionicToken.split(':');
             Database.usersReference().child(firebaseUser.uid).child('device_token').child(results[0]).set(null);
           }
@@ -168,10 +156,10 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
     // window.plugins.googleplus.disconnect();
   }
 
+
   Auth.$onAuthStateChanged(function(firebaseUser) {
     if (firebaseUser) {
-
-      User.setOnline(firebaseUser.uid);
+      $scope.currentUser = User.auth();
       // $scope.firebaseUser = User.auth();
       // if (firebaseUser.displayName) {
       //   $scope.photoURL = firebaseUser.photoURL;
@@ -181,7 +169,14 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
         if (data.photoURL) {
           $scope.photoURL = data.photoURL;
         }
+
+        $scope.$watch('firebaseUser', function(newUser) {
+          console.log('watching firebaseUser');
+          $scope.newPhotoURL = newUser.photoURL;
+        })
       })
+
+
     }
   });
 })
@@ -192,4 +187,29 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
       $scope.firebaseUser = firebaseUser;
     }
   });
+});
+
+app.directive('googleplace', function() {
+  return {
+    require: 'ngModel',
+    scope: {
+      ngModel: '=',
+      details: '=?'
+    },
+    link: function(scope, element, attrs, model) {
+      var options = {
+        componentRestrictions: {
+          country: 'PH'
+        }
+      };
+      scope.gPlace = new google.maps.places.Autocomplete(element[0], options);
+
+      google.maps.event.addListener(scope.gPlace, 'place_changed', function() {
+        scope.$apply(function() {
+          scope.details = scope.gPlace.getPlace().geometry.location;
+          model.$setViewValue(element.val());
+        });
+      });
+    }
+  };
 });
