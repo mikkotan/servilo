@@ -3,7 +3,7 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
 
   var rootRef = firebase.database().ref();
   var users = rootRef.child("users");
-  var usersObj = $firebaseArray(users);
+  // var usersObj = $firebaseArray(users);
   var restaurantsRef = Database.restaurantsReference();
   var notificationsRef = Database.notificationsReference();
   var ordersRef = Database.ordersReference();
@@ -19,10 +19,10 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
     getAuthRestaurants : function() {
       return $firebaseArray(restaurantsRef.orderByChild('owner_id').equalTo(firebase.auth().currentUser.uid));
     },
-    getAuthFullName : function() {
-      var authId = firebase.auth().currentUser.uid;
-      return usersObj.$getRecord(authId).firstName + " " + usersObj.$getRecord(authId).lastName;
-    },
+    // getAuthFullName : function() {
+    //   var authId = firebase.auth().currentUser.uid;
+    //   return usersObj.$getRecord(authId).firstName + " " + usersObj.$getRecord(authId).lastName;
+    // },
     getAuthNotifications : function() {
       return $firebaseArray(notificationsRef.orderByChild('receiver_id').equalTo(firebase.auth().currentUser.uid));
     },
@@ -41,9 +41,9 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
       console.log('Getting auth reservations');
       return $firebaseArray(reservationsRef.orderByChild('user_id').equalTo(firebase.auth().currentUser.uid));
     },
-    getUserFullname : function(id){
-      return  usersObj.$getRecord(id).firstName + " " + usersObj.$getRecord(id).lastName;
-    },
+    // getUserFullname : function(id){
+    //   return  usersObj.$getRecord(id).firstName + " " + usersObj.$getRecord(id).lastName;
+    // },
     register : function(userId){
       return $firebaseArray(users.child(userId));
     },

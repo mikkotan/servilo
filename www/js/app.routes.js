@@ -234,7 +234,10 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
           resolve: {
             "currentAuth": ["Auth", function(Auth) {
               return Auth.$requireSignIn();
-            }]
+            }],
+            currentGeoLocation: function(CordovaGeolocation) {
+              return CordovaGeolocation.get();
+            }
           }
         }
       }
