@@ -4,11 +4,9 @@
     <button class="button button-clear button-primary" ng-click="hideCartModal()"><i class="icon ion-ios-close"></i></button>
   </ion-header-bar>
   <ion-content class="padding">
-
     <div class="card" ng-repeat="order in menus">
       <div class="item item-text-wrap">
-
-        <img id="profile-image" ng-src="img/ionic.png">
+        <img id="profile-image" ng-src={{order.menu.photoURL}}>
         <p> Name: {{order.menu.name}} Price: {{order.menu.price}} Quantity: {{order.menu.quantity}} Subtotal : {{order.subtotal}}</p>
 
       </div>

@@ -147,6 +147,7 @@ app.controller("RestaurantCtrl", ["$scope", "Menu", "$firebaseArray", "$firebase
             }
           },
           facilities: restaurant.facilities,
+          openDays: restaurant.days,
           location: restaurant.location,
           latitude: $scope.marker.coords.latitude,
           longitude: $scope.marker.coords.longitude,
@@ -171,6 +172,14 @@ app.controller("RestaurantCtrl", ["$scope", "Menu", "$firebaseArray", "$firebase
           for (var facility in restaurant.facilities) {
             console.log(facility);
           }
+
+          for (var day in restaurant.days) {
+            console.log(day);
+          }
+        })
+        .catch((err) => {
+          alert(err);
+          console.log(err);
         })
 
       restaurant.name = "";
