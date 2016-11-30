@@ -168,19 +168,13 @@ app.controller("RestaurantCtrl", ["$scope", "Menu", "$firebaseArray", "$firebase
             avgRate: 0
           }
         })
-        .then(() => {
-          for (var facility in restaurant.facilities) {
-            console.log(facility);
-          }
-
-          for (var day in restaurant.days) {
-            console.log(day);
-          }
-        })
-        .catch((err) => {
-          alert(err);
-          console.log(err);
-        })
+          .then(() => {
+            console.log('Successfully added.');
+          })
+          .catch((err) => {
+            alert(err);
+            console.log(err);
+          })
 
       restaurant.name = "";
       restaurant.location = "";

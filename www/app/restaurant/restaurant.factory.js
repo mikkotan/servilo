@@ -76,20 +76,27 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
       var openTime = new Date();
       var closeTime = new Date();
       var now = new Date();
+      console.log("isOpenToday? "+ restaurant.openDays[now.getDay()]);
+      console.log(JSON.stringify(restaurant.openDays[0], null, 4));
 
       openTime.setHours(restaurantOpenTime.getHours(), restaurantOpenTime.getMinutes());
       closeTime.setHours(restaurantCloseTime.getHours(), restaurantCloseTime.getMinutes());
+      if (restaurant.openDays[now.getDay()]) {
+        if(restaurantOpenTime.getTime() > restaurantCloseTime.getTime()) {
+          closeTime.setDate(closeTime.getDate() + 1);
+        }
 
-      if(restaurantOpenTime.getTime() > restaurantCloseTime.getTime()) {
-        closeTime.setDate(closeTime.getDate() + 1);
+        if(openTime.getTime() < now.getTime() && now.getTime() < closeTime.getTime()) {
+          return true;
+        }
+        else{
+          return false;
+        }
       }
-
-      if(openTime.getTime() < now.getTime() && now.getTime() < closeTime.getTime()) {
-        return true;
-      }
-      else{
+      else {
         return false;
       }
+
     }
   }
 
