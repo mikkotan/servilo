@@ -34,7 +34,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
 
     var id = $stateParams.restaurantId;
     var userReviewsRef = Review.userReview(id);
-    Restaurant.get(id)
+    Restaurant.get(id).$loaded()
       .then(function(restaurant) {
         $scope.restaurant = restaurant;
         $scope.getReviewer = Review.reviewer;
@@ -42,6 +42,18 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
         restaurantStatus.on('value', function(snap) {
           $scope.getRestaurantStatus = snap.val() ? true : false;
         })
+
+        User.hasFavored(restaurant.$id)
+          .then((val) => {
+            console.log('Hasfavored from controller : '+val)
+            $scope.hasFavored = val
+          })
+          .catch((err) => {
+            console.log('Has favored error');
+            console.log(err);
+          })
+
+        $scope.hasFavored = User.hasFavored(restaurant.$id);
 
         $scope.restaurantOpenStatus = Restaurant.getRestaurantOpenStatus(restaurant);
         $scope.restaurantReviews = Restaurant.getReviews(restaurant.$id);
@@ -57,6 +69,11 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
     }
     $scope.isAlreadyReviewed();
 
+
+
+    $scope.addToFavorites = function() {
+      User.addToFavorites($scope.restaurant);
+    }
 
 
 

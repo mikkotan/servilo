@@ -3,6 +3,7 @@ app.controller("AddMenuCtrl",["$scope", "restaurantId", "$cordovaCamera", "Resta
 
     $scope.restaurant = Restaurant.get(restaurantId);
     $scope.categories = Menu.getMenuCategories(restaurantId);
+    $scope.defaultCategory = $scope.categories[0];
     $scope.photoURL = "";
 
     $scope.upload = function(index) {

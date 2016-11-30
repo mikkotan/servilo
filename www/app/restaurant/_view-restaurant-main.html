@@ -9,8 +9,8 @@
         </button> -->
         <button class="button button-calm" ng-if="restaurant.facilities.Online" ui-sref="tabs.viewRestaurant.menus">Online Order</button>
         <button class="button button-calm" ng-if="restaurant.facilities.Reservation" ng-click="showAddReservationModal()">Reservation</button>
+        <button class="button button-calm" ng-if="!hasFavored" ng-click="addToFavorites()">Add to Favorites</button>
       </div>
-
       <p ng-if="getRestaurantStatus">ONLINE</p>
       <p ng-if="!getRestaurantStatus">OFFLINE</p>
 

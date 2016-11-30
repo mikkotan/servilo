@@ -1,14 +1,13 @@
-app.controller("ViewRestaurantMenu", ["$scope", "$stateParams", "restaurantMenu", "$ionicModal", "Database", "$ionicListDelegate",
-  function($scope, $stateParams, restaurantMenu, $ionicModal, Database, $ionicListDelegate) {
+app.controller("ViewRestaurantMenu", ["$scope", "$stateParams", "restaurantMenu", "$ionicModal", "Database", "$ionicListDelegate", "Menu",
+  function($scope, $stateParams, restaurantMenu, $ionicModal, Database, $ionicListDelegate, Menu) {
 
-    $scope.restaurantMenus = restaurantMenu
+    $scope.restaurantMenus = restaurantMenu;
+    // $scope.categories = Menu.getMenuCategories(restaurantId);
 
     $scope.deleteMenu = function(menu) {
       console.log('Delete called');
       $scope.restaurantMenus.$remove(menu)
         .then((ref) => {
-          console.log('Successfully deleted');
-          console.log('This is the menu id '+menu.$id);
           Database.restaurantsReference().child(menu.restaurant_id).child('menus').child(menu.$id).set(null);
           Database.restaurantsReference().child(menu.restaurant_id).child('menu_categories').child(menu.category_id).child('menus').child(menu.$id).set(null);
         })
@@ -16,8 +15,11 @@ app.controller("ViewRestaurantMenu", ["$scope", "$stateParams", "restaurantMenu"
 
     $scope.editMenu = function(menu) {
       console.log("editButtonModal clicked");
-      $scope.menu = menu;
+      console.log(JSON.stringify(menu));
+      $scope.eMenu = menu;
+      $scope.categories = Menu.getMenuCategories(menu.restaurant_id);
       $scope.menuEditModal.show();
+      console.log(menu.category_id);
     }
 
     $scope.closeEditMenu = function() {
@@ -25,9 +27,11 @@ app.controller("ViewRestaurantMenu", ["$scope", "$stateParams", "restaurantMenu"
     }
 
     $scope.updateMenu = function(menu) {
+      console.log(JSON.stringify(menu));
       Database.menusReference().child(menu.$id).update({
         name: menu.name,
-        price: menu.price
+        price: menu.price,
+        category_id: menu.category
       }).then(function() {
         $scope.closeEditMenu();
       })
@@ -40,8 +44,8 @@ app.controller("ViewRestaurantMenu", ["$scope", "$stateParams", "restaurantMenu"
       })
     }
 
-    $ionicModal.fromTemplateUrl('app/menu/_edit-menu.html', function(modalEditMenu) {
-      $scope.menuEditModal = modalEditMenu;
+    $ionicModal.fromTemplateUrl('app/menu/_edit-menu.html', function(menuEditModal) {
+      $scope.menuEditModal = menuEditModal;
     }, {
       scope: $scope
     });

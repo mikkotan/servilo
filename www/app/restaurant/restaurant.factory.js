@@ -18,11 +18,11 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
     },
     get : function(restaurantId) {
       console.log('nice restaurant get');
-      return Database.restaurantsReference().child(restaurantId).once('value')
-        .then((snapshot) => {
-          console.log(snapshot.val());
-          return snapshot.val();
-        })
+      return $firebaseObject(Database.restaurantsReference().child(restaurantId));
+      // return Database.restaurantsReference().child(restaurantId).once('value')
+      //   .then((snapshot) => {
+      //     return snapshot.val();
+      //   })
     },
     getPendingRestaurants : function() {
       return Database.pendings();
@@ -156,20 +156,6 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
     addPendingRestaurant : function(restaurant, marker, imageURL) {
       var restObj = {
         name: restaurant.name.toLowerCase(),
-        services: {
-          online: {
-            name: "online",
-            status: false
-          },
-          reserve: {
-            name: "reserve",
-            status: false
-          },
-          cater: {
-            name: "cater",
-            status: false
-          }
-        },
         facilities: restaurant.facilities,
         location: restaurant.location,
         latitude: marker.coords.latitude,

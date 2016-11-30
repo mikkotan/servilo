@@ -263,7 +263,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
           templateUrl: "app/reservation/_my-reservations.html",
           controller: "MyReservationsCtrl",
           resolve: {
-            reservations: function(User) {
+            "reservations": function(User) {
               return User.getAuthReservations().$loaded();
             }
           }
