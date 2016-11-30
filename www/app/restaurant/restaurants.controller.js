@@ -169,8 +169,8 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
 
     $scope.editRestaurant = function(restaurant) {
       $scope.restaurantEditModal.show();
-      $scope.showMap = false;
-      $scope.eRestaurant = restaurant;
+      $scope.restaurant = restaurant;
+      $scope.restaurant.phonenumber = parseInt(restaurant.phonenumber)
       if (restaurant.photoURL) {
         $scope.imageURL = restaurant.photoURL;
       } else {
