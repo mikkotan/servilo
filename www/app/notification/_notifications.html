@@ -2,8 +2,10 @@
   <ion-content overflow-scroll="true" class="padding">
     <button class="button button-block button-balanced" ng-show="notifs.length != 0" ng-click="markReadAll()">Mark Read All</button>
     <div class="list">
-      {{3+3}}
-      <a class="item item-icon-left item-icon-right" ng-repeat="notif in newNotifs | orderBy:'-timestamp'" >
+      <p ng-repeat="notif in notifs">
+        {{notif}}
+      </p>
+      <a class="item item-icon-left item-icon-right" ng-if="notif.ready" ng-repeat="notif in newNotifs | orderBy:'-timestamp'" >
         <i ng-if="notif.type === 'review'" class="icon ion-thumbsup balanced"></i>
         <i ng-if="notif.type === 'order_status'" class="icon ion-android-list assertive"></i>
         <i ng-if="notif.type === 'order'" class="icon ion-android-list positive"></i>

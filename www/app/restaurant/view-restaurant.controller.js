@@ -1,5 +1,5 @@
-app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upload", "Database", "$ionicLoading", "$ionicModal", "$ionicPopup", "CordovaGeolocation", "$stateParams", "Restaurant", "User", "Review", "Reservation", "$ionicLoading",
-  function($scope, $state, $firebaseArray, Upload, Database, $ionicLoading, $ionicModal, $ionicPopup, CordovaGeolocation, $stateParams, Restaurant, User, Review, Reservation, $ionicLoading) {
+app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upload", "Database", "$ionicLoading", "$ionicModal", "$ionicPopup", "CordovaGeolocation", "$stateParams", "Restaurant", "User", "Review", "Reservation", "$ionicLoading", "Notification",
+  function($scope, $state, $firebaseArray, Upload, Database, $ionicLoading, $ionicModal, $ionicPopup, CordovaGeolocation, $stateParams, Restaurant, User, Review, Reservation, $ionicLoading, Notification) {
 
     console.log("View Restaurant Ctrl")
 
@@ -152,14 +152,12 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
         $ionicLoading.hide();
 
         var restaurant_owner = Restaurant.getOwner($scope.restaurant.$id);
-        Database.notificationsReference().child(restaurant_owner.$id).push().set({
+        Notification.create({
           sender_id: User.auth().$id,
+          receiver_id: restaurant_owner.$id,
           restaurant_id: id,
           type: 'review',
           timestamp: firebase.database.ServerValue.TIMESTAMP
-        }).then(function(x) {
-          console.log("hello notification squad");
-          $ionicLoading.hide();
         })
       })
     }

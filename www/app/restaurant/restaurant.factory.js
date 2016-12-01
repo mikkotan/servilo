@@ -19,10 +19,6 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
     get : function(restaurantId) {
       console.log('nice restaurant get');
       return $firebaseObject(Database.restaurantsReference().child(restaurantId));
-      // return Database.restaurantsReference().child(restaurantId).once('value')
-      //   .then((snapshot) => {
-      //     return snapshot.val();
-      //   })
     },
     getPendingRestaurants : function() {
       return Database.pendings();
@@ -82,7 +78,7 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
       openTime.setHours(restaurantOpenTime.getHours(), restaurantOpenTime.getMinutes());
       closeTime.setHours(restaurantCloseTime.getHours(), restaurantCloseTime.getMinutes());
       if (restaurant.openDays[now.getDay()]) {
-        if(restaurantOpenTime.getTime() > restaurantCloseTime.getTime()) {
+        if(openTime.getTime() > closeTime.getTime()) {
           closeTime.setDate(closeTime.getDate() + 1);
         }
 

@@ -31,7 +31,7 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
     getAuthNotifications : function() {
       console.log('get auth notifs');
       var authId = firebase.auth().currentUser.uid;
-      var ref = Database.notificationsReference().child(authId);
+      var ref = Database.userNotificationsReference().child(authId);
       return $firebaseArray(ref);
     },
     getAuthNotificationsRef : function() {
