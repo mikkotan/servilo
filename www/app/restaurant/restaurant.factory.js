@@ -81,16 +81,13 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
         if(openTime.getTime() > closeTime.getTime()) {
           closeTime.setDate(closeTime.getDate() + 1);
         }
-
+        
         if(openTime.getTime() < now.getTime() && now.getTime() < closeTime.getTime()) {
           return true;
         }
-        else{
+        else {
           return false;
         }
-      }
-      else {
-        return false;
       }
     },
     getTimestamp : function(restaurantKey) {

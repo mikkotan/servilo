@@ -231,6 +231,10 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
         }
       });
     }
+    $scope.detail = null;
+    $scope.$watch($scope.location, function(newArray) {
+        console.log($scope.detail);
+    }, true);
 
   }
 ]);
