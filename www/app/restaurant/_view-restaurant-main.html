@@ -21,7 +21,7 @@
         Restaurant Hours: {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}
       </p>
       <p ng-if="!restaurantOpenStatus" style="color:red;">
-        Opens at {{ restaurant.openTime | date:'shortTime' }}
+        Opens at {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}
       </p>
       <ion-list>
         <ion-item>

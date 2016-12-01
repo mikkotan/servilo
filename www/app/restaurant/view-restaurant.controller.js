@@ -249,13 +249,16 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
     }
 
     $scope.addReply = function(reply) {
-      var replyRef = Database.reviewsReference().child($scope.reviewId).child('replies').push();
-      replyRef.set({
-        content: reply.content,
-        user_id: User.auth().$id
+      Review.addReply(reply, $scope.reviewId)
+      .then(function() {
+        reply.content = "";
+        $scope.addReplyModal.hide();
       })
-      reply.content = "";
-      $scope.addReplyModal.hide();
+      // var replyRef = Database.reviewsReference().child($scope.reviewId).child('replies').push();
+      // replyRef.set({
+      //   content: reply.content,
+      //   user_id: User.auth().$id
+      // })
     }
 
     $scope.showConfirmDelete = function(review) {

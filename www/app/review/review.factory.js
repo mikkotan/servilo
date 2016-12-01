@@ -38,6 +38,13 @@ app.factory("Review", ["$firebaseObject", "$firebaseArray", "$firebaseAuth", "Da
       restaurantReview : function(id){
         return reviews.orderByChild('restaurant_id').equalTo(id)
       },
+      addReply : function(reply, reviewId) {
+        var replyRef = reviews.child(reviewId).child('replies').push();
+        return replyRef.set({
+          content: reply.content,
+          user_id: User.auth().$id
+        })
+      }
     }
 
     return Review;

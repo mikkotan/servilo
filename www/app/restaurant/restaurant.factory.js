@@ -76,19 +76,22 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
       var openTime = new Date();
       var closeTime = new Date();
       var now = new Date();
+      console.log("isOpenToday? "+ restaurant.openDays[now.getDay()]);
+      console.log(JSON.stringify(restaurant.openDays[0], null, 4));
 
       openTime.setHours(restaurantOpenTime.getHours(), restaurantOpenTime.getMinutes());
       closeTime.setHours(restaurantCloseTime.getHours(), restaurantCloseTime.getMinutes());
-
-      if(openTime.getTime() > closeTime.getTime()) {
-        closeTime.setDate(closeTime.getDate() + 1);
-      }
-      
-      if(openTime.getTime() < now.getTime() && now.getTime() < closeTime.getTime()) {
-        return true;
-      }
-      else{
-        return false;
+      if (restaurant.openDays[now.getDay()]) {
+        if(openTime.getTime() > closeTime.getTime()) {
+          closeTime.setDate(closeTime.getDate() + 1);
+        }
+        
+        if(openTime.getTime() < now.getTime() && now.getTime() < closeTime.getTime()) {
+          return true;
+        }
+        else {
+          return false;
+        }
       }
     },
     getTimestamp : function(restaurantKey) {
@@ -157,6 +160,7 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
       var restObj = {
         name: restaurant.name.toLowerCase(),
         facilities: restaurant.facilities,
+        openDays: restaurant.openDays,
         location: restaurant.location,
         latitude: marker.coords.latitude,
         longitude: marker.coords.longitude,
@@ -177,7 +181,6 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
           avgRate: 0
         }
       }
-      // return restObj;
       var pendingRef = Database.pendingsReference().push();
       return pendingRef.set(restObj);
     },
@@ -191,6 +194,7 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
         latitude: marker.coords.latitude,
         longitude: marker.coords.longitude,
         facilities: restaurant.facilities,
+        openDays: restaurant.openDays,
         type: restaurant.type,
         cuisine: restaurant.cuisine,
         photoURL: imageURL,
