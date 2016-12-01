@@ -26,28 +26,28 @@
                 <input type="text" placeholder="Cuisine of Restaurant" ng-model="restaurant.cuisine">
               </label>
               <div class="item">
-                <button class="button button-block button-royal icon-left ion-plus-circled" ng-click="setHours()">Set Hours</button>
+                <a class="button button-block button-royal icon-left ion-plus-circled" ng-click="setHours()">Set Hours</a>
                 <div class="col text-center" ng-show="restaurant.openTime && restaurant.closeTime">
                   Opening Hours : {{restaurant.openTime| date: "h:mm a"}} - {{restaurant.closeTime| date: "h:mm a"}}
                 </div>
               </div>
               <div class="item">
-                <button class="button button-block button-royal icon-left ion-plus-circled" ng-click="setFacilities()">Set Facilities</button>
+                <a class="button button-block button-royal icon-left ion-plus-circled" ng-click="setFacilities()">Set Facilities</a>
                 <div class="col text-center">
-
-                  {{restaurant.facilities}}
-
-                  <p ng-repeat="facility in restaurant.facilities">
-                    {{restaurant.facilities[facility]}}
+                  <p ng-repeat="(key, val) in restaurant.facilities" ng-if="val">
+                    {{key}}
                   </p>
                 </div>
+              </div>
+              <div class="item">
+                <button class="button button-block button-royal icon-left ion-plus-circled" ng-click="setOpenDays()">Set Open Days</button>
               </div>
               <div class="item item-input-inset">
                 <label class="item-input item-floating-label">
                   <span class="input-label has-input">Location of Restaurant</span>
                   <input type="text" placeholder="Location of Restaurant" ng-model="restaurant.location" details="detail" ng-change="allowDetailToChangeMarker()" googleplace/>
                 </label>
-                <button class="button button-royal icon ion-map" ng-click="showMap()"></button>
+                <a class="button button-royal icon ion-map" ng-click="showMap()"></a>
               </div>
               <div class="item">
                 <div class="row">

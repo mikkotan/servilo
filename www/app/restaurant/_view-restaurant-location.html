@@ -1,7 +1,7 @@
 <ion-view view-title="{{restaurant.name}}">
   <ion-content overflow-scroll="true" class="padding has-tabs-top">
     <div ng-init='setMap(restaurant)'>
-      <h3>{{location}}</h3>
+      <h3>{{restaurant.location}}</h3>
     </div>
       <img ng-src="https://maps.googleapis.com/maps/api/staticmap?center={{restaurant.latitude}},{{restaurant.longitude}}
           &zoom=16
