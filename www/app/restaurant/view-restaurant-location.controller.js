@@ -1,10 +1,8 @@
-app.controller("ViewRestaurantLocation", ["$scope", "$state", "$firebaseArray", "$firebaseObject", "Database", "$ionicLoading", "$ionicModal", "$ionicPopup", "CordovaGeolocation", "$stateParams", "Restaurant", "User", "Review", "Reservation", "$ionicLoading",
-  function($scope, $state, $firebaseArray, $firebaseObject, Database, $ionicLoading, $ionicModal, $ionicPopup, CordovaGeolocation, $stateParams, Restaurant, User, Review, Reservation, $ionicLoading) {
+app.controller("ViewRestaurantLocation", ["$scope", "$state", "$ionicModal", "CordovaGeolocation",
+  function($scope, $state, $ionicModal, CordovaGeolocation) {
   $scope.modalControl ={};
-  var id = $stateParams.restaurantId;
-  // $scope.restaurant = Restaurant.get(id);
   $scope.mapDirection = [];
-  $scope.currentLocation = CordovaGeolocation.get();
+  // $scope.currentLocation = CordovaGeolocation.get();
   $scope.restaurantMarkers = [];
 
   $scope.setMap = function(restaurant) {

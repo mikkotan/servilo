@@ -7,45 +7,45 @@
     <ion-list>
       <div class="card">
         <ion-item id="form-input">
-          <form ng-submit="edit(eRestaurant)">
+          <form ng-submit="edit(restaurant)">
             <div class="list">
               <label class="item item-input item-floating-label">
                 <span class="input-label has-input">Name of Restaurant</span>
-                <input type="text" placeholder="Name of Restaurant" ng-model="eRestaurant.name">
+                <input type="text" placeholder="Name of Restaurant" ng-model="restaurant.name">
               </label>
               <label class="item item-input item-floating-label">
                 <span class="input-label has-input">Contact Number</span>
-                <input type="number" placeholder="Contact Number" ng-model="eRestaurant.phonenumber">
+                <input type="number" placeholder="Contact Number" ng-model="restaurant.phonenumber">
               </label>
               <label class="item item-input item-floating-label">
                 <span class="input-label has-input">Type of Restaurant</span>
-                <input type="text" placeholder="Type of Restaurant" ng-model="eRestaurant.type">
+                <input type="text" placeholder="Type of Restaurant" ng-model="restaurant.type">
               </label>
               <label class="item item-input item-floating-label">
                 <span class="input-label has-input">Cuisine of Restaurant</span>
-                <input type="text" placeholder="Cuisine of Restaurant" ng-model="eRestaurant.cuisine">
+                <input type="text" placeholder="Cuisine of Restaurant" ng-model="restaurant.cuisine">
               </label>
               <div class="item">
                 <button class="button button-block button-royal icon-left ion-plus-circled" ng-click="setHours()">Set Hours</button>
-                <div class="col text-center" ng-show="eRestaurant.openTime && eRestaurant.closeTime">
-                  Opening Hours : {{eRestaurant.openTime| date: "h:mm a"}} - {{eRestaurant.closeTime| date: "h:mm a"}}
+                <div class="col text-center" ng-show="restaurant.openTime && restaurant.closeTime">
+                  Opening Hours : {{restaurant.openTime| date: "h:mm a"}} - {{restaurant.closeTime| date: "h:mm a"}}
                 </div>
               </div>
               <div class="item">
                 <button class="button button-block button-royal icon-left ion-plus-circled" ng-click="setFacilities()">Set Facilities</button>
                 <div class="col text-center">
-
-                  {{eRestaurant.facilities}}
-
-                  <p ng-repeat="facility in eRestaurant.facilities">
-                    {{eRestaurant.facilities[facility]}}
+                  <p ng-repeat="(key, val) in restaurant.facilities" ng-if="val">
+                    {{key}}
                   </p>
                 </div>
+              </div>
+              <div class="item">
+                <button class="button button-block button-royal icon-left ion-plus-circled" ng-click="setOpenDays()">Set Open Days</button>
               </div>
               <div class="item item-input-inset">
                 <label class="item-input item-floating-label">
                   <span class="input-label has-input">Location of Restaurant</span>
-                  <input type="text" placeholder="Location of Restaurant" ng-model="eRestaurant.location">
+                  <input type="text" placeholder="Location of Restaurant" ng-model="restaurant.location">
                 </label>
                 <button class="button button-royal icon ion-map" ng-click="showMap()"></button>
               </div>
@@ -65,8 +65,8 @@
                 </div>
                 <div>
                   <progress ng-show="progress" max="100" value="{{progress}}"></progress>
-                  <img ng-show="!imageURL && !eRestaurant.photoURL" ng-src="img/ionic.png" width="100%" />
-                  <img ng-show="!imageURL && eRestaurant.photoURL" ng-src="{{eRestaurant.photoURL}}" width="100%" />
+                  <img ng-show="!imageURL && !restaurant.photoURL" ng-src="img/ionic.png" width="100%" />
+                  <img ng-show="!imageURL && restaurant.photoURL" ng-src="{{restaurant.photoURL}}" width="100%" />
                   <img ng-show="imageURL" ng-src="{{imageURL}}" width="50%" />
                 </div>
               </div>

@@ -1,47 +1,54 @@
-<!-- TODO -->
-<!-- <ion-view view-title="editMenu">
+<ion-modal-view view-title="Edit Menu">
+  <ion-header-bar class="bar bar-header bar-assertive">
+    <h1 class="title">Edit Menu</h1>
+    <button class="button button-clear button-primary" ng-click="closeEditMenu()"><i class="icon ion-ios-close"></i></button>
+  </ion-header-bar>
   <ion-content class="padding">
     <ion-list>
-      <ion-item >
-        <form ng-submit="updateMenu(menu)">
-          <div class="list">
-            <label class="item item-input">
-              Name:<input type="text" ng-model="menu.name">
+      <div class="card">
+        <ion-item id="form-input">
+          <form ng-submit="updateMenu(eMenu)">
+            <label class="item item-input item-floating-label">
+              <span class="input-label has-input">Name</span>
+              <input type="text" placeholder="Name" ng-model="eMenu.name">
             </label>
-            <label class="item item-input">
-              Price:<input type="number" ng-model="menu.price">
+            <label class="item item-input item-floating-label">
+              <span class="input-label has-input">Price</span>
+              <input type="number" placeholder="Price" ng-model="eMenu.price">
             </label>
-          </div>
-          <div class="padding">
-            <button type="submit" class="button button-block button-positive">Edit menu</button>
-          </div>
-        </form>
-      </ion-item>
-      <ion-item>
-        <a class="button-calm" ui-sref="tabs.restaurant">back</a>
-      </ion-item>
+            <label class="item item-input item-select">
+              <div class="input-label">
+                Category 
+              </div>
+              <select ng-model="eMenu.category_id">
+                <option ng-repeat="category in categories" value="{{category.$id}}" ng-selected="{{eMenu.category_id === category.$id}}">
+                  {{category.name}}
+                </option>
+              </select>
+            </label>
+
+            <div class="row">
+              <div class="col">
+                <a class="button button-block button-positive icon ion-camera" ng-click="upload(1)"></a>
+              </div>
+              <div class="col">
+                <a class="button button-block button-calm icon ion-image" ng-click="upload(2)"></a>
+              </div>
+            </div>
+            <div class="col text-center">
+              <img ng-show="photoURL" ng-src="{{photoURL}}">
+              <img ng-show="!photoURL" ng-src="img/ionic.png">
+              <p ng-show="photoURL"> Edit Menu picture</p>
+              <p ng-show="!photoURL">You currently have no menu picture. Add one.</p>
+              <progress ng-show="progress" max="100" value="{{progress}}"></progress>
+            </div>
+            <img ng-src="{{photoURL}}" width="40%" />
+            <div class="row">
+              <button class="button button-block button-balanced ink">Submit</button>
+            </div>
+          </form>
+        </ion-item>
+      </div>
     </ion-list>
   </ion-content>
-</ion-view> -->
-
-<div class="modal">
-  <ion-header-bar class="bar-secondary">
-    <h1 class="title">Edit Menu</h1>
-    <button class="button button-clear button-positive" ng-click="closeEditMenu()">Cancel</button>
-  </ion-header-bar>
-  <ion-content>
-    <form ng-submit="updateMenu(menu)">
-      <div class="list">
-        <label class="item item-input">
-          Name:<input type="text" ng-model="menu.name">
-        </label>
-        <label class="item item-input">
-          Price:<input type="number" ng-model="menu.price">
-        </label>
-      </div>
-      <div class="padding">
-        <button type="submit" class="button button-block button-positive">Edit menu</button>
-      </div>
-    </form>
-  </ion-content>
-</div>
+</ion-modal-view>

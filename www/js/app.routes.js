@@ -239,7 +239,10 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
           resolve: {
             "currentAuth": ["Auth", function(Auth) {
               return Auth.$requireSignIn();
-            }]
+            }],
+            currentGeoLocation: function(CordovaGeolocation) {
+              return CordovaGeolocation.get();
+            }
           }
         }
       }
@@ -265,7 +268,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
           templateUrl: "app/reservation/_my-reservations.html",
           controller: "MyReservationsCtrl",
           resolve: {
-            reservations: function(User) {
+            "reservations": function(User) {
               return User.getAuthReservations().$loaded();
             }
           }

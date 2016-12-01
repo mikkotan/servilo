@@ -12,7 +12,7 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
       var order = $scope.cartData.indexOf(orderMenu);
       $scope.cartData[order].quantity += 1;
 
-  };
+    };
     $scope.showMap = function() {
       var mapPopup = $ionicPopup.confirm({
         title: 'Choose Location',
@@ -69,10 +69,11 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
         } else {
           var menuid = Cart.menuId($scope.totalPrice, "id", menu.id)
           $scope.totalPrice[menuid].price = menu.price * menu.quantity
+          console.log(JSON.stringify(menu, null, 4));
         }
         return {
           menu: menu,
-          subtotal: menu.price * menu.quantity
+          subtotal: menu.price * menu.quantity,
         }
       })
     }, true);
@@ -226,6 +227,10 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
         }
       });
     }
+    $scope.detail = null;
+    $scope.$watch($scope.location, function(newArray) {
+        console.log($scope.detail);
+    }, true);
 
   }
 ]);

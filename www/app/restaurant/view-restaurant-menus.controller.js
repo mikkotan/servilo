@@ -1,5 +1,5 @@
-app.controller("ViewRestaurantMenus", ["$scope", "$state", "restaurantMenus", "restaurantId", "CartData", "$ionicModal", "Cart", "Restaurant", "$ionicToast",
-  function($scope, $state, restaurantMenus, restaurantId, CartData, $ionicModal, Cart, Restaurant, $ionicToast) {
+app.controller("ViewRestaurantMenus", ["$scope", "$state", "restaurantMenus", "restaurantId", "CartData", "$ionicModal", "Cart", "Restaurant", "ionicToast",
+  function($scope, $state, restaurantMenus, restaurantId, CartData, $ionicModal, Cart, Restaurant, asdionicToast) {
 
     $scope.restaurantId = restaurantId
     $scope.restaurantMenus = restaurantMenus;

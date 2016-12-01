@@ -37,7 +37,7 @@ app.factory("Database", ["$firebaseArray", "$firebaseObject", "$firebaseAuth",
         return restaurantsRef;
       },
       notificationsReference : function() {
-        console.log("this is spartan" + notificationsRef+"/3456");
+
         return notificationsRef;
       },
       ordersReference : function() {

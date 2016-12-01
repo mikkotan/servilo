@@ -1,5 +1,6 @@
-app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover", "$ionicModal", "Database", "$cordovaCamera", "Upload", "Auth",
-  function($scope, User, $ionicLoading, $ionicPopover, $ionicModal, Database, $cordovaCamera, Upload, Auth) {
+app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover", "$ionicModal", "Database", "$cordovaCamera", "Upload", "Auth", "Restaurant",
+  function($scope, User, $ionicLoading, $ionicPopover, $ionicModal, Database, $cordovaCamera, Upload, Auth, Restaurant) {
+
 
     $ionicPopover.fromTemplateUrl('app/profile/_popover.html', {
       scope: $scope
@@ -18,6 +19,34 @@ app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover
     }, {
       scope: $scope
     });
+
+    User.getAuthFavorites().$loaded()
+      .then((favs) => {
+        $scope.usrFavs = favs;
+        $scope.$watchCollection('usrFavs', function(favorites) {
+          $scope.userFavorites = favorites.map(function(restaurant) {
+            var r = {
+              restaurant : restaurant,
+              get : function() {
+                Restaurant.get(restaurant.$id).$loaded()
+                  .then((res) => {
+                    r.name = res.name
+                  })
+              }()
+            }
+            return r;
+          })
+        })
+      })
+
+
+
+    $scope.remove = function(restaurant) {
+      console.log(JSON.stringify(restaurant, null, 4));
+      console.log(restaurant.name);
+      console.log(restaurant.restaurant.$id);
+      User.removeFromFavorites(restaurant);
+    }
 
     Auth.$onAuthStateChanged(function(firebaseUser) {
       if (firebaseUser) {
@@ -49,7 +78,6 @@ app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover
       $scope.progress = null;
       $scope.editPhotoModal.hide();
     }
-
     $scope.openPopover = function($event, user) {
       $scope.photoURL = user.photoURL;
       $scope.optionsPopover.show($event);

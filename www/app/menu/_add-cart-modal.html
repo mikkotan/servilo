@@ -8,6 +8,7 @@
       <div class="card">
         <ion-item id="form-input">
           <form ng-submit="sendToCart(menu)">
+            <img id="profile-image" ng-src="{{menuPhoto}}">
             <label class="item item-input item-floating-label">
               <span class="input-label has-input">Menu Name</span>
               <input type="text" placeholder="Menu Name" value="{{menuName}}" readonly>

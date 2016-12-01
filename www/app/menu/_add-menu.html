@@ -1,4 +1,4 @@
-<!-- 
+<!--
 <ion-modal-view view-title="{{restaurant.name}} - Add Menu">
   <ion-header-bar class="bar bar-header bar-assertive">
     <h1 class="title">Add Menu</h1>
@@ -36,7 +36,7 @@
                 <a class="button button-block button-calm icon ion-image" ng-click="upload(2)"></a>
               </div>
             </div>
-            <img ng-src="data:image/jpeg;base64,{{imageURL}}" width="40%" />
+            <img ng-src="{{photoURL}}" width="40%" />
             <div class="row">
               <button class="button button-block button-balanced ink">Submit</button>
             </div>
@@ -46,7 +46,6 @@
     </ion-list>
   </ion-content>
 </ion-modal-view> -->
-
 
 <ion-view view-title="{{restaurant.name}} - Add Menu">
   <ion-content class="padding">
@@ -66,7 +65,7 @@
               Category
             </div>
             <select ng-model="menu.category">
-              <option ng-repeat="category in categories" value="{{category.$id}}">
+              <option ng-repeat="category in categories" value="{{category.$id}}" ng-selected="selected">
                 {{category.name}}
               </option>
             </select>
