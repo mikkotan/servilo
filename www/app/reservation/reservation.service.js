@@ -14,9 +14,8 @@ app.factory('Reservation', function($firebaseObject, $firebaseArray, Database, U
           .then((restaurant) => {
             var receiver = restaurant.owner_id
             console.log('success')
-            Database.notifications().$add({
+            Database.notificationsReference().child(receiver).push().set({
               sender_id: User.auth().$id,
-              receiver_id: receiver,
               restaurant_id: reservation.restaurant_id,
               type: 'reservation',
               timestamp: firebase.database.ServerValue.TIMESTAMP

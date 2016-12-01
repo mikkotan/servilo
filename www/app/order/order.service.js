@@ -31,12 +31,11 @@ app.factory("Order",["$firebaseAuth","$firebaseArray","$firebaseObject", "Databa
           orderDetailsRef.child('status').set('cancelled');
           orderDetailsRef.child('status_time').set(firebase.database.ServerValue.TIMESTAMP);
           orderRef.child('orderStatus').set(null);
-          Restaurant.get(order.restaurant_id)
+          Restaurant.get(order.restaurant_id).$loaded()
             .then((restaurant) => {
               console.log('then in restaurant');
-              Database.notifications().$add({
+              Database.notificationsReference().child(restaurant.owner_id).push().set({
                 sender_id : User.auth().$id,
-                receiver_id : restaurant.owner_id,
                 restaurant_id : order.restaurant_id,
                 type : 'order',
                 status : 'cancelled',
@@ -94,9 +93,8 @@ app.factory("Order",["$firebaseAuth","$firebaseArray","$firebaseObject", "Databa
                 orderStatusRef.child('status_time').set(firebase.database.ServerValue.TIMESTAMP);
               }
 
-              Database.notifications().$add({
-                sender_id : User.auth().$id,
-                receiver_id : order.customer_id,
+              Database.notificationsReference().child(order.customer_id).push().set({
+                sender_id: User.auth().$id,
                 restaurant_id : order.restaurant_id,
                 type : 'order_status',
                 status : key,

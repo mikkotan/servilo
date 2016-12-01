@@ -109,6 +109,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     }
 
     $scope.edit = function(restaurant) {
+      console.log(JSON.stringify(restaurant, null, 4));
       Restaurant.editRestaurant(restaurant, $scope.marker, $scope.imageURL)
       .then(function() {
         $scope.imageURL = null;

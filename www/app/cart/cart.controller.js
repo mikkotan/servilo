@@ -132,9 +132,8 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
           CartData.get().length = 0;
           CartData.totalPrice().length = 0;
           var restaurant_owner = Restaurant.getOwner($scope.restaurantId);
-          Database.notifications().$add({
+          Database.notificationsReference().child(restaurant_owner.$id).push().set({
             sender_id: User.auth().$id,
-            receiver_id: restaurant_owner.$id,
             restaurant_id: $scope.restaurantId,
             type: 'order',
             timestamp: firebase.database.ServerValue.TIMESTAMP

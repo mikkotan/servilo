@@ -152,9 +152,8 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
         $ionicLoading.hide();
 
         var restaurant_owner = Restaurant.getOwner($scope.restaurant.$id);
-        Database.notifications().$add({
+        Database.notificationsReference().child(restaurant_owner.$id).push().set({
           sender_id: User.auth().$id,
-          receiver_id: restaurant_owner.$id,
           restaurant_id: id,
           type: 'review',
           timestamp: firebase.database.ServerValue.TIMESTAMP

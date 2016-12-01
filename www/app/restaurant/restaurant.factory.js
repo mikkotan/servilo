@@ -188,6 +188,7 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
       return pendingRef.set(restObj);
     },
     editRestaurant : function(restaurant, marker, imageURL) {
+      console.log(JSON.stringify(restaurant, null, 4));
       var resRef = restaurants.child(restaurant.$id);
       var OT = new Date(restaurant.openTime);
       var CT = new Date(restaurant.closeTime);

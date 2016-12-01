@@ -19,7 +19,12 @@ app.controller("NotificationsCtrl", ["$scope", "$firebaseArray", "User", "Restau
           sender_id : notification.sender_id,
           status : notification.status,
           order_no : notification.order_no,
-          sender : User.getUserFullname(notification.sender_id),
+          getSender : function() {
+            User.getUser(notification.sender_id).$loaded()
+              .then((user) => {
+                n.sender = user.firstName + " " +user.lastName
+              })
+          }(),
           restaurant : function() {
             Restaurant.getRestaurantName(notification.restaurant_id)
               .then((name) => {
