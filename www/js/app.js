@@ -10,7 +10,6 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
     $ionicPlatform.ready()
       .then(() => {
         if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
-          // IonicPushService.registerDevice();
           localStorage.myPush = '';
           $cordovaPushV5.initialize({
             android: {
@@ -73,6 +72,10 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
       })
 
     $rootScope.$on('$cordovaPushV5:notificationReceived', function(event, data) {
+      console.log('received notification');
+      console.log('DATA' + JSON.stringify(data, null, 4));
+
+      console.log(data.additionalData.foreground);
 
       if (data.additionalData.foreground == true) {
         console.log('foreground true');
@@ -108,11 +111,6 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
       }
     })
 
-    $rootScope.$on('$cordovaPushV5:errorOcurred', function(event, e) {
-      // e.message
-      console.log(e.message);
-    });
-
     $rootScope.$on("$stateChangeError",
       function(event, toState, toParams, fromState, fromParams, error) {
         if (error === "AUTH_REQUIRED") {
@@ -124,7 +122,7 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
     $templateCache.put('template.tpl.html', '');
   }]);
 
-app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate, Auth, User, Database, $state, $ionicPush, IonicPushService, $ionicPopover, $cordovaPushV5) {
+app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate, Auth, User, Database, $state, $ionicPush, IonicPushService, $ionicPopover) {
   $scope.showMenu = function() {
     $ionicSideMenuDelegate.toggleLeft();
   };
@@ -149,12 +147,10 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
           var fUser = Auth.$getAuth();
 
           if (ionic.Platform.isIOS() || ionic.Platform.isAndroid()) {
-            // var ionicToken = IonicPushService.getToken();
             var ionicToken = localStorage.myPush;
             var results = ionicToken.split(':');
             Database.usersReference().child(fUser.uid).child('device_token').child(results[0]).set(null);
           }
-          $cordovaPushV5.unregister();
           Auth.$signOut();
           location.reload();
           $ionicLoading.hide();
@@ -194,12 +190,12 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
   });
 })
 
-.controller('TabsCtrl', function($scope, Auth , User) {
+.controller('TabsCtrl',function($scope, Auth , User ) {
   Auth.$onAuthStateChanged(function(firebaseUser) {
     if (firebaseUser) {
       User.isRestaurantOwner(firebaseUser.uid).then(function(isRestaurantOwner){
         $scope.isRestaurantOwner = isRestaurantOwner
-        console.log(Auth.$getAuth().uid)
+        console.log()
       })
       $scope.firebaseUser = firebaseUser;
     }
@@ -208,39 +204,23 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
 
 app.directive('googleplace', function() {
   return {
-    require: 'ngModel',
-    scope: {
-      ngModel: '=',
-      details: '=?'
-    },
-    link: function(scope, element, attrs, model) {
-      // this city bounds does not limit the search but biasing the search
-      var cityBounds = new google.maps.LatLngBounds(
-        new google.maps.LatLng(10.689760946107592, 122.43714093987364),
-        new google.maps.LatLng(10.851652605488333, 122.63352155510802));
-      var options = {
-        bounds: cityBounds,
-        componentRestrictions: {
-          country: 'PH'
+        require: 'ngModel',
+        scope: {
+            ngModel: '=',
+            details: '=?'
+        },
+        link: function(scope, element, attrs, model) {
+            var options = {
+              componentRestrictions: {country: 'PH'}
+            };
+            scope.gPlace = new google.maps.places.Autocomplete(element[0], options);
+
+            google.maps.event.addListener(scope.gPlace, 'place_changed', function() {
+              scope.$apply(function() {
+                scope.details = scope.gPlace.getPlace().geometry.location;
+                model.$setViewValue(element.val());
+              });
+            });
         }
-      };
-      scope.gPlace = new google.maps.places.Autocomplete(element[0], options);
-
-      google.maps.event.addListener(scope.gPlace, 'place_changed', function() {
-        scope.$apply(function() {
-          scope.details = scope.gPlace.getPlace().geometry.location;
-          model.$setViewValue(element.val());
-        });
-      });
-
-    }
-  };
-  scope.gPlace = new google.maps.places.Autocomplete(element[0], options);
-
-  google.maps.event.addListener(scope.gPlace, 'place_changed', function() {
-    scope.$apply(function() {
-      scope.details = scope.gPlace.getPlace().geometry.location;
-      model.$setViewValue(element.val());
-    });
-  });
+    };
 });

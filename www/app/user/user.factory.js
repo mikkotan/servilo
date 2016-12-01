@@ -9,6 +9,8 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
   var ordersRef = Database.ordersReference();
   var reservationsRef = Database.reservationsReference();
 
+
+
   return {
     auth : function() {
       return $firebaseObject(users.child(firebase.auth().currentUser.uid));
@@ -24,7 +26,9 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
       return usersObj.$getRecord(authId).firstName + " " + usersObj.$getRecord(authId).lastName;
     },
     getAuthNotifications : function() {
+
       return $firebaseArray(notificationsRef.orderByChild('receiver_id').equalTo(firebase.auth().currentUser.uid));
+
     },
     getAuthNotificationsRef : function() {
       return notificationsRef.orderByChild('receiver_id').equalTo(firebase.auth().currentUser.uid);
