@@ -456,5 +456,5 @@ app.controller("RestaurantCtrl", ["$scope", "Menu", "$firebaseArray", "$firebase
     }
 
     $scope.facilities = $firebaseArray(firebase.database().ref().child('facilities'));
-  }
+    }
 ])
