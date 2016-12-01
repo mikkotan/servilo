@@ -11,12 +11,47 @@ app.factory("Order",["$firebaseAuth","$firebaseArray","$firebaseObject", "Databa
     all : function() {
       return $firebaseArray(orders);
     },
+    getOne : function(orderId) {
+      console.log('getting one ' + orderId);
+      return $firebaseObject(orders.child(orderId));
+    },
     getOrder : function(restaurantId){
       return $firebaseArray(orders.orderByChild("restaurant_id").equalTo(restaurantId));
     },
     findOne : function(orderId) {
       console.log("find One order fired");
       return $firebaseObject(Database.ordersReference().child(orderId));
+    },
+    create : function(order) {
+      console.log('Order create function');
+      var authObj = firebase.auth().currentUser.uid;
+      var pushId = Database.ordersReference().push()
+      return pushId.set(order)
+        .then(() => {
+          console.log('Order Created');
+          Database.userOrdersReference().child(authObj).child(pushId.key).set(true)
+            .then(() => {
+              console.log('userOrder Created')
+              return Database.restaurantOrdersReference().child(order.restaurant_id).child(pushId.key).set(true)
+            })
+        })
+    },
+    delete : function(order) {
+      console.log('delete ordering')
+      return Database.ordersReference().child(order).once('value')
+        .then((orderObj) => {
+          console.log(orderObj);
+          var orderId = orderObj.key;
+          var customerId = orderObj.val().customer_id;
+          var restaurantId = orderObj.val().restaurant_id;
+          Database.ordersReference().child(orderId).set(null)
+            .then(() => {
+              Database.userOrdersReference().child(customerId).child(orderId).set(null)
+                .then(() => {
+                  return Database.restaurantOrdersReference().child(restaurantId).child(orderId).set(null)
+                })
+            })
+        })
     },
     cancel : function(order) {
       var confirm = $ionicPopup.confirm({
