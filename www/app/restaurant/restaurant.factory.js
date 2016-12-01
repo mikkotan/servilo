@@ -80,10 +80,10 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
       openTime.setHours(restaurantOpenTime.getHours(), restaurantOpenTime.getMinutes());
       closeTime.setHours(restaurantCloseTime.getHours(), restaurantCloseTime.getMinutes());
 
-      if(restaurantOpenTime.getTime() > restaurantCloseTime.getTime()) {
+      if(openTime.getTime() > closeTime.getTime()) {
         closeTime.setDate(closeTime.getDate() + 1);
       }
-
+      
       if(openTime.getTime() < now.getTime() && now.getTime() < closeTime.getTime()) {
         return true;
       }

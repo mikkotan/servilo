@@ -1,5 +1,5 @@
 <ion-view view-title="{{restaurant.name}}">
-  <ion-content class="padding has-tabs-top">
+  <ion-content class="padding has-tabs-top" lazy-scroll>
     <img ng-if="restaurant.photoURL" ng-src="{{restaurant.photoURL}}" width="100%" />
     <img ng-if="!restaurant.photoURL" ng-src="img/wow.jpg" width="100%">
     <div class="padding">
@@ -44,18 +44,35 @@
       <div class="list">
         <div class="item item-divider">
           Reviews
+          <ion-spinner ng-if="loadingReviews" icon="spiral"></ion-spinner>
         </div>
         <ul>
-          <li class="item" ng-repeat="review in restaurantReviews">
+          <li class="item" ng-repeat="review in restaurantReviews" ng-init="reviewer=getName(review.reviewer_id)">
+          <!-- ng-init="reviewer=getReviewer(review)" -->
+          <!-- ng-init="images=getImages(review.images)" -->
             <h3>
               {{review.content}} <span class="badge badge-balanced">{{review.rating}}</span>
             </h3>
             <p>
-              Reviewed by: {{getReviewer(review).firstName}} {{getReviewer(review).lastName}}
+              Displayname: {{reviewer.displayName}} <br>
+              Reviewed by: {{reviewer.firstName}} {{reviewer.lastName}}
+              <!-- Reviewed by: {{getReviewer(review).firstName}} {{getReviewer(review).lastName}} -->
             </p>
-            <p ng-if="review.images" ng-repeat="img in review.images">
-              <img ng-src="{{img.image}}" style="width:50px">
-            </p>
+            <!-- <ion-gallery ion-gallery-items="images"></ion-gallery> -->
+            <div class="container-class">
+              <!-- <ion-scroll width="100px; height: 100px" direction="x" overflow-scroll="false"> -->
+                <div ng-if="review.images" ng-repeat="img in review.images">
+                  <!-- <img ng-src="{{img.src}}" style="width:50%"> -->
+                   <img image-lazy-src="{{img.src}}" style="width:100px" image-lazy-loader="spiral">
+                </div>
+              <!-- </ion-scroll>  -->
+              <button ng-click="openReplyModal(review)">Reply</button>
+              <div ng-repeat="reply in review.replies" ng-init="reviewName=getName(reply.user_id)">
+                <div>
+                  <strong>{{reviewName.firstName}} {{reviewName.lastName}}:</strong> {{reply.content}}
+                </div>
+              </div>
+            </div>
           </li>
         </ul>
 

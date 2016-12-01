@@ -14,11 +14,9 @@ app.controller("ViewRestaurantMenus", ["$scope", "$state", "restaurantMenus", "r
     //     })
     //   })
 
-
     $scope.availability = function(menu) {
       return menu.availability ? "Available" : "Currently not available"
     }
-
 
     $scope.addToCart = function(menu) {
       if ($scope.getRestaurantStatus) {

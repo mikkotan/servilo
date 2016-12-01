@@ -9,6 +9,8 @@
     "ion-datetime-picker": "^0.3.1",
     "angular-timeago": "^0.4.3",
     "ionic-social-buttons": "~1.1.1",
-    "ionic-toast": "~0.4.1"
+    "ionic-toast": "~0.4.1",
+    "ion-gallery": "^0.1.14",
+    "ionic-image-lazy-load": "ion-image-lazy-load#*"
   }
 }
