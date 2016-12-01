@@ -166,7 +166,7 @@ ion-popover-view.fit ion-content {
     width: 90% !important;
   }
 }
-.loader {
+.progress-bar {
   background: #f20d49 !important;
   border-radius: 100px;
   height: 20px;
@@ -178,4 +178,7 @@ ion-popover-view.fit ion-content {
 }
 .capitalize {
   text-transform: capitalize;
+}
+.black-bg {
+  background: rgba(0, 0, 0, 0.5);
 }

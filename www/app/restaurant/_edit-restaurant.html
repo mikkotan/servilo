@@ -25,13 +25,13 @@
                 <span class="input-label has-input">Cuisine of Restaurant</span>
                 <input type="text" placeholder="Cuisine of Restaurant" ng-model="eRestaurant.cuisine">
               </label>
-              <div class="item">
+              <div class="item item-text-wrap">
                 <button class="button button-block button-royal icon-left ion-plus-circled" ng-click="setHours()">Set Hours</button>
                 <div class="col text-center" ng-show="eRestaurant.openTime && eRestaurant.closeTime">
                   Opening Hours : {{eRestaurant.openTime| date: "h:mm a"}} - {{eRestaurant.closeTime| date: "h:mm a"}}
                 </div>
               </div>
-              <div class="item">
+              <div class="item item-text-wrap">
                 <button class="button button-block button-royal icon-left ion-plus-circled" ng-click="setFacilities()">Set Facilities</button>
                 <div class="col text-center">
 
@@ -57,18 +57,23 @@
                 </div>
                 <div class="row">
                   <div class="col">
+                    <img class="center" ng-show="!imageURL && !eRestaurant.photoURL" ng-src="img/ionic.png" width="100%" />
+                    <img class="center" ng-show="!imageURL && eRestaurant.photoURL" ng-src="{{eRestaurant.photoURL}}" width="100%" />
+                    <img class="center" ng-show="imageURL" ng-src="{{imageURL}}" width="100%" />
+                    <div ng-show="progress" class="progress-bar" style="width: {{progress}}%;">
+                      <p class="percent">{{progress}}%</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
                     <a class="button button-block button-positive icon ion-camera" ng-click="upload(1)"></a>
                   </div>
                   <div class="col">
                     <a class="button button-block button-calm icon ion-image" ng-click="upload(2)"></a>
                   </div>
                 </div>
-                <div>
-                  <progress ng-show="progress" max="100" value="{{progress}}"></progress>
-                  <img ng-show="!imageURL && !eRestaurant.photoURL" ng-src="img/ionic.png" width="100%" />
-                  <img ng-show="!imageURL && eRestaurant.photoURL" ng-src="{{eRestaurant.photoURL}}" width="100%" />
-                  <img ng-show="imageURL" ng-src="{{imageURL}}" width="50%" />
-                </div>
+
               </div>
               <div class="padding">
                 <button type="submit" class="button button-block button-balanced">Save Changes</button>

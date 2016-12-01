@@ -5,7 +5,12 @@ app.controller("ViewRestaurantMenus", ["$scope", "$state", "restaurantMenus", "r
     $scope.restaurantMenus = restaurantMenus;
     var restaurant = Restaurant.get(restaurantId);
 
-    restaurant
+    // $timeout(function() {
+    //   ionicMaterialInk.displayEffect();
+    //   ionicMaterialMotion.ripple();
+    // }, 0);
+
+    restaurant.$loaded()
       .then(function() {
         var restaurantStatus = Restaurant.getRestaurantStatus(restaurant.owner_id);
         restaurantStatus.on('value', function(snap) {

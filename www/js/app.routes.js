@@ -225,24 +225,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
         }
       }
     })
-    .state('tabs.restaurant', {
-      url: "/restaurant",
-      views: {
-        'restaurant-tab': {
-          templateUrl: "app/restaurant/_restaurants.html",
-          controller: "RestaurantCtrl",
-          resolve: {
-            "currentAuth": ["Auth", function(Auth) {
-              return Auth.$requireSignIn();
-            }],
-            currentGeoLocation: function(CordovaGeolocation) {
-              return CordovaGeolocation.get();
-            }
-          }
-        }
-      }
-    })
-    .state('tabs.myOrders', {
+
+  .state('tabs.myOrders', {
       url: "/myorders",
       views: {
         'myorders-tab': {
@@ -265,6 +249,91 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
           resolve: {
             "reservations": function(User) {
               return User.getAuthReservations().$loaded();
+            }
+          }
+        }
+      }
+    })
+    .state('tabs.dashboard', {
+      url: "/dashboard/:restaurantId",
+      views: {
+        'restaurant-tab': {
+          templateUrl: "app/dashboard/_dashboard.html",
+          controller: "DashboardCtrl",
+          resolve: {
+            "currentAuth": ["Auth", function(Auth) {
+              return Auth.$requireSignIn();
+            }],
+            currentGeoLocation: function(CordovaGeolocation) {
+              return CordovaGeolocation.get();
+            }
+          }
+        }
+      }
+    })
+    .state('tabs.dashboard.main', {
+      url: "/main",
+      views: {
+        'dashboard-page': {
+          templateUrl: "app/dashboard/_dashboard-main.html",
+          controller: "ViewRestaurantCtrl",
+          resolve: {
+            "currentAuth": ["Auth", function(Auth) {
+              return Auth.$requireSignIn();
+            }],
+            currentGeoLocation: function(CordovaGeolocation) {
+              return CordovaGeolocation.get();
+            }
+          }
+        }
+      }
+    })
+    .state('tabs.dashboard.menus', {
+      url: "/menus",
+      views: {
+        'dashboard-page': {
+          templateUrl: "app/dashboard/_dashboard-menus.html",
+          controller: "ViewRestaurantMenu",
+          resolve: {
+            "currentAuth": ["Auth", function(Auth) {
+              return Auth.$requireSignIn();
+            }],
+            restaurantMenu: function(Menu, $stateParams) {
+              return Menu.getRestaurantMenus($stateParams.restaurantId).$loaded();
+            }
+          }
+        }
+      }
+    })
+    .state('tabs.dashboard.interact', {
+      url: "/interact",
+      views: {
+        'dashboard-page': {
+          templateUrl: "app/dashboard/_dashboard-interact.html",
+          controller: "DashboardCtrl",
+          resolve: {
+            "currentAuth": ["Auth", function(Auth) {
+              return Auth.$requireSignIn();
+            }],
+            currentGeoLocation: function(CordovaGeolocation) {
+              return CordovaGeolocation.get();
+            }
+          }
+        }
+      }
+    })
+    .state('tabs.restaurant', {
+      url: "/restaurant",
+      views: {
+        'restaurant-tab': {
+          templateUrl: "app/restaurant/_restaurants.html",
+          controller: "RestaurantCtrl",
+          resolve: {
+            "currentAuth": ["Auth", function(Auth) {
+              return Auth.$requireSignIn();
+            }],
+            currentGeoLocation: function(CordovaGeolocation) {
+              return CordovaGeolocation.get();
             }
           }
         }

@@ -176,17 +176,20 @@ ion-popover-view.fit ion-content {
 .delete-popup .popup {
   width: 90% !important; }
 
-.loader {
+.progress-bar {
   background: #f20d49 !important;
   border-radius: 100px;
   height: 20px; }
-  .loader p {
+  .progress-bar p {
     text-align: center;
     color: white !important;
     text-align: center; }
 
 .capitalize {
   text-transform: capitalize; }
+
+.black-bg {
+  background: rgba(0, 0, 0, 0.5); }
 
 /* Directives : MD Label
 ==================================*/

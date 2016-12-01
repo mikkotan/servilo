@@ -12,19 +12,21 @@
 
     <ion-list>
       <ion-item ng-repeat="restaurant in displayRestaurants">
+
+        <a class="button button-small button-calm" ui-sref="tabs.dashboard.main({restaurantId:restaurant.$id})">View in dash</a>
         <h3><icon class="ion-spoon"></icon> {{restaurant.name}}</h3>
         <p>
           <icon class="ion-ios-location-outline"></icon> {{restaurant.location}}
         </p>
-        <p>
-          <a class="button button-small button-calm" ui-sref="tabs.viewRestaurantMenus({restaurantId:restaurant.$id})">View Menus</a>
+        <!-- <p>
+          <a class="button button-small button-calm" ui-sref="tabs.viewRestaurantMenus({restaurantId:restaurant.$id})">View Menus</a> -->
           <a class="button button-small button-calm" ui-sref="tabs.addMenu({restaurantId:restaurant.$id})">Add menu</a>
-          <a class="button button-small button-calm" ng-click="showAddCategoryModal(restaurant.$id)">Add Category</a>
+          <!-- <a class="button button-small button-calm" ng-click="showAddCategoryModal(restaurant.$id)">Add Category</a>
 
           <ion-checkbox ng-repeat="service in restaurant.services" ng-model="service.status" ng-change="changeServiceStatus(restaurant,service)">
             {{service.name}}
           </ion-checkbox>
-        </p>
+        </p> -->
         <ion-option-button class="button-royal" ng-click="displayRestaurants.$remove(restaurant)">
           Delete
         </ion-option-button>

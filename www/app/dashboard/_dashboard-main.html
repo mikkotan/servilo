@@ -1,0 +1,24 @@
+<ion-view view-title="dashboard-main">
+  <ion-content class="has-tabs-top">
+    <div class="hero" style="background-image: url('img/wow.jpg');">
+      <div class="content">
+        <img class="avatar" ng-if="restaurant.photoURL" ng-src="{{restaurant.photoURL}}">
+        <img class="avatar" ng-if="!restaurant.photoURL" ng-src="img/ionic.png">
+        <div class="black-bg">
+          <h3 class="stable">{{restaurant.name}}</h3>
+          <h4 class="light">{{restaurant.location}}</h4>
+        </div>
+      </div>
+    </div>
+    <div class="card list">
+      <div class="item item-divider">
+        <h2>Facilities</h2>
+      </div>
+      <div class="item item-text-wrap">
+        <div class="list">
+          <div class="item" ng-repeat="facility in restaurant.facilities">
+              <p>{{facility.name}}</p>
+          </div>
+        </div>
+  </ion-content>
+</ion-view>

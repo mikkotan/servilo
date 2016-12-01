@@ -57,18 +57,19 @@
                 </div>
                 <div class="row">
                   <div class="col">
+                    <img class="center" ng-show="imageURL" ng-src="{{imageURL}}" width="100%" />
+                    <div ng-show="progress" class="progress-bar" style="width: {{progress}}%;">
+                      <p class="percent">{{progress}}%</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
                     <a class="button button-block button-positive icon ion-camera" ng-click="upload(1)"></a>
                   </div>
                   <div class="col">
                     <a class="button button-block button-calm icon ion-image" ng-click="upload(2)"></a>
                   </div>
-                </div>
-                <div>
-                  <div class="loader" style="width: {{progress}}%;">
-                    <p class="percent">{{progress}}%</p>
-                  </div>
-                  <progress ng-show="progress" max="100" value="{{progress}}"></progress>
-                  <img ng-show="imageURL" ng-src="{{imageURL}}" width="50%" />
                 </div>
               </div>
               <div class="padding">
