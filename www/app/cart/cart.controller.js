@@ -1,5 +1,5 @@
-app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "Restaurant", "CordovaGeolocation", "$ionicPopup",
-  function($scope, User, CartData, Cart, Database, Restaurant, CordovaGeolocation, $ionicPopup) {
+app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "Restaurant", "CordovaGeolocation", "$ionicPopup", "Notification", "Order",
+  function($scope, User, CartData, Cart, Database, Restaurant, CordovaGeolocation, $ionicPopup, Notification, Order) {
 
     $scope.order = Database.orders();
     $scope.cartData = CartData.get();
@@ -107,7 +107,8 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
 
     $scope.buy = function(cart, location) {
       if (location) {
-        $scope.order.$add({
+        // $scope.order.$add({
+        Order.create({
           restaurant_id: $scope.restaurantId,
           customer_id: User.auth().$id,
           order_details: {
@@ -122,24 +123,27 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
           orderStatus: {
             cancelled: false,
             confirmed: false
-              // done : false,
-              // onDelivery : false,
-              // delivered : false
           },
-        }).then(function() {
+        })
+        .then(() => {
+          $scope.hideCartModal();
+          console.log('restaurantOrder done');
           CartData.get().length = 0;
           CartData.totalPrice().length = 0;
           var restaurant_owner = Restaurant.getOwner($scope.restaurantId);
-          Database.notifications().$add({
+          Notification.create({
             sender_id: User.auth().$id,
             receiver_id: restaurant_owner.$id,
             restaurant_id: $scope.restaurantId,
             type: 'order',
             timestamp: firebase.database.ServerValue.TIMESTAMP
-          });
-          $scope.restaurantCart.hide();
-          alert("success")
-        }).catch(function(error) {
+          })
+            .then(() => {
+              alert('Success');
+            })
+            .catch((err) => { alert(err) })
+        })
+        .catch((error) => {
           alert(error);
           console.log(error);
         });

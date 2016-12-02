@@ -1,11 +1,13 @@
-app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera", "CordovaGeolocation", "currentGeoLocation", "Upload", "$ionicPopup",
-  function($scope, $firebaseArray, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation, currentGeoLocation, Upload, $ionicPopup) {
+app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera", "CordovaGeolocation", "currentGeoLocation", "Upload", "$ionicPopup", "Order", "Database",
+  function($scope, $firebaseArray, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation, currentGeoLocation, Upload, $ionicPopup, Order, Database) {
 
     $scope.modalControl = {};
     $scope.data= {detail:""};
     $scope.pendingRestaurants = Restaurant.getPendingRestaurants();
     $scope.displayRestaurants = User.getAuthRestaurants();
     $scope.AppUser = User.auth();
+
+
 
     console.log($scope.AppUser)
     $scope.showMap = function() {
@@ -110,6 +112,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     }
 
     $scope.edit = function(restaurant) {
+      console.log(JSON.stringify(restaurant, null, 4));
       Restaurant.editRestaurant(restaurant, $scope.marker, $scope.imageURL)
       .then(function() {
         $scope.imageURL = null;
@@ -156,10 +159,11 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     }
 
     $scope.deleteRestaurant = function(restaurant) {
+      console.log('delete');
       var resObj = restaurant;
-      $scope.displayRestaurants.$remove(resObj).then(function() {
-        console.log('deleted?');
-      });
+      // $scope.displayRestaurants.$remove(resObj).then(function() {
+      //   console.log('deleted?');
+      // });
 
       for (var menu in resObj.menus) {
         var menusRef = firebase.database().ref().child('menus');
@@ -176,6 +180,20 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
         console.log('reviewer ref' + userReviewedRestaurantsRef);
         userReviewedRestaurantsRef.child(resObj.$id).set(null);
       }
+
+      Database.restaurantOrdersReference().child(resObj.$id).once('value')
+        .then((snapshot) => {
+          for (var order in snapshot.val()) {
+            console.log(order);
+            Order.delete(order)
+              .then(() => {
+                console.log('success')
+              })
+              .catch((err) => {
+                console.log(err)
+              })
+          }
+        })
     }
 
     $scope.editRestaurant = function(restaurant) {

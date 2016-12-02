@@ -19,10 +19,6 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
     get : function(restaurantId) {
       console.log('nice restaurant get');
       return $firebaseObject(Database.restaurantsReference().child(restaurantId));
-      // return Database.restaurantsReference().child(restaurantId).once('value')
-      //   .then((snapshot) => {
-      //     return snapshot.val();
-      //   })
     },
     getPendingRestaurants : function() {
       return Database.pendings();
@@ -82,19 +78,16 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
       openTime.setHours(restaurantOpenTime.getHours(), restaurantOpenTime.getMinutes());
       closeTime.setHours(restaurantCloseTime.getHours(), restaurantCloseTime.getMinutes());
       if (restaurant.openDays[now.getDay()]) {
-        if(restaurantOpenTime.getTime() > restaurantCloseTime.getTime()) {
+        if(openTime.getTime() > closeTime.getTime()) {
           closeTime.setDate(closeTime.getDate() + 1);
         }
-
+        
         if(openTime.getTime() < now.getTime() && now.getTime() < closeTime.getTime()) {
           return true;
         }
-        else{
+        else {
           return false;
         }
-      }
-      else {
-        return false;
       }
     },
     getTimestamp : function(restaurantKey) {
@@ -188,6 +181,7 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
       return pendingRef.set(restObj);
     },
     editRestaurant : function(restaurant, marker, imageURL) {
+      console.log(JSON.stringify(restaurant, null, 4));
       var resRef = restaurants.child(restaurant.$id);
       var OT = new Date(restaurant.openTime);
       var CT = new Date(restaurant.closeTime);

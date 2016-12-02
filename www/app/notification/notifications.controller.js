@@ -1,37 +1,44 @@
-app.controller("NotificationsCtrl", ["$scope", "$firebaseArray", "User", "Restaurant", "notifications", "Notification",
-  function($scope, $firebaseArray, User, Restaurant, notifications, Notification){
+app.controller("NotificationsCtrl", ["$scope", "$firebaseArray", "$firebaseObject", "User", "Restaurant", "notifications", "Notification", "Database",
+  function($scope, $firebaseArray, $firebaseObject, User, Restaurant, notifications, Notification, Database){
 
     $scope.notifs = notifications;
 
-    $scope.markReadAll = function() {
-      return Notification.markReadAll(notifications);
+    $scope.markRead = function(notif) {
+      return Notification.delete(notif)
     }
 
-    $scope.markRead = function(notif) {
-      return Notification.markRead(notif);
+    $scope.markReadAll = function() {
+      return Notification.deleteAll($scope.notifs);
     }
 
     $scope.$watchCollection('notifs', function(newNotifs) {
       $scope.newNotifs = newNotifs.map(function(notification) {
-        var n =  {
-          self : notification,
-          id : notification.$id,
-          sender_id : notification.sender_id,
-          status : notification.status,
-          order_no : notification.order_no,
-          sender : User.getUserFullname(notification.sender_id),
-          restaurant : function() {
-            Restaurant.getRestaurantName(notification.restaurant_id)
-              .then((name) => {
-                n.restaurant_name = name;
-              })
-          }(),
-          timestamp : notification.timestamp,
-          type : notification.type,
+        var n = {
+          getObject : Notification.getOne(notification.$id).$loaded()
+            .then((notif) => {
+            User.getUser(notif.sender_id).$loaded().then((user) => {
+              Restaurant.get(notif.restaurant_id).$loaded()
+                .then((restaurant) => {
+                  n.restaurant_name = restaurant.name
+                  n.sender = user.firstName + " " + user.lastName
+                  n.status = notif.status;
+                  n.type = notif.type;
+                  n.timestamp = notif.timestamp;
+                  n.order_no = notif.order_no;
+                  n.ready = true
+                  n.self = notif
+                })
+                .catch((err) => {
+                  console.log(JSON.stringify(err))
+                })
+            })
+          })
         }
 
         return n;
       })
-    });
+    })
+
+
 
   }]);

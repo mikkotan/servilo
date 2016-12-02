@@ -1,5 +1,10 @@
-app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, firebaseConfigProvider, $ionicCloudProvider) {
-
+app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, firebaseConfigProvider, $ionicCloudProvider, ionGalleryConfigProvider) {
+  ionGalleryConfigProvider.setGalleryConfig({
+    action_label: 'Close',
+    toggle: true,
+    row_size: 4,
+    fixed_row_size: true
+  });
   firebase.initializeApp(firebaseConfigProvider.config);
   $urlRouterProvider.otherwise("/home");
   $ionicConfigProvider.tabs.position('bottom');
@@ -116,7 +121,12 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
       views: {
         'restaurant-page': {
           templateUrl: "app/restaurant/_view-restaurant-location.html",
-          controller: "ViewRestaurantLocation"
+          controller: "ViewRestaurantLocation",
+          resolve: {
+            currentGeoLocation: function(CordovaGeolocation) {
+              return CordovaGeolocation.get();
+            }
+          }
         }
       }
     })
