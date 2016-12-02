@@ -1,5 +1,5 @@
-app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upload", "Database", "$ionicLoading", "$ionicModal", "$ionicPopup", "CordovaGeolocation", "$stateParams", "Restaurant", "User", "Review", "Reservation", "$ionicLoading",
-  function($scope, $state, $firebaseArray, Upload, Database, $ionicLoading, $ionicModal, $ionicPopup, CordovaGeolocation, $stateParams, Restaurant, User, Review, Reservation, $ionicLoading) {
+app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "$firebaseObject", "Upload", "Database", "$ionicLoading", "$ionicModal", "$ionicPopup", "CordovaGeolocation", "$stateParams", "Restaurant", "User", "Review", "Reservation", "$ionicLoading",
+  function($scope, $state, $firebaseArray, $firebaseObject, Upload, Database, $ionicLoading, $ionicModal, $ionicPopup, CordovaGeolocation, $stateParams, Restaurant, User, Review, Reservation, $ionicLoading) {
 
     console.log("View Restaurant Ctrl")
     $scope.items = [];
@@ -7,6 +7,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
       rate: 0,
       max: 5
     }
+    $scope.user = User.auth();
 
     $scope.getImages = function(images) {
       var items = [];
@@ -242,10 +243,31 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
       scope: $scope
     })
 
+    $ionicModal.fromTemplateUrl('app/review/_edit-reply.html', function(editReplyModal) {
+      $scope.editReplyModal = editReplyModal;
+    }, {
+      scope: $scope
+    })
+
+    $scope.getReplies = function(reviewId) {
+      return Review.getReplies(reviewId);
+      // return $firebaseObject(Database.reviewsReference().child(reviewId).child('replies'))
+    }
+
     $scope.openReplyModal = function(review) {
       $scope.addReplyModal.show();
       $scope.reviewId = review.$id;
-      console.log($scope.reviewId)
+    }
+
+    $scope.openEditReplyModal = function(reply, reviewId) {
+      $scope.editReplyModal.show();
+      $scope.ereply = {
+        content: reply.content,
+        $id: reply.$id,
+        oldContent: reply.content,
+        user_id: reply.user_id,
+        reviewId: reviewId
+      }
     }
 
     $scope.addReply = function(reply) {
@@ -254,11 +276,13 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
         reply.content = "";
         $scope.addReplyModal.hide();
       })
-      // var replyRef = Database.reviewsReference().child($scope.reviewId).child('replies').push();
-      // replyRef.set({
-      //   content: reply.content,
-      //   user_id: User.auth().$id
-      // })
+    }
+
+    $scope.editReply = function(reply) {
+      Review.editReply(reply)
+      .then(function() {
+        $scope.editReplyModal.hide(); 
+      })
     }
 
     $scope.showConfirmDelete = function(review) {

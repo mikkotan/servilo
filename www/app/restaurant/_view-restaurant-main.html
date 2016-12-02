@@ -62,17 +62,24 @@
             <div class="container-class">
               <!-- <ion-scroll width="100px; height: 100px" direction="x" overflow-scroll="false"> -->
                 <div ng-if="review.images" ng-repeat="img in review.images">
-                  <!-- <img ng-src="{{img.src}}" style="width:50%"> -->
                    <img image-lazy-src="{{img.src}}" style="width:100px" image-lazy-loader="spiral">
                 </div>
               <!-- </ion-scroll>  -->
-              <button ng-click="openReplyModal(review)">Reply</button>
-              <div ng-repeat="reply in review.replies" ng-init="reviewName=getName(reply.user_id)">
+              <button ng-click="openReplyModal(review)" ng-init="replies=getReplies(review.$id)">Reply</button>
+              <div ng-repeat="reply in replies" ng-init="replyName=getName(reply.user_id)">
                 <div>
-                  <strong>{{reviewName.firstName}} {{reviewName.lastName}}:</strong> {{reply.content}}
+                  <strong>{{replyName.firstName}} {{replyName.lastName}}:</strong>
+                  {{reply.content}}
+                  <div ng-if="reply.user_id == user.$id">
+                    <a class="icon ion-edit" ng-click="openEditReplyModal(reply, review.$id)">Edit</a>
+                    <a class="icon ion-ios-close-outline" ng-click="replies.$remove(reply)">Remove</a>
+                  </div>
                 </div>
               </div>
             </div>
+          </li>
+          <li class="item" ng-hide="loadingReviews" ui-sref="tabs.viewRestaurant.reviews">
+            See all reviews
           </li>
         </ul>
 

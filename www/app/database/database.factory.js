@@ -11,7 +11,7 @@ app.factory("Database", ["$firebaseArray", "$firebaseObject", "$firebaseAuth",
     var ordersRef = rootRef.child('orders');
     var serviceRef = rootRef.child('service');
     var reservationsRef = rootRef.child('reservations');
-    var userFavoritesRef = rootRef.child('userFavorites');
+    var userFavoritesRef = rootRef.child('user_favorites');
 
 
     var Database = {
