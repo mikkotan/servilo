@@ -17,16 +17,6 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
     }
 
     $scope.bookReservation = function(reservation) {
-      //   $ionicLoading.show();
-      var reservationObject = {
-        datetime: reservation.datetime.getTime(),
-        number_of_persons: reservation.number_of_persons,
-        status: 'pending',
-        user_id: User.auth().$id,
-        restaurant_id: id,
-        timestamp: firebase.database.ServerValue.TIMESTAMP
-      }
-
       var confirmReservation = $ionicPopup.confirm({
         title: 'Confirm',
         template: 'Confirm your reservation?',
@@ -35,7 +25,22 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
       });
       confirmReservation.then(function(res) {
         if (res) {
-          Reservation.create(reservationObject);
+          Reservation.create({
+            datetime: reservation.datetime.getTime(),
+            number_of_persons: reservation.number_of_persons,
+            status: 'pending',
+            user_id: User.auth().$id,
+            restaurant_id: id,
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+          })
+            .then(() => {
+              console.log('success reservation')
+              alert('Reservation has been booked successfully.');
+            })
+            .catch((err) => {
+              console.log(err);
+              alert(err);
+            })
           $scope.addReservationModal.hide();
         }
       });
@@ -69,7 +74,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
 
         $scope.hasFavored = User.hasFavored(restaurant.$id);
         $scope.restaurantOpenStatus = Restaurant.getRestaurantOpenStatus(restaurant);
-        
+
         Restaurant.getReviews(restaurant.$id).$loaded().then(function(reviews) {
           $scope.restaurantReviews = reviews;
           $scope.loadingReviews = false;

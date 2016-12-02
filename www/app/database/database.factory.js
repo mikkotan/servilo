@@ -11,11 +11,12 @@ app.factory("Database", ["$firebaseArray", "$firebaseObject", "$firebaseAuth",
     var ordersRef = rootRef.child('orders');
     var serviceRef = rootRef.child('service');
     var reservationsRef = rootRef.child('reservations');
-    var userFavoritesRef = rootRef.child('userFavorites');
+    var userFavoritesRef = rootRef.child('user_favorites');
     var userNotificationsRef = rootRef.child('user_notifications');
     var userOrdersRef = rootRef.child('user_orders');
     var restaurantOrdersRef = rootRef.child('restaurant_orders');
-
+    var userReservationsRef = rootRef.child('user_reservations');
+    var restaurantReservationsRef = rootRef.child('restuarant_reservations');
 
     var Database = {
       rootReference : function() {
@@ -59,6 +60,12 @@ app.factory("Database", ["$firebaseArray", "$firebaseObject", "$firebaseAuth",
       },
       restaurantOrdersReference : function() {
         return restaurantOrdersRef;
+      },
+      userReservationsReference : function() {
+        return userReservationsRef;
+      },
+      restaurantReservationsReference : function() {
+        return restaurantReservationsRef;
       },
       services : function(){
         return $firebaseArray(serviceRef)

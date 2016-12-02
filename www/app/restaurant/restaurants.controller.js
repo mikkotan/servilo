@@ -1,5 +1,5 @@
-app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera", "CordovaGeolocation", "currentGeoLocation", "Upload", "$ionicPopup", "Order", "Database",
-  function($scope, $firebaseArray, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation, currentGeoLocation, Upload, $ionicPopup, Order, Database) {
+app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera", "CordovaGeolocation", "currentGeoLocation", "Upload", "$ionicPopup", "Order", "Database", "Reservation",
+  function($scope, $firebaseArray, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation, currentGeoLocation, Upload, $ionicPopup, Order, Database, Reservation) {
 
     $scope.modalControl = {};
     $scope.pendingRestaurants = Restaurant.getPendingRestaurants();
@@ -163,22 +163,37 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
       // $scope.displayRestaurants.$remove(resObj).then(function() {
       //   console.log('deleted?');
       // });
+      // for (var menu in resObj.menus) {
+      //   var menusRef = firebase.database().ref().child('menus');
+      //   menusRef.child(menu).set(null);
+      // }
+      //
+      // for (var review in resObj.reviews) {
+      //   var reviewsRef = firebase.database().ref().child('reviews');
+      //   reviewsRef.child(review).set(null);
+      // }
+      //
+      // for (var reviewer in resObj.reviewers) {
+      //   var userReviewedRestaurantsRef = firebase.database().ref().child('users').child(reviewer).child('reviewed_restaurants');
+      //   console.log('reviewer ref' + userReviewedRestaurantsRef);
+      //   userReviewedRestaurantsRef.child(resObj.$id).set(null);
+      // }
 
-      for (var menu in resObj.menus) {
-        var menusRef = firebase.database().ref().child('menus');
-        menusRef.child(menu).set(null);
-      }
-
-      for (var review in resObj.reviews) {
-        var reviewsRef = firebase.database().ref().child('reviews');
-        reviewsRef.child(review).set(null);
-      }
-
-      for (var reviewer in resObj.reviewers) {
-        var userReviewedRestaurantsRef = firebase.database().ref().child('users').child(reviewer).child('reviewed_restaurants');
-        console.log('reviewer ref' + userReviewedRestaurantsRef);
-        userReviewedRestaurantsRef.child(resObj.$id).set(null);
-      }
+      Database.restaurantReservationsReference().child(resObj.$id).once('value')
+        .then((snapshot) => {
+          for (var reservation in snapshot.val()) {
+            console.log(reservation);
+            Reservation.delete(reservation)
+              .then(() => {
+                console.log('delete sucess')
+                alert('delete success');
+              })
+              .catch((err) => {
+                console.log(err)
+                alert(err);
+              })
+          }
+        })
 
       Database.restaurantOrdersReference().child(resObj.$id).once('value')
         .then((snapshot) => {
@@ -190,6 +205,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
               })
               .catch((err) => {
                 console.log(err)
+                alert(err);
               })
           }
         })

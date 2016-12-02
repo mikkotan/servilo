@@ -37,9 +37,6 @@ app.factory('Notification', ['$firebaseObject', '$firebaseArray', 'Database', 'U
             console.log('success');
             return userNotifsRef.child(pushId.key).set(true)
           })
-          .catch((err) => {
-            return err
-          })
       },
       delete : function(notification) {
         var notifId = notification.$id;
