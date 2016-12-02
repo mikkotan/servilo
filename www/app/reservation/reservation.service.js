@@ -1,4 +1,4 @@
-app.factory('Reservation', function($firebaseObject, $firebaseArray, Database, User, Restaurant, $ionicLoading){
+app.factory('Reservation', function($firebaseObject, $firebaseArray, Database, User, Restaurant, $ionicLoading, Notification){
 
   var Reservation = {
     all : function() {
@@ -14,22 +14,13 @@ app.factory('Reservation', function($firebaseObject, $firebaseArray, Database, U
           .then((restaurant) => {
             var receiver = restaurant.owner_id
             console.log('success')
-            Database.notifications().$add({
+            Notification.create({
               sender_id: User.auth().$id,
               receiver_id: receiver,
               restaurant_id: reservation.restaurant_id,
               type: 'reservation',
               timestamp: firebase.database.ServerValue.TIMESTAMP
             })
-              .then(() => {
-                console.log('success promise notification')
-                $ionicLoading.hide();
-                alert('success');
-              })
-              .catch((err) => {
-                console.log(err);
-                alert(err);
-              })
           })
           .catch((err) => {
             alert(err);
