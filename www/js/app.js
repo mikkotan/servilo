@@ -204,7 +204,7 @@ app.directive('googleplace', function() {
     require: 'ngModel',
     scope: {
       ngModel: '=',
-      details: '=?'
+      details: '=details'
     },
     link: function(scope, element, attrs, model) {
       // this city bounds does not limit the search but biasing the search

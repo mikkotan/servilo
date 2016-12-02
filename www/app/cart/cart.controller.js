@@ -2,11 +2,9 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
   function($scope, User, CartData, Cart, Database, Restaurant, CordovaGeolocation, $ionicPopup) {
 
     $scope.order = Database.orders();
-
-
-
     $scope.cartData = CartData.get();
     $scope.totalPrice = CartData.totalPrice();
+    $scope.data ={location:"", detail: ""};
 
     $scope.add = function(orderMenu) {
       var order = $scope.cartData.indexOf(orderMenu);
@@ -195,18 +193,8 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
     //Mark the current location function here !!!
     $scope.markLocation = function() {
       $scope.currentLocation = CordovaGeolocation.get();
-      $scope.marker = {
-        id: Date.now(),
-        coords: {
-          latitude: $scope.currentLocation.latitude,
-          longitude: $scope.currentLocation.longitude
-        }
-      };
-      $scope.map.center = {
-        latitude: $scope.currentLocation.latitude,
-        longitude: $scope.currentLocation.longitude
-      };
-      $scope.placeName($scope.marker.coords.latitude, $scope.marker.coords.longitude);
+      $scope.setMarker($scope.currentLocation.latitude, $scope.currentLocation.longitude);
+      $scope.placeName($scope.currentLocation.latitude, $scope.currentLocation.longitude);
     }
 
     //function that converts LatLng coordinates to word
@@ -220,17 +208,38 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
         'location': latLng
       }, function(results, status) {
         if (status === 'OK') {
-          $scope.$parent.location = results[0].formatted_address;
+          $scope.data.location = results[0].formatted_address;
           $scope.$apply();
         } else {
           alert('Geocoder failed due to: ' + status);
         }
       });
     }
-    $scope.detail = null;
-    $scope.$watch($scope.location, function(newArray) {
-        console.log($scope.detail);
-    }, true);
+
+    $scope.$watch(function($scope){return $scope.data.detail;},
+      function(newValue, oldValue){
+        if(oldValue !== newValue){
+          if (angular.isDefined(newValue)){
+            var lat = newValue.lat();
+            var lng = newValue.lng();
+            $scope.setMarker(lat, lng);
+         }
+        }
+    });
+
+    $scope.setMarker = function(latitude, longitude) {
+      $scope.marker = {
+        id: Date.now(),
+        coords: {
+          latitude: latitude,
+          longitude: longitude
+        }
+      };
+      $scope.map.center = {
+        latitude: latitude,
+        longitude: longitude
+      };
+    }
 
   }
 ]);
