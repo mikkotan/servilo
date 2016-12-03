@@ -150,39 +150,46 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
         reviewer_id: User.auth().$id,
         restaurant_id: id,
         timestamp: firebase.database.ServerValue.TIMESTAMP
-      }).then(function(review) {
-        $ionicLoading.hide();
-        var list = Upload.multipleUpload(review.key);
-        for (var i = 0; i < $scope.images.length; i++) {
-          list.$add({
-              src: $scope.images[i]
-            })
-            .then(function(ref) {
-              console.log("added..." + ref);
-            });
-        }
-        console.log("add review done");
-        Review.userReview(id).set(review.key);
-        // Database.usersReference().child(User.auth().$id).child('reviewed_restaurants').child(id).set(review.key);
-        // Database.restaurantsReference().child(id).child('reviews').child(review.key).set(true); //new
-        // Database.restaurantsReference().child(id).child('reviewers').child(User.auth().$id).set(true); //new
-        $scope.isAlreadyReviewed();
-        $scope.reviewModal.hide();
-        review.content = '';
-        $scope.review.rating = 0;
-        $scope.rating.rate = 0;
-        $scope.images = [];
-        $ionicLoading.hide();
-
-        var restaurant_owner = Restaurant.getOwner($scope.restaurant.$id);
-        Notification.create({
-          sender_id: User.auth().$id,
-          receiver_id: restaurant_owner.$id,
-          restaurant_id: id,
-          type: 'review',
-          timestamp: firebase.database.ServerValue.TIMESTAMP
-        })
       })
+        .then(function(review) {
+          console.log('then 3');
+          console.log(review);
+          console.log('after creating a review');
+          $ionicLoading.hide();
+          var list = Upload.multipleUpload(review.key);
+          for (var i = 0; i < $scope.images.length; i++) {
+            list.$add({
+                src: $scope.images[i]
+              })
+              .then(function(ref) {
+                console.log("added..." + ref);
+              });
+          }
+          console.log("add review done");
+          Review.userReview(id).set(review.key);
+          // Database.usersReference().child(User.auth().$id).child('reviewed_restaurants').child(id).set(review.key);
+          // Database.restaurantsReference().child(id).child('reviews').child(review.key).set(true); //new
+          // Database.restaurantsReference().child(id).child('reviewers').child(User.auth().$id).set(true); //new
+          $scope.isAlreadyReviewed();
+          $scope.reviewModal.hide();
+          $scope.review.content = '';
+          $scope.review.rating = 0;
+          $scope.rating.rate = 0;
+          $scope.images = [];
+          $ionicLoading.hide();
+
+          var restaurant_owner = Restaurant.getOwner($scope.restaurant.$id);
+          Notification.create({
+            sender_id: User.auth().$id,
+            receiver_id: restaurant_owner.$id,
+            restaurant_id: id,
+            type: 'review',
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+          })
+        })
+        .catch((err) => {
+          alert(err);
+        })
     }
 
     $scope.openEditModal = function(review) {

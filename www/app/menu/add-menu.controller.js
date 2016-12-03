@@ -46,6 +46,26 @@ app.controller("AddMenuCtrl",["$scope", "restaurantId", "$cordovaCamera", "Resta
         Menu.getRestaurantRef(restaurantId, categoryId, newKey);
       })
       // $state.go('tabs.restaurant');
-  }
+    }
+
+    $scope.addMenu = function(menu) {
+      Menu.create({
+        name : menu.name.toLowerCase(),
+        price : menu.price,
+        restaurant_id : restaurantId,
+        category_id : menu.category,
+        availability : false,
+        prevPrice : menu.price,
+        photoURL : $scope.photoURL,
+        timestamp : firebase.database.ServerValue.TIMESTAMP
+      })
+        .then(() => {
+          // $state.go('tabs.restaurant{{id}}')
+          alert('Success');
+        })
+        .catch((err) => {
+          alert(err);
+        })
+    }
 
 }]);
