@@ -7,6 +7,7 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
   var reviews = Database.reviewsReference();
   var orders = Database.ordersReference();
   var restaurantsArray = Database.restaurants();
+  var restaurantReviews = Database.restaurantReviewsReference();
 
   var Restaurant = {
     all : function() {
@@ -51,7 +52,8 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
         })
     },
     getReviews : function(restaurantId) {
-      return $firebaseArray(reviews.orderByChild('restaurant_id').equalTo(restaurantId));
+      // return $firebaseArray(reviews.orderByChild('restaurant_id').equalTo(restaurantId));
+      return $firebaseArray(restaurantReviews.child(restaurantId).limitToLast(5))
     },
     getOwner : function(restaurantId) {
       // console.log('get owner method');

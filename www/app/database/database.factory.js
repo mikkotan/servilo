@@ -21,6 +21,7 @@ app.factory("Database", ["$firebaseArray", "$firebaseObject", "$firebaseAuth",
     var restaurantReviewsRef = rootRef.child('restaurant_reviews');
     var userReviewsRef = rootRef.child('user_reviews');
 
+
     var Database = {
       rootReference : function() {
         return rootRef;

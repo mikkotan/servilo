@@ -24,9 +24,20 @@ app.factory("Upload", ["Database", "$firebaseArray",
       var reviewsRef = storageRef.child(child).putString(base64, 'data_url', metadata);
       return reviewsRef;
     },
-    multipleUpload : function(id) {
-      var ref = Database.reviewsReference().child(id).child('images');
+    getMultipleUpload : function(restaurantId, reviewId) {
+      var ref = Database.restaurantReviewsReference().child(restaurantId).child(reviewId).child('images');
       return $firebaseArray(ref);
+    },
+    uploadMultiple : function(images, restaurantId, reviewId) {
+      var list = this.getMultipleUpload(restaurantId, reviewId);
+      for (var i = 0; i < images.length; i++) {
+        list.$add({
+          src: images[i]
+        })
+        .then(function(ref) {
+          console.log("added..." + ref);
+        });
+      }
     },
     getSource : function(input) {
       var source = "";

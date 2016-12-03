@@ -1,7 +1,7 @@
-app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "Restaurant", "CordovaGeolocation", "$ionicPopup", "Notification", "Order",
-  function($scope, User, CartData, Cart, Database, Restaurant, CordovaGeolocation, $ionicPopup, Notification, Order) {
+app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "Restaurant", "CordovaGeolocation", "$ionicPopup", "Notification", "Order", "$ionicLoading",
+  function($scope, User, CartData, Cart, Database, Restaurant, CordovaGeolocation, $ionicPopup, Notification, Order, $ionicLoading) {
 
-    $scope.order = Database.orders();
+    // $scope.order = Database.orders();
     $scope.cartData = CartData.get();
     $scope.totalPrice = CartData.totalPrice();
     $scope.data ={location:"", detail: ""};
@@ -106,6 +106,7 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
     }
 
     $scope.buy = function(cart, location) {
+      $ionicLoading.show();
       if (location) {
         // $scope.order.$add({
         Order.create({
@@ -139,6 +140,7 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
             timestamp: firebase.database.ServerValue.TIMESTAMP
           })
             .then(() => {
+              $ionicLoading.hide();
               alert('Success');
             })
             .catch((err) => { alert(err) })
