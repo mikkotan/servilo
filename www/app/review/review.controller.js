@@ -12,6 +12,7 @@ app.controller("ReviewCtrl", ["$scope", "restaurantId", "$ionicModal", "$ionicLi
         lastKey = Review.getLastKey(reviews);
         Review.nextReviews(lastKey, restaurantId).$loaded().then(function(data) {
           if(data.length <= 0) {
+            console.log('wala na reviews hehe')
             $scope.noMoreItemsAvailable = true;
           }
           $scope.$broadcast('scroll.infiniteScrollComplete');
