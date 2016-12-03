@@ -1,6 +1,6 @@
 app.controller('SearchTabCtrl',
-  ["$scope","Auth", "$state", "User", "ionicMaterialInk", "$ionicPopup", "CordovaGeolocation", "$ionicLoading", "Search", "currentGeoLocation",
-    function($scope, Auth, $state, User, ionicMaterialInk, $ionicPopup, CordovaGeolocation, $ionicLoading, Search, currentGeoLocation) {
+  ["$scope","Auth", "$state", "User", "ionicMaterialInk", "$ionicPopup", "CordovaGeolocation", "$ionicLoading", "Search", "currentGeoLocation", "Restaurant",
+    function($scope, Auth, $state, User, ionicMaterialInk, $ionicPopup, CordovaGeolocation, $ionicLoading, Search, currentGeoLocation, Restaurant) {
 
   console.log('SearchTabCtrl');
   $scope.restaurants = [];
@@ -9,11 +9,63 @@ app.controller('SearchTabCtrl',
   $scope.map = Search.getMap();
   var isMarkerCanChange = true;
   $scope.mapText = "Nearest restaurant in 1km";
-  
+
+  $scope.RestaurantService = Restaurant;
   $scope.rating = {
     rate : 0,
     max: 5
   }
+
+  $scope.$watch('restaurants', function() {
+    console.log('restaurants changed');
+  })
+
+  $scope.$watchCollection('restaurants', function(newRestaurants) {
+    console.log('WATCH COLLECTION BEING RUN');
+    $scope.newRestaurants = newRestaurants.map(function(restaurant) {
+      console.log('hehe hellow')
+      console.log(restaurant);
+      var r = {
+        details : restaurant,
+        getAvg : Restaurant.getAverageRating(restaurant.$id)
+        .then((res) => {
+          console.log(res);
+          console.log('wewokwokwokwowkwowk');
+          r.avg = res
+          r.ready = true
+        })
+      }
+      return r;
+    })
+  })
+
+  // $scope.$watchCollection('notifs', function(newNotifs) {
+  //   $scope.newNotifs = newNotifs.map(function(notification) {
+  //     var n = {
+  //       getObject : Notification.getOne(notification.$id).$loaded()
+  //         .then((notif) => {
+  //         User.getUser(notif.sender_id).$loaded().then((user) => {
+  //           Restaurant.get(notif.restaurant_id).$loaded()
+  //             .then((restaurant) => {
+  //               n.restaurant_name = restaurant.name
+  //               n.sender = user.firstName + " " + user.lastName
+  //               n.status = notif.status;
+  //               n.type = notif.type;
+  //               n.timestamp = notif.timestamp;
+  //               n.order_no = notif.order_no;
+  //               n.ready = true
+  //               n.self = notif
+  //             })
+  //             .catch((err) => {
+  //               console.log(JSON.stringify(err))
+  //             })
+  //         })
+  //       })
+  //     }
+  //
+  //     return n;
+  //   })
+  // })
 
   Auth.$onAuthStateChanged(function(firebaseUser) {
     if(firebaseUser) {
@@ -61,8 +113,8 @@ app.controller('SearchTabCtrl',
       // })
       $scope.map.zoom = 14;
       $scope.map.center = {
-        latitude: currentLocation.latitude, 
-        longitude: currentLocation.longitude 
+        latitude: currentLocation.latitude,
+        longitude: currentLocation.longitude
       };
       isMarkerCanChange = false;
     }

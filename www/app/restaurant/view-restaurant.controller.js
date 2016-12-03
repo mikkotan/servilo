@@ -9,6 +9,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
     }
     $scope.user = User.auth();
 
+
     $scope.getImages = function(images) {
       var items = [];
       for (var key in images) {
@@ -52,6 +53,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
     }
 
     var id = $stateParams.restaurantId;
+    Restaurant.getAverageRating(id);
     var userReviewsRef = Review.userReview(id);
     Restaurant.get(id).$loaded()
       .then(function(restaurant) {

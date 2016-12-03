@@ -33,6 +33,20 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
     //   var res = Database.restaurants().$getRecord(restaurantId);
     //   return res.secured_data.avgRate.toFixed(1);
     // },
+    getAverageRating : function(restaurantId) {
+      console.log('getting averge rating to ' + restaurantId);
+      return Database.restaurantReviewsReference().child(restaurantId).once('value')
+        .then((snapshot) => {
+          var total = 0
+          var count = 0
+          var reviews = snapshot.val();
+          for (var key in reviews) {
+            count ++;
+            total += reviews[key].rating
+          }
+          return (total/count).toFixed(1);
+        })
+    },
     getMenus : function(restaurantId) {
       return $firebaseArray(menus.orderByChild("restaurant_id").equalTo(restaurantId));
     },
@@ -83,7 +97,7 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
         if(openTime.getTime() > closeTime.getTime()) {
           closeTime.setDate(closeTime.getDate() + 1);
         }
-        
+
         if(openTime.getTime() < now.getTime() && now.getTime() < closeTime.getTime()) {
           return true;
         }
