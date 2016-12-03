@@ -42,8 +42,28 @@ app.factory("Review", ["$firebaseObject", "$firebaseArray", "$firebaseAuth", "Da
         var replyRef = reviews.child(reviewId).child('replies').push();
         return replyRef.set({
           content: reply.content,
+          prevContent: "",
           user_id: User.auth().$id
         })
+      },
+      editReply : function(reply) {
+        var replyRef = reviews.child(reply.reviewId).child('replies').child(reply.$id);
+        return replyRef.update({
+          prevContent: reply.oldContent,
+          content: reply.content,
+          user_id: User.auth().$id
+        })
+      },
+      getReplies : function(reviewId) {
+        return $firebaseArray(reviews.child(reviewId).child('replies'))
+      },
+      getLastKey : function(reviewArray) {
+        return reviewArray[reviewArray.length-1].$id;
+      },
+      nextReviews : function(key, restaurantId) {
+        // var query = restaurantsRef.orderByKey().startAt(key+1).limitToFirst(5);
+        var query = reviews.orderByChild('restaurant_id').equalTo(restaurantId).startAt(key+1).limitToFirst(5)
+        return $firebaseArray(query);
       }
     }
 

@@ -99,6 +99,23 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
         }
       }
     })
+    .state('tabs.viewRestaurant.reviews', {
+      url: "/reviews",
+      views: {
+        'restaurant-page': {
+          templateUrl: "app/review/_all-reviews.html",
+          controller: "ReviewCtrl",
+          resolve: {
+            "currentAuth": ["Auth", function(Auth) {
+              return Auth.$requireSignIn();
+            }],
+            restaurantId: function($stateParams) {
+              return $stateParams.restaurantId
+            }
+          }
+        }
+      }
+    })
     .state('tabs.viewRestaurant.menus', {
       url: "/menus",
       views: {
