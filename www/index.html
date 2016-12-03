@@ -104,6 +104,8 @@
   <script src="cordova.js"></script>
   <!-- toast -->
   <script src="lib/ionic-toast/dist/ionic-toast.bundle.min.js"></script>
+  <!-- action button -->
+  <script src="lib\material-action-button\ion-action-button.js"></script>
   <!-- end of data -->
 
 </head>
@@ -160,13 +162,13 @@
             Profile
           </ion-item>
           <hr ng-show="firebaseUser">
-          <ion-item menu-close ng-show="firebaseUser" class="item-borderless">
+          <ion-item menu-close ng-show="firebaseUser" ui-sref="tabs.restaurant" class="item-borderless">
             Restaurants
           </ion-item>
-          <ion-item menu-close ng-show="firebaseUser" class="item-borderless" ng-click="signOut()">
+          <ion-item menu-close ng-show="firebaseUser" class="item-borderless">
             Notifications
           </ion-item>
-          <ion-item menu-close ng-show="firebaseUser" class="item-borderless" ng-click="signOut()">
+          <ion-item menu-close ng-show="firebaseUser" class="item-borderless">
             Orders
           </ion-item>
           <hr ng-show="firebaseUser">

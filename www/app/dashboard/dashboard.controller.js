@@ -1,12 +1,60 @@
-app.controller("DashboardCtrl", ["$scope", "$firebaseArray", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera", "CordovaGeolocation", "currentGeoLocation", "Upload", "$ionicPopup",
-  function($scope, $firebaseArray, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation, currentGeoLocation, Upload, $ionicPopup) {
+app.controller("DashboardCtrl", ["$scope", "$state", "$stateParams", "$firebaseArray", "User", "$ionicModal", "$actionButton", "$ionicListDelegate", "Restaurant", "$cordovaCamera", "CordovaGeolocation", "currentGeoLocation", "Upload", "$ionicPopup",
+  function($scope, $state, $stateParams, $firebaseArray, User, $ionicModal, $actionButton, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation, currentGeoLocation, Upload, $ionicPopup) {
 
     $scope.modalControl = {};
     $scope.pendingRestaurants = Restaurant.getPendingRestaurants();
     $scope.displayRestaurants = User.getAuthRestaurants();
     $scope.AppUser = User.auth();
 
+    var id = $stateParams.restaurantId;
     console.log($scope.AppUser);
+
+    // check state
+    console.log($state.current.name);
+
+    $scope.showDelete = function() {
+      var deletePopup = $ionicPopup.confirm({
+        title: 'Sure to delete?',
+        cssClass: 'custom-popup',
+        scope: $scope
+      });
+      deletePopup.then(function(res) {
+        if (res) {
+          $scope.deleteRestaurant(Restaurant.get(id));
+        }
+      });
+    };
+
+    if ($state.is("tabs.dashboard.main")) {
+      var actionButton = $actionButton.create({
+        mainAction: {
+          icon: 'ion-gear-b',
+          backgroundColor: '#886aea',
+          textColor: ' white',
+          onClick: function() {}
+        },
+        buttons: [{
+          icon: 'ion-trash-b',
+          label: 'Delete Restaurant',
+          backgroundColor: 'red',
+          iconColor: 'white',
+          onClick: function() {
+            $scope.showDelete()
+          }
+        }, {
+          icon: 'ion-edit',
+          label: 'Edit Restaurant',
+          backgroundColor: 'blue',
+          iconColor: 'white',
+          onClick: function() {
+            console.log($stateParams.restaurantId);
+            console.log('clicked pin');
+            $scope.editRestaurant(Restaurant.get(id));
+          }
+        }]
+      });
+    }
+
     $scope.showMap = function() {
       var mapPopup = $ionicPopup.confirm({
         title: 'Choose Location',
@@ -98,8 +146,8 @@ app.controller("DashboardCtrl", ["$scope", "$firebaseArray", "User", "$ionicModa
     }
 
     $scope.edit = function(restaurant) {
-        $scope.restaurant.phonenumber =
-      Restaurant.editRestaurant(restaurant, $scope.marker, $scope.imageURL)
+      $scope.restaurant.phonenumber =
+        Restaurant.editRestaurant(restaurant, $scope.marker, $scope.imageURL)
         .then(function() {
           $scope.imageURL = null;
         })

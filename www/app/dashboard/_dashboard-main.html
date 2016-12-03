@@ -12,13 +12,37 @@
     </div>
     <div class="card list">
       <div class="item item-divider">
+        <h2>Information</h2>
+      </div>
+      <div class="item item-text-wrap">
+        <div class="list">
+          <div class="item">
+            <p>Type: {{restaurant.type}}</p>
+          </div>
+          <div class="item">
+            <p>Cuisine: {{restaurant.cuisine}}</p>
+          </div>
+          <div class="item">
+            <p>Open: {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}</p>
+          </div>
+          <div class="item">
+            <p>Contact no.: {{restaurant.phonenumber}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card list">
+      <div class="item item-divider">
         <h2>Facilities</h2>
       </div>
       <div class="item item-text-wrap">
         <div class="list">
-          <div class="item" ng-repeat="facility in restaurant.facilities">
-              <p>{{facility.name}}</p>
+          <div class="item" ng-repeat="(key, val) in restaurant.facilities">
+            <p>{{key}}</p>
+            <!-- todo name - mikel -->
           </div>
         </div>
+      </div>
+    </div>
   </ion-content>
 </ion-view>
