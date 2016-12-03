@@ -1,5 +1,5 @@
 <ion-view view-title="{{restaurant.name}}">
-  <ion-content class="padding has-tabs-top">
+  <ion-content class="padding has-tabs-top" lazy-scroll>
     <img ng-if="restaurant.photoURL" ng-src="{{restaurant.photoURL}}" width="100%" />
     <img ng-if="!restaurant.photoURL" ng-src="img/wow.jpg" width="100%">
     <div class="padding">
@@ -21,7 +21,7 @@
         Restaurant Hours: {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}
       </p>
       <p ng-if="!restaurantOpenStatus" style="color:red;">
-        Opens at {{ restaurant.openTime | date:'shortTime' }}
+        Opens at {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}
       </p>
       <ion-list>
         <ion-item>
@@ -44,18 +44,42 @@
       <div class="list">
         <div class="item item-divider">
           Reviews
+          <ion-spinner ng-if="loadingReviews" icon="spiral"></ion-spinner>
         </div>
         <ul>
-          <li class="item" ng-repeat="review in restaurantReviews">
+          <li class="item" ng-repeat="review in restaurantReviews" ng-init="reviewer=getName(review.reviewer_id)">
+          <!-- ng-init="reviewer=getReviewer(review)" -->
+          <!-- ng-init="images=getImages(review.images)" -->
             <h3>
               {{review.content}} <span class="badge badge-balanced">{{review.rating}}</span>
             </h3>
             <p>
-              Reviewed by: {{getReviewer(review).firstName}} {{getReviewer(review).lastName}}
+              Displayname: {{reviewer.displayName}} <br>
+              Reviewed by: {{reviewer.firstName}} {{reviewer.lastName}}
+              <!-- Reviewed by: {{getReviewer(review).firstName}} {{getReviewer(review).lastName}} -->
             </p>
-            <p ng-if="review.images" ng-repeat="img in review.images">
-              <img ng-src="{{img.image}}" style="width:50px">
-            </p>
+            <!-- <ion-gallery ion-gallery-items="images"></ion-gallery> -->
+            <div class="container-class">
+              <!-- <ion-scroll width="100px; height: 100px" direction="x" overflow-scroll="false"> -->
+                <div ng-if="review.images" ng-repeat="img in review.images">
+                   <img image-lazy-src="{{img.src}}" style="width:100px" image-lazy-loader="spiral">
+                </div>
+              <!-- </ion-scroll>  -->
+              <button ng-click="openReplyModal(review)" ng-init="replies=getReplies(review.$id)">Reply</button>
+              <div ng-repeat="reply in replies" ng-init="replyName=getName(reply.user_id)">
+                <div>
+                  <strong>{{replyName.firstName}} {{replyName.lastName}}:</strong>
+                  {{reply.content}}
+                  <div ng-if="reply.user_id == user.$id">
+                    <a class="icon ion-edit" ng-click="openEditReplyModal(reply, review.$id)">Edit</a>
+                    <a class="icon ion-ios-close-outline" ng-click="replies.$remove(reply)">Remove</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="item" ng-hide="loadingReviews" ui-sref="tabs.viewRestaurant.reviews">
+            See all reviews
           </li>
         </ul>
 

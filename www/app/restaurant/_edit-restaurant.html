@@ -7,23 +7,23 @@
     <ion-list>
       <div class="card">
         <ion-item id="form-input">
-          <form ng-submit="edit(eRestaurant)">
+          <form ng-submit="edit(restaurant)">
             <div class="list">
               <label class="item item-input item-floating-label">
                 <span class="input-label has-input">Name of Restaurant</span>
-                <input type="text" placeholder="Name of Restaurant" ng-model="eRestaurant.name">
+                <input type="text" placeholder="Name of Restaurant" ng-model="restaurant.name">
               </label>
               <label class="item item-input item-floating-label">
                 <span class="input-label has-input">Contact Number</span>
-                <input type="number" placeholder="Contact Number" ng-model="eRestaurant.phonenumber">
+                <input type="number" placeholder="Contact Number" ng-model="restaurant.phonenumber">
               </label>
               <label class="item item-input item-floating-label">
                 <span class="input-label has-input">Type of Restaurant</span>
-                <input type="text" placeholder="Type of Restaurant" ng-model="eRestaurant.type">
+                <input type="text" placeholder="Type of Restaurant" ng-model="restaurant.type">
               </label>
               <label class="item item-input item-floating-label">
                 <span class="input-label has-input">Cuisine of Restaurant</span>
-                <input type="text" placeholder="Cuisine of Restaurant" ng-model="eRestaurant.cuisine">
+                <input type="text" placeholder="Cuisine of Restaurant" ng-model="restaurant.cuisine">
               </label>
               <div class="item item-text-wrap">
                 <button class="button button-block button-royal icon-left ion-plus-circled" ng-click="setHours()">Set Hours</button>
@@ -33,19 +33,20 @@
               </div>
               <div class="item item-text-wrap">
                 <button class="button button-block button-royal icon-left ion-plus-circled" ng-click="setFacilities()">Set Facilities</button>
+
                 <div class="col text-center">
-
-                  {{eRestaurant.facilities}}
-
-                  <p ng-repeat="facility in eRestaurant.facilities">
-                    {{eRestaurant.facilities[facility]}}
+                  <p ng-repeat="(key, val) in restaurant.facilities" ng-if="val">
+                    {{key}}
                   </p>
                 </div>
+              </div>
+              <div class="item">
+                <a class="button button-block button-royal icon-left ion-plus-circled" ng-click="setOpenDays()">Set Open Days</a>
               </div>
               <div class="item item-input-inset">
                 <label class="item-input item-floating-label">
                   <span class="input-label has-input">Location of Restaurant</span>
-                  <input type="text" placeholder="Location of Restaurant" ng-model="eRestaurant.location">
+                  <input type="text" placeholder="Location of Restaurant" ng-model="restaurant.location">
                 </label>
                 <button class="button button-royal icon ion-map" ng-click="showMap()"></button>
               </div>

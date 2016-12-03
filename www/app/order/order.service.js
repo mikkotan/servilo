@@ -1,5 +1,5 @@
-app.factory("Order",["$firebaseAuth","$firebaseArray","$firebaseObject", "Database", "$ionicPopup", "Restaurant", "User",
-  function($firebaseAuth , $firebaseArray , $firebaseObject, Database, $ionicPopup, Restaurant, User){
+app.factory("Order",["$firebaseAuth","$firebaseArray","$firebaseObject", "Database", "$ionicPopup", "Restaurant", "User", "Notification",
+  function($firebaseAuth , $firebaseArray , $firebaseObject, Database, $ionicPopup, Restaurant, User, Notification){
 
   var rootRef = firebase.database().ref();
   var orders = Database.ordersReference();
@@ -11,12 +11,47 @@ app.factory("Order",["$firebaseAuth","$firebaseArray","$firebaseObject", "Databa
     all : function() {
       return $firebaseArray(orders);
     },
+    getOne : function(orderId) {
+      console.log('getting one ' + orderId);
+      return $firebaseObject(orders.child(orderId));
+    },
     getOrder : function(restaurantId){
       return $firebaseArray(orders.orderByChild("restaurant_id").equalTo(restaurantId));
     },
     findOne : function(orderId) {
       console.log("find One order fired");
       return $firebaseObject(Database.ordersReference().child(orderId));
+    },
+    create : function(order) {
+      console.log('Order create function');
+      var authObj = firebase.auth().currentUser.uid;
+      var pushId = Database.ordersReference().push()
+      return pushId.set(order)
+        .then(() => {
+          console.log('Order Created');
+          Database.userOrdersReference().child(authObj).child(pushId.key).set(true)
+            .then(() => {
+              console.log('userOrder Created')
+              return Database.restaurantOrdersReference().child(order.restaurant_id).child(pushId.key).set(true)
+            })
+        })
+    },
+    delete : function(order) {
+      console.log('delete ordering')
+      return Database.ordersReference().child(order).once('value')
+        .then((orderObj) => {
+          console.log(orderObj);
+          var orderId = orderObj.key;
+          var customerId = orderObj.val().customer_id;
+          var restaurantId = orderObj.val().restaurant_id;
+          Database.ordersReference().child(orderId).set(null)
+            .then(() => {
+              Database.userOrdersReference().child(customerId).child(orderId).set(null)
+                .then(() => {
+                  return Database.restaurantOrdersReference().child(restaurantId).child(orderId).set(null)
+                })
+            })
+        })
     },
     cancel : function(order) {
       var confirm = $ionicPopup.confirm({
@@ -31,20 +66,17 @@ app.factory("Order",["$firebaseAuth","$firebaseArray","$firebaseObject", "Databa
           orderDetailsRef.child('status').set('cancelled');
           orderDetailsRef.child('status_time').set(firebase.database.ServerValue.TIMESTAMP);
           orderRef.child('orderStatus').set(null);
-          Restaurant.get(order.restaurant_id)
+          Restaurant.get(order.restaurant_id).$loaded()
             .then((restaurant) => {
-              console.log('then in restaurant');
-              Database.notifications().$add({
+              Notification.create({
                 sender_id : User.auth().$id,
-                receiver_id : restaurant.owner_id,
                 restaurant_id : order.restaurant_id,
+                receiver_id : restaurant.owner_id,
                 type : 'order',
                 status : 'cancelled',
                 order_no: order.order_details.timestamp,
                 timestamp: firebase.database.ServerValue.TIMESTAMP
               })
-                .then(() => { console.log('success')})
-                .catch((err) => { console.log(err)})
             })
             .catch((err) => {
               console.log(err)
@@ -94,21 +126,15 @@ app.factory("Order",["$firebaseAuth","$firebaseArray","$firebaseObject", "Databa
                 orderStatusRef.child('status_time').set(firebase.database.ServerValue.TIMESTAMP);
               }
 
-              Database.notifications().$add({
-                sender_id : User.auth().$id,
-                receiver_id : order.customer_id,
+              Notification.create({
+                sender_id: User.auth().$id,
                 restaurant_id : order.restaurant_id,
+                receiver_id : order.customer_id,
                 type : 'order_status',
                 status : key,
                 order_no: order.order_details.timestamp,
                 timestamp: firebase.database.ServerValue.TIMESTAMP
               })
-                .then(() => {
-                  console.log("success");
-                })
-                .catch((err) => {
-                  console.log(err);
-                })
               console.log('Order Reference :' + orderRef);
             }
             else {

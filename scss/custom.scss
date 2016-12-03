@@ -182,3 +182,8 @@ ion-popover-view.fit ion-content {
 .black-bg {
   background: rgba(0, 0, 0, 0.5);
 }
+.container-class {
+  ::-webkit-scrollbar {
+    display: none !important;
+  }
+}

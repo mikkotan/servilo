@@ -5,7 +5,7 @@
       <h1>{{status}}</h1>
       <ion-item ng-repeat="menu in restaurantMenus">
         <h3>{{menu.name}}</h3>
-        <img id="profile-image" ng-src="img/ionic.png">
+        <img id="profile-image" ng-src="{{menu.photoURL}}">
         <button class="button button-calm" ng-disabled="!getRestaurantStatus || !menu.availability" ng-click="addToCart(menu)">Buy</button>
         <p>{{availability(menu)}}</p>
         <p>

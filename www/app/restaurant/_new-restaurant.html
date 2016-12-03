@@ -34,18 +34,18 @@
               <div class="item">
                 <a class="button button-block button-royal icon-left ion-plus-circled" ng-click="setFacilities()">Set Facilities</a>
                 <div class="col text-center">
-
-                  {{restaurant.facilities}}
-
-                  <p ng-repeat="facility in restaurant.facilities">
-                    {{restaurant.facilities[facility]}}
+                  <p ng-repeat="(key, val) in restaurant.facilities" ng-if="val">
+                    {{key}}
                   </p>
                 </div>
+              </div>
+              <div class="item">
+                <button class="button button-block button-royal icon-left ion-plus-circled" ng-click="setOpenDays()">Set Open Days</button>
               </div>
               <div class="item item-input-inset">
                 <label class="item-input item-floating-label">
                   <span class="input-label has-input">Location of Restaurant</span>
-                  <input type="text" placeholder="Location of Restaurant" ng-model="restaurant.location">
+                  <input type="text" placeholder="Location of Restaurant" ng-model="restaurant.location" details="data.detail" googleplace/>
                 </label>
                 <a class="button button-royal icon ion-map" ng-click="showMap()"></a>
               </div>
@@ -78,8 +78,6 @@
             </div>
 
           </form>
-          <!-- watch does not work on this function -->
-          <div ng-cloak>{{locationDetail(detail)}}</div>
         </ion-item>
       </div>
     </ion-list>

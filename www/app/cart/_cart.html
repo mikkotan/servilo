@@ -4,11 +4,9 @@
     <button class="button button-clear button-primary" ng-click="hideCartModal()"><i class="icon ion-ios-close"></i></button>
   </ion-header-bar>
   <ion-content class="padding">
-
     <div class="card" ng-repeat="order in menus">
       <div class="item item-text-wrap">
-
-        <img id="profile-image" ng-src="img/ionic.png">
+        <img id="profile-image" ng-src={{order.menu.photoURL}}>
         <p> Name: {{order.menu.name}} Price: {{order.menu.price}} Quantity: {{order.menu.quantity}} Subtotal : {{order.subtotal}}</p>
 
       </div>
@@ -32,13 +30,12 @@
         <div class="item item-input-inset">
           <label class="item-input item-floating-label">
             <span class="input-label has-input">Delivery Address</span>
-            <input type="text" placeholder="Delivery Address" ng-model="location" required>
+            <input type="text" placeholder="Delivery Address" ng-model="data.location" details="data.detail" required googleplace/>
           </label>
           <button class="button button-royal icon ion-map" ng-click="showMap()"></button>
         </div>
       </div>
     </div>
     <button class="button button-block button-calm" ng-click="buy(menus,location)">Buy</button>
-
   </ion-content>
 </ion-modal-view>
