@@ -1,8 +1,17 @@
 app.controller('HomeTabCtrl',
-  ["$scope","$ionicModal", "$state", "ionicMaterialInk", "$ionicLoading", "Home", "$timeout",
-    function($scope, $ionicModal, $state, ionicMaterialInk, $ionicLoading, Home, $timeout) {
+  ["$scope","$ionicModal", "$state", "ionicMaterialInk", "$ionicLoading", "Home", "$timeout","User","Auth",
+    function($scope, $ionicModal, $state, ionicMaterialInk, $ionicLoading, Home, $timeout,User,Auth) {
 
   var vm = this;
+
+  Auth.$onAuthStateChanged(function(firebaseUser) {
+    if(firebaseUser) {
+      User.setOnline(firebaseUser.uid);
+      User.isAdmin(firebaseUser.uid).then(function(val){console.log("ADMIN: " + val)})
+      User.isUser(firebaseUser.uid).then(function(val){console.log("USER: " + val)})
+      User.isRestaurantOwner(firebaseUser.uid).then(function(val){console.log("RESTAURANT_OWNER: " + val)})
+    }
+  });
 
   console.log('HomeTabCtrl');
   vm.restaurants = Home.srestaurants();

@@ -4,7 +4,7 @@ app.factory("Menu",["$firebaseAuth","$firebaseArray","$firebaseObject","Restaura
   var rootRef = firebase.database().ref();
   var menus = Database.menusReference();
   var restaurants = Database.restaurantsReference();
-  var menusArray = Database.menus();
+  // var menusArray = Database.menus();
   // var restaurantsArray = Database.restaurants();
 
   return {
@@ -19,7 +19,8 @@ app.factory("Menu",["$firebaseAuth","$firebaseArray","$firebaseObject","Restaura
       return menus.push().key;
     },
     get : function(menuId) {
-      return menusArray.$getRecord(menuId);
+      // return menusArray.$getRecord(menuId);
+      return $firebaseObject(menus.child(menuId));
     },
     getRestaurantRef : function(restaurantId, categoryId, key){
       var restaurantRef = restaurants.child(restaurantId);
@@ -31,6 +32,25 @@ app.factory("Menu",["$firebaseAuth","$firebaseArray","$firebaseObject","Restaura
     },
     getMenuCategories : function(restaurantId) {
       return $firebaseArray(restaurants.child(restaurantId).child('menu_categories'));
+    },
+    create : function(menu) {
+      var authObj = firebase.auth().currentUser.uid;
+      var pushId = Database.menusReference().push();
+      return pushId.set(menu)
+        .then(() => {
+          Database.restaurantMenusReference().child(menu.restaurant_id).child(pushId.key).set(true)
+            .then(() => {
+              return Database.restaurantsReference().child(menu.restaurant_id).child(menu.category_id).child('menus').child(pushId.key).set(true)
+            })
+        })
+    },
+    delete : function(menuId) {
+      return Database.menusReference().child(menuId).once('value')
+        .then((menuSnapshot) => {
+          var menuId = menuSnapshot.key
+          var restaurant_id = menuSnapshot.val().restaurant_id
+          Database.restaurantMenusReference().child(restaurant_id).child(menuId).set(null)
+        })
     }
   }
 }]);

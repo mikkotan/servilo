@@ -1,28 +1,30 @@
 app.controller('SearchTabCtrl',
-  ["$scope","Auth", "$state", "User", "ionicMaterialInk", "$ionicPopup", "CordovaGeolocation", "$ionicLoading", "Search", "currentGeoLocation",
-    function($scope, Auth, $state, User, ionicMaterialInk, $ionicPopup, CordovaGeolocation, $ionicLoading, Search, currentGeoLocation) {
+  ["$scope", "$state", "User", "ionicMaterialInk", "$ionicPopup", "CordovaGeolocation", "$ionicLoading", "Search", "currentGeoLocation",
+    function($scope, $state, User, ionicMaterialInk, $ionicPopup, CordovaGeolocation, $ionicLoading, Search, currentGeoLocation) {
 
   console.log('SearchTabCtrl');
   $scope.restaurants = [];
   $scope.markers = [];
+
   ionicMaterialInk.displayEffect();
   $scope.map = Search.getMap();
   var isMarkerCanChange = true;
   $scope.mapText = "Nearest restaurant in 1km";
-  
+
   $scope.rating = {
     rate : 0,
     max: 5
   }
 
-  Auth.$onAuthStateChanged(function(firebaseUser) {
-    if(firebaseUser) {
-      User.setOnline(firebaseUser.uid);
-    }
-  })
+  // Auth.$onAuthStateChanged(function(firebaseUser) {
+  //   if(firebaseUser) {
+  //     User.setOnline(firebaseUser.uid);
+  //   }
+  // })
 
   $scope.addMarkers = function(item){
     $scope.markers.push(Search.getMarker(item));
+
   };
 
   $scope.markerEvents = {
@@ -61,8 +63,8 @@ app.controller('SearchTabCtrl',
       // })
       $scope.map.zoom = 14;
       $scope.map.center = {
-        latitude: currentLocation.latitude, 
-        longitude: currentLocation.longitude 
+        latitude: currentLocation.latitude,
+        longitude: currentLocation.longitude
       };
       isMarkerCanChange = false;
     }

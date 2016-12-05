@@ -139,7 +139,7 @@ function actionButtonFactory($rootScope, $compile, $ionicBody, $animate) {
     }
 
     //auto remove when state changes
-    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options) {
+    $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams, options) {
         console.log(toState.name);
         if (toState.name == "tabs.dashboard.main"){
             scope.show();

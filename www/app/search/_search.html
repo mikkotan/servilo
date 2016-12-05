@@ -21,9 +21,12 @@
           </ui-gmap-map-control>
         </ui-gmap-google-map>
       </div>
+
+
       <h3>Results</h3>
       <ion-spinner ng-show="loading" icon="lines"></ion-spinner>
       <div class="card padding" ng-repeat="restaurant in (filteredItems = restaurants)">
+
         <div class="item item-thumbnail-left">
           <img class="img-thumbnail" ng-if="restaurant.photoURL" ng-src="{{restaurant.photoURL}}" />
           <img ng-if="!restaurant.photoURL" ng-src="img/wow.jpg">

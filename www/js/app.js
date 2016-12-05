@@ -6,8 +6,8 @@
 
 var app = angular.module('app', ['ui.mask', 'ionic','ionic.cloud', 'ionMdInput', 'ionic-material', 'firebase', 'ionic.rating','ionic-toast', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker', 'yaru22.angular-timeago', 'ui.select', 'ngSanitize', '$actionButton', 'ion-gallery', 'ionicLazyLoad'])
 
-app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushService", "User", "Database", "$cordovaGeolocation", "$ionicPopup", "$cordovaPushV5",
-  function($ionicPlatform, $rootScope, $state, $templateCache, IonicPushService, User, Database, $cordovaGeolocation, $ionicPopup, $cordovaPushV5) {
+app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushService", "User", "Database", "$cordovaGeolocation", "$ionicPopup", "$cordovaPushV5","Cart","$ionicLoading",
+  function($ionicPlatform, $rootScope, $state, $templateCache, IonicPushService, User, Database, $cordovaGeolocation, $ionicPopup, $cordovaPushV5,Cart,$ionicLoading) {
     $ionicPlatform.ready()
       .then(() => {
         if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
@@ -75,7 +75,6 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
       })
 
     $rootScope.$on('$cordovaPushV5:notificationReceived', function(event, data) {
-
       if (data.additionalData.foreground == true) {
         console.log('foreground true');
         $ionicPopup.alert({
@@ -106,26 +105,66 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
     })
 
     $rootScope.$on('$cordovaPushV5:errorOcurred', function(event, e) {
-      // e.message
       console.log(e.message);
     });
 
+
+    $rootScope.$on('$stateChangeStart',function(event, toState, toParams, fromState, fromParams, options){
+
+      if(typeof fromState.views.restaurant_page !== "undefined" && typeof toState.views.restaurant_page == "undefined"){
+          if(!Cart.isEmpty()){
+              event.preventDefault();
+
+              var leavingRestaurantPopup = $ionicPopup.confirm({
+                title: 'Leaving this restaurant will delete your orders',
+                template: 'Are you sure you want to leave?',
+                cssClass: 'delete-popup',
+              });
+
+              leavingRestaurantPopup.then(function(res) {
+                if (res) {
+                  Cart.setNull();
+                  event.defaultPrevented = false;
+                  $state.go(toState.name);
+                }else{
+                  console.log("ngaa gn cancel mo?");
+                }
+              });
+
+            }else{
+              console.log("HI");
+            }
+
+        }else if(toState) {
+            $ionicLoading.show();
+        }else{
+          console.log("Free Will")
+        }
+      })
+    $rootScope.$on("$stateChangeSuccess",
+      function(event, toState, toParams, fromState, fromParams, options) {
+          $ionicLoading.hide();
+    })
+
     $rootScope.$on("$stateChangeError",
       function(event, toState, toParams, fromState, fromParams, error) {
+        $ionicLoading.hide()
         if (error === "AUTH_REQUIRED") {
           event.preventDefault();
           $state.go("login")
         }
-      })
+    })
 
     $templateCache.put('template.tpl.html', '');
   }
 ]);
 
-app.controller('AppCtrl', function($scope, $state,$ionicLoading, $ionicSideMenuDelegate, Auth, User, Database, $state, $ionicPush, IonicPushService, $ionicPopover, $cordovaPushV5) {
+app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate, Auth, User, Database, $state, $ionicPush, IonicPushService, $ionicPopover, $cordovaPushV5 , Cart) {
+
   $scope.showMenu = function() {
     $ionicSideMenuDelegate.toggleLeft();
   };
+
   $scope.showRightMenu = function() {
     $ionicSideMenuDelegate.toggleRight();
   };
@@ -135,8 +174,6 @@ app.controller('AppCtrl', function($scope, $state,$ionicLoading, $ionicSideMenuD
   //     //if ng-model has value..add "used" class
   //     //if ng-model has no value...wala lang
   // };
-
-
   $scope.signOut = function() {
     $ionicLoading.show({
       template: '<p>Signing out . . .</p><ion-spinner></ion-spinner>',
@@ -169,6 +206,7 @@ app.controller('AppCtrl', function($scope, $state,$ionicLoading, $ionicSideMenuD
 
   Auth.$onAuthStateChanged(function(firebaseUser) {
     if (firebaseUser) {
+
       $scope.currentUser = User.auth();
       // $scope.firebaseUser = User.auth();
       // if (firebaseUser.displayName) {
@@ -191,12 +229,39 @@ app.controller('AppCtrl', function($scope, $state,$ionicLoading, $ionicSideMenuD
   });
 })
 
-.controller('TabsCtrl', function($scope, Auth) {
+.controller('TabsCtrl', function($scope,$state, Auth) {
+  $scope.goToHome = function(){
+    $state.go("tabs.home")
+  }
+  $scope.goToOrders = function(){
+    $state.go("tabs.orders")
+  }
+  $scope.goToNotifications = function(){
+    $state.go("tabs.notifications")
+  }
+  $scope.goToRestaurants = function(){
+    $state.go("tabs.home")
+  }
+  $scope.goToMyOrders = function(){
+    $state.go("tabs.myOrders")
+  }
+  $scope.goToMyReservations = function(){
+    $state.go("tabs.myReservations")
+  }
+  $scope.goToMyRestaurant = function(){
+    $state.go("tabs.restaurant")
+  }
+  // $scope.$on("$ionicView.beforeEnter", function(event, data){
+  //   console.log("FROM IONIC VIEW EVENT")
+  //   console.log(event);
+  // });
+
   Auth.$onAuthStateChanged(function(firebaseUser) {
     if (firebaseUser) {
       $scope.firebaseUser = firebaseUser;
     }
   });
+
 });
 
 app.directive('googleplace', function() {

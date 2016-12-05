@@ -5,7 +5,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
     row_size: 4,
     fixed_row_size: true
   });
-  firebase.initializeApp(firebaseConfigProvider.config);
+  firebase.initializeApp(firebaseConfigProvider.$get());
+
   $urlRouterProvider.otherwise("/home");
   $ionicConfigProvider.tabs.position('bottom');
   $ionicCloudProvider.init({
@@ -88,7 +89,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
     .state('tabs.viewRestaurant.main', {
       url: "/main",
       views: {
-        'restaurant-page': {
+        'restaurant_page': {
           templateUrl: "app/restaurant/_view-restaurant-main.html",
           controller: "ViewRestaurantCtrl",
           resolve: {
@@ -119,7 +120,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
     .state('tabs.viewRestaurant.menus', {
       url: "/menus",
       views: {
-        'restaurant-page': {
+        'restaurant_page': {
           templateUrl: "app/restaurant/_view-restaurant-menus.html",
           controller: "ViewRestaurantMenus",
           resolve: {
@@ -136,7 +137,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
     .state('tabs.viewRestaurant.location', {
       url: "/location",
       views: {
-        'restaurant-page': {
+        'restaurant_page': {
           templateUrl: "app/restaurant/_view-restaurant-location.html",
           controller: "ViewRestaurantLocation",
           resolve: {
@@ -221,6 +222,11 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
             restaurants: function(Restaurant) {
               return Restaurant.getAuthUserRestaurants().$loaded();
             }
+            // permission: function(Role){
+            //   Role.isRestaurantOwner().then(function(restaurantOwner){
+            //     return restaurantOwner
+            //   })
+            // }
           }
         }
       }
