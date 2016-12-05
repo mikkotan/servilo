@@ -179,3 +179,8 @@ ion-popover-view.fit ion-content {
 .capitalize {
   text-transform: capitalize;
 }
+.container-class {
+  ::-webkit-scrollbar {
+    display: none !important;
+  }
+}

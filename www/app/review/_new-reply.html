@@ -1,0 +1,19 @@
+<ion-modal-view view-title="New Reply">
+  <ion-header-bar class="bar bar-header bar-assertive">
+    <h1 class="title">New Reply</h1>
+    <button class="button button-clear button-primary" ng-click="addReplyModal.hide()"><i class="icon ion-ios-close"></i></button>
+  </ion-header-bar>
+  <ion-content class="padding">
+    <form ng-submit="addReply(rep)">
+      <div class="list">
+        <label class="item item-input item-floating-label">
+          <span class="input-label has-input">Write review here . . . </span>
+          <textarea type="text" placeholder="Write review here . . . " ng-model="rep.content" rows="6" required></textarea>
+        </label>
+        <div class="padding row">
+          <button type="submit" class="button button-block button-positive">Save</button>
+        </div>
+      </div>
+    </form>
+  </ion-content>
+</ion-modal-view>

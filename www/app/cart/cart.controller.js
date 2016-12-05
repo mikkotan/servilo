@@ -1,12 +1,10 @@
-app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "Restaurant", "CordovaGeolocation", "$ionicPopup",
-  function($scope, User, CartData, Cart, Database, Restaurant, CordovaGeolocation, $ionicPopup) {
+app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "Restaurant", "CordovaGeolocation", "$ionicPopup", "Notification", "Order", "$ionicLoading",
+  function($scope, User, CartData, Cart, Database, Restaurant, CordovaGeolocation, $ionicPopup, Notification, Order, $ionicLoading) {
 
-    $scope.order = Database.orders();
-
-
-
+    // $scope.order = Database.orders();
     $scope.cartData = CartData.get();
     $scope.totalPrice = CartData.totalPrice();
+    $scope.data ={location:"", detail: ""};
 
     $scope.add = function(orderMenu) {
       var order = $scope.cartData.indexOf(orderMenu);
@@ -109,8 +107,10 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
     }
 
     $scope.buy = function(cart, location) {
+      $ionicLoading.show();
       if (location) {
-        $scope.order.$add({
+        // $scope.order.$add({
+        Order.create({
           restaurant_id: $scope.restaurantId,
           customer_id: User.auth().$id,
           order_details: {
@@ -125,24 +125,28 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
           orderStatus: {
             cancelled: false,
             confirmed: false
-              // done : false,
-              // onDelivery : false,
-              // delivered : false
           },
-        }).then(function() {
+        })
+        .then(() => {
+          $scope.hideCartModal();
+          console.log('restaurantOrder done');
           CartData.get().length = 0;
           CartData.totalPrice().length = 0;
           var restaurant_owner = Restaurant.getOwner($scope.restaurantId);
-          Database.notifications().$add({
+          Notification.create({
             sender_id: User.auth().$id,
             receiver_id: restaurant_owner.$id,
             restaurant_id: $scope.restaurantId,
             type: 'order',
             timestamp: firebase.database.ServerValue.TIMESTAMP
-          });
-          $scope.restaurantCart.hide();
-          alert("success")
-        }).catch(function(error) {
+          })
+            .then(() => {
+              $ionicLoading.hide();
+              alert('Success');
+            })
+            .catch((err) => { alert(err) })
+        })
+        .catch((error) => {
           alert(error);
           console.log(error);
         });
@@ -196,18 +200,8 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
     //Mark the current location function here !!!
     $scope.markLocation = function() {
       $scope.currentLocation = CordovaGeolocation.get();
-      $scope.marker = {
-        id: Date.now(),
-        coords: {
-          latitude: $scope.currentLocation.latitude,
-          longitude: $scope.currentLocation.longitude
-        }
-      };
-      $scope.map.center = {
-        latitude: $scope.currentLocation.latitude,
-        longitude: $scope.currentLocation.longitude
-      };
-      $scope.placeName($scope.marker.coords.latitude, $scope.marker.coords.longitude);
+      $scope.setMarker($scope.currentLocation.latitude, $scope.currentLocation.longitude);
+      $scope.placeName($scope.currentLocation.latitude, $scope.currentLocation.longitude);
     }
 
     //function that converts LatLng coordinates to word
@@ -221,17 +215,38 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
         'location': latLng
       }, function(results, status) {
         if (status === 'OK') {
-          $scope.$parent.location = results[0].formatted_address;
+          $scope.data.location = results[0].formatted_address;
           $scope.$apply();
         } else {
           alert('Geocoder failed due to: ' + status);
         }
       });
     }
-    $scope.detail = null;
-    $scope.$watch($scope.location, function(newArray) {
-        console.log($scope.detail);
-    }, true);
+
+    $scope.$watch(function($scope){return $scope.data.detail;},
+      function(newValue, oldValue){
+        if(oldValue !== newValue){
+          if (angular.isDefined(newValue)){
+            var lat = newValue.lat();
+            var lng = newValue.lng();
+            $scope.setMarker(lat, lng);
+         }
+        }
+    });
+
+    $scope.setMarker = function(latitude, longitude) {
+      $scope.marker = {
+        id: Date.now(),
+        coords: {
+          latitude: latitude,
+          longitude: longitude
+        }
+      };
+      $scope.map.center = {
+        latitude: latitude,
+        longitude: longitude
+      };
+    }
 
   }
 ]);

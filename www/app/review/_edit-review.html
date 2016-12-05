@@ -26,7 +26,7 @@
       </div>
     </form>
     <p ng-repeat="img in editImages">
-      <img ng-src="{{img.image}}" style="width: 100px">
+      <img ng-src="{{img.src}}" style="width: 100px">
       <button ng-click="editImages.$remove(img)">Remove</button>
     </p>
     <p ng-repeat="img in images  track by $index">

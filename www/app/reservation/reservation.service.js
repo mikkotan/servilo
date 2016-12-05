@@ -1,46 +1,46 @@
-app.factory('Reservation', function($firebaseObject, $firebaseArray, Database, User, Restaurant, $ionicLoading){
+app.factory('Reservation', function($firebaseObject, $firebaseArray, Database, User, Restaurant, $ionicLoading, Notification){
 
   var Reservation = {
     all : function() {
       return $firebaseArray(Database.reservationsReference());
     },
-    create : function(reservation) {
-      console.log(reservation.restaurant_id);
-      console.log('Reservation Service create function called.');
-      Database.reservations().$add(reservation)
+    create: function(reservation) {
+      console.log('create');
+      var pushRef = Database.reservationsReference().push();
+      return pushRef.set(reservation)
         .then(() => {
-          console.log(reservation.restaurant_id);
-         Restaurant.get(reservation.restaurant_id)
-          .then((restaurant) => {
-            var receiver = restaurant.owner_id
-            console.log('success')
-            Database.notifications().$add({
-              sender_id: User.auth().$id,
-              receiver_id: receiver,
-              restaurant_id: reservation.restaurant_id,
-              type: 'reservation',
-              timestamp: firebase.database.ServerValue.TIMESTAMP
-            })
+           Database.userReservationsReference().child(reservation.user_id).child(pushRef.key).set(true)
+            .then(() => {
+             Database.restaurantReservationsReference().child(reservation.restaurant_id).child(pushRef.key).set(true)
               .then(() => {
-                console.log('success promise notification')
-                $ionicLoading.hide();
-                alert('success');
+                return Notification.create({
+                  sender_id: User.auth().$id,
+                  receiver_id: receiver,
+                  restaurant_id: reservation.restaurant_id,
+                  type: 'reservation',
+                  timestamp: firebase.database.ServerValue.TIMESTAMP
+                })
               })
-              .catch((err) => {
-                console.log(err);
-                alert(err);
-              })
-          })
-          .catch((err) => {
-            alert(err);
-            console.log(err)
-          })
+            })
         })
-        .catch((err) => {
-          alert(err);
-          console.log(err)
+    },
+    delete: function(reservationId) {
+      console.log('delete');
+      return Database.reservationsReference().child(reservationId).once('value')
+        .then((reservation) => {
+          var reservation_id = reservation.key
+          var user_id = reservation.val().user_id
+          var restaurant_id = reservation.val().restaurant_id
+          Database.reservationsReference().child(reservation_id).set(null)
+            .then(() => {
+              Database.userReservationsReference().child(user_id).child(reservation_id).set(null)
+                .then(() => {
+                  return Database.restaurantReservationsReference().child(restaurant_id).child(reservation_id).set(null)
+                })
+            })
         })
     }
+
   }
 
   return Reservation;

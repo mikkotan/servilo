@@ -19,14 +19,19 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
     getAuthRestaurants : function() {
       return $firebaseArray(restaurantsRef.orderByChild('owner_id').equalTo(firebase.auth().currentUser.uid));
     },
+    getUser : function(userId) {
+      return $firebaseObject(Database.usersReference().child(userId));
+    },
     // getAuthFullName : function() {
     //   var authId = firebase.auth().currentUser.uid;
+    //   return $firebaseObject(Database.usersReference())
     //   return usersObj.$getRecord(authId).firstName + " " + usersObj.$getRecord(authId).lastName;
     // },
     getAuthNotifications : function() {
-
-      return $firebaseArray(notificationsRef.orderByChild('receiver_id').equalTo(firebase.auth().currentUser.uid));
-
+      console.log('get auth notifs');
+      var authId = firebase.auth().currentUser.uid;
+      var ref = Database.userNotificationsReference().child(authId);
+      return $firebaseArray(ref);
     },
     getAuthNotificationsRef : function() {
       return notificationsRef.orderByChild('receiver_id').equalTo(firebase.auth().currentUser.uid);

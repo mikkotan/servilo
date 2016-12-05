@@ -13,6 +13,16 @@ app.factory("Database", ["$firebaseArray", "$firebaseObject", "$firebaseAuth",
     var reservationsRef = rootRef.child('reservations');
     var userFavoritesRef = rootRef.child('user_favorites');
     var roleRef = rootRef.child('role')
+    var userNotificationsRef = rootRef.child('user_notifications');
+    var userOrdersRef = rootRef.child('user_orders');
+    var restaurantOrdersRef = rootRef.child('restaurant_orders');
+    var userReservationsRef = rootRef.child('user_reservations');
+    var restaurantReservationsRef = rootRef.child('restuarant_reservations');
+    var restaurantMenusRef = rootRef.child('restaurant_menus');
+    var restaurantReviewsRef = rootRef.child('restaurant_reviews');
+    var userReviewsRef = rootRef.child('user_reviews');
+
+
 
     var Database = {
       roleReference : function(){
@@ -50,6 +60,30 @@ app.factory("Database", ["$firebaseArray", "$firebaseObject", "$firebaseAuth",
       },
       userFavoritesReference : function() {
         return userFavoritesRef
+      },
+      userNotificationsReference : function() {
+        return userNotificationsRef;
+      },
+      userOrdersReference : function() {
+        return userOrdersRef;
+      },
+      restaurantOrdersReference : function() {
+        return restaurantOrdersRef;
+      },
+      userReservationsReference : function() {
+        return userReservationsRef;
+      },
+      restaurantReservationsReference : function() {
+        return restaurantReservationsRef;
+      },
+      restaurantMenusReference : function() {
+        return restaurantMenusRef;
+      },
+      userReviewsReference : function() {
+        return userReviewsRef;
+      },
+      restaurantReviewsReference : function() {
+        return restaurantReviewsRef;
       },
       services : function(){
         return $firebaseArray(serviceRef)
