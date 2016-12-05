@@ -1,18 +1,20 @@
-app.controller("DashboardCtrl", ["$scope", "$state", "$stateParams", "$firebaseArray", "User", "$ionicModal", "$actionButton", "$ionicListDelegate", "Restaurant", "$cordovaCamera", "CordovaGeolocation", "currentGeoLocation", "Upload", "$ionicPopup",
-  function($scope, $state, $stateParams, $firebaseArray, User, $ionicModal, $actionButton, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation, currentGeoLocation, Upload, $ionicPopup) {
+app.controller("DashboardCtrl", ["$scope", "$state", "$stateParams", "Database", "$firebaseArray", "User", "$ionicModal", "$actionButton", "$ionicListDelegate", "Restaurant", "$cordovaCamera", "CordovaGeolocation", "currentGeoLocation", "Upload", "$ionicPopup", "Order",
+  function($scope, $state, $stateParams, Database, $firebaseArray, User, $ionicModal, $actionButton, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation, currentGeoLocation, Upload, $ionicPopup, Order) {
 
     $scope.modalControl = {};
+    $scope.data = {
+      detail: ""
+    };
     $scope.pendingRestaurants = Restaurant.getPendingRestaurants();
     $scope.displayRestaurants = User.getAuthRestaurants();
     $scope.AppUser = User.auth();
+    $scope.resto = Restaurant.get($stateParams.restaurantId);
 
-    var id = $stateParams.restaurantId;
-    console.log($scope.AppUser);
 
-    // check state
-    console.log($state.current.name);
-
-    $scope.showDelete = function() {
+    // show popup to confirm before delete
+    $scope.showDelete = function(restaurant) {
+      console.log("in showDelete()");
+      console.log($scope.resto);
       var deletePopup = $ionicPopup.confirm({
         title: 'Sure to delete?',
         cssClass: 'custom-popup',
@@ -20,40 +22,11 @@ app.controller("DashboardCtrl", ["$scope", "$state", "$stateParams", "$firebaseA
       });
       deletePopup.then(function(res) {
         if (res) {
-          $scope.deleteRestaurant(Restaurant.get(id));
+          // wont delete TODO
+          $scope.deleteRestaurant($scope.resto);
         }
       });
     };
-
-    if ($state.is("tabs.dashboard.main")) {
-      var actionButton = $actionButton.create({
-        mainAction: {
-          icon: 'ion-gear-b',
-          backgroundColor: '#886aea',
-          textColor: ' white',
-          onClick: function() {}
-        },
-        buttons: [{
-          icon: 'ion-trash-b',
-          label: 'Delete Restaurant',
-          backgroundColor: 'red',
-          iconColor: 'white',
-          onClick: function() {
-            $scope.showDelete()
-          }
-        }, {
-          icon: 'ion-edit',
-          label: 'Edit Restaurant',
-          backgroundColor: 'blue',
-          iconColor: 'white',
-          onClick: function() {
-            console.log($stateParams.restaurantId);
-            console.log('clicked pin');
-            $scope.editRestaurant(Restaurant.get(id));
-          }
-        }]
-      });
-    }
 
     $scope.showMap = function() {
       var mapPopup = $ionicPopup.confirm({
@@ -87,6 +60,48 @@ app.controller("DashboardCtrl", ["$scope", "$state", "$stateParams", "$firebaseA
         scope: $scope
       });
     };
+
+    $scope.setOpenDays = function() {
+      var openDays = $ionicPopup.confirm({
+        title: 'Set Open Days',
+        templateUrl: 'app/restaurant/_openDaysPopout.html',
+        subTitle: 'Set the days open on your restaurant.',
+        cssClass: 'custom-popup',
+        scope: $scope
+      })
+    }
+
+    if ($state.is("tabs.dashboard.main")) {
+      var actionButton = $actionButton.create({
+        mainAction: {
+          icon: 'ion-gear-b',
+          backgroundColor: '#886aea',
+          textColor: ' white',
+          onClick: function() {}
+        },
+        buttons: [{
+          icon: 'ion-trash-b',
+          label: 'Delete Restaurant',
+          backgroundColor: 'red',
+          iconColor: 'white',
+          onClick: function() {
+            console.log($scope.resto);
+            $scope.showDelete($scope.resto);
+          }
+        }, {
+          icon: 'ion-edit',
+          label: 'Edit Restaurant',
+          backgroundColor: 'blue',
+          iconColor: 'white',
+          onClick: function() {
+            console.log($stateParams.restaurantId);
+            console.log('clicked pin');
+            $scope.editRestaurant($scope.resto);
+          }
+        }]
+      });
+    }
+
 
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
@@ -193,9 +208,18 @@ app.controller("DashboardCtrl", ["$scope", "$state", "$stateParams", "$firebaseA
     }
 
     $scope.deleteRestaurant = function(restaurant) {
-      var resObj = restaurant;
+
+      console.log("in deleteRestaurant()")
+      console.log(restaurant);
+
+      console.log('delete');
+
+    //   var resObj = Restaurant.getCurrentRestaurant(restaurant.$id);
+        var resObj = restaurant;
       $scope.displayRestaurants.$remove(resObj).then(function() {
         console.log('deleted?');
+      }).catch((err) => {
+        console.log(err)
       });
 
       for (var menu in resObj.menus) {
@@ -213,12 +237,27 @@ app.controller("DashboardCtrl", ["$scope", "$state", "$stateParams", "$firebaseA
         console.log('reviewer ref' + userReviewedRestaurantsRef);
         userReviewedRestaurantsRef.child(resObj.$id).set(null);
       }
+
+      Database.restaurantOrdersReference().child(resObj.$id).once('value')
+        .then((snapshot) => {
+          for (var order in snapshot.val()) {
+            console.log(order);
+            Order.delete(order)
+              .then(() => {
+                console.log('success')
+              })
+              .catch((err) => {
+                console.log(err)
+              })
+          }
+        })
     }
 
     $scope.editRestaurant = function(restaurant) {
+      //   console.log(JSON.stringify(restaurant, null, 4));
       $scope.restaurantEditModal.show();
-      $scope.showMap = false;
-      $scope.eRestaurant = restaurant;
+      $scope.restaurant = restaurant;
+      $scope.restaurant.phonenumber = parseInt(restaurant.phonenumber)
       if (restaurant.photoURL) {
         $scope.imageURL = restaurant.photoURL;
       } else {
@@ -330,12 +369,42 @@ app.controller("DashboardCtrl", ["$scope", "$state", "$stateParams", "$firebaseA
         latitude: latitude,
         longitude: longitude
       };
-    }
-
-    $scope.allowDetailToChangeMarker = function() {
-      $scope.isDetailCanMoveMarker = true;
-    }
-
+    };
+    $scope.$watch(function($scope) {
+        return $scope.data.detail;
+      },
+      function(newValue, oldValue) {
+        if (oldValue !== newValue) {
+          if (angular.isDefined(newValue)) {
+            var lat = newValue.lat();
+            var lng = newValue.lng();
+            $scope.setMarker(lat, lng);
+          }
+        }
+      });
     $scope.facilities = $firebaseArray(firebase.database().ref().child('facilities'));
+    $scope.days = {
+      '0': {
+        name: 'Monday'
+      },
+      '1': {
+        name: 'Tuesday'
+      },
+      '2': {
+        name: 'Wednesday'
+      },
+      '3': {
+        name: 'Thursday'
+      },
+      '4': {
+        name: 'Friday'
+      },
+      '5': {
+        name: 'Saturday'
+      },
+      '6': {
+        name: 'Sunday'
+      }
+    }
   }
 ])

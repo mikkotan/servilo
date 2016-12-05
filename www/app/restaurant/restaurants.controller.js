@@ -156,11 +156,12 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     }
 
     $scope.deleteRestaurant = function(restaurant) {
+        console.log(restaurant);
       console.log('delete');
       var resObj = restaurant;
-      // $scope.displayRestaurants.$remove(resObj).then(function() {
-      //   console.log('deleted?');
-      // });
+      $scope.displayRestaurants.$remove(resObj).then(function() {
+        console.log('deleted?');
+      });
 
       for (var menu in resObj.menus) {
         var menusRef = firebase.database().ref().child('menus');
@@ -194,6 +195,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     }
 
     $scope.editRestaurant = function(restaurant) {
+    console.log(restaurant);
       console.log(JSON.stringify(restaurant, null, 4));
       $scope.restaurantEditModal.show();
       $scope.restaurant = restaurant;
@@ -283,9 +285,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     }
 
     $scope.placeName = function(latitude, longitude) {
-
-
-      Restaurant.getLocationName(latitude, longitude).then(function(data) {
+        Restaurant.getLocationName(latitude, longitude).then(function(data) {
         $scope.restaurant.location = data
       });
     }

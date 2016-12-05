@@ -147,20 +147,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
         }
       }
     })
-    .state('tabs.viewRestaurantMenus', {
-      url: "/restaurant/menus/:restaurantId",
-      views: {
-        'restaurant-tab': {
-          templateUrl: "app/menu/_view-restaurant-menus.html",
-          controller: "ViewRestaurantMenu",
-          resolve: {
-            restaurantMenu: function(Menu, $stateParams) {
-              return Menu.getRestaurantMenus($stateParams.restaurantId).$loaded();
-            }
-          }
-        }
-      }
-    })
+
     .state('tabs.addMenu', {
       url: "/menu/add/:restaurantId",
       views: {
@@ -320,7 +307,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
       views: {
         'dashboard-page': {
           templateUrl: "app/dashboard/_dashboard-menus.html",
-          controller: "ViewRestaurantMenu",
+          controller: "ViewMenusCtrl",
           resolve: {
             "currentAuth": ["Auth", function(Auth) {
               return Auth.$requireSignIn();

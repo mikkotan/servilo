@@ -1,12 +1,21 @@
 <ion-view view-title="dashboard-menus">
   <ion-content class="has-tabs-top">
-    <div class="list">
-      <div class="item item-avatar item-icon-right" ng-repeat="menu in restaurantMenus">
+    <ion-list>
+      <a class="button button-small button-calm" ng-click="openAddModal()">Add menu</a>
+      <a class="button button-small button-calm" ng-click="showAddCategoryModal(restoId)">Add Category</a>
+      <ion-item class="item item-avatar item-icon-right" ng-repeat="menu in restaurantMenus">
         <img ng-src="{{menu.photoURL}}">
         <h2>{{menu.name}}</h2>
         <p>{{menu.price}}</p>
-      </div>
-    </div>
+        <ion-toggle ng-model="menu.availability" ng-change="changeAvailability(menu)" toggle-class="toggle-calm"><h3>Availability</h3></ion-toggle>
+        <ion-option-button class="button-royal" ng-click="deleteMenu(menu)">
+          Delete
+        </ion-option-button>
+        <ion-option-button class="button-calm" ng-click="editMenu(menu)">
+          Edit
+        </ion-option-button>
+    </ion-item>
+  </ion-list>
     <!-- <ion-list>
       <ion-item ng-repeat="menu in restaurantMenus">
         <ion-toggle ng-model="menu.availability" ng-change="changeAvailability(menu)" toggle-class="toggle-calm">
