@@ -25,24 +25,23 @@
 
       <h3>Results</h3>
       <ion-spinner ng-show="loading" icon="lines"></ion-spinner>
-      <div class="card padding" ng-repeat="restaurant in (filteredItems = restaurants)">
-
+      <div class="card padding" ng-repeat="restaurant in (filteredItems = newRestaurants)" ng-if="restaurant.ready">
         <div class="item item-thumbnail-left">
-          <img class="img-thumbnail" ng-if="restaurant.photoURL" ng-src="{{restaurant.photoURL}}" />
-          <img ng-if="!restaurant.photoURL" ng-src="img/wow.jpg">
-          <h3 ng-init="addMarkers(restaurant)" ui-sref="tabs.viewRestaurant.main({restaurantId:restaurant.$id})">
-            <icon class="ion-spoon"></icon> {{restaurant.name}}
+          <img class="img-thumbnail" ng-if="restaurant.details.photoURL" ng-src="{{restaurant.details.photoURL}}" />
+          <img ng-if="!restaurant.details.photoURL" ng-src="img/wow.jpg">
+          <h3 ng-init="addMarkers(restaurant.details)" ui-sref="tabs.viewRestaurant.main({restaurantId:restaurant.details.$id})">
+            <icon class="ion-spoon"></icon> {{restaurant.details.name}}
             <span style="color:green">
-              <icon class="ion-android-star-outline"></icon> {{restaurant.secured_data.avgRate.toFixed(1)}}
+              <icon class="ion-android-star-outline"></icon> {{restaurant.avg}}
             </span>
           </h3>
           <p>
-            {{restaurant.secured_data.avgPrice.toFixed(2) | currency:"₱"}}
+            {{restaurant.details.secured_data.avgPrice.toFixed(2) | currency:"₱"}}
           </p>
           <p>
-            <icon class="ion-ios-location-outline"></icon> {{restaurant.location}}
+            <icon class="ion-ios-location-outline"></icon> {{restaurant.details.location}}
           </p>
-          <button class="button button-balanced button-small button-outline" ng-click="CallNumber(restaurant.phonenumber)">
+          <button class="button button-balanced button-small button-outline" ng-click="CallNumber(restaurant.details.phonenumber)">
             <icon class="ion-android-call"></icon> Call Us
           </button>
         </div>

@@ -23,9 +23,6 @@ app.factory("Order",["$firebaseAuth","$firebaseArray","$firebaseObject", "Databa
       return $firebaseObject(Database.ordersReference().child(orderId));
     },
     create : function(order) {
-      console.log('Order create function');
-      console.log(order);
-      console.log(order.restaurant_id);
       var authObj = firebase.auth().currentUser.uid;
       var pushId = Database.ordersReference().push()
       return pushId.set(order)
@@ -39,8 +36,6 @@ app.factory("Order",["$firebaseAuth","$firebaseArray","$firebaseObject", "Databa
         })
     },
     delete : function(order) {
-      console.log('delete ordering')
-      // console.log(r)
       return Database.ordersReference().child(order).once('value')
         .then((orderObj) => {
           console.log(orderObj);

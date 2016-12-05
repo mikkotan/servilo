@@ -9,6 +9,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
     }
     $scope.user = User.auth();
 
+
     $scope.getImages = function(images) {
       var items = [];
       for (var key in images) {

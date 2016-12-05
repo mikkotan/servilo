@@ -156,28 +156,49 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     }
 
     $scope.deleteRestaurant = function(restaurant) {
-        console.log(restaurant);
-      console.log('delete');
       var resObj = restaurant;
-      $scope.displayRestaurants.$remove(resObj).then(function() {
-        console.log('deleted?');
-      });
+      // $scope.displayRestaurants.$remove(resObj).then(function() {
+      //   console.log('deleted?');
+      // });
+      Restaurant.delete(restaurant.$id)
+        .then(() => {
+          console.log('Success deleting ');
+        })
+        .catch((err) => {
+          console.log('Error on deleting: '+err);
+        })
+      // for (var menu in resObj.menus) {
+      //   var menusRef = firebase.database().ref().child('menus');
+      //   menusRef.child(menu).set(null);
+      // }
+      //
+      // for (var review in resObj.reviews) {
+      //   var reviewsRef = firebase.database().ref().child('reviews');
+      //   reviewsRef.child(review).set(null);
+      // }
+      //
+      // for (var reviewer in resObj.reviewers) {
+      //   var userReviewedRestaurantsRef = firebase.database().ref().child('users').child(reviewer).child('reviewed_restaurants');
+      //   console.log('reviewer ref' + userReviewedRestaurantsRef);
+      //   userReviewedRestaurantsRef.child(resObj.$id).set(null);
+      // }
+      Database.restaurantMenusReference().child(resObj.$id).remove();
 
-      for (var menu in resObj.menus) {
-        var menusRef = firebase.database().ref().child('menus');
-        menusRef.child(menu).set(null);
-      }
-
-      for (var review in resObj.reviews) {
-        var reviewsRef = firebase.database().ref().child('reviews');
-        reviewsRef.child(review).set(null);
-      }
-
-      for (var reviewer in resObj.reviewers) {
-        var userReviewedRestaurantsRef = firebase.database().ref().child('users').child(reviewer).child('reviewed_restaurants');
-        console.log('reviewer ref' + userReviewedRestaurantsRef);
-        userReviewedRestaurantsRef.child(resObj.$id).set(null);
-      }
+      Database.restaurantReservationsReference().child(resObj.$id).once('value')
+        .then((snapshot) => {
+          for (var reservation in snapshot.val()) {
+            console.log(reservation);
+            Reservation.delete(reservation)
+              .then(() => {
+                console.log('delete sucess')
+                alert('delete success');
+              })
+              .catch((err) => {
+                console.log(err)
+                alert(err);
+              })
+          }
+        })
 
       Database.restaurantOrdersReference().child(resObj.$id).once('value')
         .then((snapshot) => {
