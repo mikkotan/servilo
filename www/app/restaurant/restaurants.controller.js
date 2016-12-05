@@ -164,6 +164,13 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
       // $scope.displayRestaurants.$remove(resObj).then(function() {
       //   console.log('deleted?');
       // });
+      Restaurant.delete(restaurant.$id)
+        .then(() => {
+          console.log('Success deleting ');
+        })
+        .catch((err) => {
+          console.log('Error on deleting: '+err);
+        })
       // for (var menu in resObj.menus) {
       //   var menusRef = firebase.database().ref().child('menus');
       //   menusRef.child(menu).set(null);
@@ -179,6 +186,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
       //   console.log('reviewer ref' + userReviewedRestaurantsRef);
       //   userReviewedRestaurantsRef.child(resObj.$id).set(null);
       // }
+      Database.restaurantMenusReference().child(resObj.$id).remove();
 
       Database.restaurantReservationsReference().child(resObj.$id).once('value')
         .then((snapshot) => {

@@ -29,10 +29,9 @@ app.controller('SearchTabCtrl',
         details : restaurant,
         getAvg : Restaurant.getAverageRating(restaurant.$id)
         .then((res) => {
-          console.log(res);
-          console.log('wewokwokwokwowkwowk');
           r.avg = res
           r.ready = true
+          $scope.$apply();
         })
       }
       return r;

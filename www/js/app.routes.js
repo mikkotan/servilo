@@ -123,9 +123,9 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
           templateUrl: "app/restaurant/_view-restaurant-menus.html",
           controller: "ViewRestaurantMenus",
           resolve: {
-            restaurantMenus: function(Menu, $stateParams) {
-              return Menu.getRestaurantMenus($stateParams.restaurantId).$loaded();
-            },
+            // restaurantMenus: function(Restaurant, $stateParams) {
+            //   return Restaurant.getMenus($stateParams.restaurantId).$loaded();
+            // },
             restaurantId: function($stateParams) {
               return $stateParams.restaurantId
             }
@@ -154,8 +154,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
           templateUrl: "app/menu/_view-restaurant-menus.html",
           controller: "ViewRestaurantMenu",
           resolve: {
-            restaurantMenu: function(Menu, $stateParams) {
-              return Menu.getRestaurantMenus($stateParams.restaurantId).$loaded();
+            restaurantMenu: function(Restaurant, $stateParams) {
+              return Restaurant.getMenus($stateParams.restaurantId).$loaded();
             }
           }
         }

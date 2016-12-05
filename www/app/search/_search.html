@@ -23,7 +23,7 @@
       </div>
       <h3>Results</h3>
       <ion-spinner ng-show="loading" icon="lines"></ion-spinner>
-      <div class="card padding" ng-repeat="restaurant in (filteredItems = newRestaurants)" ng-show="restaurant.ready">
+      <div class="card padding" ng-repeat="restaurant in (filteredItems = newRestaurants)" ng-if="restaurant.ready">
         <div class="item item-thumbnail-left">
           <img class="img-thumbnail" ng-if="restaurant.details.photoURL" ng-src="{{restaurant.details.photoURL}}" />
           <img ng-if="!restaurant.details.photoURL" ng-src="img/wow.jpg">

@@ -19,7 +19,6 @@ app.factory("Menu",["$firebaseAuth","$firebaseArray","$firebaseObject","Restaura
       return menus.push().key;
     },
     get : function(menuId) {
-      // return menusArray.$getRecord(menuId);
       return $firebaseObject(menus.child(menuId));
     },
     getRestaurantRef : function(restaurantId, categoryId, key){
@@ -49,8 +48,28 @@ app.factory("Menu",["$firebaseAuth","$firebaseArray","$firebaseObject","Restaura
         .then((menuSnapshot) => {
           var menuId = menuSnapshot.key
           var restaurant_id = menuSnapshot.val().restaurant_id
-          Database.restaurantMenusReference().child(restaurant_id).child(menuId).set(null)
+          var category_id = menuSnapshot.val().category_id
+          Database.menusReference().child(menuId).remove()
+            .then(() => {
+              Database.restaurantMenusReference().child(restaurant_id).child(menuId).remove()
+                .then(() => {
+                  return Database.restaurantsReference().child(restaurant_id).child(category_id).child('menus').child(menuId).remove()
+                })
+            })
         })
-    }
+    },
+    update : function(menu) {
+      return Database.menusReference().child(menu.$id).update({
+        name: menu.name,
+        price: menu.price,
+        category_id: menu.category
+      })
+    },
+    changeAvailability : function(menu) {
+      return Database.menusReference().child(menu.$id).update({
+        availability: menu.availability,
+      })
+    },
+
   }
 }]);

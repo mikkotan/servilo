@@ -48,7 +48,7 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
         })
     },
     getMenus : function(restaurantId) {
-      return $firebaseArray(menus.orderByChild("restaurant_id").equalTo(restaurantId));
+      return $firebaseArray(Database.restaurantMenusReference().child(restaurantId));
     },
     getRestaurantStatus : function(ownerId) {
       return Database.usersReference().child(ownerId).child("online");
@@ -216,6 +216,9 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
         closeTime: CT.getTime()
       }
       return resRef.update(restObj);
+    },
+    delete: function(restaurantId) {
+      return Database.restaurantsReference().child(restaurantId).remove()
     }
   }
 

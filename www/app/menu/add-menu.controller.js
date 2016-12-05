@@ -1,5 +1,5 @@
-app.controller("AddMenuCtrl",["$scope", "restaurantId", "$cordovaCamera", "Restaurant", "Menu", "Upload",
-  function($scope, restaurantId, $cordovaCamera, Restaurant, Menu, Upload){
+app.controller("AddMenuCtrl",["$scope", "restaurantId", "$cordovaCamera", "Restaurant", "Menu", "Upload", "$state",
+  function($scope, restaurantId, $cordovaCamera, Restaurant, Menu, Upload, $state){
 
     $scope.restaurant = Restaurant.get(restaurantId);
     $scope.categories = Menu.getMenuCategories(restaurantId);
@@ -60,7 +60,7 @@ app.controller("AddMenuCtrl",["$scope", "restaurantId", "$cordovaCamera", "Resta
         timestamp : firebase.database.ServerValue.TIMESTAMP
       })
         .then(() => {
-          // $state.go('tabs.restaurant{{id}}')
+          $state.go('tabs.restaurant');
           alert('Success');
         })
         .catch((err) => {
