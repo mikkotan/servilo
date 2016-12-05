@@ -1,5 +1,5 @@
 app.controller('SearchTabCtrl',
-  ["$scope", "$state", "User", "ionicMaterialInk", "$ionicPopup", "CordovaGeolocation", "$ionicLoading", "Search", "currentGeoLocation",
+  ["$scope", "$state", "User", "ionicMaterialInk","$ionicPopup", "CordovaGeolocation", "$ionicLoading", "Search", "currentGeoLocation",
     function($scope, $state, User, ionicMaterialInk, $ionicPopup, CordovaGeolocation, $ionicLoading, Search, currentGeoLocation) {
 
   console.log('SearchTabCtrl');

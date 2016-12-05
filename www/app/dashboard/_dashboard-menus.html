@@ -7,26 +7,8 @@
         <img ng-src="{{menu.photoURL}}">
         <h2>{{menu.name}}</h2>
         <p>{{menu.price}}</p>
-        <ion-toggle ng-model="menu.availability" ng-change="changeAvailability(menu)" toggle-class="toggle-calm"><h3>Availability</h3></ion-toggle>
-        <ion-option-button class="button-royal" ng-click="deleteMenu(menu)">
-          Delete
-        </ion-option-button>
-        <ion-option-button class="button-calm" ng-click="editMenu(menu)">
-          Edit
-        </ion-option-button>
-    </ion-item>
-  </ion-list>
-    <!-- <ion-list>
-      <ion-item ng-repeat="menu in restaurantMenus">
         <ion-toggle ng-model="menu.availability" ng-change="changeAvailability(menu)" toggle-class="toggle-calm">
-          <h3>{{menu.name}}</h3></ion-toggle>
-        <a class="button button-small button-calm" ui-sref="tabs.addMenu({restaurantId:restaurant.$id})">Add menu</a>
-        <a class="button button-small button-calm" ng-click="showAddCategoryModal(restaurant.$id)">Add Category</a>
-
-        <p>
-          P {{menu.price}}
-        </p>
-        {{menu.category_id}}
+          <h3>Availability</h3></ion-toggle>
         <ion-option-button class="button-royal" ng-click="deleteMenu(menu)">
           Delete
         </ion-option-button>
@@ -34,6 +16,6 @@
           Edit
         </ion-option-button>
       </ion-item>
-    </ion-list> -->
+    </ion-list>
   </ion-content>
 </ion-view>

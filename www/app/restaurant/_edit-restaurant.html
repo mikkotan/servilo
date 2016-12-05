@@ -11,31 +11,31 @@
             <div class="list">
               <label class="item item-input item-floating-label">
                 <span class="input-label has-input">Name of Restaurant</span>
-                <input type="text" placeholder="Name of Restaurant" ng-model="restaurant.name">
+                <input type="text" placeholder="Name of Restaurant" ng-model="eRestaurant.name">
               </label>
               <label class="item item-input item-floating-label">
                 <span class="input-label has-input">Contact Number</span>
-                <input type="number" placeholder="Contact Number" ng-model="restaurant.phonenumber">
+                <input type="number" placeholder="Contact Number" ng-model="eRestaurant.phonenumber">
               </label>
               <label class="item item-input item-floating-label">
                 <span class="input-label has-input">Type of Restaurant</span>
-                <input type="text" placeholder="Type of Restaurant" ng-model="restaurant.type">
+                <input type="text" placeholder="Type of Restaurant" ng-model="eRestaurant.type">
               </label>
               <label class="item item-input item-floating-label">
                 <span class="input-label has-input">Cuisine of Restaurant</span>
-                <input type="text" placeholder="Cuisine of Restaurant" ng-model="restaurant.cuisine">
+                <input type="text" placeholder="Cuisine of Restaurant" ng-model="eRestaurant.cuisine">
               </label>
               <div class="item item-text-wrap">
                 <a class="button button-block button-royal icon-left ion-plus-circled" ng-click="setHours()">Set Hours</a>
-                <div class="col text-center" ng-show="restaurant.openTime && restaurant.closeTime">
-                  Opening Hours : {{restaurant.openTime| date: "h:mm a"}} - {{restaurant.closeTime| date: "h:mm a"}}
+                <div class="col text-center" ng-show="eRestaurant.openTime && eRestaurant.closeTime">
+                  Opening Hours : {{eRestaurant.openTime| date: "h:mm a"}} - {{eRestaurant.closeTime| date: "h:mm a"}}
                 </div>
               </div>
               <div class="item item-text-wrap">
                 <a class="button button-block button-royal icon-left ion-plus-circled" ng-click="setFacilities()">Set Facilities</a>
 
                 <div class="col text-center">
-                  <p ng-repeat="(key, val) in restaurant.facilities" ng-if="val">
+                  <p ng-repeat="(key, val) in eRestaurant.facilities" ng-if="val">
                     {{key}}
                   </p>
                 </div>
@@ -46,7 +46,7 @@
               <div class="item item-input-inset">
                 <label class="item-input item-floating-label">
                   <span class="input-label has-input">Location of Restaurant</span>
-                  <input type="text" placeholder="Location of Restaurant" ng-model="restaurant.location">
+                  <input type="text" placeholder="Location of Restaurant" ng-model="eRestaurant.location">
                 </label>
                 <a class="button button-royal icon ion-map" ng-click="showMap()"></a>
               </div>
