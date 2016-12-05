@@ -3,15 +3,15 @@
     <ion-list>
       <a class="button button-small button-calm" ng-click="openAddModal()">Add menu</a>
       <a class="button button-small button-calm" ng-click="showAddCategoryModal(restoId)">Add Category</a>
-      <ion-item class="item item-avatar item-icon-right" ng-repeat="menu in restaurantMenus">
-        <img ng-src="{{menu.photoURL}}">
-        <h2>{{menu.name}}</h2>
-        <p>{{menu.price}}</p>
-        <ion-toggle ng-model="menu.availability" ng-change="changeAvailability(menu)" toggle-class="toggle-calm"><h3>Availability</h3></ion-toggle>
-        <ion-option-button class="button-royal" ng-click="deleteMenu(menu)">
+      <ion-item class="item item-avatar item-icon-right" ng-repeat="menu in menus">
+        <img ng-src="{{menu.details.photoURL}}">
+        <h2>{{menu.details.name}}</h2>
+        <p>{{menu.details.price}}</p>
+        <ion-toggle ng-model="menu.details.availability" ng-change="changeAvailability(menu.details)" toggle-class="toggle-calm"><h3>Availability</h3></ion-toggle>
+        <ion-option-button class="button-royal" ng-click="deleteMenu(menu.details)">
           Delete
         </ion-option-button>
-        <ion-option-button class="button-calm" ng-click="editMenu(menu)">
+        <ion-option-button class="button-calm" ng-click="editMenu(menu.details)">
           Edit
         </ion-option-button>
     </ion-item>

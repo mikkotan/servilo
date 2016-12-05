@@ -317,8 +317,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
             "currentAuth": ["Auth", function(Auth) {
               return Auth.$requireSignIn();
             }],
-            restaurantMenu: function(Menu, $stateParams) {
-              return Menu.getRestaurantMenus($stateParams.restaurantId).$loaded();
+            restaurantMenu: function(Restaurant, $stateParams) {
+              return Restaurant.getMenus($stateParams.restaurantId).$loaded();
             }
           }
         }

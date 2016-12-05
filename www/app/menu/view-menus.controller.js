@@ -1,6 +1,6 @@
-app.controller("ViewMenusCtrl", ["$scope", "$stateParams", "restaurantMenu", "$ionicModal", "Database", "$ionicListDelegate", "Menu", "$cordovaCamera", "Restaurant", "Upload",
-  function($scope, $stateParams, restaurantMenu, $ionicModal, Database, $ionicListDelegate, Menu, $cordovaCamera, Restaurant, Upload) {
-
+app.controller("ViewMenusCtrl", ["$scope", "$stateParams", "restaurantMenu", "$ionicModal", "Database", "$ionicListDelegate", "Menu", "$cordovaCamera", "Restaurant", "Upload", "$ionicLoading",
+  function($scope, $stateParams, restaurantMenu, $ionicModal, Database, $ionicListDelegate, Menu, $cordovaCamera, Restaurant, Upload, $ionicLoading) {
+    $ionicLoading.show();
     $scope.restaurantMenus = restaurantMenu;
     // $scope.categories = Menu.getMenuCategories(restaurantId);
     $scope.restoId = $stateParams.restaurantId;
@@ -9,6 +9,20 @@ app.controller("ViewMenusCtrl", ["$scope", "$stateParams", "restaurantMenu", "$i
     $scope.categories = Menu.getMenuCategories($stateParams.restaurantId);
     $scope.defaultCategory = $scope.categories[0];
     $scope.photoURL = "";
+
+    $scope.$watchCollection('restaurantMenus', function(newRestaurantMenus) {
+      $scope.menus = newRestaurantMenus.map(function(menu) {
+        var m = {
+          get: Menu.get(menu.$id).$loaded()
+            .then((menuObj) => {
+              m.details = menuObj
+              m.ready = true
+              $ionicLoading.hide()
+            })
+        }
+        return m;
+      })
+    })
 
 
     $scope.upload = function(index) {

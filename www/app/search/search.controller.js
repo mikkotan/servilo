@@ -14,23 +14,6 @@ app.controller('SearchTabCtrl',
     rate : 0,
     max: 5
   }
-  console.log('restaurant try');
-  Restaurant.get('hello mga ser');
-
-  Restaurant.all().$loaded()
-    .then((restaurants) => {
-      console.log('restaurants all method');
-      console.log(restaurants)
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-
-  Restaurant.get('-KXuaZnttBfF1aWQOzkJ').$loaded()
-    .then((res) => {
-      console.log('restaurant get');
-      console.log(res)
-    })
 
   $scope.$watch('restaurants', function() {
     console.log('restaurants changed');
