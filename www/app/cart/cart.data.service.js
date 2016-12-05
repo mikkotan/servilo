@@ -8,7 +8,6 @@ app.factory('CartData', function(){
         cart.unshift(menu);
     },
     get: function(){
-      console.log("hi "+ cart);
       return cart;
     },
     totalPrice : function(){

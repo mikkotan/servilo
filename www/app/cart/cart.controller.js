@@ -103,6 +103,7 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
       }
       return scanMenu;
     }
+
     $scope.hideCartModal = function() {
       $scope.restaurantCart.hide();
     }

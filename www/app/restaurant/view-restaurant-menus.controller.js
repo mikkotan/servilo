@@ -1,11 +1,11 @@
 app.controller("ViewRestaurantMenus", ["$scope", "$state", "restaurantMenus", "restaurantId", "CartData", "$ionicModal", "Cart", "Restaurant", "ionicToast",
-  function($scope, $state, restaurantMenus, restaurantId, CartData, $ionicModal, Cart, Restaurant, asdionicToast) {
+  function($scope, $state, restaurantMenus, restaurantId, CartData, $ionicModal, Cart, Restaurant, ionicToast) {
 
     $scope.restaurantId = restaurantId
     $scope.restaurantMenus = restaurantMenus;
     var restaurant = Restaurant.get(restaurantId);
 
-    restaurant
+    restaurant.$loaded()
       .then(function() {
         var restaurantStatus = Restaurant.getRestaurantStatus(restaurant.owner_id);
         restaurantStatus.on('value', function(snap) {
@@ -15,25 +15,30 @@ app.controller("ViewRestaurantMenus", ["$scope", "$state", "restaurantMenus", "r
       })
 
 
+
     $scope.availability = function(menu) {
       return menu.availability ? "Available" : "Currently not available"
     }
 
 
     $scope.addToCart = function(menu) {
+      console.log(menu.photoURL);
       if ($scope.getRestaurantStatus) {
         $scope.id = menu.$id;
         $scope.menuName = menu.name;
         $scope.menuPrice = menu.price;
+        $scope.menuPhoto = menu.photoURL;
         $scope.addToCartModal.show();
       } else {
         alert('sorry the restaurant is offline')
       }
+      console.log('Scope photo: ' + $scope.menuPhoto);
     };
 
     $scope.viewCart = function() {
       if (CartData.get().length > 0) {
         $scope.restaurantCart.show();
+        console.log(JSON.stringify(CartData.get(), null, 4));
       } else {
         alert("No food in your cart");
       }
@@ -65,22 +70,27 @@ app.controller("ViewRestaurantMenus", ["$scope", "$state", "restaurantMenus", "r
       if (menu.quantity) {
         if (menu.quantity > 0) {
           let menuCart = {
-            id: $scope.id,
-            name: $scope.menuName,
-            price: $scope.menuPrice,
-            quantity: menu.quantity
+              id: $scope.id,
+              name: $scope.menuName,
+              price: $scope.menuPrice,
+              photoURL: $scope.menuPhoto,
+              quantity: menu.quantity
           };
+          console.log(menuCart)
           $scope.error = false;
 
           if (menuOrder === null) {
             CartData.add(menuCart);
+            console.log(CartData.get())
             ionicToast.show('Added ' + $scope.menuName + ' to cart', 'bottom', false, 2500);
             closeModal();
+            menu.quantity = 0;
           } else {
             var cartMenu = CartData.get()[menuOrder];
             cartMenu.quantity = cartMenu.quantity + menu.quantity;
             ionicToast.show('Added ' + $scope.menuName + ' to cart', 'bottom', false, 2500);
             closeModal();
+            menu.quantity = 0;
           }
         } else {
           $scope.error = true;
