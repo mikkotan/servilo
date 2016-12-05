@@ -1,5 +1,4 @@
-app.factory("Cart",["$firebaseObject" , "$firebaseAuth","$firebaseArray",
-  function($firebaseObject ,$firebaseAuth, $firebaseArray){
+app.factory("Cart", function(CartData , $state){
 
   return {
 
@@ -10,7 +9,19 @@ app.factory("Cart",["$firebaseObject" , "$firebaseAuth","$firebaseArray",
           }
         }
         return null;
+      },
+
+    isEmpty : function(){
+        let isEmpty = true
+        if(CartData.get().length > 0){
+          isEmpty = false
+        }
+        return isEmpty;
+      },
+      setNull : function(){
+        CartData.get().length = 0
+        CartData.totalPrice().length = 0
       }
   }
 
-}])
+})

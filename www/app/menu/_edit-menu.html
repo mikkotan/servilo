@@ -18,7 +18,7 @@
             </label>
             <label class="item item-input item-select">
               <div class="input-label">
-                Category 
+                Category
               </div>
               <select ng-model="eMenu.category_id">
                 <option ng-repeat="category in categories" value="{{category.$id}}" ng-selected="{{eMenu.category_id === category.$id}}">
@@ -35,12 +35,17 @@
                 <a class="button button-block button-calm icon ion-image" ng-click="upload(2)"></a>
               </div>
             </div>
-            <div class="col text-center">
-              <img ng-show="photoURL" ng-src="{{photoURL}}">
-              <img ng-show="!photoURL" ng-src="img/ionic.png">
-              <p ng-show="photoURL"> Edit Menu picture</p>
-              <p ng-show="!photoURL">You currently have no menu picture. Add one.</p>
-              <progress ng-show="progress" max="100" value="{{progress}}"></progress>
+
+            <div class="row">
+              <div class="col">
+                <img class="center" ng-show="photoURL" ng-src="{{photoURL}}">
+                <img class="center" ng-show="!photoURL" ng-src="img/ionic.png">
+                <p class="center" ng-show="photoURL"> Edit Menu picture</p>
+                <p class="center" ng-show="!photoURL">You currently have no menu picture. Add one.</p>
+                <div ng-show="progress" class="progress-bar" style="width: {{progress}}%;">
+                  <p class="percent">{{progress}}%</p>
+                </div>
+              </div>
             </div>
             <img ng-src="{{photoURL}}" width="40%" />
             <div class="row">

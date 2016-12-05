@@ -101,12 +101,13 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
       }
       return scanMenu;
     }
+
     $scope.hideCartModal = function() {
       $scope.restaurantCart.hide();
     }
 
     $scope.buy = function(cart, location) {
-      $ionicLoading.show();
+    //   $ionicLoading.show();
       if (location) {
         // $scope.order.$add({
         Order.create({
@@ -140,7 +141,7 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
             timestamp: firebase.database.ServerValue.TIMESTAMP
           })
             .then(() => {
-              $ionicLoading.hide();
+            //   $ionicLoading.hide();
               alert('Success');
             })
             .catch((err) => { alert(err) })

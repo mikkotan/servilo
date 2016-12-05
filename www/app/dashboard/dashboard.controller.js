@@ -1,13 +1,33 @@
-app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera", "CordovaGeolocation", "currentGeoLocation", "Upload", "$ionicPopup", "Order", "Database", "Reservation",
-  function($scope, $firebaseArray, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation, currentGeoLocation, Upload, $ionicPopup, Order, Database, Reservation) {
+app.controller("DashboardCtrl", ["$scope", "$state", "$stateParams", "Database", "$firebaseArray", "User", "$ionicModal", "$actionButton", "$ionicListDelegate", "Restaurant", "$cordovaCamera", "CordovaGeolocation", "currentGeoLocation", "Upload", "$ionicPopup", "Order",
+  function($scope, $state, $stateParams, Database, $firebaseArray, User, $ionicModal, $actionButton, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation, currentGeoLocation, Upload, $ionicPopup, Order) {
 
     $scope.modalControl = {};
-    $scope.data= {detail:""};
+    $scope.data = {
+      detail: ""
+    };
     $scope.pendingRestaurants = Restaurant.getPendingRestaurants();
     $scope.displayRestaurants = User.getAuthRestaurants();
     $scope.AppUser = User.auth();
+    $scope.resto = Restaurant.get($stateParams.restaurantId);
 
-    console.log($scope.AppUser);
+
+    // show popup to confirm before delete
+    $scope.showDelete = function(restaurant) {
+      console.log("in showDelete()");
+      console.log($scope.resto);
+      var deletePopup = $ionicPopup.confirm({
+        title: 'Sure to delete?',
+        cssClass: 'custom-popup',
+        scope: $scope
+      });
+      deletePopup.then(function(res) {
+        if (res) {
+          // wont delete TODO
+          $scope.deleteRestaurant($scope.resto);
+        }
+      });
+    };
+
     $scope.showMap = function() {
       var mapPopup = $ionicPopup.confirm({
         title: 'Choose Location',
@@ -50,6 +70,38 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
         scope: $scope
       })
     }
+
+    if ($state.is("tabs.dashboard.main")) {
+      var actionButton = $actionButton.create({
+        mainAction: {
+          icon: 'ion-gear-b',
+          backgroundColor: '#886aea',
+          textColor: ' white',
+          onClick: function() {}
+        },
+        buttons: [{
+          icon: 'ion-trash-b',
+          label: 'Delete Restaurant',
+          backgroundColor: 'red',
+          iconColor: 'white',
+          onClick: function() {
+            console.log($scope.resto);
+            $scope.showDelete($scope.resto);
+          }
+        }, {
+          icon: 'ion-edit',
+          label: 'Edit Restaurant',
+          backgroundColor: 'blue',
+          iconColor: 'white',
+          onClick: function() {
+            console.log($stateParams.restaurantId);
+            console.log('clicked pin');
+            $scope.editRestaurant($scope.resto);
+          }
+        }]
+      });
+    }
+
 
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
@@ -109,8 +161,8 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     }
 
     $scope.edit = function(restaurant) {
-      console.log(JSON.stringify(restaurant, null, 4));
-      Restaurant.editRestaurant(restaurant, $scope.marker, $scope.imageURL)
+      $scope.restaurant.phonenumber =
+        Restaurant.editRestaurant(restaurant, $scope.marker, $scope.imageURL)
         .then(function() {
           $scope.imageURL = null;
         })
@@ -156,49 +208,35 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     }
 
     $scope.deleteRestaurant = function(restaurant) {
-      var resObj = restaurant;
-      // $scope.displayRestaurants.$remove(resObj).then(function() {
-      //   console.log('deleted?');
-      // });
-      Restaurant.delete(restaurant.$id)
-        .then(() => {
-          console.log('Success deleting ');
-        })
-        .catch((err) => {
-          console.log('Error on deleting: '+err);
-        })
-      // for (var menu in resObj.menus) {
-      //   var menusRef = firebase.database().ref().child('menus');
-      //   menusRef.child(menu).set(null);
-      // }
-      //
-      // for (var review in resObj.reviews) {
-      //   var reviewsRef = firebase.database().ref().child('reviews');
-      //   reviewsRef.child(review).set(null);
-      // }
-      //
-      // for (var reviewer in resObj.reviewers) {
-      //   var userReviewedRestaurantsRef = firebase.database().ref().child('users').child(reviewer).child('reviewed_restaurants');
-      //   console.log('reviewer ref' + userReviewedRestaurantsRef);
-      //   userReviewedRestaurantsRef.child(resObj.$id).set(null);
-      // }
-      Database.restaurantMenusReference().child(resObj.$id).remove();
 
-      Database.restaurantReservationsReference().child(resObj.$id).once('value')
-        .then((snapshot) => {
-          for (var reservation in snapshot.val()) {
-            console.log(reservation);
-            Reservation.delete(reservation)
-              .then(() => {
-                console.log('delete sucess')
-                alert('delete success');
-              })
-              .catch((err) => {
-                console.log(err)
-                alert(err);
-              })
-          }
-        })
+      console.log("in deleteRestaurant()")
+      console.log(restaurant);
+
+      console.log('delete');
+
+    //   var resObj = Restaurant.getCurrentRestaurant(restaurant.$id);
+        var resObj = restaurant;
+      $scope.displayRestaurants.$remove(resObj).then(function() {
+        console.log('deleted?');
+      }).catch((err) => {
+        console.log(err)
+      });
+
+      for (var menu in resObj.menus) {
+        var menusRef = firebase.database().ref().child('menus');
+        menusRef.child(menu).set(null);
+      }
+
+      for (var review in resObj.reviews) {
+        var reviewsRef = firebase.database().ref().child('reviews');
+        reviewsRef.child(review).set(null);
+      }
+
+      for (var reviewer in resObj.reviewers) {
+        var userReviewedRestaurantsRef = firebase.database().ref().child('users').child(reviewer).child('reviewed_restaurants');
+        console.log('reviewer ref' + userReviewedRestaurantsRef);
+        userReviewedRestaurantsRef.child(resObj.$id).set(null);
+      }
 
       Database.restaurantOrdersReference().child(resObj.$id).once('value')
         .then((snapshot) => {
@@ -210,15 +248,13 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
               })
               .catch((err) => {
                 console.log(err)
-                alert(err);
               })
           }
         })
     }
 
     $scope.editRestaurant = function(restaurant) {
-    console.log(restaurant);
-      console.log(JSON.stringify(restaurant, null, 4));
+      //   console.log(JSON.stringify(restaurant, null, 4));
       $scope.restaurantEditModal.show();
       $scope.restaurant = restaurant;
       $scope.restaurant.phonenumber = parseInt(restaurant.phonenumber)
@@ -269,6 +305,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     $scope.marker = {
       id: 0
     };
+    $scope.isDetailCanMoveMarker = false;
     $scope.map = {
       control: {},
       center: {
@@ -296,6 +333,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
             }
           };
           $scope.marker = m;
+          $scope.isDetailCanMoveMarker = false;
           $scope.$apply();
         }
       }
@@ -303,15 +341,27 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
 
     $scope.markLocation = function() {
       var currentLocation = CordovaGeolocation.get();
+      $scope.isDetailCanMoveMarker = false;
       $scope.setMarker(currentLocation.latitude, currentLocation.longitude);
     }
 
     $scope.placeName = function(latitude, longitude) {
         Restaurant.getLocationName(latitude, longitude).then(function(data) {
-        $scope.restaurant.location = data
-      });
-    }
-
+          $scope.restaurant.location = data
+        });
+      }
+      // function that check if you can change the marker and also to remove the digest problem
+    $scope.locationDetail = function(detail) {
+        if (angular.isDefined(detail) && $scope.isDetailCanMoveMarker) {
+          var latitude = detail.lat();
+          var longitude = detail.lng();
+          if ($scope.marker.id == 0) {
+            $scope.setMarker(latitude, longitude);
+          } else if (($scope.marker.coords.latitude !== latitude) && ($scope.marker.coords.longitude !== longitude)) {
+            $scope.setMarker(latitude, longitude);
+          }
+        }
+      }
       //change the marker location
     $scope.setMarker = function(latitude, longitude) {
       $scope.marker = Restaurant.getMarker(latitude, longitude);
@@ -319,22 +369,20 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
         latitude: latitude,
         longitude: longitude
       };
-    }
-
-
-    $scope.$watch(function($scope){return $scope.data.detail;},
-      function(newValue, oldValue){
-        if(oldValue !== newValue){
-          if (angular.isDefined(newValue)){
+    };
+    $scope.$watch(function($scope) {
+        return $scope.data.detail;
+      },
+      function(newValue, oldValue) {
+        if (oldValue !== newValue) {
+          if (angular.isDefined(newValue)) {
             var lat = newValue.lat();
             var lng = newValue.lng();
             $scope.setMarker(lat, lng);
-         }
+          }
         }
-    });
-
+      });
     $scope.facilities = $firebaseArray(firebase.database().ref().child('facilities'));
-
     $scope.days = {
       '0': {
         name: 'Monday'

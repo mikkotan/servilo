@@ -58,7 +58,7 @@
   <script src="app/menu/menu-avg.controller.js"></script>
   <script src="app/menu/menus.controller.js"></script>
   <script src="app/menu/menu.factory.js"></script>
-  <script src="app/menu/view-restaurant-menus.controller.js"></script>
+  <script src="app/menu/view-menus.controller.js"></script>
   <!-- <script src="app/menu/view-restaurant-menus-order.controller.js"></script> -->
   <!-- notification -->
   <script src="app/notification/notifications.controller.js"></script>
@@ -75,6 +75,10 @@
   <script src="app/restaurant/view-restaurant.controller.js"></script>
   <script src="app/restaurant/view-restaurant-location.controller.js"></script>
   <script src="app/restaurant/view-restaurant-menus.controller.js"></script>
+  <!-- dashboard -->
+
+  <script src="app/dashboard/dashboard.controller.js"></script>
+  <script src="app/dashboard/dashboard.factory.js"></script>
   <!-- reservation -->
   <script src="app/reservation/add-reservation.controller.js"></script>
   <script src="app/reservation/my-reservations.controller.js"></script>
@@ -103,6 +107,8 @@
   <script src="cordova.js"></script>
   <!-- toast -->
   <script src="lib/ionic-toast/dist/ionic-toast.bundle.min.js"></script>
+  <!-- action button -->
+  <script src="lib\material-action-button\ion-action-button.js"></script>
   <!-- end of data -->
 
 </head>
@@ -159,13 +165,13 @@
             Profile
           </ion-item>
           <hr ng-show="firebaseUser">
-          <ion-item menu-close ng-show="firebaseUser" class="item-borderless">
+          <ion-item menu-close ng-show="firebaseUser" ui-sref="tabs.restaurant" class="item-borderless">
             Restaurants
           </ion-item>
-          <ion-item menu-close ng-show="firebaseUser" class="item-borderless" ng-click="signOut()">
+          <ion-item menu-close ng-show="firebaseUser" class="item-borderless">
             Notifications
           </ion-item>
-          <ion-item menu-close ng-show="firebaseUser" class="item-borderless" ng-click="signOut()">
+          <ion-item menu-close ng-show="firebaseUser" class="item-borderless" ui-sref="tabs.orders">
             Orders
           </ion-item>
           <hr ng-show="firebaseUser">

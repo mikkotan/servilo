@@ -53,7 +53,6 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
     }
 
     var id = $stateParams.restaurantId;
-    Restaurant.getAverageRating(id);
     var userReviewsRef = Review.userReview(id);
     Restaurant.get(id).$loaded()
       .then(function(restaurant) {

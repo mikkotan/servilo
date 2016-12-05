@@ -84,16 +84,18 @@ app.controller("ViewRestaurantMenus", ["$scope", "$state", "restaurantId", "Cart
       if (menu.quantity) {
         if (menu.quantity > 0) {
           let menuCart = {
-            id: $scope.id,
-            name: $scope.menuName,
-            price: $scope.menuPrice,
-            photoURL: $scope.menuPhoto,
-            quantity: menu.quantity
+              id: $scope.id,
+              name: $scope.menuName,
+              price: $scope.menuPrice,
+              photoURL: $scope.menuPhoto,
+              quantity: menu.quantity
           };
+          console.log(menuCart)
           $scope.error = false;
 
           if (menuOrder === null) {
             CartData.add(menuCart);
+            console.log(CartData.get())
             ionicToast.show('Added ' + $scope.menuName + ' to cart', 'bottom', false, 2500);
             closeModal();
             menu.quantity = 0;

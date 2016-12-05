@@ -5,7 +5,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
     row_size: 4,
     fixed_row_size: true
   });
-  firebase.initializeApp(firebaseConfigProvider.config);
+  firebase.initializeApp(firebaseConfigProvider.$get());
+
   $urlRouterProvider.otherwise("/home");
   $ionicConfigProvider.tabs.position('bottom');
   $ionicCloudProvider.init({
@@ -88,7 +89,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
     .state('tabs.viewRestaurant.main', {
       url: "/main",
       views: {
-        'restaurant-page': {
+        'restaurant_page': {
           templateUrl: "app/restaurant/_view-restaurant-main.html",
           controller: "ViewRestaurantCtrl",
           resolve: {
@@ -119,7 +120,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
     .state('tabs.viewRestaurant.menus', {
       url: "/menus",
       views: {
-        'restaurant-page': {
+        'restaurant_page': {
           templateUrl: "app/restaurant/_view-restaurant-menus.html",
           controller: "ViewRestaurantMenus",
           resolve: {
@@ -136,26 +137,12 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
     .state('tabs.viewRestaurant.location', {
       url: "/location",
       views: {
-        'restaurant-page': {
+        'restaurant_page': {
           templateUrl: "app/restaurant/_view-restaurant-location.html",
           controller: "ViewRestaurantLocation",
           resolve: {
             currentGeoLocation: function(CordovaGeolocation) {
               return CordovaGeolocation.get();
-            }
-          }
-        }
-      }
-    })
-    .state('tabs.viewRestaurantMenus', {
-      url: "/restaurant/menus/:restaurantId",
-      views: {
-        'restaurant-tab': {
-          templateUrl: "app/menu/_view-restaurant-menus.html",
-          controller: "ViewRestaurantMenu",
-          resolve: {
-            restaurantMenu: function(Restaurant, $stateParams) {
-              return Restaurant.getMenus($stateParams.restaurantId).$loaded();
             }
           }
         }
@@ -234,6 +221,11 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
             restaurants: function(Restaurant) {
               return Restaurant.getAuthUserRestaurants().$loaded();
             }
+            // permission: function(Role){
+            //   Role.isRestaurantOwner().then(function(restaurantOwner){
+            //     return restaurantOwner
+            //   })
+            // }
           }
         }
       }
@@ -252,24 +244,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
         }
       }
     })
-    .state('tabs.restaurant', {
-      url: "/restaurant",
-      views: {
-        'restaurant-tab': {
-          templateUrl: "app/restaurant/_restaurants.html",
-          controller: "RestaurantCtrl",
-          resolve: {
-            "currentAuth": ["Auth", function(Auth) {
-              return Auth.$requireSignIn();
-            }],
-            currentGeoLocation: function(CordovaGeolocation) {
-              return CordovaGeolocation.get();
-            }
-          }
-        }
-      }
-    })
-    .state('tabs.myOrders', {
+
+  .state('tabs.myOrders', {
       url: "/myorders",
       views: {
         'myorders-tab': {
@@ -292,6 +268,91 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
           resolve: {
             "reservations": function(User) {
               return User.getAuthReservations().$loaded();
+            }
+          }
+        }
+      }
+    })
+    .state('tabs.dashboard', {
+      url: "/dashboard/:restaurantId",
+      views: {
+        'restaurant-tab': {
+          templateUrl: "app/dashboard/_dashboard.html",
+          controller: "DashboardCtrl",
+          resolve: {
+            "currentAuth": ["Auth", function(Auth) {
+              return Auth.$requireSignIn();
+            }],
+            currentGeoLocation: function(CordovaGeolocation) {
+              return CordovaGeolocation.get();
+            }
+          }
+        }
+      }
+    })
+    .state('tabs.dashboard.main', {
+      url: "/main",
+      views: {
+        'dashboard-page': {
+          templateUrl: "app/dashboard/_dashboard-main.html",
+          controller: "ViewRestaurantCtrl",
+          resolve: {
+            "currentAuth": ["Auth", function(Auth) {
+              return Auth.$requireSignIn();
+            }],
+            currentGeoLocation: function(CordovaGeolocation) {
+              return CordovaGeolocation.get();
+            }
+          }
+        }
+      }
+    })
+    .state('tabs.dashboard.menus', {
+      url: "/menus",
+      views: {
+        'dashboard-page': {
+          templateUrl: "app/dashboard/_dashboard-menus.html",
+          controller: "ViewMenusCtrl",
+          resolve: {
+            "currentAuth": ["Auth", function(Auth) {
+              return Auth.$requireSignIn();
+            }],
+            restaurantMenu: function(Menu, $stateParams) {
+              return Menu.getRestaurantMenus($stateParams.restaurantId).$loaded();
+            }
+          }
+        }
+      }
+    })
+    .state('tabs.dashboard.interact', {
+      url: "/interact",
+      views: {
+        'dashboard-page': {
+          templateUrl: "app/dashboard/_dashboard-interact.html",
+          controller: "DashboardCtrl",
+          resolve: {
+            "currentAuth": ["Auth", function(Auth) {
+              return Auth.$requireSignIn();
+            }],
+            currentGeoLocation: function(CordovaGeolocation) {
+              return CordovaGeolocation.get();
+            }
+          }
+        }
+      }
+    })
+    .state('tabs.restaurant', {
+      url: "/restaurant",
+      views: {
+        'restaurant-tab': {
+          templateUrl: "app/restaurant/_restaurants.html",
+          controller: "RestaurantCtrl",
+          resolve: {
+            "currentAuth": ["Auth", function(Auth) {
+              return Auth.$requireSignIn();
+            }],
+            currentGeoLocation: function(CordovaGeolocation) {
+              return CordovaGeolocation.get();
             }
           }
         }

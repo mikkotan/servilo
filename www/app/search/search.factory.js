@@ -151,8 +151,8 @@ app.factory("Search",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "Dat
     getMapCenter : function() {
       var currentLocation = CordovaGeolocation.get();
       var center = {
-        latitude: currentLocation.latitude, 
-        longitude: currentLocation.longitude 
+        latitude: currentLocation.latitude,
+        longitude: currentLocation.longitude
       };
       return center;
     }
