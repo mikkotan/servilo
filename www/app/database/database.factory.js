@@ -21,6 +21,7 @@ app.factory("Database", ["$firebaseArray", "$firebaseObject", "$firebaseAuth",
     var restaurantMenusRef = rootRef.child('restaurant_menus');
     var restaurantReviewsRef = rootRef.child('restaurant_reviews');
     var userReviewsRef = rootRef.child('user_reviews');
+    var facilitiesRef = rootRef.child('facilities');
 
 
 
@@ -84,6 +85,9 @@ app.factory("Database", ["$firebaseArray", "$firebaseObject", "$firebaseAuth",
       },
       restaurantReviewsReference : function() {
         return restaurantReviewsRef;
+      },
+      facilitiesReference : function() {
+        return facilitiesRef;
       },
       services : function(){
         return $firebaseArray(serviceRef)

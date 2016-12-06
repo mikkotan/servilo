@@ -1,6 +1,9 @@
 app.controller("ViewMenusCtrl", ["$scope", "$stateParams", "restaurantMenu", "$ionicModal", "Database", "$ionicListDelegate", "Menu", "$cordovaCamera", "Restaurant", "Upload", "$ionicLoading",
   function($scope, $stateParams, restaurantMenu, $ionicModal, Database, $ionicListDelegate, Menu, $cordovaCamera, Restaurant, Upload, $ionicLoading) {
-    $ionicLoading.show();
+
+    if (restaurantMenu.length != 0) {
+      $ionicLoading.show();
+    }
     $scope.restaurantMenus = restaurantMenu;
     // $scope.categories = Menu.getMenuCategories(restaurantId);
     $scope.restoId = $stateParams.restaurantId;
@@ -40,6 +43,7 @@ app.controller("ViewMenusCtrl", ["$scope", "$stateParams", "restaurantMenu", "$i
         }, function() {
           //enable save button
           $scope.photoURL = menuRef.snapshot.downloadURL;
+          console.log($scope.photoURL);
           $scope.$apply();
         });
 
@@ -73,7 +77,7 @@ app.controller("ViewMenusCtrl", ["$scope", "$stateParams", "restaurantMenu", "$i
       Menu.create({
         name : menu.name.toLowerCase(),
         price : menu.price,
-        restaurant_id : restaurantId,
+        restaurant_id : $scope.restoId,
         category_id : menu.category,
         availability : false,
         prevPrice : menu.price,
@@ -81,8 +85,8 @@ app.controller("ViewMenusCtrl", ["$scope", "$stateParams", "restaurantMenu", "$i
         timestamp : firebase.database.ServerValue.TIMESTAMP
       })
         .then(() => {
-          $state.go('tabs.restaurant');
           alert('Success');
+          $scope.addMenuModal.hide();
         })
         .catch((err) => {
           alert(err);
@@ -104,7 +108,7 @@ app.controller("ViewMenusCtrl", ["$scope", "$stateParams", "restaurantMenu", "$i
         .then(() => {
           $ionicLoading.hide()
           alert('Menu successfully deleted.')
-          consle.log('Menu successfully deleted.')
+          console.log('Menu successfully deleted.')
         })
         .catch((err) => {
           console.log(err)

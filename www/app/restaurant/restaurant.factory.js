@@ -1,5 +1,5 @@
-app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject",
-  function($firebaseArray, User, Database, $firebaseObject){
+app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject", "$q",
+  function($firebaseArray, User, Database, $firebaseObject, $q){
 
   var restaurants = Database.restaurantsReference();
   var users = Database.usersReference();
@@ -8,6 +8,7 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
   var orders = Database.ordersReference();
   var restaurantsArray = Database.restaurants();
   var restaurantReviews = Database.restaurantReviewsReference();
+  var facilities = $firebaseArray(Database.facilitiesReference());
 
   var Restaurant = {
     all : function() {
@@ -119,6 +120,9 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
         }
       });
       return deferred.promise;
+    },
+    getFacilityName : function(facilityId) {
+      return facilities.$getRecord(facilityId).name;
     },
     getMarker : function(latitude, longitude) {
       return marker = {

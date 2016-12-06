@@ -1,4 +1,8 @@
 <ion-view view-title="dashboard-main">
+  <ion-floating-menu has-footer="true" menu-color="#886aea" menu-icon="ion-gear-a" menu-open-color="#444">
+    <ion-floating-item icon="ion-trash-b" click="deleteRestaurant(restaurant)" button-color="#ef473a" text="Delete Restaurant"></ion-floating-item>
+    <ion-floating-item icon="ion-edit" click="editRestaurant(restaurant)" button-color="#387ef5" text="Edit Restaurant"></ion-floating-item>
+  </ion-floating-menu>
   <ion-content class="has-tabs-top">
     <div class="hero" style="background-image: url('img/wow.jpg');">
       <div class="content">
@@ -26,6 +30,10 @@
           <div class="item">
             <p>Open: {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}</p>
           </div>
+          <!-- TODO - days -->
+          <!-- <div class="item" ng-repeat="(key, val) in restaurant.openDays">
+            <p>Days: {{openDays[key].name}}</p>
+          </div> -->
           <div class="item">
             <p>Contact no.: {{restaurant.phonenumber}}</p>
           </div>
@@ -39,7 +47,7 @@
       <div class="item item-text-wrap">
         <div class="list">
           <div class="item" ng-repeat="(key, val) in restaurant.facilities">
-            <p>{{key}}</p>
+            <p>{{getFacilityName(key)}}</p>
             <!-- todo name - mikel -->
           </div>
         </div>
