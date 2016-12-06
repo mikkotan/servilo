@@ -1,5 +1,5 @@
-app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject",
-  function($firebaseArray, User, Database, $firebaseObject){
+app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject", "$q",
+  function($firebaseArray, User, Database, $firebaseObject, $q){
 
   var restaurants = Database.restaurantsReference();
   var users = Database.usersReference();

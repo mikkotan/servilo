@@ -22,20 +22,29 @@
         <div class="list">
           <div class="item">
             <p>Type: {{restaurant.type}}</p>
-            <!-- <p> {{resto}}</p> -->
           </div>
           <div class="item">
             <p>Cuisine: {{restaurant.cuisine}}</p>
           </div>
           <div class="item">
-            <p>Open: {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}</p>
-          </div>
-          <!-- TODO - days -->
-          <!-- <div class="item" ng-repeat="(key, val) in restaurant.openDays">
-            <p>Days: {{openDays[key].name}}</p>
-          </div> -->
-          <div class="item">
             <p>Contact no.: {{restaurant.phonenumber}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card list">
+      <div class="item item-divider">
+        <h2>Schedule</h2>
+      </div>
+      <div class="item item-text-wrap">
+        <div class="list">
+          <p>Time Open: </p>
+          <div class="item">
+            <p>{{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}</p>
+          </div>
+          <p>Days Open: </p>
+          <div class="item" ng-repeat="(key, val) in restaurant.openDays track by $index" ng-if="val === true">
+            <p>{{days[key].name}}</p>
           </div>
         </div>
       </div>
