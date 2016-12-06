@@ -144,7 +144,7 @@ app.controller("DashboardCtrl", ["$scope", "$state", "$stateParams", "Database",
       scope: $scope
     });
 
-    $ionicModal.fromTemplateUrl('app/dashboard/_edit-restaurant.html', function(restaurantEditModal) {
+    $ionicModal.fromTemplateUrl('app/restaurant/_edit-restaurant.html', function(restaurantEditModal) {
       $scope.restaurantEditModal = restaurantEditModal;
     }, {
       scope: $scope
