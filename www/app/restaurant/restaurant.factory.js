@@ -8,6 +8,7 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
   var orders = Database.ordersReference();
   var restaurantsArray = Database.restaurants();
   var restaurantReviews = Database.restaurantReviewsReference();
+  var facilities = Database.facilities();
 
   var Restaurant = {
     all : function() {
