@@ -12,24 +12,25 @@ app.controller("DashboardMenusCtrl", ["$scope", "$stateParams", "$ionicModal", "
         if (menus.length !== 0) {
           $ionicLoading.show();
         }
+
+        $scope.$watchCollection('restaurantMenus', function(newRestaurantMenus) {
+          $scope.menus = newRestaurantMenus.map(function(menu) {
+            var m = {
+              get: Menu.get(menu.$id).$loaded()
+                .then((menuObj) => {
+                  m.details = menuObj
+                  m.ready = true
+                  $ionicLoading.hide()
+                })
+            }
+            return m;
+          })
+        })
       })
     $scope.categories = Menu.getMenuCategories($stateParams.restaurantId);
     $scope.defaultCategory = $scope.categories[0];
     $scope.photoURL = "";
 
-    $scope.$watchCollection('restaurantMenus', function(newRestaurantMenus) {
-      $scope.menus = newRestaurantMenus.map(function(menu) {
-        var m = {
-          get: Menu.get(menu.$id).$loaded()
-            .then((menuObj) => {
-              m.details = menuObj
-              m.ready = true
-              $ionicLoading.hide()
-            })
-        }
-        return m;
-      })
-    })
 
     $scope.showAddCategoryModal = function(resId) {
       console.log('show add category');

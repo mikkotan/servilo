@@ -1,7 +1,13 @@
-app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionicModal", "$ionicPopup", "restaurant", "Restaurant", "Database",
-  function($scope, $state, $stateParams, $ionicModal, $ionicPopup, restaurant, Restaurant, Database) {
+app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionicModal", "$ionicPopup", "Restaurant", "Database", "$ionicLoading",
+  function($scope, $state, $stateParams, $ionicModal, $ionicPopup, Restaurant, Database, $ionicLoading) {
+    $ionicLoading.show();
 
-    $scope.restaurant = restaurant;
+    Restaurant.get($stateParams.restaurantId).$loaded()
+      .then((restaurant) => {
+        $scope.restaurant = restaurant
+        $scope.ready = true
+        $ionicLoading.hide();
+      })
     $scope.getFacilityName = Restaurant.getFacilityName;
 
     $scope.showDelete = function(restaurant) {

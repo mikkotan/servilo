@@ -298,12 +298,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
       views: {
         'dashboard-page': {
           templateUrl: "app/dashboard/_dashboard-main.html",
-          controller: "DashboardMainCtrl",
-          resolve: {
-            restaurant : function(Restaurant, $stateParams) {
-              return Restaurant.get($stateParams.restaurantId).$loaded()
-            }
-          }
+          controller: "DashboardMainCtrl"
         }
       }
     })
@@ -312,12 +307,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
       views: {
         'dashboard-page': {
           templateUrl: "app/dashboard/_dashboard-menus.html",
-          controller: "DashboardMenusCtrl",
-          resolve: {
-            "currentAuth": ["Auth", function(Auth) {
-              return Auth.$requireSignIn();
-            }]
-            }
+          controller: "DashboardMenusCtrl"
           }
         }
     })
@@ -326,15 +316,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
       views: {
         'dashboard-page': {
           templateUrl: "app/dashboard/_dashboard-interact.html",
-          controller: "DashboardInteractCtrl",
-          resolve: {
-            "currentAuth": ["Auth", function(Auth) {
-              return Auth.$requireSignIn();
-            }],
-            currentGeoLocation: function(CordovaGeolocation) {
-              return CordovaGeolocation.get();
-            }
-          }
+          controller: "DashboardInteractCtrl"
         }
       }
     })
