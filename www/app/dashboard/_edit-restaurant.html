@@ -1,0 +1,87 @@
+<ion-modal-view view-title="Edit Restaurant">
+  <ion-header-bar class="bar bar-header bar-assertive">
+    <h1 class="title">Edit {{restaurantName}}</h1>
+    <button class="button button-clear button-primary" ng-click="closeEditRestaurant()"><i class="icon ion-ios-close"></i></button>
+  </ion-header-bar>
+  <ion-content class="padding">
+    <ion-list>
+      <div class="card">
+        <ion-item id="form-input">
+          <form ng-submit="edit(eRestaurant)">
+            <div class="list">
+              <label class="item item-input item-floating-label">
+                <span class="input-label has-input">Name of Restaurant</span>
+                <input type="text" placeholder="Name of Restaurant" ng-model="eRestaurant.name">
+              </label>
+              <label class="item item-input item-floating-label">
+                <span class="input-label has-input">Contact Number</span>
+                <input type="number" placeholder="Contact Number" ng-model="eRestaurant.phonenumber">
+              </label>
+              <label class="item item-input item-floating-label">
+                <span class="input-label has-input">Type of Restaurant</span>
+                <input type="text" placeholder="Type of Restaurant" ng-model="eRestaurant.type">
+              </label>
+              <label class="item item-input item-floating-label">
+                <span class="input-label has-input">Cuisine of Restaurant</span>
+                <input type="text" placeholder="Cuisine of Restaurant" ng-model="eRestaurant.cuisine">
+              </label>
+              <div class="item item-text-wrap">
+                <a class="button button-block button-royal icon-left ion-plus-circled" ng-click="setHours()">Set Hours</a>
+                <div class="col text-center" ng-show="eRestaurant.openTime && eRestaurant.closeTime">
+                  Opening Hours : {{eRestaurant.openTime| date: "h:mm a"}} - {{eRestaurant.closeTime| date: "h:mm a"}}
+                </div>
+              </div>
+              <div class="item item-text-wrap">
+                <a class="button button-block button-royal icon-left ion-plus-circled" ng-click="setFacilities()">Set Facilities</a>
+
+                <div class="col text-center">
+                  <p ng-repeat="(key, val) in eRestaurant.facilities" ng-if="val">
+                    {{key}}
+                  </p>
+                </div>
+              </div>
+              <div class="item">
+                <a class="button button-block button-royal icon-left ion-plus-circled" ng-click="setOpenDays()">Set Open Days</a>
+              </div>
+              <div class="item item-input-inset">
+                <label class="item-input item-floating-label">
+                  <span class="input-label has-input">Location of Restaurant</span>
+                  <input type="text" placeholder="Location of Restaurant" ng-model="eRestaurant.location">
+                </label>
+                <a class="button button-royal icon ion-map" ng-click="showMap()"></a>
+              </div>
+              <div class="item">
+                <div class="row">
+                  <div class="col text-center">
+                    Edit image
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <img class="center" ng-show="!imageURL && !eRestaurant.photoURL" ng-src="img/ionic.png" width="100%" />
+                    <img class="center" ng-show="!imageURL && eRestaurant.photoURL" ng-src="{{eRestaurant.photoURL}}" width="100%" />
+                    <img class="center" ng-show="imageURL" ng-src="{{imageURL}}" width="100%" />
+                    <div ng-show="progress" class="progress-bar" style="width: {{progress}}%;">
+                      <p class="percent">{{progress}}%</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <a class="button button-block button-positive icon ion-camera" ng-click="upload(1)"></a>
+                  </div>
+                  <div class="col">
+                    <a class="button button-block button-calm icon ion-image" ng-click="upload(2)"></a>
+                  </div>
+                </div>
+
+              </div>
+              <div class="padding">
+                <button type="submit" class="button button-block button-balanced">Save Changes</button>
+              </div>
+            </div>
+          </form>
+        </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-modal-view>

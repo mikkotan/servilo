@@ -30,6 +30,10 @@
           <div class="item">
             <p>Open: {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}</p>
           </div>
+          <!-- TODO - days -->
+          <!-- <div class="item" ng-repeat="(key, val) in restaurant.openDays">
+            <p>Days: {{openDays[key].name}}</p>
+          </div> -->
           <div class="item">
             <p>Contact no.: {{restaurant.phonenumber}}</p>
           </div>

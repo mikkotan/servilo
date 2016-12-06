@@ -70,38 +70,6 @@ app.controller("DashboardCtrl", ["$scope", "$state", "$stateParams", "Database",
       })
     }
 
-    // if ($state.is("tabs.dashboard.main")) {
-    //   $scope.actionButton = $actionButton.create({
-    //     mainAction: {
-    //       icon: 'ion-gear-b',
-    //       backgroundColor: '#886aea',
-    //       textColor: ' white',
-    //       onClick: function() {}
-    //     },
-    //     buttons: [{
-    //       icon: 'ion-trash-b',
-    //       label: 'Delete Restaurant',
-    //       backgroundColor: 'red',
-    //       iconColor: 'white',
-    //       onClick: function() {
-    //         console.log($scope.resto);
-    //         $scope.showDelete($scope.resto);
-    //       }
-    //     }, {
-    //       icon: 'ion-edit',
-    //       label: 'Edit Restaurant',
-    //       backgroundColor: 'blue',
-    //       iconColor: 'white',
-    //       onClick: function() {
-    //         console.log($stateParams.restaurantId);
-    //         console.log('clicked pin');
-    //         $scope.editRestaurant($scope.resto);
-    //       }
-    //     }]
-    //   });
-    // }
-
-
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
         console.log("User:" + user.uid);
@@ -160,13 +128,14 @@ app.controller("DashboardCtrl", ["$scope", "$state", "$stateParams", "Database",
     }
 
     $scope.edit = function(restaurant) {
-      $scope.restaurant.phonenumber =
-        Restaurant.editRestaurant(restaurant, $scope.marker, $scope.imageURL)
+      console.log("edit function =>");
+      console.log(restaurant.$id);
+      Restaurant.editRestaurant(restaurant, $scope.marker, $scope.imageURL)
         .then(function() {
           $scope.imageURL = null;
         })
       $scope.restaurantEditModal.hide();
-      $ionicListDelegate.closeOptionButtons();
+      //   $ionicListDelegate.closeOptionButtons();
     }
 
     $ionicModal.fromTemplateUrl('app/restaurant/_new-restaurant.html', function(restaurantModal) {
@@ -175,7 +144,7 @@ app.controller("DashboardCtrl", ["$scope", "$state", "$stateParams", "Database",
       scope: $scope
     });
 
-    $ionicModal.fromTemplateUrl('app/restaurant/_edit-restaurant.html', function(restaurantEditModal) {
+    $ionicModal.fromTemplateUrl('app/dashboard/_edit-restaurant.html', function(restaurantEditModal) {
       $scope.restaurantEditModal = restaurantEditModal;
     }, {
       scope: $scope
@@ -255,9 +224,24 @@ app.controller("DashboardCtrl", ["$scope", "$state", "$stateParams", "Database",
     $scope.editRestaurant = function(restaurant) {
       //   console.log(JSON.stringify(restaurant, null, 4));
       //   $scope.actionButton.hideButton();
-
-      $scope.eRestaurant = restaurant;
-      $scope.eRestaurant.phonenumber = parseInt(restaurant.phonenumber);
+      //
+      //   $scope.eRestaurant = restaurant;
+      //   $scope.eRestaurant.phonenumber = parseInt(restaurant.phonenumber);
+      console.log("editRestaurant =>");
+      console.log(restaurant.$id);
+      $scope.eRestaurant = {
+        $id: restaurant.$id,
+        name: restaurant.name,
+        phonenumber: parseInt(restaurant.phonenumber),
+        type: restaurant.type,
+        cuisine: restaurant.cuisine,
+        openTime: restaurant.openTime,
+        closeTime: restaurant.closeTime,
+        openDays: restaurant.openDays,
+        facilities: restaurant.facilities,
+        location: restaurant.location,
+        photoURL: restaurant.photoURL
+      };
       $scope.restaurantEditModal.show();
       if (restaurant.photoURL) {
         $scope.imageURL = restaurant.photoURL;
