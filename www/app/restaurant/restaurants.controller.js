@@ -216,23 +216,23 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
         })
     }
 
-    $scope.editRestaurant = function(restaurant) {
-    console.log(restaurant);
-      console.log(JSON.stringify(restaurant, null, 4));
-      $scope.restaurantEditModal.show();
-      $scope.restaurant = restaurant;
-      $scope.restaurant.phonenumber = parseInt(restaurant.phonenumber)
-      if (restaurant.photoURL) {
-        $scope.imageURL = restaurant.photoURL;
-      } else {
-        $scope.imageURL = null;
-      }
-      $scope.restaurantName = restaurant.name;
-      $scope.marker.coords = {
-        latitude: restaurant.latitude,
-        longitude: restaurant.longitude
-      };
-    }
+    // $scope.editRestaurant = function(restaurant) {
+    // console.log(restaurant);
+    //   console.log(JSON.stringify(restaurant, null, 4));
+    //   $scope.restaurantEditModal.show();
+    //   $scope.eRestaurant = restaurant;
+    //   $scope.eRestaurant.phonenumber = parseInt(restaurant.phonenumber)
+    //   if (restaurant.photoURL) {
+    //     $scope.imageURL = restaurant.photoURL;
+    //   } else {
+    //     $scope.imageURL = null;
+    //   }
+    //   $scope.restaurantName = restaurant.name;
+    //   $scope.marker.coords = {
+    //     latitude: restaurant.latitude,
+    //     longitude: restaurant.longitude
+    //   };
+    // }
 
     $scope.approveRestaurant = function(restaurant) {
       $scope.pendingRestaurants.$remove(restaurant)
