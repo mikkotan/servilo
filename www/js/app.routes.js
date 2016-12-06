@@ -281,7 +281,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
       views: {
         'restaurant-tab': {
           templateUrl: "app/dashboard/_dashboard.html",
-          controller: "DashboardCtrl",
+          // controller: "DashboardCtrl",
           resolve: {
             "currentAuth": ["Auth", function(Auth) {
               return Auth.$requireSignIn();
@@ -298,13 +298,10 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
       views: {
         'dashboard-page': {
           templateUrl: "app/dashboard/_dashboard-main.html",
-          controller: "ViewRestaurantCtrl",
+          controller: "DashboardMainCtrl",
           resolve: {
-            "currentAuth": ["Auth", function(Auth) {
-              return Auth.$requireSignIn();
-            }],
-            currentGeoLocation: function(CordovaGeolocation) {
-              return CordovaGeolocation.get();
+            restaurant : function(Restaurant, $stateParams) {
+              return Restaurant.get($stateParams.restaurantId).$loaded()
             }
           }
         }
@@ -315,24 +312,21 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
       views: {
         'dashboard-page': {
           templateUrl: "app/dashboard/_dashboard-menus.html",
-          controller: "ViewMenusCtrl",
+          controller: "DashboardMenusCtrl",
           resolve: {
             "currentAuth": ["Auth", function(Auth) {
               return Auth.$requireSignIn();
-            }],
-            restaurantMenu: function(Restaurant, $stateParams) {
-              return Restaurant.getMenus($stateParams.restaurantId).$loaded();
+            }]
             }
           }
         }
-      }
     })
     .state('tabs.dashboard.interact', {
       url: "/interact",
       views: {
         'dashboard-page': {
           templateUrl: "app/dashboard/_dashboard-interact.html",
-          controller: "DashboardCtrl",
+          controller: "DashboardInteractCtrl",
           resolve: {
             "currentAuth": ["Auth", function(Auth) {
               return Auth.$requireSignIn();
