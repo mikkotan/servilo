@@ -213,6 +213,9 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
     })
     .state('tabs.orders', {
       url: "/orders",
+      params: {
+        restaurantId: null
+      },
       views: {
         'order-tab': {
           templateUrl: "app/order/_orders.html",
