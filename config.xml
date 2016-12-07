@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <widget id="com.ionicframework.todo334097" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>todo</name>
-  <description>
-    An Ionic Framework and Cordova project.
+  <description>&#xD;&#xD;
+    An Ionic Framework and Cordova project.&#xD;&#xD;
   </description>
-  <author email="you@example.com" href="http://example.com.com/">
-    Your Name Here
+  <author email="you@example.com" href="http://example.com.com/">&#xD;&#xD;
+    Your Name Here&#xD;&#xD;
   </author>
   <content src="index.html"/>
   <access origin="*"/>
+  <preference name="xwalkVersion" value="xwalk_core_library_beta:19+"/>
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
   <preference name="DisallowOverscroll" value="true"/>
@@ -101,7 +102,13 @@
   <plugin name="com-badrit-base64" spec="~0.2.0"/>
   <plugin name="cl.rmd.cordova.dialoggps" spec="https://github.com/rodrigo-martinezd/cordova-dialog-gps.git"/>
   <plugin name="cordova-plugin-geolocation" spec="~2.4.0"/>
-  <plugin name="cordova-plugin-customurlscheme" source="npm">
-    <param name="URL_SCHEME" value="servilothesis"/>
+  <plugin name="cordova-plugin-crosswalk-webview" spec="https://github.com/crosswalk-project/cordova-plugin-crosswalk-webview.git">
+    <variable name="XWALK_VERSION" value="19"/>
+    <variable name="XWALK_LITEVERSION" value="xwalk_core_library_canary:17+"/>
+    <variable name="XWALK_COMMANDLINE" value="--disable-pull-to-refresh-effect"/>
+    <variable name="XWALK_MODE" value="embedded"/>
+    <variable name="XWALK_MULTIPLEAPK" value="true"/>
   </plugin>
+  <allow-navigation href="http://192.168.0.130:8100"/>
+  <allow-navigation href="http://192.168.0.118:8100"/>
 </widget>
