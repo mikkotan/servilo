@@ -47,6 +47,7 @@
                 <a class="button button-block button-royal icon-left ion-plus-circled" ng-click="setOpenDays()">Set Open Days</a>
                 <div class="col text-center">
                   <p ng-repeat="(key, val) in eRestaurant.openDays track by $index" ng-if="val === true">
+
                     {{days[key].name}}
                   </p>
                 </div>

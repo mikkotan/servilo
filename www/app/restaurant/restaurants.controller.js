@@ -3,11 +3,14 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
 
     $scope.modalControl = {};
     $scope.data= {detail:""};
+    // $scope.facilities = $firebaseArray(firebase.database().ref().child('facilities'));
+    $scope.facilities = Database.facilities();
     $scope.pendingRestaurants = Restaurant.getPendingRestaurants();
     $scope.displayRestaurants = User.getAuthRestaurants();
     $scope.AppUser = User.auth();
 
     console.log($scope.AppUser);
+
     $scope.showMap = function() {
       var mapPopup = $ionicPopup.confirm({
         title: 'Choose Location',
@@ -333,7 +336,6 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
         }
     });
 
-    $scope.facilities = $firebaseArray(firebase.database().ref().child('facilities'));
 
     $scope.days = {
       '0': {

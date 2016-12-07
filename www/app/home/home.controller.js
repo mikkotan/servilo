@@ -6,6 +6,7 @@ app.controller('HomeTabCtrl',
   $scope.currentLocation = CordovaGeolocation.get();
 
   Auth.$onAuthStateChanged(function(firebaseUser) {
+    console.log('on auth state changed running');
     if(firebaseUser) {
       User.setOnline(firebaseUser.uid);
       User.isAdmin(firebaseUser.uid).then(function(val){console.log("ADMIN: " + val)})

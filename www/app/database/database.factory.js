@@ -124,6 +124,9 @@ app.factory("Database", ["$firebaseArray", "$firebaseObject", "$firebaseAuth",
       },
       firebaseArray : function(data){
         return $firebaseArray(data)
+      },
+      facilities : function() {
+        return $firebaseArray(facilitiesRef);
       }
     }
 
