@@ -2,7 +2,7 @@
   <ion-header-bar class="bar bar-subheader bar-light item-input-inset">
     <label class="item-input-wrapper">
       <i class="icon ion-search placeholder-icon"></i>
-      <input placeholder="Search..." type="search" ng-model="name" ng-model-options="{ debounce: 1000 }" ng-change="searchChange(name)">
+      <input placeholder="Search..." type="search" ng-model="name" ng-model-options="{ debounce: 1000 }" ng-change="searchChange(name)" >
     </label>
   </ion-header-bar>
   <ion-content>
@@ -12,7 +12,7 @@
 	  on-refresh="doRefresh()">
 	</ion-refresher>
     <ion-list>
-	  <ion-item ng-repeat="rest in home.restaurants" item="rest">
+	  <ion-item ng-repeat="rest in home.restaurants | orderBy:'distance'" item="rest">
 	    {{rest.name}}
 	  </ion-item>
     </ion-list>

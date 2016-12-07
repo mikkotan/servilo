@@ -179,9 +179,6 @@ ion-popover-view.fit ion-content {
 .capitalize {
   text-transform: capitalize;
 }
-.black-bg {
-  background: rgba(0, 0, 0, 0.5);
-}
 .container-class {
   ::-webkit-scrollbar {
     display: none !important;
@@ -193,4 +190,25 @@ ion-popover-view.fit ion-content {
   background-position: center;
   margin: auto;
   z-index: 2;
+}
+.login-container {
+  display: -webkit-flex;
+  -webkit-flex-direction: column;
+  height: 100%;
+  background: rgba(black, 0.75);
+}
+.login-container > .header {
+  -webkit-flex: 4;
+  padding-top: 20px;
+}
+.bottom-text {
+  color: #fff;
+}
+* {
+  box-shadow: none !important;
+}
+.center {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
 }

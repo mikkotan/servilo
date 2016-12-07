@@ -176,35 +176,46 @@ app.controller("DashboardCtrl", ["$scope", "$state", "$stateParams", "Database",
     }
 
     $scope.deleteRestaurant = function(restaurant) {
-
-      console.log("in deleteRestaurant()")
-      console.log(restaurant);
-
-      console.log('delete');
-
-      //   var resObj = Restaurant.getCurrentRestaurant(restaurant.$id);
       var resObj = restaurant;
-      $scope.displayRestaurants.$remove(resObj).then(function() {
-        console.log('deleted?');
-      }).catch((err) => {
-        console.log(err)
-      });
+      Restaurant.delete(restaurant.$id)
+        .then(() => {
+          console.log('Success deleting ');
+        })
+        .catch((err) => {
+          console.log('Error on deleting: '+err);
+        })
+      // for (var menu in resObj.menus) {
+      //   var menusRef = firebase.database().ref().child('menus');
+      //   menusRef.child(menu).set(null);
+      // }
+      //
+      // for (var review in resObj.reviews) {
+      //   var reviewsRef = firebase.database().ref().child('reviews');
+      //   reviewsRef.child(review).set(null);
+      // }
+      //
+      // for (var reviewer in resObj.reviewers) {
+      //   var userReviewedRestaurantsRef = firebase.database().ref().child('users').child(reviewer).child('reviewed_restaurants');
+      //   console.log('reviewer ref' + userReviewedRestaurantsRef);
+      //   userReviewedRestaurantsRef.child(resObj.$id).set(null);
+      // }
+      Database.restaurantMenusReference().child(resObj.$id).remove();
 
-      for (var menu in resObj.menus) {
-        var menusRef = firebase.database().ref().child('menus');
-        menusRef.child(menu).set(null);
-      }
-
-      for (var review in resObj.reviews) {
-        var reviewsRef = firebase.database().ref().child('reviews');
-        reviewsRef.child(review).set(null);
-      }
-
-      for (var reviewer in resObj.reviewers) {
-        var userReviewedRestaurantsRef = firebase.database().ref().child('users').child(reviewer).child('reviewed_restaurants');
-        console.log('reviewer ref' + userReviewedRestaurantsRef);
-        userReviewedRestaurantsRef.child(resObj.$id).set(null);
-      }
+      Database.restaurantReservationsReference().child(resObj.$id).once('value')
+        .then((snapshot) => {
+          for (var reservation in snapshot.val()) {
+            console.log(reservation);
+            Reservation.delete(reservation)
+              .then(() => {
+                console.log('delete sucess')
+                alert('delete success');
+              })
+              .catch((err) => {
+                console.log(err)
+                alert(err);
+              })
+          }
+        })
 
       Database.restaurantOrdersReference().child(resObj.$id).once('value')
         .then((snapshot) => {
@@ -216,10 +227,58 @@ app.controller("DashboardCtrl", ["$scope", "$state", "$stateParams", "Database",
               })
               .catch((err) => {
                 console.log(err)
+                alert(err);
               })
           }
         })
+      $state.go('tabs.restaurant');
     }
+
+    // $scope.deleteRestaurant = function(restaurant) {
+    //
+    //   console.log("in deleteRestaurant()")
+    //   console.log(restaurant);
+    //
+    //   console.log('delete');
+    //
+    // //   var resObj = Restaurant.getCurrentRestaurant(restaurant.$id);
+    //     var resObj = restaurant;
+    //   $scope.displayRestaurants.$remove(resObj).then(function() {
+    //     console.log('deleted?');
+    //   }).catch((err) => {
+    //     console.log(err)
+    //   });
+    //
+    //   for (var menu in resObj.menus) {
+    //     var menusRef = firebase.database().ref().child('menus');
+    //     menusRef.child(menu).set(null);
+    //   }
+    //
+    //   for (var review in resObj.reviews) {
+    //     var reviewsRef = firebase.database().ref().child('reviews');
+    //     reviewsRef.child(review).set(null);
+    //   }
+    //
+    //   for (var reviewer in resObj.reviewers) {
+    //     var userReviewedRestaurantsRef = firebase.database().ref().child('users').child(reviewer).child('reviewed_restaurants');
+    //     console.log('reviewer ref' + userReviewedRestaurantsRef);
+    //     userReviewedRestaurantsRef.child(resObj.$id).set(null);
+    //   }
+    //
+    //   Database.restaurantOrdersReference().child(resObj.$id).once('value')
+    //     .then((snapshot) => {
+    //       for (var order in snapshot.val()) {
+    //         console.log(order);
+    //         Order.delete(order)
+    //           .then(() => {
+    //             console.log('success')
+    //           })
+    //           .catch((err) => {
+    //             console.log(err)
+    //           })
+    //       }
+    //     })
+    // }
 
     $scope.editRestaurant = function(restaurant) {
       //   console.log(JSON.stringify(restaurant, null, 4));
@@ -370,6 +429,7 @@ app.controller("DashboardCtrl", ["$scope", "$state", "$stateParams", "Database",
         }
       });
     $scope.facilities = $firebaseArray(firebase.database().ref().child('facilities'));
+
     $scope.days = {
       '0': {
         name: 'Monday'

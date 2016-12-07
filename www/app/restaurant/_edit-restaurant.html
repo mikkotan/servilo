@@ -1,7 +1,10 @@
 <ion-modal-view view-title="Edit Restaurant">
   <ion-header-bar class="bar bar-header bar-assertive">
     <h1 class="title">Edit {{restaurantName}}</h1>
-    <button class="button button-clear button-primary" ng-click="closeEditRestaurant()"><i class="icon ion-ios-close"></i></button>
+
+    <div class="buttons">
+      <button class="button button-clear button-primary icon ion-ios-close" ng-click="closeEditRestaurant()"></button>
+    </div>
   </ion-header-bar>
   <ion-content class="padding">
     <ion-list>

@@ -1,7 +1,13 @@
-app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "ionicMaterialMotion", "User", "$state", "$ionicLoading", "$ionicModal", "Database", "IonicPushService", "$ionicPopup",
-  function($scope, Auth, ionicMaterialInk, ionicMaterialMotion, User, $state, $ionicLoading, $ionicModal, Database, IonicPushService, $ionicPopup) {
+app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMenuDelegate", "ionicMaterialMotion", "User", "$state", "$ionicLoading", "$ionicModal", "Database", "IonicPushService", "$ionicPopup",
+  function($scope, Auth, ionicMaterialInk, $ionicSideMenuDelegate, ionicMaterialMotion, User, $state, $ionicLoading, $ionicModal, Database, IonicPushService, $ionicPopup) {
 
     ionicMaterialInk.displayEffect();
+    $scope.$on('$ionicView.enter', function() {
+      $ionicSideMenuDelegate.canDragContent(false);
+    });
+    $scope.$on('$ionicView.leave', function() {
+      $ionicSideMenuDelegate.canDragContent(true);
+    });
 
     $scope.googleLogin = function() {
       console.log("initiated");

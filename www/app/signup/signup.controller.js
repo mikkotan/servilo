@@ -1,5 +1,12 @@
-app.controller("SignUpCtrl", ["$scope", "Auth", "User", "$state", "IonicPushService", "Database",
-  function($scope, Auth, User, $state, IonicPushService, Database) {
+app.controller("SignUpCtrl", ["$scope", "Auth", "User", "$state", "IonicPushService", "Database", "$ionicSideMenuDelegate",
+  function($scope, Auth, User, $state, IonicPushService, Database, $ionicSideMenuDelegate) {
+    
+    $scope.$on('$ionicView.enter', function() {
+      $ionicSideMenuDelegate.canDragContent(false);
+    });
+    $scope.$on('$ionicView.leave', function() {
+      $ionicSideMenuDelegate.canDragContent(true);
+    });
 
     $scope.createUser = function(user) {
       Auth.$createUserWithEmailAndPassword(user.email, user.password)
