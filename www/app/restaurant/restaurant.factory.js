@@ -113,13 +113,16 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
         lat: latitude,
         lng: longitude
       };
+      console.log(latLng);
       geocoder.geocode({
         'location': latLng
       }, function(results, status) {
         if (status === 'OK') {
+          console.log('oks');
           deferred.resolve(results[0].formatted_address);
           // $scope.$apply();
         } else {
+          console.log('nonono');
           deferred.resolve(null);
           alert('Geocoder failed due to: ' + status);
         }

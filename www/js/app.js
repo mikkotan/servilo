@@ -151,7 +151,7 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
         $ionicLoading.hide()
         if (error === "AUTH_REQUIRED") {
           event.preventDefault();
-          $state.go("login")
+          $state.go("landing")
         }
     })
 
@@ -191,8 +191,9 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
           }
           $cordovaPushV5.unregister();
           Auth.$signOut();
-          location.reload();
+        //   location.reload();
           $ionicLoading.hide();
+          $state.go("landing");
         })
         .catch((err) => {
           console.log(err)

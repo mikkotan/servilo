@@ -8,7 +8,7 @@ app.controller("NotificationsCtrl", ["$scope", "$firebaseArray", "$firebaseObjec
     }
 
     $scope.markReadAll = function() {
-      return Notification.deleteAll($scope.notifs);
+      return Notification.markReadAll($scope.notifs);
     }
 
     $scope.$watchCollection('notifs', function(newNotifs) {

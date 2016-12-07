@@ -1,47 +1,38 @@
 <ion-view view-title="Profile">
   <ion-nav-buttons side="right">
-    <a class="button button-icon icon ion-android-options" ng-click="openPopover($event, firebaseUser)"></a>
+    <button class="button button-icon icon ion-android-options ink" ng-click="openPopover($event, firebaseUser)"></button>
   </ion-nav-buttons>
   <ion-content>
     <div id="content">
-      <div id="profile-info" >
-        <img id="profile-image" ng-show="firebaseUser.photoURL" ng-src="{{firebaseUser.photoURL}}">
-        <img id="profile-image" ng-show="!firebaseUser.photoURL" ng-src="img/ionic.png">
-        <h3 id="profile-name" ng-if="firebaseUser.provider !== email">{{firebaseUser.displayName}}</h3>
-        <h3 id="profile-name" ng-if="firebaseUser.provider === email">{{firebaseUser.firstName}} {{firebaseUser.lastName}}</h3>
-        <p id="profile-description" ng-if="firebaseUser.description"> {{ firebaseUser.description }} </p>
-        <p id="profile-description" ng-if="!firebaseUser.description"> <a ng-click="openEditProfile()">Add a description</a> </p>
+      <div id="profile-info" class="hero slide-up" style="background-image: url('img/profile-bg.jpg');">
+        <div class="content">
+          <img class="avatar" ng-show="firebaseUser.photoURL" ng-src="{{firebaseUser.photoURL}}">
+          <img class="avatar" ng-show="!firebaseUser.photoURL" ng-src="img/ionic.png">
+          <h3 ng-if="firebaseUser.provider !== email" class="light">{{firebaseUser.displayName}}</h3>
+          <h3 ng-if="firebaseUser.provider === email" class="light">{{firebaseUser.firstName}} {{firebaseUser.lastName}}</h3>
+          <h4 id="profile-description" ng-if="firebaseUser.description"> {{ firebaseUser.description }} </h4>
+          <h4 id="profile-description" ng-if="!firebaseUser.description"> <a ng-click="openEditProfile()">Add a description</a> </h4>
+        </div>
+
+
       </div>
-      <ion-list>
-        <ion-item>
-          <img class="post-profile-image" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/94311/me.png">
-          <div class="post-time"></div>
-          <div class="post-options">
-            <i class="icon-reply"></i>
-            <i class="icon-shuffle"></i>
-          </div>
+
+      <h4 class="content padding double-padding-x">Favorites</h4>
+      <ion-list class="list animate-fade-slide-in-right">
+        <ion-item ng-repeat="restaurant in userFavorites">
+          <p>
+            {{restaurant.name}}
+          </p>
+          <ion-option-button class="button-royal" ng-click="remove(restaurant)">
+            Delete
+          </ion-option-button>
+
         </ion-item>
       </ion-list>
-      <div class="list">
-        <div class="item item-divider">
-          Favorites
-        </div>
-        <ion-list>
-          <ion-item ng-repeat="restaurant in userFavorites">
-            <p>
-              {{restaurant.name}}
-            </p>
-            <ion-option-button class="button-royal" ng-click="remove(restaurant)">
-              Delete
-            </ion-option-button>
 
-          </ion-item>
-        </ion-list>
-
-        <!-- <a class="item" href="#" ng-repeat="restaurant in userFavorites">
+      <!-- <a class="item" href="#" ng-repeat="restaurant in userFavorites">
           {{restaurant.name}}
         </a> -->
-      </div>
 
     </div>
   </ion-content>

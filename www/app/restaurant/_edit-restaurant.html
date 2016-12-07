@@ -1,7 +1,10 @@
 <ion-modal-view view-title="Edit Restaurant">
   <ion-header-bar class="bar bar-header bar-assertive">
     <h1 class="title">Edit {{restaurantName}}</h1>
-    <button class="button button-clear button-primary" ng-click="closeEditRestaurant()"><i class="icon ion-ios-close"></i></button>
+
+    <div class="buttons">
+      <button class="button button-clear button-primary icon ion-ios-close" ng-click="closeEditRestaurant()"></button>
+    </div>
   </ion-header-bar>
   <ion-content class="padding">
     <ion-list>
@@ -42,6 +45,12 @@
               </div>
               <div class="item">
                 <a class="button button-block button-royal icon-left ion-plus-circled" ng-click="setOpenDays()">Set Open Days</a>
+                <div class="col text-center">
+                  <p ng-repeat="(key, val) in eRestaurant.openDays track by $index" ng-if="val === true">
+
+                    {{days[key].name}}
+                  </p>
+                </div>
               </div>
               <div class="item item-input-inset">
                 <label class="item-input item-floating-label">

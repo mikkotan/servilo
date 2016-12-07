@@ -77,12 +77,12 @@
                 bottom: '@?'
             },
             template: '<ul id="floating-menu"  \n\
-                            ng-style="{\'bottom\' : \'{{bottom}}\'}" \n\
-                            ng-class="{\'active\' : isOpen}" \n\
-                            ng-click="open()">' +
-                    '<div ng-transclude></div>' +
-                    '<span><li class="menu-button icon menu-icon" ng-class="icon" ng-style="{\'background-color\' : buttonColor, \'color\': iconColor}"></li></span>' +
-                    '</ul>',
+                                ng-style="{\'bottom\' : \'{{bottom}}\'}" \n\
+                                ng-class="{\'active\' : isOpen}" \n\
+                                ng-click="open()">' +
+                       '<div ng-transclude></div>' +
+                       '<span><li class="menu-button icon menu-icon" ng-class="icon" ng-style="{\'background-color\' : buttonColor, \'color\': iconColor}"></li></span>' +
+                       '</ul>',
             replace: false,
             transclude: true,
             link: function (scope, element, attrs, ctrl, transclude)
@@ -90,31 +90,6 @@
                 element.find('div').replaceWith(transclude());
             },
             controller: ionFloatingMenuCtrl
-        };
-    }
-
-    function ionFloatingItem() {
-        return {
-            restrict: 'E',
-            require: ['^ionFloatingMenu'],
-            scope: {
-                click: '&?',
-                icon: '@',
-                iconColor: '@?',
-                buttonColor: '@?',
-                buttonClass: '@?',
-                iconImagePath: '@?',
-                iconImageClass: '@?',
-                text: '@?',
-                textClass: '@?'},
-            template:
-                    '<li ng-click="click()" ng-class="buttonClass" ng-style="{\'background-color\': buttonColor }">' +
-                    '<span ng-if="text" class="label-container"><span class="label" ng-class="textClass" ng-bind="text"></span></span>' +
-                    '<img ng-if="iconImagePath" class="menu-icon" ng-class="iconImageClass" ng-src="{{iconImagePath}}"/>' +
-                    '<i ng-if="!iconImagePath" class="icon menu-icon" ng-class="{ \'{{icon}}\' : true}" ng-style="{\'color\': iconColor }"></i>' +
-                    '</li>',
-            replace: false,
-            controller: ionFloatingItemCtrl
         };
     }
 
@@ -133,7 +108,6 @@
             $scope.buttonColor = menuOpenColor;
             $scope.icon = menuOpenIcon;
             $scope.iconColor = menuOpenIconColor;
-
             if (backdrop) {
                 $ionicBackdropIon.retain();
             }
@@ -148,6 +122,14 @@
             }
             $rootScope.$broadcast('floating-menu:close');
         };
+
+        $scope.$on('floating-menu:set-close', function() {
+            if ($scope.isOpen) {
+                $scope.isOpen = false;
+                $scope.setClose();
+            }
+        });
+
         var menuColor = $scope.menuColor || '#2AC9AA';
         var menuIcon = $scope.menuIcon || 'ion-plus';
         var menuIconColor = $scope.menuIconColor || '#fff';
@@ -155,6 +137,7 @@
         var menuOpenIcon = $scope.menuOpenIcon || 'ion-minus';
         var menuOpenIconColor = $scope.menuOpenIconColor || '#fff';
         var backdrop = $scope.backdrop || false;
+
         $scope.setClose();
         $scope.hasFooter = $scope.hasFooter || false;
         if ($scope.hasFooter) {
@@ -165,20 +148,43 @@
 
     }
 
+    function ionFloatingItem() {
+        return {
+            restrict: 'E',
+            require: ['^ionFloatingMenu'],
+            scope: {
+                click: '&?',
+                icon: '@',
+                iconColor: '@?',
+                buttonColor: '@?',
+                buttonClass: '@?',
+                iconImagePath: '@?',
+                iconImageClass: '@?',
+                text: '@?',
+                textClass: '@?'},
+            template:
+            '<li ng-click="click($event)" ng-class="buttonClass" ng-style="{\'background-color\': buttonColor }">' +
+            '<span ng-if="text" ng-click="ignore($event);" class="label-container"><span class="label" ng-class="textClass" ng-bind="text"></span></span>' +
+            '<i ng-if="!iconImagePath" class="icon menu-icon" ng-class="{ \'{{icon}}\' : true}" ng-style="{\'color\': iconColor }"></i>' +
+            '</li>',
+            replace: false,
+            controller: ionFloatingItemCtrl
+        };
+    }
+
     ionFloatingItemCtrl.$inject = ['$scope'];
     function ionFloatingItemCtrl($scope) {
         $scope.buttonColor = $scope.buttonColor || '#2AC9AA';
         $scope.iconColor = $scope.iconColor || '#fff';
+        $scope.ignore = function($event) {
+          $event.stopPropagation();
+          return false;
+        };
     }
 
 
-    $ionicBackdropIon.$inject = ['$document', '$timeout', '$$rAF', '$rootScope'];
-    function $ionicBackdropIon($document, $timeout, $$rAF, $rootScope) {
-        var el = angular.element('<div class="backdrop">');
-        var backdropHolds = 0;
-
-
-        var a = angular.element(document.querySelector('ion-content')).append(el[0]);
+    $ionicBackdropIon.$inject = ['$rootScope'];
+    function $ionicBackdropIon($rootScope) {
 
         return {
             /**
@@ -193,39 +199,39 @@
              * @description
              * Releases the backdrop.
              */
-            release: release,
-            getElement: getElement,
-            // exposed for testing
-            _element: el
+            release: release
         };
 
-        function retain() {
-            backdropHolds++;
-            if (backdropHolds === 1) {
-                el.addClass('visible');
-                $rootScope.$broadcast('backdrop.shown');
-                $$rAF(function () {
-                    // If we're still at >0 backdropHolds after async...
-                    if (backdropHolds >= 1)
-                        el.addClass('active');
-                });
+        function removeBackdrops() {
+            var elements = document.querySelectorAll('.cbackdrop');
+            if (elements) {
+                for (var i = 0; i < elements.length; i++) {
+                    var backdropElement = elements[i];
+                    backdropElement.parentNode.removeChild(backdropElement);
+                }
             }
-        }
-        function release() {
-            if (backdropHolds === 1) {
-                el.removeClass('active');
-                $rootScope.$broadcast('backdrop.hidden');
-                $timeout(function () {
-                    // If we're still at 0 backdropHolds after async...
-                    if (backdropHolds === 0)
-                        el.removeClass('visible');
-                }, 400, false);
-            }
-            backdropHolds = Math.max(0, backdropHolds - 1);
         }
 
-        function getElement() {
-            return el;
+        function createBackdrops() {
+            var el = angular.element('<div class="backdrop cbackdrop active visible">');
+            var views = document.querySelectorAll('ion-view');
+            if (views) {
+                for (var i = 0; i < views.length; i++) {
+                    var viewElement = views[i];
+                    angular.element(viewElement).append(el[0]);
+                }
+            }
+        }
+
+        function retain() {
+            removeBackdrops();
+            createBackdrops();
+            $rootScope.$broadcast('backdrop.shown');
+        }
+
+        function release() {
+            removeBackdrops();
+            $rootScope.$broadcast('backdrop.hidden');
         }
 
     }

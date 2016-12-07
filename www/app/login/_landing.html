@@ -1,0 +1,34 @@
+<ion-view view-title="Landing" hide-nav-bar="true">
+  <ion-content class="login-page" scroll="false">
+    <section class="login-container">
+      <div class="col header text-center">
+        <img src="./img/wow.jpg" id="profile-image" />
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <button class="button button-block button-large button-energized-900 ink" ui-sref="signup">
+            Sign up a new account
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <button class="button button-block social-button-google text-center" ng-click="googleLogin()">Google</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col col-50">
+          <button class="button button-block social-button-facebook" ng-click="fbLogin()">Facebook</button>
+        </div>
+        <div class="col col-50">
+          <button class="button button-block social-button-twitter" ng-click="twitterLogin()">Twitter</button>
+        </div>
+      </div>
+      <div class="col text-center bottom-text padding">
+        Already have an account? <strong><a ui-sref = "login">Log in now!</a></strong>
+      </div>
+    </section>
+
+  </ion-content>
+</ion-view>

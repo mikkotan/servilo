@@ -327,6 +327,11 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
         }
       }
     })
+    .state('landing', {
+      url: "/landing",
+      templateUrl: "app/login/_landing.html",
+      controller: "LoginCtrl"
+    })
     .state('login', {
       url: "/login",
       templateUrl: "app/login/_login.html",

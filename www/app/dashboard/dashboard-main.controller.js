@@ -1,5 +1,5 @@
-app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionicModal", "$ionicPopup", "$firebaseArray", "Restaurant", "Database", "$ionicLoading",
-  function($scope, $state, $stateParams, $ionicModal, $ionicPopup, $firebaseArray, Restaurant, Database, $ionicLoading) {
+app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionicModal", "$ionicPopup", "$firebaseArray", "Restaurant", "Database", "$ionicLoading", "Upload", "$cordovaCamera",
+  function($scope, $state, $stateParams, $ionicModal, $ionicPopup, $firebaseArray, Restaurant, Database, $ionicLoading, Upload, $cordovaCamera) {
     $ionicLoading.show();
 
     Restaurant.get($stateParams.restaurantId).$loaded()
@@ -13,7 +13,7 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
     $scope.showMap = function() {
       var mapPopup = $ionicPopup.confirm({
         title: 'Choose Location',
-        templateUrl: 'app/restaurant/_googleMapsPopout.html',
+        templateUrl: 'app/dashboard/_popout-google-maps.html',
         cssClass: 'custom-popup',
         scope: $scope
       });
@@ -27,16 +27,16 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
     $scope.setHours = function() {
       var hoursPopup = $ionicPopup.confirm({
         title: 'Set Opening and Closing Hours',
-        templateUrl: 'app/restaurant/_hoursPopout.html',
+        templateUrl: 'app/dashboard/_popout-hours.html',
         cssClass: 'custom-popup',
         scope: $scope
       });
     };
 
     $scope.setFacilities = function() {
-      var facilities = $ionicPopup.confirm({
+      var facilities = $ionicPopup.alert({
         title: 'Set Facilities Offered',
-        templateUrl: 'app/restaurant/_facilitiesPopout.html',
+        templateUrl: 'app/dashboard/_popout-facilities.html',
         subTitle: 'Amenities available for the customers in your restaurant.',
         cssClass: 'custom-popup',
         scope: $scope
@@ -44,9 +44,9 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
     };
 
     $scope.setOpenDays = function() {
-      var openDays = $ionicPopup.confirm({
+      var openDays = $ionicPopup.alert({
         title: 'Set Open Days',
-        templateUrl: 'app/restaurant/_openDaysPopout.html',
+        templateUrl: 'app/dashboard/_popout-opendays.html',
         subTitle: 'Set the days open on your restaurant.',
         cssClass: 'custom-popup',
         scope: $scope
@@ -125,15 +125,58 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
       $state.go('tabs.restaurant');
     }
 
+    $scope.placeName = function(latitude, longitude) {
+      console.log(latitude);
+      console.log(longitude);
+      Restaurant.getLocationName(latitude, longitude).then(function(data) {
+        $scope.eRestaurant.location = data
+        console.log(data);
+      });
+    }
+
     $scope.editRestaurant = function(restaurant) {
-      $scope.restaurant = {
+
+      $scope.map = {
+        center: {
+          latitude: restaurant.latitude,
+          longitude: restaurant.longitude
+        },
+        zoom: 14,
+        options: {
+          scrollwheel: false
+        },
+        bounds: {},
+        events: {
+          tilesloaded: function(map) {
+            // $scope.$apply(function () {
+            google.maps.event.trigger(map, "resize");
+            // });
+          },
+          click: function(map, eventName, originalEventArgs) {
+            var coords = originalEventArgs[0];
+            var m = {
+              id: Date.now(),
+              coords: {
+                latitude: coords.latLng.lat(),
+                longitude: coords.latLng.lng()
+              }
+            };
+            $scope.marker = m;
+            $scope.$apply();
+          }
+        }
+      }
+      $scope.marker = {id: 0};
+      $scope.timeD = restaurant.openTime;
+      $scope.eRestaurant = {
+        resto: restaurant.name,
         $id: restaurant.$id,
         name: restaurant.name,
         phonenumber: parseInt(restaurant.phonenumber),
         type: restaurant.type,
         cuisine: restaurant.cuisine,
-        openTime: restaurant.openTime,
-        closeTime: restaurant.closeTime,
+        openTime: new Date(restaurant.openTime),
+        closeTime: new Date(restaurant.closeTime),
         openDays: restaurant.openDays,
         facilities: restaurant.facilities,
         location: restaurant.location,
@@ -157,6 +200,7 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
       Restaurant.editRestaurant(restaurant, $scope.marker, $scope.imageURL)
         .then(function() {
           $scope.imageURL = null;
+          $scope.progress = null;
           $ionicLoading.hide();
           $scope.restaurantEditModal.hide();
         })
@@ -167,18 +211,11 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
         $scope.imageURL = null;
     }
 
-
-
     $ionicModal.fromTemplateUrl('app/restaurant/_edit-restaurant.html', function(restaurantEditModal) {
       $scope.restaurantEditModal = restaurantEditModal;
     }, {
       scope: $scope
     });
-
-    $scope.marker = {
-
-    };
-
 
     $scope.facilities = $firebaseArray(firebase.database().ref().child('facilities'));
     // $scope.facilities = $firebaseArray(Database.facilitiesReference());
@@ -207,5 +244,27 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
       }
     }
 
+    $scope.upload = function(index) {
+      var source = Upload.getSource(index);
+      var options = Upload.getOptions(source);
+      $cordovaCamera.getPicture(options).then(function(imageData) {
+        var restaurantRef = Upload.restaurant(imageData);
+        $scope.progress = 1;
+        restaurantRef.on('state_changed', function(snapshot) {
+          var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+          $scope.progress = progress;
+        }, function(error) {
+          console.log("error in uploading." + error);
+        }, function() {
+          //success upload
+          $scope.imageURL = restaurantRef.snapshot.downloadURL;
+          $scope.$apply();
+        });
+
+      }, function(error) {
+        console.error(error);
+      });
+    }
   }
 ]);
