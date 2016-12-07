@@ -1,5 +1,5 @@
-app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionicModal", "$ionicPopup", "$firebaseArray", "Restaurant", "Database", "$ionicLoading",
-  function($scope, $state, $stateParams, $ionicModal, $ionicPopup, $firebaseArray, Restaurant, Database, $ionicLoading) {
+app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionicModal", "$ionicPopup", "$firebaseArray", "Restaurant", "Database", "$ionicLoading", "Upload", "$cordovaCamera",
+  function($scope, $state, $stateParams, $ionicModal, $ionicPopup, $firebaseArray, Restaurant, Database, $ionicLoading, Upload, $cordovaCamera) {
     $ionicLoading.show();
 
     Restaurant.get($stateParams.restaurantId).$loaded()
@@ -199,6 +199,7 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
       Restaurant.editRestaurant(restaurant, $scope.marker, $scope.imageURL)
         .then(function() {
           $scope.imageURL = null;
+          $scope.progress = null;
           $ionicLoading.hide();
           $scope.restaurantEditModal.hide();
         })
@@ -242,5 +243,27 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
       }
     }
 
+    $scope.upload = function(index) {
+      var source = Upload.getSource(index);
+      var options = Upload.getOptions(source);
+      $cordovaCamera.getPicture(options).then(function(imageData) {
+        var restaurantRef = Upload.restaurant(imageData);
+        $scope.progress = 1;
+        restaurantRef.on('state_changed', function(snapshot) {
+          var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+          $scope.progress = progress;
+        }, function(error) {
+          console.log("error in uploading." + error);
+        }, function() {
+          //success upload
+          $scope.imageURL = restaurantRef.snapshot.downloadURL;
+          $scope.$apply();
+        });
+
+      }, function(error) {
+        console.error(error);
+      });
+    }
   }
 ]);
