@@ -127,6 +127,10 @@ app.factory("Database", ["$firebaseArray", "$firebaseObject", "$firebaseAuth",
       },
       facilities : function() {
         return $firebaseArray(facilitiesRef);
+      },
+      restaurantOrders : function(restaurantId) {
+        console.log(restaurantOrderRef.child(restaurantId));
+        return $firebaseArray(restaurantOrdersRef.child(restaurantId));
       }
     }
 
