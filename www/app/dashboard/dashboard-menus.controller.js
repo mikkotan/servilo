@@ -67,7 +67,6 @@ app.controller("DashboardMenusCtrl", ["$scope", "$stateParams", "$ionicModal", "
         }, function() {
           //enable save button
           $scope.photoURL = menuRef.snapshot.downloadURL;
-          console.log($scope.photoURL);
           $scope.$apply();
         });
 

@@ -1,5 +1,5 @@
-app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionicModal", "$ionicPopup", "Restaurant", "Database", "$ionicLoading",
-  function($scope, $state, $stateParams, $ionicModal, $ionicPopup, Restaurant, Database, $ionicLoading) {
+app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionicModal", "$ionicPopup", "$firebaseArray", "Restaurant", "Database", "$ionicLoading",
+  function($scope, $state, $stateParams, $ionicModal, $ionicPopup, $firebaseArray, Restaurant, Database, $ionicLoading) {
     $ionicLoading.show();
 
     Restaurant.get($stateParams.restaurantId).$loaded()
@@ -9,6 +9,49 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
         $ionicLoading.hide();
       })
     $scope.getFacilityName = Restaurant.getFacilityName;
+
+    $scope.showMap = function() {
+      var mapPopup = $ionicPopup.confirm({
+        title: 'Choose Location',
+        templateUrl: 'app/restaurant/_googleMapsPopout.html',
+        cssClass: 'custom-popup',
+        scope: $scope
+      });
+      mapPopup.then(function(res) {
+        if (res) {
+          $scope.placeName($scope.marker.coords.latitude, $scope.marker.coords.longitude);
+        }
+      });
+    };
+
+    $scope.setHours = function() {
+      var hoursPopup = $ionicPopup.confirm({
+        title: 'Set Opening and Closing Hours',
+        templateUrl: 'app/restaurant/_hoursPopout.html',
+        cssClass: 'custom-popup',
+        scope: $scope
+      });
+    };
+
+    $scope.setFacilities = function() {
+      var facilities = $ionicPopup.confirm({
+        title: 'Set Facilities Offered',
+        templateUrl: 'app/restaurant/_facilitiesPopout.html',
+        subTitle: 'Amenities available for the customers in your restaurant.',
+        cssClass: 'custom-popup',
+        scope: $scope
+      });
+    };
+
+    $scope.setOpenDays = function() {
+      var openDays = $ionicPopup.confirm({
+        title: 'Set Open Days',
+        templateUrl: 'app/restaurant/_openDaysPopout.html',
+        subTitle: 'Set the days open on your restaurant.',
+        cssClass: 'custom-popup',
+        scope: $scope
+      })
+    }
 
     $scope.showDelete = function(restaurant) {
       var deletePopup = $ionicPopup.confirm({
@@ -132,8 +175,37 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
       scope: $scope
     });
 
+    $scope.marker = {
+
+    };
 
 
+    $scope.facilities = $firebaseArray(firebase.database().ref().child('facilities'));
+    // $scope.facilities = $firebaseArray(Database.facilitiesReference());
+
+    $scope.days = {
+      '0': {
+        name: 'Monday'
+      },
+      '1': {
+        name: 'Tuesday'
+      },
+      '2': {
+        name: 'Wednesday'
+      },
+      '3': {
+        name: 'Thursday'
+      },
+      '4': {
+        name: 'Friday'
+      },
+      '5': {
+        name: 'Saturday'
+      },
+      '6': {
+        name: 'Sunday'
+      }
+    }
 
   }
 ]);

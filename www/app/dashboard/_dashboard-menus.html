@@ -1,6 +1,6 @@
 <ion-view view-title="dashboard-menus">
-  <ion-floating-menu has-footer="true" menu-color="#886aea" menu-icon="ion-gear-a" menu-open-color="#444">
-    <ion-floating-item icon="ion-edit" click="openAddModal()" button-color="#387ef5" text="Add Menu"></ion-floating-item>
+  <ion-floating-menu has-footer="true" menu-color="#886aea" menu-icon="ion-plus" menu-open-color="#444">
+    <ion-floating-item icon="ion-edit" ng-if="categories.length !== 0" click="openAddModal()" button-color="#387ef5" text="Add Menu"></ion-floating-item>
     <ion-floating-item icon="ion-edit" click="showAddCategoryModal(restoId)" button-color="#387ef5" text="Add Category"></ion-floating-item>
   </ion-floating-menu>
   <ion-content class="has-tabs-top">

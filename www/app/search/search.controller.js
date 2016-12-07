@@ -64,11 +64,11 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
     //   })
     // })
 
-    Auth.$onAuthStateChanged(function(firebaseUser) {
-      if (firebaseUser) {
-        User.setOnline(firebaseUser.uid);
-      }
-    })
+    // Auth.$onAuthStateChanged(function(firebaseUser) {
+    //   if (firebaseUser) {
+    //     User.setOnline(firebaseUser.uid);
+    //   }
+    // })
 
     $scope.addMarkers = function(item) {
       $scope.markers.push(Search.getMarker(item));
