@@ -126,7 +126,7 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
     }
 
     $scope.editRestaurant = function(restaurant) {
-      $scope.eRestaurant = {
+      $scope.restaurant = {
         $id: restaurant.$id,
         name: restaurant.name,
         phonenumber: parseInt(restaurant.phonenumber),

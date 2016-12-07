@@ -1,6 +1,6 @@
 app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover", "$ionicModal", "Database", "$cordovaCamera", "Upload", "Auth", "Restaurant",
   function($scope, User, $ionicLoading, $ionicPopover, $ionicModal, Database, $cordovaCamera, Upload, Auth, Restaurant) {
-
+    $ionicLoading.show();
 
     $ionicPopover.fromTemplateUrl('app/profile/_popover.html', {
       scope: $scope
@@ -23,6 +23,9 @@ app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover
     User.getAuthFavorites().$loaded()
       .then((favs) => {
         $scope.usrFavs = favs;
+        if(favs.length == 0) {
+          $ionicLoading.hide();
+        }
         $scope.$watchCollection('usrFavs', function(favorites) {
           $scope.userFavorites = favorites.map(function(restaurant) {
             var r = {
@@ -31,6 +34,7 @@ app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover
                 Restaurant.get(restaurant.$id).$loaded()
                   .then((res) => {
                     r.name = res.name
+                    $ionicLoading.hide();
                   })
               }()
             }
