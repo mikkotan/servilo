@@ -1,5 +1,5 @@
 <ion-view view-title="{{restaurant.name}}">
-  <ion-content class="padding has-tabs-top" lazy-scroll>
+  <ion-content class="padding has-tabs-top">
     <img ng-if="restaurant.photoURL" ng-src="{{restaurant.photoURL}}" width="100%" />
     <img ng-if="!restaurant.photoURL" ng-src="img/wow.jpg" width="100%">
     <div class="padding">
@@ -61,9 +61,11 @@
             <!-- <ion-gallery ion-gallery-items="images"></ion-gallery> -->
             <div class="container-class">
               <!-- <ion-scroll width="100px; height: 100px" direction="x" overflow-scroll="false"> -->
-                <div ng-if="review.images" ng-repeat="img in review.images">
-                   <img image-lazy-src="{{img.src}}" style="width:100px" image-lazy-loader="spiral">
-                </div>
+               
+                <hscroller ng-if="review.images">
+                  <hcard ng-repeat="img in review.images" index="{{$index}}" desc="" image="{{img.src}}" ng-click="showImages($index)" ng-show="$index < 5"></hcard>
+                  <hcard index="{{$index}}" desc="" image="img/plus.jpg" ng-click="showGallery(review.images)" ui-sref="tabs.viewRestaurant.gallery"></hcard>
+                </hscroller>
               <!-- </ion-scroll>  -->
               <button ng-click="openReplyModal(review)" ng-init="replies=getReplies(review.$id)">Reply</button>
               <div ng-repeat="reply in replies" ng-init="replyName=getName(reply.user_id)">
@@ -93,5 +95,8 @@
         </ul>
       </div>
     </div>
+
+    <ion-gallery ion-gallery-items="allImages"></ion-gallery>
+
   </ion-content>
 </ion-view>

@@ -1,8 +1,8 @@
-app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upload", "Database", "$ionicLoading", "$ionicModal", "$ionicPopup", "CordovaGeolocation", "$stateParams", "Restaurant", "User", "Review", "Reservation", "$ionicLoading", "Notification",
-  function($scope, $state, $firebaseArray, Upload, Database, $ionicLoading, $ionicModal, $ionicPopup, CordovaGeolocation, $stateParams, Restaurant, User, Review, Reservation, $ionicLoading, Notification) {
+app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upload", "Database", "$ionicLoading", "$ionicModal", "$ionicPopup", "CordovaGeolocation", "$stateParams", "Restaurant", "User", "Review", "Reservation", "$ionicLoading", "Notification", "$ionicSlideBoxDelegate", "$ionicScrollDelegate", "Gallery",
+  function($scope, $state, $firebaseArray, Upload, Database, $ionicLoading, $ionicModal, $ionicPopup, CordovaGeolocation, $stateParams, Restaurant, User, Review, Reservation, $ionicLoading, Notification, $ionicSlideBoxDelegate, $ionicScrollDelegate, Gallery) {
 
     console.log("View Restaurant Ctrl")
-    $scope.items = [];
+    
     $scope.rating = {
       rate: 0,
       max: 5
@@ -17,6 +17,11 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
       }
       return items;
     }
+
+    // $scope.pushImage = function(image) {
+    //   $scope.items.push(image);
+    //   console.log($scope.items)
+    // }
 
     $scope.bookReservation = function(reservation) {
       var confirmReservation = $ionicPopup.confirm({
@@ -344,5 +349,71 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
       //     }
       //   })
     }
+
+    $scope.allImages = [{
+      src: 'img/1.jpg'
+    }, {
+      src: 'img/2.jpg'
+    }, {
+      src: 'img/3.jpg'
+    }, {
+      src: 'img/3.jpg'
+    }, {
+      src: 'img/3.jpg'
+    }, {
+      src: 'img/3.jpg'
+    }, {
+      src: 'img/3.jpg'
+    }, {
+      src: 'img/3.jpg'
+    }, {
+      src: 'img/3.jpg'
+    }, {
+      src: 'img/3.jpg'
+    }, {
+      src: 'img/3.jpg'
+    }, {
+      src: 'img/3.jpg'
+    }];
+
+    $scope.showGallery = function(allImages) {
+      Gallery.set(allImages);
+    }
+
+    $scope.zoomMin = 1;
+
+    // $ionicModal.fromTemplateUrl('app/restaurant/_gallery.html', function(galleryModal) {
+    //   $scope.galleryModal = galleryModal;
+    // }, {
+    //   scope: $scope
+    // });
+
+    $scope.showImages = function(index) {
+      $scope.activeSlide = index;
+      $scope.showModal('app/restaurant/_gallery-zoomview.html');
+    };
+     
+    $scope.showModal = function(templateUrl) {
+      $ionicModal.fromTemplateUrl(templateUrl, {
+        scope: $scope
+      }).then(function(modal) {
+        $scope.modal = modal;
+        $scope.modal.show();
+      });
+    }
+     
+    $scope.closeModal = function() {
+      $scope.modal.hide();
+      $scope.modal.remove()
+    };
+     
+    $scope.updateSlideStatus = function(slide) {
+      var zoomFactor = $ionicScrollDelegate.$getByHandle('scrollHandle' + slide).getScrollPosition().zoom;
+      if (zoomFactor == $scope.zoomMin) {
+        $ionicSlideBoxDelegate.enableSlide(true);
+      } else {
+        $ionicSlideBoxDelegate.enableSlide(false);
+      }
+    };
   }
 ]);

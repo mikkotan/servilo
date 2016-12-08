@@ -1,0 +1,13 @@
+<ion-view view-title="Gallery">
+  <ion-header-bar class="bar bar-subheader bar-light item-input-inset">
+    <h1 class="title">Gallery</h1>
+  </ion-header-bar>
+
+  <ion-content>
+	<div class="col text-center">
+      <ion-spinner ng-if="!loadContent" icon="spiral"></ion-spinner>
+	</div>
+  	<ion-gallery ng-if="loadContent" ion-gallery-items="items"></ion-gallery>
+  </ion-content>
+<!-- </ion-modal-view> -->
+</ion-view>
