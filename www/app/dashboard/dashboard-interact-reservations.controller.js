@@ -1,7 +1,31 @@
-app.controller('DashboardInteractReservationsCtrl', function($scope, $stateParams, User, Restaurant, Reservation, $ionicPopup, $ionicLoading) {
+app.controller('DashboardInteractReservationsCtrl', function($scope, $stateParams, User, Restaurant, Reservation, $ionicPopup, $ionicLoading, $ionicModal) {
   console.log('dashboard interact reservations ctrl');
   $ionicLoading.show();
   $scope.restaurantId = $stateParams.restaurantId;
+
+  $scope.reservation = {
+    name : '',
+    number_of_persons : 2,
+    datetime: new Date()
+  }
+
+  $scope.bookReservation = function(reservation) {
+    reservation.datetime = reservation.datetime.getTime()
+    reservation.status = 'walk-in'
+    reservation.user_id = User.auth().$id
+    reservation.timestamp = firebase.database.ServerValue.TIMESTAMP
+    reservation.restaurant_id = $scope.restaurantId
+    
+    console.log(JSON.stringify(reservation));
+    $scope.walkinReservationModal.hide();
+    Reservation.create(reservation)
+      .then((res) => {
+        console.log('Reserve')
+      })
+      .catch((err) => {
+        console.log('fail')
+      })
+  }
 
   $scope.confirm = function(reservation) {
     console.log('confirm reservation')
@@ -42,6 +66,29 @@ app.controller('DashboardInteractReservationsCtrl', function($scope, $stateParam
         console.log(err)
       })
   }
+
+  $scope.walkinReservation = function() {
+    $scope.walkinReservationModal.show();
+  }
+
+  $scope.addReservationModal = function() {
+    $scope.walkinReservationModal.hide();
+  }
+
+  $ionicModal.fromTemplateUrl('app/reservation/_add-reservation.html', function(walkinReservationModal) {
+    $scope.walkinReservationModal = walkinReservationModal;
+  }, {
+    scope: $scope
+  })
+
+  $scope.setHours = function() {
+    var hoursPopup = $ionicPopup.confirm({
+      title: 'Set Opening and Closing Hours',
+      templateUrl: 'app/dashboard/_popout-hours.html',
+      cssClass: 'custom-popup',
+      scope: $scope
+    });
+  };
 
   Restaurant.getReservations($scope.restaurantId).$loaded()
     .then((reservations) => {
