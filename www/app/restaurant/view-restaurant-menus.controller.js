@@ -3,21 +3,27 @@ app.controller("ViewRestaurantMenus", ["$scope", "$state", "restaurantId", "Cart
     $ionicLoading.show();
     $scope.restaurantId = restaurantId
     $scope.restaurantMenus = Restaurant.getMenus(restaurantId);
-    // $scope.restaurantMenus = restaurantMenus;
-
-    $scope.$watchCollection('restaurantMenus', function(newRestaurantMenus) {
-      $scope.menus = newRestaurantMenus.map(function(menu) {
-        var m = {
-          get : Menu.get(menu.$id).$loaded()
-            .then((menuObj) => {
-              $ionicLoading.hide();
-              m.details = menuObj;
-              m.ready = true
-            })
+    Restaurant.getMenus(restaurantId).$loaded()
+      .then((menus) => {
+        if (menus.length == 0) {
+          $ionicLoading.hide()
         }
-        return m;
+        $scope.restaurantMenus = menus
+
+        $scope.$watchCollection('restaurantMenus', function(newRestaurantMenus) {
+          $scope.menus = newRestaurantMenus.map(function(menu) {
+            var m = {
+              get : Menu.get(menu.$id).$loaded()
+                .then((menuObj) => {
+                  $ionicLoading.hide();
+                  m.details = menuObj;
+                  m.ready = true
+                })
+            }
+            return m;
+          })
+        })
       })
-    })
 
     var restaurant = Restaurant.get(restaurantId);
 
