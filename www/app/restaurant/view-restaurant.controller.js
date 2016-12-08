@@ -1,8 +1,8 @@
-app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upload", "Database", "$ionicLoading", "$ionicModal", "$ionicPopup", "CordovaGeolocation", "$stateParams", "Restaurant", "User", "Review", "Reservation", "$ionicLoading", "Notification", "$ionicSlideBoxDelegate",
-  function($scope, $state, $firebaseArray, Upload, Database, $ionicLoading, $ionicModal, $ionicPopup, CordovaGeolocation, $stateParams, Restaurant, User, Review, Reservation, $ionicLoading, Notification, $ionicSlideBoxDelegate) {
+app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upload", "Database", "$ionicLoading", "$ionicModal", "$ionicPopup", "CordovaGeolocation", "$stateParams", "Restaurant", "User", "Review", "Reservation", "$ionicLoading", "Notification", "$ionicSlideBoxDelegate", "$ionicScrollDelegate", "Gallery",
+  function($scope, $state, $firebaseArray, Upload, Database, $ionicLoading, $ionicModal, $ionicPopup, CordovaGeolocation, $stateParams, Restaurant, User, Review, Reservation, $ionicLoading, Notification, $ionicSlideBoxDelegate, $ionicScrollDelegate, Gallery) {
 
     console.log("View Restaurant Ctrl")
-    $scope.items = [];
+    
     $scope.rating = {
       rate: 0,
       max: 5
@@ -17,6 +17,11 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
       }
       return items;
     }
+
+    // $scope.pushImage = function(image) {
+    //   $scope.items.push(image);
+    //   console.log($scope.items)
+    // }
 
     $scope.bookReservation = function(reservation) {
       var confirmReservation = $ionicPopup.confirm({
@@ -345,67 +350,70 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
       //   })
     }
 
-    $scope.aImages = [{
-        'src' : 'http://ionicframework.com/img/ionic-logo-blog.png', 
-        'msg' : 'Swipe me to the left. Tap/click to close'
-      }, {
-        'src' : 'http://ionicframework.com/img/ionic_logo.svg', 
-        'msg' : ''
-      }, { 
-        'src' : 'http://ionicframework.com/img/homepage/phones-weather-demo@2x.png', 
-        'msg' : ''
+    $scope.allImages = [{
+      src: 'img/1.jpg'
+    }, {
+      src: 'img/2.jpg'
+    }, {
+      src: 'img/3.jpg'
+    }, {
+      src: 'img/3.jpg'
+    }, {
+      src: 'img/3.jpg'
+    }, {
+      src: 'img/3.jpg'
+    }, {
+      src: 'img/3.jpg'
+    }, {
+      src: 'img/3.jpg'
+    }, {
+      src: 'img/3.jpg'
+    }, {
+      src: 'img/3.jpg'
+    }, {
+      src: 'img/3.jpg'
+    }, {
+      src: 'img/3.jpg'
     }];
 
-    $ionicModal.fromTemplateUrl('image-modal.html', {
-      scope: $scope,
-      animation: 'slide-in-up'
-    }).then(function(modal) {
-      $scope.modal = modal;
-    });
+    $scope.showGallery = function(allImages) {
+      Gallery.set(allImages);
+    }
 
-    $scope.openModal = function() {
-      $ionicSlideBoxDelegate.slide(0);
-      $scope.modal.show();
+    $scope.zoomMin = 1;
+
+    // $ionicModal.fromTemplateUrl('app/restaurant/_gallery.html', function(galleryModal) {
+    //   $scope.galleryModal = galleryModal;
+    // }, {
+    //   scope: $scope
+    // });
+
+    $scope.showImages = function(index) {
+      $scope.activeSlide = index;
+      $scope.showModal('app/restaurant/_gallery-zoomview.html');
     };
-
+     
+    $scope.showModal = function(templateUrl) {
+      $ionicModal.fromTemplateUrl(templateUrl, {
+        scope: $scope
+      }).then(function(modal) {
+        $scope.modal = modal;
+        $scope.modal.show();
+      });
+    }
+     
     $scope.closeModal = function() {
       $scope.modal.hide();
+      $scope.modal.remove()
     };
-
-    // Cleanup the modal when we're done with it!
-    $scope.$on('$destroy', function() {
-      $scope.modal.remove();
-    });
-
-    // Execute action on hide modal
-    $scope.$on('modal.hide', function() {
-      // Execute action
-    });
-    // Execute action on remove modal
-    $scope.$on('modal.removed', function() {
-      // Execute action
-    });
-    $scope.$on('modal.shown', function() {
-      console.log('Modal is shown!');
-    });
-
-    // Call this functions if you need to manually control the slides
-    $scope.next = function() {
-      $ionicSlideBoxDelegate.next();
-    };
-  
-    $scope.previous = function() {
-      $ionicSlideBoxDelegate.previous();
-    };
-  
-    $scope.goToSlide = function(index) {
-      $scope.modal.show();
-      $ionicSlideBoxDelegate.slide(index);
-    }
-  
-    // Called each time the slide changes
-    $scope.slideChanged = function(index) {
-      $scope.slideIndex = index;
+     
+    $scope.updateSlideStatus = function(slide) {
+      var zoomFactor = $ionicScrollDelegate.$getByHandle('scrollHandle' + slide).getScrollPosition().zoom;
+      if (zoomFactor == $scope.zoomMin) {
+        $ionicSlideBoxDelegate.enableSlide(true);
+      } else {
+        $ionicSlideBoxDelegate.enableSlide(false);
+      }
     };
   }
 ]);

@@ -2,7 +2,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
   ionGalleryConfigProvider.setGalleryConfig({
     action_label: 'Close',
     toggle: true,
-    row_size: 4,
+    row_size: 3,
     fixed_row_size: true
   });
   firebase.initializeApp(firebaseConfigProvider.$get());
@@ -74,7 +74,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
       views: {
         'search-tab': {
           templateUrl: "app/restaurant/_view-restaurant.html",
-          controller: "ViewRestaurantCtrl",
+          // controller: "ViewRestaurantCtrl",
           resolve: {
             currentAuth: function(Auth) {
               return Auth.$requireSignIn();
@@ -103,7 +103,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
     .state('tabs.viewRestaurant.reviews', {
       url: "/reviews",
       views: {
-        'restaurant-page': {
+        'restaurant_page': {
           templateUrl: "app/review/_all-reviews.html",
           controller: "ReviewCtrl",
           resolve: {
@@ -113,6 +113,20 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
             restaurantId: function($stateParams) {
               return $stateParams.restaurantId
             }
+          }
+        }
+      }
+    })
+    .state('tabs.viewRestaurant.gallery', {
+      url: "/gallery",
+      views: {
+        'restaurant_page': {
+          templateUrl: "app/gallery/_gallery.html",
+          controller: "GalleryCtrl",
+          resolve: {
+            "currentAuth": ["Auth", function(Auth) {
+              return Auth.$requireSignIn();
+            }],
           }
         }
       }
