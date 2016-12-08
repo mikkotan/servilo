@@ -52,17 +52,21 @@ ul.rating li i {
   white-space: nowrap;
   width: 100%;
   padding-top: 15px;
+  border-bottom: 3px solid #FFF;
+  background-image: url("../img/material-wall.jpg");
 }
 .profile .sidebar-name {
-  color: #444;
+  color: #FFF;
   margin-top: 10px !important;
   margin-bottom: 10px !important;
 }
 .sidebar-picture {
+  display: block;
   border-radius: 100px;
   border: 1px solid #fff;
-  width: 100px;
-  height: 100px;
+  width: 400px;
+  height: 400px;
+  margin: 30px auto 0;
   box-shadow: 0 0 4px rgba(0,0,0,0.7);
   background-color: white;
 }
@@ -184,12 +188,27 @@ ion-popover-view.fit ion-content {
     display: none !important;
   }
 }
+// @keyframes animatedBackground {
+// 	from { background-position: 0 0; }
+// 	to { background-position: 100% 0; }
+// }
+//
+// @-webkit-keyframes animatedBackground {
+// 	from { background-position: 0 0; }
+// 	to { background-position: 100% 0; }
+// }
 .login-page {
-  background: url('../img/batchoy.jpg') no-repeat;
+  background: url('../img/batchoy.jpg');
   background-size: cover;
+  // background-repeat: repeat-x;
   background-position: center;
   margin: auto;
-  z-index: 2;
+  z-index: -1;
+  // -webkit-animation: animatedBackground 40s linear 2s infinite alternate;
+  // -moz-animation: animatedBackground 40s linear 2s infinite alternate;
+  // -ms-animation: animatedBackground 40s linear 2s infinite alternate;
+  // -o-animation: animatedBackground 40s linear 2s infinite alternate;
+  // animation: animatedBackground 40s linear 2s infinite alternate;
 }
 .login-container {
   display: -webkit-flex;
@@ -240,4 +259,50 @@ ion-popover-view.fit ion-content {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center, center;
+}
+
+body.menu-open ion-side-menu-content {
+  -webkit-transition: opacity 300ms ease-in-out;
+  transition: opacity 300ms ease-in-out;
+  opacity: 0.5;
+  transition: opacity 300ms ease-in-out;
+  background-color: #000;
+}
+.custom {
+  background-color: #3f4041 !important;
+}
+.custom .item {
+  background-color: transparent;
+  border: none;
+  color: white;
+}
+.custom hr {
+  border: 1px solid #666;
+}
+// .custom .item:last-child {
+//   border-bottom: 1px solid #666;
+// }
+.custom .item-complex .item-content,
+.dark .item-radio .item-content {
+  background-color: transparent;
+}
+.custom a,
+.custom h2,
+.custom h3,
+.custom p {
+  color: white;
+}
+ion-slides {
+  height: 40vh !important
+}
+ion-slides .slider-imgs {
+  max-height: 100%;
+  margin:auto;
+  display:block;
+}
+
+ion-slides .card {
+  max-height: 100%;
+  margin:auto;
+  display:block;
 }

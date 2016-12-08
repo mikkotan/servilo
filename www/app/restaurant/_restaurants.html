@@ -1,14 +1,17 @@
 <ion-view view-title="Restaurant">
+  <ion-floating-menu has-footer="true" menu-color="#886aea" menu-icon="ion-plus" menu-open-color="#444">
+    <ion-floating-item icon="ion-android-restaurant" click="newRestaurant()" button-color="#387ef5" text="Add Restaurant"></ion-floating-item>
+  </ion-floating-menu>
   <ion-content class="padding">
     <div class="card">
       <div class="item">
         <h2>Restaurateur: {{AppUser.firstName}} {{AppUser.lastName}} </h2>
       </div>
     </div>
-    <div>
+    <!-- <div>
       <button ng-click="newRestaurant()" class="button button-block button-positive">
         <icon class="ion-plus"></icon> New Restaurant</button>
-    </div>
+    </div> -->
 
     <ion-list>
       <ion-item class="text-wrap" ng-repeat="restaurant in displayRestaurants">
