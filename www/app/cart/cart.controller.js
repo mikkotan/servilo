@@ -2,15 +2,14 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
   function($scope, User, CartData, Cart, Database, Restaurant, CordovaGeolocation, $ionicPopup, Notification, Order, $ionicLoading) {
 
     // $scope.order = Database.orders();
-    $scope.cartData = CartData.get();
-    $scope.totalPrice = CartData.totalPrice();
+    $scope.cart = CartData.get();
+
     $scope.data ={location:"", detail: ""};
-
     $scope.add = function(orderMenu) {
-      var order = $scope.cartData.indexOf(orderMenu);
-      $scope.cartData[order].quantity += 1;
-
+      var order = $scope.cart.menus.indexOf(orderMenu);
+      $scope.cart.menus[order].quantity += 1;
     };
+
     $scope.showMap = function() {
       var mapPopup = $ionicPopup.confirm({
         title: 'Choose Location',
@@ -26,21 +25,21 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
     };
 
     $scope.minus = function(orderMenu) {
-      var menu = $scope.cartData.indexOf(orderMenu);
-      var menuId = Cart.menuId($scope.totalPrice, "id", orderMenu.id)
+      var menu = $scope.cart.menus.indexOf(orderMenu);
+      var menuId = Cart.menuId($scope.cart.totalPrice, "id", orderMenu.id)
 
-      if ($scope.cartData[menu].quantity > 0) {
-        $scope.cartData[menu].quantity -= 1;
-        if ($scope.cartData[menu].quantity <= 0) {
-          $scope.cartData.splice(menu, 1);
-          $scope.totalPrice.splice(menuId, 1);
+      if ($scope.cart.menus[menu].quantity > 0) {
+        $scope.cart.menus[menu].quantity -= 1;
+        if ($scope.cart.menus[menu].quantity <= 0) {
+          $scope.cart.menus.splice(menu, 1);
+          $scope.cart.totalPrice.splice(menuId, 1);
         }
       }
     };
 
     $scope.delete = function(orderMenu) {
-      var menu = $scope.cartData.indexOf(orderMenu);
-      var menuId = Cart.menuId($scope.totalPrice, "id", orderMenu.id)
+      var menu = $scope.cart.menus.indexOf(orderMenu);
+      var menuId = Cart.menuId($scope.cart.totalPrice, "id", orderMenu.id)
 
       var deletePopup = $ionicPopup.confirm({
         title: 'Delete order?',
@@ -48,46 +47,29 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
         cssClass: 'delete-popup',
         scope: $scope
       });
+
       deletePopup.then(function(res) {
         if (res) {
-          $scope.cartData.splice(menu, 1);
-          $scope.totalPrice.splice(menuId, 1)
+          $scope.cart.menus.splice(menu, 1);
+          $scope.cart.totalPrice.splice(menuId, 1)
+          if(CartData.isEmpty()){
+            $scope.restaurantCart.hide();
+          }
+
         }
       });
 
     };
 
-    $scope.$watch('cartData', function(newArray) {
-      $scope.menus = newArray.map(function(menu) {
-        if (Cart.menuId($scope.totalPrice, "id", menu.id) === null) {
-          $scope.totalPrice.push({
-            id: menu.id,
-            price: menu.price * menu.quantity
-          });
-        } else {
-          var menuid = Cart.menuId($scope.totalPrice, "id", menu.id)
-          $scope.totalPrice[menuid].price = menu.price * menu.quantity
-          console.log(JSON.stringify(menu, null, 4));
-        }
-        return {
-          menu: menu,
-          subtotal: menu.price * menu.quantity,
-        }
-      })
-    }, true);
-
-    // $scope.$watch('data.orderVal.pickupTime', function(newValue){
-    //   console.log("NEW VALUE OKAY++ "+newValue);
-    //   $scope.data.orderVal.pickupTime = newValue.getTime();
-    // })
-
-
-    $scope.$watch('totalPrice', function(newValue) {
-      var price = 0;
-      for (var i = 0; i < newValue.length; i++) {
-        price += newValue[i].price;
-      }
-      $scope.total = price;
+    $scope.$watch('cart', function(newCart , oldMenus) {
+        $scope.menus = newCart.menus.map(function(menu) {
+          CartData.addToTotalPrice(menu);
+            return {
+              menu: menu,
+              subtotal: menu.price * menu.quantity,
+            }
+        })
+        $scope.total = CartData.totalPrice();
     }, true);
 
 
@@ -107,9 +89,8 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
     }
 
     $scope.buy = function(cart, location) {
-      $ionicLoading.show();
+      //$ionicLoading.show();
       if (location) {
-        // $scope.order.$add({
         Order.create({
           restaurant_id: $scope.restaurantId,
           customer_id: User.auth().$id,
@@ -129,9 +110,10 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
         })
         .then(() => {
           $scope.hideCartModal();
+
           console.log('restaurantOrder done');
-          CartData.get().length = 0;
-          CartData.totalPrice().length = 0;
+          CartData.setNull();
+
           var restaurant_owner = Restaurant.getOwner($scope.restaurantId);
           Notification.create({
             sender_id: User.auth().$id,
@@ -141,12 +123,15 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
             timestamp: firebase.database.ServerValue.TIMESTAMP
           })
             .then(() => {
-              $ionicLoading.hide();
+            //  $ionicLoading.hide();
               alert('Success');
             })
-            .catch((err) => { alert(err) })
+            .catch((err) => {
+            //  $ionicLoading.hide();
+              alert(err)  })
         })
         .catch((error) => {
+          $ionicLoading.hide();
           alert(error);
           console.log(error);
         });

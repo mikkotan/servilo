@@ -5,8 +5,8 @@
 // the 2nd parameter is an array of 'requires'
 var app = angular.module('app', ['ui.mask', 'ionic', 'ionic.cloud', 'ionMdInput', 'ionic-material', 'firebase', 'ionic.rating','ionic-toast', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker', 'yaru22.angular-timeago', 'ui.select', 'ngSanitize', 'ion-gallery', 'ionicLazyLoad'])
 
-app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushService", "User", "Database", "$cordovaGeolocation", "$ionicPopup", "$cordovaPushV5","Cart","$ionicLoading",
-  function($ionicPlatform, $rootScope, $state, $templateCache, IonicPushService, User, Database, $cordovaGeolocation, $ionicPopup, $cordovaPushV5,Cart,$ionicLoading) {
+app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushService", "User", "Database", "$cordovaGeolocation", "$ionicPopup", "$cordovaPushV5","CartData","$ionicLoading",
+  function($ionicPlatform, $rootScope, $state, $templateCache, IonicPushService, User, Database, $cordovaGeolocation, $ionicPopup, $cordovaPushV5,CartData,$ionicLoading) {
     $ionicPlatform.ready()
       .then(() => {
         if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
@@ -113,12 +113,10 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
 
 
     $rootScope.$on('$stateChangeStart',function(event, toState, toParams, fromState, fromParams, options){
-      if(toState){
-        $ionicLoading.show();
-      }
+
       if(typeof fromState.views.restaurant_page !== "undefined" && typeof toState.views.restaurant_page == "undefined"){
-          if(!Cart.isEmpty()){
-              $ionicLoading.hide();
+          if(!CartData.isEmpty()){
+              // $ionicLoading.hide();
               event.preventDefault();
 
               var leavingRestaurantPopup = $ionicPopup.confirm({
@@ -129,7 +127,7 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
 
               leavingRestaurantPopup.then(function(res) {
                 if (res) {
-                  Cart.setNull();
+                  CartData.setNull();
                   event.defaultPrevented = false;
                   $state.go(toState.name);
                 }else{
@@ -141,7 +139,9 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
               console.log("HI");
             }
 
-        }else{
+        }else if(toState){
+            $ionicLoading.show();
+        }else {
           console.log("Free Will")
         }
       })
