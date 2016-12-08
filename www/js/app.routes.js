@@ -218,18 +218,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
       },
       views: {
         'order-tab': {
-          templateUrl: "app/order/_orders.html",
-          controller: "OrderCtrl",
-          resolve: {
-            restaurants: function(Restaurant) {
-                return Restaurant.getAuthUserRestaurants().$loaded();
-              }
-              // permission: function(Role){
-              //   Role.isRestaurantOwner().then(function(restaurantOwner){
-              //     return restaurantOwner
-              //   })
-              // }
-          }
+          templateUrl: "app/dashboard/_dashboard-interact-orders.html",
+          controller: "DashboardInteractOrdersCtrl"
         }
       }
     })
@@ -290,6 +280,18 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
               return CordovaGeolocation.get();
             }
           }
+        }
+      }
+    })
+    .state('tabs.reservations', {
+      url: "/reservations",
+      params: {
+        restaurantId: null
+      },
+      views: {
+        'reservations-tab' : {
+          templateUrl: "app/dashboard/_dashboard-interact-reservations.html",
+          controller: "DashboardInteractReservationsCtrl"
         }
       }
     })

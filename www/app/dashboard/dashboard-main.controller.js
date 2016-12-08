@@ -133,8 +133,9 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
         console.log(data);
       });
     }
-  
+
     $scope.editRestaurant = function(restaurant) {
+
       $scope.map = {
         center: {
           latitude: restaurant.latitude,

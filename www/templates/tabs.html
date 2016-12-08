@@ -29,8 +29,11 @@
   <ion-tab ng-if="firebaseUser" title="Orders" icon="ion-android-list">
     <ion-nav-view name="order-tab"></ion-nav-view>
   </ion-tab>
-  <ion-tab ng-if="firebaseUser" title="Notifications" icon="ion-android-notifications" ng-click="goToNotifications()">
+  <!-- <ion-tab ng-if="firebaseUser" title="Notifications" icon="ion-android-notifications" ng-click="goToNotifications()">
     <ion-nav-view name="notifications-tab"></ion-nav-view>
+  </ion-tab> -->
+  <ion-tab ng-if="firebaseUser" title="Reservations" icon="ion-android-notifications">
+    <ion-nav-view name="reservations-tab"></ion-nav-view>
   </ion-tab>
   <ion-tab ng-if="firebaseUser" title="My Orders" icon="ion-android-notifications" ng-click="goToMyOrders()">
     <ion-nav-view name="myorders-tab"></ion-nav-view>

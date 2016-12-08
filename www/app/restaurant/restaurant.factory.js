@@ -6,6 +6,7 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
   var menus = Database.menusReference();
   var reviews = Database.reviewsReference();
   var orders = Database.ordersReference();
+  var restaurantOrders = Database.restaurantOrdersReference();
   var restaurantsArray = Database.restaurants();
   var restaurantReviews = Database.restaurantReviewsReference();
   var facilities = $firebaseArray(Database.facilitiesReference());
@@ -57,6 +58,13 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
           return snapshot.val().name
         })
     },
+    getReservations : function(restaurantId) {
+      return $firebaseArray(Database.restaurantReservationsReference().child(restaurantId));
+    },
+    // getOrders : function(restaurantId) {
+    //   console.log('getting orders in restaurant factory');
+    //   return $firebaseArray(restaurantOrders.child(restaurantId))
+    // },
     getReviews : function(restaurantId) {
       // return $firebaseArray(reviews.orderByChild('restaurant_id').equalTo(restaurantId));
       return $firebaseArray(restaurantReviews.child(restaurantId).limitToLast(5))
@@ -70,7 +78,7 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
       return $firebaseObject(users.child(res.owner_id))
     },
     getOrders : function(restaurantId) {
-      return $firebaseArray(orders.orderByChild("restaurant_id").equalTo(restaurantId));
+      return $firebaseArray(restaurantOrders.child(restaurantId));
     },
     getRestaurantOpenStatus : function(restaurant) {
       // var restaurant = $firebaseObject(restaurants.child(restaurantId));

@@ -38,6 +38,9 @@ app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover
     User.getAuthFavorites().$loaded()
       .then((favs) => {
         $scope.usrFavs = favs;
+        if(favs.length == 0) {
+          $ionicLoading.hide();
+        }
         $scope.$watchCollection('usrFavs', function(favorites) {
           $scope.userFavorites = favorites.map(function(restaurant) {
             var r = {

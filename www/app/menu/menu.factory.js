@@ -19,7 +19,7 @@ app.factory("Menu",["$firebaseAuth","$firebaseArray","$firebaseObject","Restaura
       return menus.push().key;
     },
     get : function(menuId) {
-      return $firebaseObject(menus.child(menuId));
+      return $firebaseObject(menus.child(menuId))
     },
     getRestaurantRef : function(restaurantId, categoryId, key){
       var restaurantRef = restaurants.child(restaurantId);
