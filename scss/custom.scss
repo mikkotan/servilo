@@ -188,27 +188,12 @@ ion-popover-view.fit ion-content {
     display: none !important;
   }
 }
-// @keyframes animatedBackground {
-// 	from { background-position: 0 0; }
-// 	to { background-position: 100% 0; }
-// }
-//
-// @-webkit-keyframes animatedBackground {
-// 	from { background-position: 0 0; }
-// 	to { background-position: 100% 0; }
-// }
 .login-page {
   background: url('../img/batchoy.jpg');
   background-size: cover;
-  // background-repeat: repeat-x;
   background-position: center;
   margin: auto;
   z-index: -1;
-  // -webkit-animation: animatedBackground 40s linear 2s infinite alternate;
-  // -moz-animation: animatedBackground 40s linear 2s infinite alternate;
-  // -ms-animation: animatedBackground 40s linear 2s infinite alternate;
-  // -o-animation: animatedBackground 40s linear 2s infinite alternate;
-  // animation: animatedBackground 40s linear 2s infinite alternate;
 }
 .login-container {
   display: -webkit-flex;
@@ -249,9 +234,6 @@ body.menu-open ion-side-menu-content {
 .custom hr {
   border: 1px solid #666;
 }
-// .custom .item:last-child {
-//   border-bottom: 1px solid #666;
-// }
 .custom .item-complex .item-content,
 .dark .item-radio .item-content {
   background-color: transparent;
@@ -265,12 +247,6 @@ body.menu-open ion-side-menu-content {
 ion-slides {
   height: 40vh !important
 }
-ion-slides .slider-imgs {
-  max-height: 100%;
-  margin:auto;
-  display:block;
-}
-
 ion-slides .card {
   max-height: 100%;
   margin:auto;
