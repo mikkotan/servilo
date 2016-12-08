@@ -283,6 +283,18 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
         }
       }
     })
+    .state('tabs.reservations', {
+      url: "/reservations",
+      params: {
+        restaurantId: null
+      },
+      views: {
+        'reservations-tab' : {
+          templateUrl: "app/dashboard/_dashboard-interact-reservations.html",
+          controller: "DashboardInteractReservationsCtrl"
+        }
+      }
+    })
     .state('tabs.dashboard.main', {
       url: "/main",
       views: {

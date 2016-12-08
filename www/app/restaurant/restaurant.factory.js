@@ -58,6 +58,9 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
           return snapshot.val().name
         })
     },
+    getReservations : function(restaurantId) {
+      return $firebaseArray(Database.restaurantReservationsReference().child(restaurantId));
+    },
     // getOrders : function(restaurantId) {
     //   console.log('getting orders in restaurant factory');
     //   return $firebaseArray(restaurantOrders.child(restaurantId))

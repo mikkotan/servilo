@@ -12,9 +12,10 @@ app.controller('MyReservationsCtrl', ["$scope", "reservations", "Restaurant", "D
         var r = {
           details: reservation,
           restaurant: function() {
-            Restaurant.getRestaurantName(reservation.restaurant_id)
-              .then((name) => {
-                r.restaurant_name = name
+            Restaurant.get(reservation.restaurant_id).$loaded()
+              .then((restaurant) => {
+                console.log("Restaurant: "+restaurant.name)
+                r.restaurant_name = restaurant.name
               })
           }()
         }
