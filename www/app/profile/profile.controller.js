@@ -1,6 +1,21 @@
-app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover", "$ionicModal", "Database", "$cordovaCamera", "Upload", "Auth", "Restaurant",
-  function($scope, User, $ionicLoading, $ionicPopover, $ionicModal, Database, $cordovaCamera, Upload, Auth, Restaurant) {
+app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover", "$ionicModal", "Database", "$cordovaCamera", "Upload", "Auth", "Restaurant", "ionicMaterialMotion", "ionicMaterialInk", "$timeout",
+  function($scope, User, $ionicLoading, $ionicPopover, $ionicModal, Database, $cordovaCamera, Upload, Auth, Restaurant, ionicMaterialMotion, ionicMaterialInk, $timeout) {
 
+    // Set Motion
+    $timeout(function() {
+      ionicMaterialMotion.slideUp({
+        selector: '.slide-up'
+      });
+    }, 300);
+
+    // $timeout(function() {
+    //   ionicMaterialMotion.fadeSlideInRight({
+    //     startVelocity: 3000
+    //   });
+    // }, 700);
+
+    // Set Ink
+    ionicMaterialInk.displayEffect();
 
     $ionicPopover.fromTemplateUrl('app/profile/_popover.html', {
       scope: $scope
@@ -23,14 +38,23 @@ app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover
     User.getAuthFavorites().$loaded()
       .then((favs) => {
         $scope.usrFavs = favs;
+        if(favs.length == 0) {
+          $ionicLoading.hide();
+        }
         $scope.$watchCollection('usrFavs', function(favorites) {
           $scope.userFavorites = favorites.map(function(restaurant) {
             var r = {
-              restaurant : restaurant,
-              get : function() {
+              restaurant: restaurant,
+              get: function() {
                 Restaurant.get(restaurant.$id).$loaded()
                   .then((res) => {
                     r.name = res.name
+                    // ionicMaterialMotion.slideUp({
+                    //   selector: '.slide-up'
+                    // });
+                    ionicMaterialMotion.fadeSlideInRight({
+                      startVelocity: 3000
+                    });
                   })
               }()
             }
@@ -92,16 +116,16 @@ app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover
       $cordovaCamera.getPicture(options).then(function(imageData) {
         var profileRef = Upload.profile(imageData);
         $scope.progress = 1;
-        profileRef.on('state_changed', function(snapshot){
-        var progress = Upload.getProgress(snapshot);
-        console.log('Upload is ' + progress + '% done');
-        $scope.progress = progress;
-      }, function(error) {
-        console.log("error in uploading." + error);
-      }, function() {
-        $scope.photoURL = profileRef.snapshot.downloadURL;
-        $scope.$apply();
-      });
+        profileRef.on('state_changed', function(snapshot) {
+          var progress = Upload.getProgress(snapshot);
+          console.log('Upload is ' + progress + '% done');
+          $scope.progress = progress;
+        }, function(error) {
+          console.log("error in uploading." + error);
+        }, function() {
+          $scope.photoURL = profileRef.snapshot.downloadURL;
+          $scope.$apply();
+        });
 
       }, function(error) {
         console.error(error);

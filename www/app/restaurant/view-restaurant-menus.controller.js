@@ -1,8 +1,24 @@
-app.controller("ViewRestaurantMenus", ["$scope", "$state", "restaurantMenus", "restaurantId", "CartData", "$ionicModal", "Cart", "Restaurant", "ionicToast",
-  function($scope, $state, restaurantMenus, restaurantId, CartData, $ionicModal, Cart, Restaurant, ionicToast) {
-
+app.controller("ViewRestaurantMenus", ["$scope", "$state", "restaurantId", "CartData", "$ionicModal", "Cart", "Restaurant", "ionicToast", "Menu", "$ionicLoading",
+  function($scope, $state, restaurantId, CartData, $ionicModal, Cart, Restaurant, ionicToast, Menu, $ionicLoading) {
+    $ionicLoading.show();
     $scope.restaurantId = restaurantId
-    $scope.restaurantMenus = restaurantMenus;
+    $scope.restaurantMenus = Restaurant.getMenus(restaurantId);
+    // $scope.restaurantMenus = restaurantMenus;
+
+    $scope.$watchCollection('restaurantMenus', function(newRestaurantMenus) {
+      $scope.menus = newRestaurantMenus.map(function(menu) {
+        var m = {
+          get : Menu.get(menu.$id).$loaded()
+            .then((menuObj) => {
+              $ionicLoading.hide();
+              m.details = menuObj;
+              m.ready = true
+            })
+        }
+        return m;
+      })
+    })
+
     var restaurant = Restaurant.get(restaurantId);
 
     restaurant.$loaded()

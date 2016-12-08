@@ -1,66 +1,52 @@
-<ion-view view-title="Login">
-  <ion-content class="padding">
-    <ion-list>
-      <div class="card">
-        <ion-item>
-          <div class="row">
-            <div class="col text-center">
-              <h2> Welcome to Servilo! Log in here... </h2>
+<ion-view view-title="Login" hide-nav-bar="true">
+  <ion-content class="login-page" scroll="false">
+    <section class="login-container">
+      <button class="button button-block button-assertive ink" ui-sref="landing">Back</button>
+      <div class="card padding">
+        <form ng-submit="login(user)">
+          <div class="list">
+            <label class="item item-input item-floating-label">
+              <span class="input-label has-input">E-mail Address</span>
+              <input type="text" placeholder="E-mail Address" ng-model="user.email">
+            </label>
+            <label class="item item-input item-floating-label" ng-show="showPasswordIsChecked">
+              <span class="input-label has-input">Password</span>
+              <input type="text" placeholder="Password" ng-model="user.password" ng-focus="onPasswordFocus()" ng-blur="onPasswordBlur()" required>
+            </label>
+            <label class="item item-input item-floating-label" ng-show="!showPasswordIsChecked">
+              <span class="input-label has-input">Password</span>
+              <input type="password" placeholder="Password" ng-model="user.password" required>
+            </label>
+            <div class="item item-checkbox">
+              <label class="checkbox">
+                <input type="checkbox" ng-model="showPasswordIsChecked"> </label> Show Password
             </div>
           </div>
-        </ion-item>
-        <ion-item id="form-input">
-          <form ng-submit="login(user)" ng-hide="firebaseUser">
-            <div class="list">
-              <label class="item item-input item-floating-label">
-                <span class="input-label has-input">E-mail Address</span>
-                <input type="text" placeholder="E-mail Address" ng-model="user.email">
-              </label>
-              <label class="item item-input item-floating-label" ng-show="showPasswordIsChecked">
-                <span class="input-label has-input">Password</span>
-                <input type="text" placeholder="Password" ng-model="user.password" ng-focus="onPasswordFocus()" ng-blur="onPasswordBlur()" required>
-              </label>
-              <label class="item item-input item-floating-label" ng-show="!showPasswordIsChecked">
-                <span class="input-label has-input">Password</span>
-                <input type="password" placeholder="Password" ng-model="user.password" required>
-              </label>
-
-              <ion-checkbox ng-model="showPasswordIsChecked">Show password</ion-checkbox>
-            </div>
-
-            <div class="list">
-              <button type="submit" class="button button-block button-balanced">Login</button>
-            </div>
-          </form>
-        </ion-item>
+          <div class="list">
+            <button type="submit" class="button button-block button-balanced ink">Login</button>
+          </div>
+        </form>
       </div>
-      <div class="card">
-        <ion-item>
-          <div class="row">
-            <div class="col text-center">
-              <h2> New to Servilo? Sign up here... </h2>
+    </section>
+    <!-- <div class="ionic login " style="background-image: url('../img/batchoy.jpg');" ng-app="login">
+        <div class="hero no-header flat">
+            <div class="content">
+                <i class="ion-map icon hero-icon royal-bg"></i>
+                <h1>App Name</h1>
             </div>
-          </div>
-          <button class="button button-block button-energized" ui-sref="signup">
-            Sign up
-          </button>
+        </div>
+        <div class="list">
+            <label class="item item-input item-md-label" placeholder="Username" highlight-color="balanced" type="text"><input type="text"><span class="input-label">Username</span><div class="highlight highlight-balanced"></div></label>
+            <label class="item item-input item-md-label" placeholder="Password" highlight-color="energized" type="password"><input type="password"><span class="input-label">Password</span><div class="highlight highlight-energized"></div></label>
+        </div>
+        <div class="padding">
+            <button class="button button-block button-positive waves-effect waves-button waves-light">Login</button>
+        </div>
+        <div class="button-bar">
+            <button class="button button-small button-outline button-assertive light-bg icon-left ion-social-google waves-effect waves-button waves-light">Google+</button>
+            <button class="button button-small button-outline button-positive light-bg icon-left ion-social-facebook waves-effect waves-button waves-light">Facebook</button>
+        </div>
+    </div> -->
 
-          <div class="row">
-            <div class="col text-center">
-              <h2> ...or log-in through other accounts! </h2>
-            </div>
-          </div>
-          <button class="button button-block social-button-facebook" ng-click="fbLogin()">
-            Facebook
-          </button>
-          <button class="button button-block social-button-twitter" ng-click="twitterLogin()">
-            Twitter
-          </button>
-          <button class="button button-block social-button-google" ng-click="googleLogin()">
-            Google
-          </button>
-        </ion-item>
-      </div>
-    </ion-list>
   </ion-content>
 </ion-view>

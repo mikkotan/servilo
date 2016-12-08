@@ -1,0 +1,41 @@
+<ion-view view-title="Interact :: Orders">
+  <ion-content class="padding">
+    <h3>Manage Orders for {{restaurantId}}</h3>
+    <!-- hehehe
+    <h3 ng-repeat="order in orders" ng-if="order.ready">
+      {{order.customer}}    {{orders.length}} {{order.menus}}
+    </h3> -->
+
+    <ion-item  ng-repeat="order in orders">
+      <p>
+      Customer Name: {{order.customer}}
+      </p>
+      <ion-item ng-repeat="menu in order.menus">
+        <p>
+        Name : {{menu.name}}
+        </p>
+        <p>
+          Quantity : {{menu.quantity}}
+        </p>
+        <p>
+        Price : {{menu.price}}
+        </p>
+        <p>
+          Subtotal : {{ menu.price  * menu.quantity }}
+        </p>
+      </ion-item>
+      <p>
+        Location: {{order.details.order_details.location}}
+      </p>
+      <p>
+        Total : {{order.details.order_details.totalprice}}
+      </p>
+      <p>
+        Order Status : {{order.details.order_details.status}}
+      </p>
+      <ion-checkbox ng-repeat="(key, val) in order.details.orderStatus" ng-model="order.details.orderStatus[key]" ng-change="changeOrderStatus(order.details.$id, key, order.details.orderStatus[key])">
+        {{key}}
+      </ion-checkbox>
+    </ion-item>
+  </ion-content>
+</ion-view>

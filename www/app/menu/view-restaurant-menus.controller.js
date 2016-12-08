@@ -1,21 +1,41 @@
-app.controller("ViewRestaurantMenu", ["$scope", "$stateParams", "restaurantMenu", "$ionicModal", "Database", "$ionicListDelegate", "Menu",
-  function($scope, $stateParams, restaurantMenu, $ionicModal, Database, $ionicListDelegate, Menu) {
-
+app.controller("ViewRestaurantMenu", ["$scope", "$stateParams", "restaurantMenu", "$ionicModal", "Database", "$ionicListDelegate", "Menu", "$ionicLoading",
+  function($scope, $stateParams, restaurantMenu, $ionicModal, Database, $ionicListDelegate, Menu, $ionicLoading) {
+    $ionicLoading.show();
     $scope.restaurantMenus = restaurantMenu;
+
+    $scope.$watchCollection('restaurantMenus', function(newRestaurantMenus) {
+      $scope.menus = newRestaurantMenus.map(function(menu) {
+        var m = {
+          get: Menu.get(menu.$id).$loaded()
+            .then((menuObj) => {
+              m.details = menuObj
+              m.ready = true
+              $ionicLoading.hide()
+            })
+        }
+        return m;
+      })
+    })
     // $scope.categories = Menu.getMenuCategories(restaurantId);
+    // $scope.restaurantMenus = Restaurant.getMenus($stateParams.restaurantId)
 
     $scope.deleteMenu = function(menu) {
       console.log('Delete called');
-      $scope.restaurantMenus.$remove(menu)
-        .then((ref) => {
-          Database.restaurantsReference().child(menu.restaurant_id).child('menus').child(menu.$id).set(null);
-          Database.restaurantsReference().child(menu.restaurant_id).child('menu_categories').child(menu.category_id).child('menus').child(menu.$id).set(null);
+      return Menu.delete(menu.$id)
+        .then(() => {
+          console.log('Successfully deleted menu '+menu.$id)
         })
+        .catch((err) => {
+          console.log(err);
+        })
+      // $scope.restaurantMenus.$remove(menu)
+      //   .then((ref) => {
+      //     Database.restaurantsReference().child(menu.restaurant_id).child('menus').child(menu.$id).set(null);
+      //     Database.restaurantsReference().child(menu.restaurant_id).child('menu_categories').child(menu.category_id).child('menus').child(menu.$id).set(null);
+      //   })
     }
 
     $scope.editMenu = function(menu) {
-      console.log("editButtonModal clicked");
-      console.log(JSON.stringify(menu));
       $scope.eMenu = menu;
       $scope.categories = Menu.getMenuCategories(menu.restaurant_id);
       $scope.menuEditModal.show();
@@ -27,21 +47,23 @@ app.controller("ViewRestaurantMenu", ["$scope", "$stateParams", "restaurantMenu"
     }
 
     $scope.updateMenu = function(menu) {
-      console.log(JSON.stringify(menu));
-      Database.menusReference().child(menu.$id).update({
-        name: menu.name,
-        price: menu.price,
-        category_id: menu.category
-      }).then(function() {
-        $scope.closeEditMenu();
-      })
+      return Menu.update(menu)
+        .then(() => {
+          $scope.menuEditModal.hide();
+        })
+        .catch((err) => {
+          console.log(err);
+        })
     }
 
     $scope.changeAvailability = function(menu) {
-      console.log("update " + menu.availability)
-      Database.menusReference().child(menu.$id).update({
-        availability: menu.availability,
-      })
+      return Menu.changeAvailability(menu)
+        .then(() => {
+          console.log('success changed availability to ' + menu.availability)
+        })
+        .catch((err) => {
+          console.log(err);
+        })
     }
 
     $ionicModal.fromTemplateUrl('app/menu/_edit-menu.html', function(menuEditModal) {

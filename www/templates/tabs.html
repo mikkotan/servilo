@@ -1,4 +1,4 @@
-<ion-tabs class="tabs-icon-top tabs-stable" ng-controller="TabsCtrl" >
+<ion-tabs class="tabs-icon-top tabs-stable" ng-controller="TabsCtrl">
   <ion-tab title="Home" icon="ion-home" ng-click="goToHome()">
     <ion-nav-view name="home-tab"></ion-nav-view>
   </ion-tab>
@@ -26,7 +26,7 @@
   <!-- <ion-tab ng-if="firebaseUser" title="Restaurantmenus" icon="ion-spoon" ui-sref="tabs.restaurantMenus">
     <ion-nav-view name="restaurantmenus-tab"></ion-nav-view>
   </ion-tab> -->
-  <ion-tab ng-if="firebaseUser" title="Orders" icon="ion-android-list" ng-click="goToOrders()">
+  <ion-tab ng-if="firebaseUser" title="Orders" icon="ion-android-list">
     <ion-nav-view name="order-tab"></ion-nav-view>
   </ion-tab>
   <ion-tab ng-if="firebaseUser" title="Notifications" icon="ion-android-notifications" ng-click="goToNotifications()">

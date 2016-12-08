@@ -9,6 +9,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
     }
     $scope.user = User.auth();
 
+
     $scope.getImages = function(images) {
       var items = [];
       for (var key in images) {
@@ -62,6 +63,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
         restaurantStatus.on('value', function(snap) {
           $scope.getRestaurantStatus = snap.val() ? true : false;
         })
+        $scope.getFacilityName = Restaurant.getFacilityName;
 
         User.hasFavored(restaurant.$id)
           .then((val) => {
@@ -278,6 +280,69 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
           console.log("delete failed");
         }
       })
+    }
+
+    //put in restaurant dashboard
+    $scope.deleteRestaurant = function(restaurant) {
+      console.log(restaurant + 'delete');
+      // var resObj = restaurant;
+      // // $scope.displayRestaurants.$remove(resObj).then(function() {
+      // //   console.log('deleted?');
+      // // });
+      // Restaurant.delete(restaurant.$id)
+      //   .then(() => {
+      //     console.log('Success deleting ');
+      //   })
+      //   .catch((err) => {
+      //     console.log('Error on deleting: '+err);
+      //   })
+      // // for (var menu in resObj.menus) {
+      // //   var menusRef = firebase.database().ref().child('menus');
+      // //   menusRef.child(menu).set(null);
+      // // }
+      // //
+      // // for (var review in resObj.reviews) {
+      // //   var reviewsRef = firebase.database().ref().child('reviews');
+      // //   reviewsRef.child(review).set(null);
+      // // }
+      // //
+      // // for (var reviewer in resObj.reviewers) {
+      // //   var userReviewedRestaurantsRef = firebase.database().ref().child('users').child(reviewer).child('reviewed_restaurants');
+      // //   console.log('reviewer ref' + userReviewedRestaurantsRef);
+      // //   userReviewedRestaurantsRef.child(resObj.$id).set(null);
+      // // }
+      // Database.restaurantMenusReference().child(resObj.$id).remove();
+      //
+      // Database.restaurantReservationsReference().child(resObj.$id).once('value')
+      //   .then((snapshot) => {
+      //     for (var reservation in snapshot.val()) {
+      //       console.log(reservation);
+      //       Reservation.delete(reservation)
+      //         .then(() => {
+      //           console.log('delete sucess')
+      //           alert('delete success');
+      //         })
+      //         .catch((err) => {
+      //           console.log(err)
+      //           alert(err);
+      //         })
+      //     }
+      //   })
+      //
+      // Database.restaurantOrdersReference().child(resObj.$id).once('value')
+      //   .then((snapshot) => {
+      //     for (var order in snapshot.val()) {
+      //       console.log(order);
+      //       Order.delete(order)
+      //         .then(() => {
+      //           console.log('success')
+      //         })
+      //         .catch((err) => {
+      //           console.log(err)
+      //           alert(err);
+      //         })
+      //     }
+      //   })
     }
   }
 ]);

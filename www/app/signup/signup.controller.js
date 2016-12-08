@@ -1,16 +1,24 @@
-app.controller("SignUpCtrl" , ["$scope", "Auth","User", "$state", "IonicPushService","Database",
-  function($scope, Auth, User, $state, IonicPushService,Database) {
 
-  $scope.createUser = function(user) {
-    Auth.$createUserWithEmailAndPassword(user.email , user.password)
-      .then(function(firebaseUser) {
+app.controller("SignUpCtrl", ["$scope", "Auth", "User", "$state", "IonicPushService", "Database", "$ionicSideMenuDelegate",
+  function($scope, Auth, User, $state, IonicPushService, Database, $ionicSideMenuDelegate) {
 
-        var ref = Database.usersReference().child(firebaseUser.uid);
-        $scope.appUser = Database.firebaseArray(ref);
+    $scope.$on('$ionicView.enter', function() {
+      $ionicSideMenuDelegate.canDragContent(false);
+    });
+    $scope.$on('$ionicView.leave', function() {
+      $ionicSideMenuDelegate.canDragContent(true);
+    });
 
 
+    $scope.createUser = function(user) {
+      Auth.$createUserWithEmailAndPassword(user.email, user.password)
+        .then(function(firebaseUser) {
 
-        $scope.message = "User created with uid: " + firebaseUser.uid;
+          var ref = Database.usersReference().child(firebaseUser.uid);
+          $scope.appUser = Database.firebaseArray(ref);
+
+          $scope.message = "User created with uid: " + firebaseUser.uid;
+
 
         ref.set({
           firstName : user.firstName,
@@ -22,19 +30,20 @@ app.controller("SignUpCtrl" , ["$scope", "Auth","User", "$state", "IonicPushServ
         },function(error) {
           if(error) {
             console.log("hello error" + error);
-          }
-          else {
+          }else{
             console.log("no error means succues");
             User.setAsUser(firebaseUser.uid);
+            $state.go("tabs.home");
             if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
               IonicPushService.registerToAuth();
             }
           }
-        })
-        $state.go("tabs.home");
-      }).catch(function(err){
-        console.log(err);
-        console.log("may error")
-    });
+          })
+
+        }).catch(function(err) {
+          console.log(err);
+          console.log("may error")
+        });
+    }
   }
-}]);
+]);

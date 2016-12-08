@@ -1,9 +1,9 @@
-<ion-view view-title="SignUp">
-  <ion-content class="padding">
-    <ion-list>
-      <div class="card">
-        <ion-item id="form-input">
-          <form ng-submit="createUser(user)" ng-hide="firebaseUser">
+<ion-view view-title="SignUp" hide-nav-bar="true">
+  <ion-content style="background: url(img/wow.jpg) center; background-size: cover;" class="dark-bg">
+    <section class="login-container">
+      <button class="button button-block button-assertive ink" ui-sref="landing">Back</button>
+      <div class="card padding">
+        <form ng-submit="createUser(user)">
             <div class="list">
               <label class="item item-input item-floating-label">
                 <span class="input-label has-input">First Name</span>
@@ -28,11 +28,10 @@
               <ion-checkbox ng-model="showPasswordIsChecked">Show password</ion-checkbox>
             </div>
             <div class="list">
-              <button type="submit" class="button button-block button-energized">Signup</button>
+              <button type="submit" class="button button-block button-energized ink">Signup</button>
             </div>
-          </form>
-        </ion-item>
+        </form>
       </div>
-    </ion-list>
+    </section>
   </ion-content>
 </ion-view>

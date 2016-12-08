@@ -1,7 +1,9 @@
 <ion-modal-view view-title="Order Form">
   <ion-header-bar class="bar bar-header bar-assertive">
     <h1 class="title">Order Form</h1>
+    <div class="buttons">
     <button class="button button-clear button-primary" ng-click="addToCartModal.hide()"><i class="icon ion-ios-close"></i></button>
+</div>
   </ion-header-bar>
   <ion-content class="padding">
     <ion-list>
@@ -23,7 +25,7 @@
             </label>
             <label class="item item-input item-floating-label">
               <span class="input-label has-input">Subtotal</span>
-              <input type="number" placeholder="Subtotal" value={{menuPrice*menu.quantity}}>
+              <input type="number" placeholder="Subtotal" value={{menuPrice * menu.quantity}} readonly>
             </label>
 
             <div class="row">

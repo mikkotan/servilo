@@ -1,7 +1,9 @@
 <ion-modal-view view-title="Edit Profile Photo">
   <ion-header-bar class="bar bar-header bar-assertive">
     <h1 class="title">Edit Profile Photo</h1>
+    <div class="buttons">
     <button class="button button-clear button-primary" ng-click="closeEditPhoto()"><i class="icon ion-ios-close"></i></button>
+</div>
   </ion-header-bar>
   <ion-content class="padding">
     <ion-list>
@@ -9,29 +11,32 @@
         <ion-item id="form-input">
           <div class="row">
             <div class="col text-center">
-              <img id="profile-preview" ng-show="photoURL" ng-src="{{photoURL}}">
-              <img id="profile-preview" ng-show="!photoURL" ng-src="img/ionic.png">
-              <p ng-show="photoURL"> Edit Profile Picture</p>
-              <p ng-show="!photoURL">You currently have no profile picture. Add one.</p>
-              <progress ng-show="progress" max="100" value="{{progress}}"></progress>
+              <img class="center" id="profile-preview" ng-show="photoURL" ng-src="{{photoURL}}">
+              <img class="center" id="profile-preview" ng-show="!photoURL" ng-src="img/ionic.png">
+              <p class="center" ng-show="photoURL"> Edit Profile Picture</p>
+              <p class="center" ng-show="!photoURL">You currently have no profile picture. Add one.</p>
+              <div ng-show="progress" class="progress-bar" style="width: {{progress}}%;">
+                <p class="percent">{{progress}}%</p>
+              </div>
             </div>
           </div>
-          <form ng-submit="editPhoto()">
-            <div class="row">
-              <div class="col text-center">
-                <a class="button icon button-positive icon ion-camera" ng-click="upload(1)"> Camera</a>
-                <a class="button icon button-calm ion-image" ng-click="upload(2)"> Album</a>
+          <div class="row">
+            <form ng-submit="editPhoto()">
+              <div class="row">
+                <div class="col text-center">
+                  <a class="button icon button-positive icon ion-camera" ng-click="upload(1)"> Camera</a>
+                  <a class="button icon button-calm ion-image" ng-click="upload(2)"> Album</a>
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col text-center">
-                <button class="button button-balanced icon ion-checkmark"> Submit</button>
-                <button class="button button-assertive icon ion-ios-close" ng-click="closeEditPhoto()"> Cancel</button>
+              <div class="row">
+                <div class="col text-center">
+                  <button class="button button-balanced icon ion-checkmark"> Submit</button>
+                  <button class="button button-assertive icon ion-ios-close" ng-click="closeEditPhoto()"> Cancel</button>
+                </div>
               </div>
-            </div>
-          </form>
+            </form>
         </ion-item>
-      </div>
+        </div>
     </ion-list>
   </ion-content>
 </ion-modal-view>

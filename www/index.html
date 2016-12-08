@@ -7,13 +7,15 @@
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
   <link href="css/ionic.app.css" rel="stylesheet">
   <link href="lib/angular-ui-select/dist/select.css" rel="stylesheet" />
+  <!-- <link href="lib/ionic-material/dist/ionic.material.css" rel="stylesheet"> -->
   <!-- <link href="lib/ionic-material/dist/ionic.material.min.css" rel="stylesheet"> -->
   <!-- <link href="lib/ion-md-input/css/ion-md-input.css" rel="stylesheet"> -->
   <!-- <link href="lib/ion-datetime-picker/release/ion-datetime-picker.min.css" rel="stylesheet"> -->
   <script src="lib/bluebird.min.js"></script>
   <script src="lib/ionic/js/ionic.bundle.js"></script>
   <script src="lib/ionic.cloud.min.js"></script>
-  <script src="lib/ionic-material/dist/ionic.material.min.js"></script>
+  <!-- // <script src="lib/ionic-material/src/js/ionic-material.js"></script> -->
+  <script src="lib/ionic-material/dist/ionic.material.js"></script>
   <script src="lib/ion-md-input/js/ion-md-input.js"></script>
   <script src="lib/firebase/firebase.js"></script>
   <script src="lib/angularfire/dist/angularfire.min.js"></script>
@@ -23,6 +25,7 @@
   <!-- <script src="lib/angular-ui-select/dist/select.css"></script> -->
   <script src="lib/ion-gallery/dist/ion-gallery.min.js"></script>
   <script src="lib/ionic-image-lazy-load/ionic-image-lazy-load.js"></script>
+  <script src="lib/ion-floating-menu/dist/ion-floating-menu.js"></script>
 
   <!-- map -->
   <script src="lib/angular-simple-logger/dist/angular-simple-logger.min.js"></script>
@@ -58,7 +61,7 @@
   <script src="app/menu/menu-avg.controller.js"></script>
   <script src="app/menu/menus.controller.js"></script>
   <script src="app/menu/menu.factory.js"></script>
-  <script src="app/menu/view-restaurant-menus.controller.js"></script>
+  <script src="app/menu/view-menus.controller.js"></script>
   <!-- <script src="app/menu/view-restaurant-menus-order.controller.js"></script> -->
   <!-- notification -->
   <script src="app/notification/notifications.controller.js"></script>
@@ -75,6 +78,13 @@
   <script src="app/restaurant/view-restaurant.controller.js"></script>
   <script src="app/restaurant/view-restaurant-location.controller.js"></script>
   <script src="app/restaurant/view-restaurant-menus.controller.js"></script>
+  <!-- dashboard -->
+  <script src="app/dashboard/dashboard-main.controller.js"></script>
+  <script src="app/dashboard/dashboard-menus.controller.js"></script>
+  <script src="app/dashboard/dashboard-interact.controller.js"></script>
+  <script src="app/dashboard/dashboard-interact-orders.controller.js"></script>
+  <script src="app/dashboard/dashboard.controller.js"></script>
+  <!-- <script src="app/dashboard/dashboard.factory.js"></script> -->
   <!-- reservation -->
   <script src="app/reservation/add-reservation.controller.js"></script>
   <script src="app/reservation/my-reservations.controller.js"></script>
@@ -103,6 +113,8 @@
   <script src="cordova.js"></script>
   <!-- toast -->
   <script src="lib/ionic-toast/dist/ionic-toast.bundle.min.js"></script>
+  <!-- action button -->
+  <script src="lib\material-action-button\ion-action-button.js"></script>
   <!-- end of data -->
 
 </head>
@@ -159,17 +171,17 @@
             Profile
           </ion-item>
           <hr ng-show="firebaseUser">
-          <ion-item menu-close ng-show="firebaseUser" class="item-borderless">
+          <ion-item menu-close ng-show="firebaseUser" ui-sref="tabs.restaurant" class="item-borderless">
             Restaurants
           </ion-item>
-          <ion-item menu-close ng-show="firebaseUser" class="item-borderless" ng-click="signOut()">
+          <ion-item menu-close ng-show="firebaseUser" class="item-borderless">
             Notifications
           </ion-item>
           <ion-item menu-close ng-show="firebaseUser" class="item-borderless" ui-sref="tabs.orders">
             Orders
           </ion-item>
           <hr ng-show="firebaseUser">
-          <ion-item menu-close ng-show="firebaseUser" class="item-borderless" ui-sref="login" ng-click="signOut()">
+          <ion-item menu-close ng-show="firebaseUser" class="item-borderless" ng-click="signOut()">
             Sign Out
           </ion-item>
         </ion-list>

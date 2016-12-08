@@ -6,8 +6,10 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
   var menus = Database.menusReference();
   var reviews = Database.reviewsReference();
   var orders = Database.ordersReference();
+  var restaurantOrders = Database.restaurantOrdersReference();
   var restaurantsArray = Database.restaurants();
   var restaurantReviews = Database.restaurantReviewsReference();
+  var facilities = $firebaseArray(Database.facilitiesReference());
 
   var Restaurant = {
     all : function() {
@@ -18,23 +20,28 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
       return $firebaseArray(restaurants.orderByChild("owner_id").equalTo(authUserId))
     },
     get : function(restaurantId) {
-      console.log('nice restaurant get');
       return $firebaseObject(Database.restaurantsReference().child(restaurantId));
     },
     getPendingRestaurants : function() {
       return Database.pendings();
       // return $firebaseArray(Database.pendingsReference())
     },
-    // getAveragePrice : function(restaurantId) {
-    //   var res = Database.restaurants().$getRecord(restaurantId);
-    //   return res.secured_data.avgPrice.toFixed(2);
-    // },
-    // getAverageRating : function(restaurantId) {
-    //   var res = Database.restaurants().$getRecord(restaurantId);
-    //   return res.secured_data.avgRate.toFixed(1);
-    // },
+    getAverageRating : function(restaurantId) {
+      console.log('getting averge rating to ' + restaurantId);
+      return Database.restaurantReviewsReference().child(restaurantId).once('value')
+        .then((snapshot) => {
+          var total = 0
+          var count = 0
+          var reviews = snapshot.val();
+          for (var key in reviews) {
+            count ++;
+            total += reviews[key].rating
+          }
+          return (total/count).toFixed(1);
+        })
+    },
     getMenus : function(restaurantId) {
-      return $firebaseArray(menus.orderByChild("restaurant_id").equalTo(restaurantId));
+      return $firebaseArray(Database.restaurantMenusReference().child(restaurantId));
     },
     getRestaurantStatus : function(ownerId) {
       return Database.usersReference().child(ownerId).child("online");
@@ -51,6 +58,10 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
           return snapshot.val().name
         })
     },
+    // getOrders : function(restaurantId) {
+    //   console.log('getting orders in restaurant factory');
+    //   return $firebaseArray(restaurantOrders.child(restaurantId))
+    // },
     getReviews : function(restaurantId) {
       // return $firebaseArray(reviews.orderByChild('restaurant_id').equalTo(restaurantId));
       return $firebaseArray(restaurantReviews.child(restaurantId).limitToLast(5))
@@ -64,7 +75,7 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
       return $firebaseObject(users.child(res.owner_id))
     },
     getOrders : function(restaurantId) {
-      return $firebaseArray(orders.orderByChild("restaurant_id").equalTo(restaurantId));
+      return $firebaseArray(restaurantOrders.child(restaurantId));
     },
     getRestaurantOpenStatus : function(restaurant) {
       // var restaurant = $firebaseObject(restaurants.child(restaurantId));
@@ -83,7 +94,7 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
         if(openTime.getTime() > closeTime.getTime()) {
           closeTime.setDate(closeTime.getDate() + 1);
         }
-        
+
         if(openTime.getTime() < now.getTime() && now.getTime() < closeTime.getTime()) {
           return true;
         }
@@ -102,18 +113,24 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
         lat: latitude,
         lng: longitude
       };
+      console.log(latLng);
       geocoder.geocode({
         'location': latLng
       }, function(results, status) {
         if (status === 'OK') {
+          console.log('oks');
           deferred.resolve(results[0].formatted_address);
           // $scope.$apply();
         } else {
+          console.log('nonono');
           deferred.resolve(null);
           alert('Geocoder failed due to: ' + status);
         }
       });
       return deferred.promise;
+    },
+    getFacilityName : function(facilityId) {
+      return facilities.$getRecord(facilityId).name;
     },
     getMarker : function(latitude, longitude) {
       return marker = {
@@ -202,6 +219,9 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
         closeTime: CT.getTime()
       }
       return resRef.update(restObj);
+    },
+    delete: function(restaurantId) {
+      return Database.restaurantsReference().child(restaurantId).remove()
     }
   }
 

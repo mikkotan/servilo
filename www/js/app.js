@@ -3,7 +3,8 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var app = angular.module('app', ['ui.mask', 'ionic', 'ionic.cloud', 'ionMdInput', 'ionic-material', 'firebase', 'ionic.rating','ionic-toast', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker', 'yaru22.angular-timeago', 'ui.select', 'ngSanitize', 'ion-gallery', 'ionicLazyLoad'])
+
+var app = angular.module('app', ['ui.mask', 'ionic','ionic.cloud', 'ionMdInput', 'ionic-material','ion-floating-menu', 'firebase', 'ionic.rating','ionic-toast', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker', 'yaru22.angular-timeago', 'ui.select', 'ngSanitize', '$actionButton', 'ion-gallery', 'ionicLazyLoad'])
 
 app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushService", "User", "Database", "$cordovaGeolocation", "$ionicPopup", "$cordovaPushV5","CartData","$ionicLoading",
   function($ionicPlatform, $rootScope, $state, $templateCache, IonicPushService, User, Database, $cordovaGeolocation, $ionicPopup, $cordovaPushV5,CartData,$ionicLoading) {
@@ -13,23 +14,23 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
           // IonicPushService.registerDevice();
           localStorage.myPush = '';
           $cordovaPushV5.initialize({
-            android: {
-              senderID: "155324175920"
-            },
-            ios: {
-              alert: 'true',
-              badge: true,
-              sound: 'false',
-              clearBadge: true
-            },
-            windows: {}
-          })
+              android: {
+                senderID: "155324175920"
+              },
+              ios: {
+                alert: 'true',
+                badge: true,
+                sound: 'false',
+                clearBadge: true
+              },
+              windows: {}
+            })
             .then((result) => {
               $cordovaPushV5.onNotification();
               $cordovaPushV5.onError();
               $cordovaPushV5.register()
                 .then((registerResult) => {
-                  console.log("Register Result: "+registerResult)
+                  console.log("Register Result: " + registerResult)
                   localStorage.myPush = registerResult;
                 })
                 .catch((err) => {
@@ -42,6 +43,7 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
           timeout: 10000,
           enableHighAccuracy: true
         }
+
 
         $cordovaGeolocation.getCurrentPosition(posOptions)
           .then((position) => {
@@ -76,32 +78,27 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
       if (data.additionalData.foreground == true) {
         console.log('foreground true');
         $ionicPopup.alert({
-          title: data.title,
-          template: data.message
-        })
+            title: data.title,
+            template: data.message
+          })
           .then((res) => {
             if (res) {
               if (data.additionalData.url === 'reservation') {
                 $state.go('tabs.myReservations');
-              }
-              else if (data.additionalData.url === 'order') {
+              } else if (data.additionalData.url === 'order') {
                 $state.go('tabs.myOrders');
-              }
-              else if (data.additionalData.url === 'order_status') {
+              } else if (data.additionalData.url === 'order_status') {
                 $state.go('tabs.myOrders');
               }
             }
           })
-      }
-      else {
+      } else {
         console.log('not in foreground')
         if (data.additionalData.url === 'reservation') {
           $state.go('tabs.myReservations');
-        }
-        else if (data.additionalData.url === 'order') {
+        } else if (data.additionalData.url === 'order') {
           $state.go('tabs.myOrders');
-        }
-        else if (data.additionalData.url === 'order_status') {
+        } else if (data.additionalData.url === 'order_status') {
           $state.go('tabs.myOrders');
         }
       }
@@ -115,10 +112,9 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
     $rootScope.$on('$stateChangeStart',function(event, toState, toParams, fromState, fromParams, options){
 
       if(typeof fromState.views.restaurant_page !== "undefined" && typeof toState.views.restaurant_page == "undefined"){
-          if(!CartData.isEmpty()){
-              // $ionicLoading.hide();
-              event.preventDefault();
 
+          if(!CartData.isEmpty()){
+              event.preventDefault();
               var leavingRestaurantPopup = $ionicPopup.confirm({
                 title: 'Leaving this restaurant will delete your orders',
                 template: 'Are you sure you want to leave?',
@@ -138,16 +134,16 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
             }else{
               console.log("HI");
             }
-
         }else if(toState){
-            $ionicLoading.show();
+          console.log(toState.name)
+            //$ionicLoading.show();
         }else {
           console.log("Free Will")
         }
       })
     $rootScope.$on("$stateChangeSuccess",
       function(event, toState, toParams, fromState, fromParams, options) {
-          $ionicLoading.hide();
+          //$ionicLoading.hide();
     })
 
     $rootScope.$on("$stateChangeError",
@@ -155,12 +151,13 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
         $ionicLoading.hide()
         if (error === "AUTH_REQUIRED") {
           event.preventDefault();
-          $state.go("login")
+          $state.go("landing")
         }
     })
 
     $templateCache.put('template.tpl.html', '');
-  }]);
+  }
+]);
 
 app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate, Auth, User, Database, $state, $ionicPush, IonicPushService, $ionicPopover, $cordovaPushV5 , Cart) {
 
@@ -177,7 +174,6 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
   //     //if ng-model has value..add "used" class
   //     //if ng-model has no value...wala lang
   // };
-
   $scope.signOut = function() {
     $ionicLoading.show({
       template: '<p>Signing out . . .</p><ion-spinner></ion-spinner>',
@@ -195,8 +191,9 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
           }
           $cordovaPushV5.unregister();
           Auth.$signOut();
-          location.reload();
+        //   location.reload();
           $ionicLoading.hide();
+          $state.go("landing");
         })
         .catch((err) => {
           console.log(err)
@@ -218,7 +215,7 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
       // }
       User.auth().$loaded().then(function(data) {
         $scope.firebaseUser = data;
-        if(data.photoURL) {
+        if (data.photoURL) {
           $scope.photoURL = data.photoURL;
         }
 
