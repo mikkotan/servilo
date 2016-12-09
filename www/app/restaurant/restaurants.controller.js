@@ -35,7 +35,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     };
 
     $scope.setFacilities = function() {
-      var facilities = $ionicPopup.confirm({
+      var facilities = $ionicPopup.alert({
         title: 'Set Facilities Offered',
         templateUrl: 'app/restaurant/_facilitiesPopout.html',
         subTitle: 'Amenities available for the customers in your restaurant.',
@@ -45,7 +45,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     };
 
     $scope.setOpenDays = function() {
-      var openDays = $ionicPopup.confirm({
+      var openDays = $ionicPopup.alert({
         title: 'Set Open Days',
         templateUrl: 'app/restaurant/_openDaysPopout.html',
         subTitle: 'Set the days open on your restaurant.',

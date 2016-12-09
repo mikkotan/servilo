@@ -1,23 +1,42 @@
 <ion-view view-title="Home">
-  <ion-header-bar class="bar bar-subheader bar-light item-input-inset">
-    <label class="item-input-wrapper">
-      <i class="icon ion-search placeholder-icon"></i>
-      <input placeholder="Search..." type="search" ng-model="name" ng-model-options="{ debounce: 1000 }" ng-change="searchChange(name)" >
-    </label>
-  </ion-header-bar>
   <ion-content>
+
+    <ion-slides options="options" slider="data.slider">
+      <ion-slide-page>
+        <!-- <div><img class="slider-imgs" ng-src="img/material-wall.jpg"></div> -->
+        <h1>ADVERTISEMENTSU</h1>
+        <div class="card padding">
+          <div class="item item-thumbnail-left">
+            <img class="img-thumbnail" ng-src="img/wow.jpg" />
+            <h3>
+              <icon class="ion-spoon"></icon> SNIPER ISLAND 2
+              <span style="color:green">
+                <icon class="ion-android-star-outline"></icon> 5 STARS
+              </span>
+            </h3>
+            <p>
+              1000000 PESOS
+            </p>
+            <p>
+              <icon class="ion-ios-location-outline"></icon> IN YOUR HEART
+            </p>
+            <button class="button button-balanced button-small button-outline">
+              <icon class="ion-android-call"></icon> Call Us
+            </button>
+          </div>
+        </div>
+      </ion-slide-page>
+    </ion-slides>
     HOME HERE
-    <ion-refresher
-	  pulling-text="Pull to refresh..."
-	  on-refresh="doRefresh()">
-	</ion-refresher>
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="doRefresh()">
+    </ion-refresher>
     <ion-list>
-	  <ion-item ng-repeat="rest in home.restaurants | orderBy:'distance'" item="rest">
-	    {{rest.name}}
-	  </ion-item>
+      <ion-item ng-repeat="rest in home.restaurants | orderBy:'distance'" item="rest">
+        {{rest.name}}
+      </ion-item>
     </ion-list>
 
-    <!-- <ion-infinite-scroll ng-if="!home.noMoreItemsAvailable" on-infinite="loadMore()" distance="1%">
-    </ion-infinite-scroll> -->
+    <ion-infinite-scroll ng-if="!home.noMoreItemsAvailable" on-infinite="loadMore()" distance="1%">
+    </ion-infinite-scroll>
   </ion-content>
 </ion-view>

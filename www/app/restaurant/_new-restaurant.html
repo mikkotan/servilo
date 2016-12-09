@@ -39,11 +39,10 @@
                   <p ng-repeat="(key, val) in restaurant.facilities" ng-if="val">
                     {{key}}
                   </p>
-                  {{restaurant.facilities}}
                 </div>
               </div>
               <div class="item">
-                <button class="button button-block button-royal icon-left ion-plus-circled" ng-click="setOpenDays()">Set Open Days</button>
+                <a class="button button-block button-royal icon-left ion-plus-circled" ng-click="setOpenDays()">Set Open Days</a>
               </div>
               <div class="item item-input-inset">
                 <label class="item-input item-floating-label">
