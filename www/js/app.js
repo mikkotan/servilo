@@ -84,9 +84,15 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
           .then((res) => {
             if (res) {
               if (data.additionalData.url === 'reservation') {
-                $state.go('tabs.myReservations');
+                $state.go('tabs.restaurant')
+                  .then(() => {
+                    $state.go('tabs.dashboard.reservations', {restaurantId: data.additionalData.restaurant_id});
+                  })
               } else if (data.additionalData.url === 'order') {
-                $state.go('tabs.myOrders');
+                $state.go('tabs.restaurant')
+                  .then(() => {
+                    $state.go('tabs.dashboard.orders', {restaurantId: data.additionalData.restaurant_id})
+                  })
               } else if (data.additionalData.url === 'order_status') {
                 $state.go('tabs.myOrders');
               }
@@ -95,9 +101,10 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
       } else {
         console.log('not in foreground')
         if (data.additionalData.url === 'reservation') {
-          $state.go('tabs.myReservations');
+          $state.go('tabs.dashboard.reservations', {restaurantId: data.additionalData.restaurant_id});
         } else if (data.additionalData.url === 'order') {
-          $state.go('tabs.myOrders');
+          console.log(data.additionalData.restaurant_id);
+          $state.go('tabs.dashboard.orders', {restaurantId: data.additionalData.restaurant_id});
         } else if (data.additionalData.url === 'order_status') {
           $state.go('tabs.myOrders');
         }
