@@ -4,7 +4,7 @@ app.controller('DashboardInteractCtrl', ['$scope', '$state', '$stateParams',
 
     console.log($stateParams.restaurantId);
     $scope.goToOrders = function() {
-      $state.go('tabs.orders', {restaurantId: $stateParams.restaurantId});
+      $state.go('tabs.dashboard.orders', {restaurantId: $stateParams.restaurantId});
     }
 
     $scope.goToReservations = function() {

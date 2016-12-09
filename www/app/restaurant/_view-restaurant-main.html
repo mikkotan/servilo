@@ -61,7 +61,7 @@
             <!-- <ion-gallery ion-gallery-items="images"></ion-gallery> -->
             <div class="container-class">
               <!-- <ion-scroll width="100px; height: 100px" direction="x" overflow-scroll="false"> -->
-               
+
                 <hscroller ng-if="review.images">
                   <hcard ng-repeat="img in review.images" index="{{$index}}" desc="" image="{{img.src}}" ng-click="showImages($index)" ng-show="$index < 5"></hcard>
                   <hcard index="{{$index}}" desc="" image="img/plus.jpg" ng-click="showGallery(review.images)" ui-sref="tabs.viewRestaurant.gallery"></hcard>
@@ -96,7 +96,7 @@
       </div>
     </div>
 
-    <ion-gallery ion-gallery-items="allImages"></ion-gallery>
+    <!-- <ion-gallery ion-gallery-items="allImages"></ion-gallery> -->
 
   </ion-content>
 </ion-view>

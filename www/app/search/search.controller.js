@@ -13,7 +13,9 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
       rate: 0,
       max: 5
     }
-
+    $scope.goToMyOrders = function() {
+      $state.go("tabs.myOrders")
+    }
     $scope.$watch('restaurants', function() {
       console.log('restaurants changed');
     })

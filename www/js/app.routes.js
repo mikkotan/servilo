@@ -225,13 +225,13 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
         }
       }
     })
-    .state('tabs.orders', {
+    .state('tabs.dashboard.orders', {
       url: "/orders",
       params: {
         restaurantId: null
       },
       views: {
-        'order-tab': {
+        'dashboard-page': {
           templateUrl: "app/dashboard/_dashboard-interact-orders.html",
           controller: "DashboardInteractOrdersCtrl"
         }

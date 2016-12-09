@@ -1,4 +1,4 @@
-<ion-view view-title="Search">
+<ion-view view-title="Search" ng-class="{'bar-subheader-slide-away': slideHeader}">
   <ion-header-bar class="bar bar-subheader bar-light item-input-inset">
 
     <label class="item-input-wrapper">
@@ -8,21 +8,28 @@
 
   </ion-header-bar>
 
-  <ion-content class="padding has-subheader">
-    <ion-radio ng-repeat="item in searchFilter" ng-value="item.value" ng-model="data.filter" style="width:150px">
-      {{ item.text }}
-    </ion-radio>
+  <!-- <ion-content class="padding has-subheader"> -->
+
+  <!-- <ion-search-bar placeholder="Search Books"></ion-search-bar> -->
+  <ion-content class="padding has-header">
+
+    <h4 class="text-center">Search by:</h4>
+    <div class="button-bar">
+      <a grouped-radio="item.value" ng-repeat="item in searchFilter" ng-value="item.value" ng-model="data.filter">{{item.text}}</a>
+    </div>
+
+    <button class="button button-small button-balanced" ng-click="showNear()">{{mapText}}</button>
+    <div>
+      <ui-gmap-google-map zoom='map.zoom' center="map.center" options='map.options' bounds='map.bounds' control='map.control' refresh=map.refresh events=map.events ng-cloak>
+        <ui-gmap-markers models="markers" coords="'coords'" icon="'icon'" events="markerEvents" doRebuildAll="true"></ui-gmap-markers>
+        <ui-gmap-map-control position="top-right">
+        </ui-gmap-map-control>
+      </ui-gmap-google-map>
+    </div>
+
+
+
     <ion-list>
-      <div>
-        <ui-gmap-google-map zoom='map.zoom' center="map.center" options='map.options' bounds='map.bounds' control='map.control' refresh=map.refresh events=map.events ng-cloak>
-          <ui-gmap-markers models="markers" coords="'coords'" icon="'icon'" events="markerEvents" doRebuildAll="true"></ui-gmap-markers>
-          <ui-gmap-map-control position="top-right">
-            <button class="button button-small button-balanced" ng-click="showNear()">{{mapText}}</button>
-          </ui-gmap-map-control>
-        </ui-gmap-google-map>
-      </div>
-
-
       <h3>Results</h3>
       <ion-spinner ng-show="loading" icon="lines"></ion-spinner>
       <div class="card padding" ng-repeat="restaurant in (filteredItems = newRestaurants)" ng-if="restaurant.ready">
@@ -46,7 +53,6 @@
           </button>
         </div>
       </div>
-      <!-- <div ng-cloak>{{addMarkers(filteredItems)}}</div> -->
     </ion-list>
   </ion-content>
 </ion-view>
