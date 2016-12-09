@@ -13,7 +13,10 @@ app.factory('Reservation', function($firebaseObject, $firebaseArray, Database, U
           Restaurant.get(reservation.restaurant_id).$loaded()
             .then((restaurant) => {
               var receiverId;
-              if (updateStatus !== 'remind') {
+              if (updateStatus !== 'remind' && restaurant.owner_id === User.auth().$id) {
+                receiverId = reservation.user_id
+              }
+              else if (updateStatus !== 'remind' && restaurant.owner_id !== User.auth().$id) {
                 receiverId = restaurant.owner_id
               }
               else {

@@ -134,6 +134,11 @@ app.controller('DashboardInteractReservationsCtrl', function($scope, $stateParam
 
   Restaurant.getReservations($scope.restaurantId).$loaded()
     .then((reservations) => {
+      console.log('then reservations');
+      console.log(reservations.length);
+      if (reservations.length == 0) {
+        $ionicLoading.hide();
+      }
       $scope.tempReservations = reservations;
 
       $scope.$watchCollection('tempReservations', function(newReservations) {
@@ -141,9 +146,7 @@ app.controller('DashboardInteractReservationsCtrl', function($scope, $stateParam
           var r = {
             get : Reservation.get(reservation.$id).$loaded()
               .then((reservation) => {
-                if (reservation.length == 0) {
-                  $ionicLoading.hide();
-                }
+
                 console.log(reservation);
                 var date = new Date(reservation.datetime)
                 r.day = date.getDay();
@@ -162,11 +165,19 @@ app.controller('DashboardInteractReservationsCtrl', function($scope, $stateParam
                     $ionicLoading.hide();
                   })
               })
+              .catch((err) => {
+                console.log('err')
+                $ionicLoading.hide();
+              })
           }
           return r;
         })
       })
 
+    })
+    .catch((err) => {
+      console.log('err')
+      $ionicLoading();
     })
 
 })
