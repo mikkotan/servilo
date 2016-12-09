@@ -7,8 +7,30 @@ app.factory('Reservation', function($firebaseObject, $firebaseArray, Database, U
     get : function(reservationId) {
       return $firebaseObject(Database.reservationsReference().child(reservationId));
     },
-    update : function(reservationId, updateStatus) {
-      return Database.reservationsReference().child(reservationId).update({ status: updateStatus })
+    update : function(reservation, updateStatus) {
+      return Database.reservationsReference().child(reservation.$id).update({ status: updateStatus })
+        .then(() => {
+          Restaurant.get(reservation.restaurant_id).$loaded()
+            .then((restaurant) => {
+              var receiverId;
+              if (updateStatus !== 'remind') {
+                receiverId = restaurant.owner_id
+              }
+              else {
+                receiverId = reservation.user_id
+              }
+
+              return Notification.create({
+                sender_id: User.auth().$id,
+                receiver_id: receiverId,
+                restaurant_id: restaurant.$id,
+                type: 'reservation_status',
+                status: updateStatus,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+              })
+
+            })
+        })
     },
     create: function(reservation) {
       console.log('create');

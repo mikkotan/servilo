@@ -2,6 +2,7 @@ app.controller('DashboardInteractReservationsCtrl', function($scope, $stateParam
   console.log('dashboard interact reservations ctrl');
   $ionicLoading.show();
   $scope.restaurantId = $stateParams.restaurantId;
+  $scope.today = (new Date()).getDay();
 
   $scope.reservation = {
     name : '',
@@ -15,7 +16,7 @@ app.controller('DashboardInteractReservationsCtrl', function($scope, $stateParam
     reservation.user_id = User.auth().$id
     reservation.timestamp = firebase.database.ServerValue.TIMESTAMP
     reservation.restaurant_id = $scope.restaurantId
-    
+
     console.log(JSON.stringify(reservation));
     $scope.walkinReservationModal.hide();
     Reservation.create(reservation)
@@ -36,7 +37,14 @@ app.controller('DashboardInteractReservationsCtrl', function($scope, $stateParam
       .then((res) => {
         if (res) {
           console.log('tapped ok')
-          Reservation.update(reservation.$id, 'confirmed')
+          Reservation.update(reservation, 'confirmed')
+            .then(() => {
+              console.log('success fully updated')
+              alert('ok')
+            })
+            .catch((err) => {
+              alert(err)
+            })
         }
         else {
           console.log('tapped cancel')
@@ -56,7 +64,41 @@ app.controller('DashboardInteractReservationsCtrl', function($scope, $stateParam
       .then((res) => {
         if (res) {
           console.log('tapped ok')
-          Reservation.update(reservation.$id, 'cancelled')
+          Reservation.update(reservation, 'cancelled')
+            .then(() => {
+              console.log('success fully updated')
+              alert('ok')
+            })
+            .catch((err) => {
+              alert(err)
+            })
+        }
+        else {
+          console.log('tapped cancel')
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+  $scope.remind = function(reservation) {
+    console.log('');
+    var confirm = $ionicPopup.confirm({
+      title: 'Remind Reservation',
+      template: 'Remind Reservation #' + reservation.timestamp + '?'
+    })
+      .then((res) => {
+        if (res) {
+          console.log('tapped ok')
+          Reservation.update(reservation, 'remind')
+            .then(() => {
+              console.log('success fully updated')
+              alert('ok')
+            })
+            .catch((err) => {
+              alert(err)
+            })
         }
         else {
           console.log('tapped cancel')
@@ -103,6 +145,8 @@ app.controller('DashboardInteractReservationsCtrl', function($scope, $stateParam
                   $ionicLoading.hide();
                 }
                 console.log(reservation);
+                var date = new Date(reservation.datetime)
+                r.day = date.getDay();
                 r.details = reservation
 
 
