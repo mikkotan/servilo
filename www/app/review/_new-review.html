@@ -15,6 +15,7 @@
           <span class="input-label has-input">Write review here . . . </span>
           <textarea type="text" placeholder="Write review here . . . " ng-model="review.content" rows="6" required></textarea>
         </label>
+        {{imgs}}
         <div class="item item-input">
           Rate us:
           <br>
@@ -26,7 +27,11 @@
       </div>
     </form>
     <p ng-repeat="img in images track by $index">
-      <img ng-src="{{img}}" style="max-width:200px" />
+      <img ng-src="{{img.original}}" style="max-width:200px" />
+    </p>
+    THUMBS BABEH
+    <p ng-repeat="img in images track by $index">
+      <img ng-src="{{img.thumb}}" style="max-width:200px" />
     </p>
   </ion-content>
 </ion-modal-view>

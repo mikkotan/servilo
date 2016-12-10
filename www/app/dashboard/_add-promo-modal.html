@@ -26,6 +26,29 @@
           <br>
           <strong>{{promo.endDate| date: "MMM d, y"}}</strong>
         </div>
+        <div class="item">
+          <div class="row">
+            <div class="col text-center">
+              Add image
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <img class="center" ng-show="imageURL" ng-src="{{imageURL}}" width="100%" />
+              <div class="col text-center">
+                <ion-spinner ng-if="imageLoading" icon="android"></ion-spinner>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <a class="button button-block button-positive icon ion-camera" ng-click="upload(1)"></a>
+            </div>
+            <div class="col">
+              <a class="button button-block button-calm icon ion-image" ng-click="upload(2)"></a>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="padding">
         <button type="submit" class="button button-block button-positive">Add Promo</button>

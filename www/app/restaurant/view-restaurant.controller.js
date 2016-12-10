@@ -113,25 +113,15 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
     }
 
     $scope.images = [];
+    $scope.thumbs = [];
 
     $scope.selImages = function() {
       window.imagePicker.getPictures(
         function(results) {
           for (var i = 0; i < results.length; i++) {
-            window.plugins.Base64.encodeFile(results[i], function(base64) {
-              var reviewsRef = Upload.get(base64);
-              reviewsRef.on('state_changed', function(snapshot) {
-                var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                console.log('Upload is ' + progress + '% done');
-                // $scope.progress = progress;
-              }, function(error) {
-                console.log("error in uploading." + error);
-              }, function() {
-                var downloadURL = reviewsRef.snapshot.downloadURL;
-                $scope.images.push(downloadURL);
-                $scope.$apply();
-              });
-            });
+            Upload.review(results[i]).then(function(downloadURL) {
+              $scope.images.push(downloadURL);
+            })
           }
         },
         function(error) {
@@ -158,6 +148,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
           review.content = '';
           review.rating = 0;
           $scope.images = [];
+          $scope.thumbs = [];
           $ionicLoading.hide();
           Review.userReview(id).set(newReview.key).then(function() {
             console.log('added to user_reviews')
@@ -172,7 +163,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
             timestamp: firebase.database.ServerValue.TIMESTAMP
           })
         })
-        .catch(function() {
+        .catch(function(err) {
           alert(err);
           // $ionicLoading.hide();
         })
@@ -187,12 +178,12 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
     $scope.updateReview = function(review) {
       // var reviewRef = Review.getReview(review.$id);
       Review.editReview(id, review)
-      .then(function() {
-        console.log("finished updating review.");
-        Upload.uploadMultiple($scope.images, id, review.$id);
-        $scope.images = [];
-        $scope.editReviewModal.hide();
-      })
+        .then(function() {
+          console.log("finished updating review.");
+          Upload.uploadMultiple($scope.images, id, review.$id);
+          $scope.images = [];
+          $scope.editReviewModal.hide();
+        })
       $scope.isAlreadyReviewed();
     };
 
@@ -349,32 +340,6 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
       //     }
       //   })
     }
-
-    $scope.allImages = [{
-      src: 'img/1.jpg'
-    }, {
-      src: 'img/2.jpg'
-    }, {
-      src: 'img/3.jpg'
-    }, {
-      src: 'img/3.jpg'
-    }, {
-      src: 'img/3.jpg'
-    }, {
-      src: 'img/3.jpg'
-    }, {
-      src: 'img/3.jpg'
-    }, {
-      src: 'img/3.jpg'
-    }, {
-      src: 'img/3.jpg'
-    }, {
-      src: 'img/3.jpg'
-    }, {
-      src: 'img/3.jpg'
-    }, {
-      src: 'img/3.jpg'
-    }];
 
     $scope.showGallery = function(allImages) {
       Gallery.set(allImages);

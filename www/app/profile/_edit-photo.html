@@ -15,8 +15,11 @@
               <img class="center" id="profile-preview" ng-show="!photoURL" ng-src="img/ionic.png">
               <p class="center" ng-show="photoURL"> Edit Profile Picture</p>
               <p class="center" ng-show="!photoURL">You currently have no profile picture. Add one.</p>
-              <div ng-show="progress" class="progress-bar" style="width: {{progress}}%;">
+              <!-- <div ng-show="progress" class="progress-bar" style="width: {{progress}}%;">
                 <p class="percent">{{progress}}%</p>
+              </div> -->
+              <div class="col text-center">
+                <ion-spinner ng-if="imageLoading" icon="android"></ion-spinner>
               </div>
             </div>
           </div>

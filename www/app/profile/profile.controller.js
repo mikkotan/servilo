@@ -99,7 +99,7 @@ app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover
     }
     $scope.closeEditPhoto = function() {
       // $scope.photoURL = null;
-      $scope.progress = null;
+      // $scope.progress = null;
       $scope.editPhotoModal.hide();
     }
     $scope.openPopover = function($event, user) {
@@ -111,42 +111,18 @@ app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover
     };
 
     $scope.upload = function(index) {
-      var source = Upload.getSource(index);
-      var options = Upload.getOptions(source);
-      $cordovaCamera.getPicture(options).then(function(imageData) {
-        var profileRef = Upload.profile(imageData);
-        $scope.progress = 1;
-        profileRef.on('state_changed', function(snapshot) {
-          var progress = Upload.getProgress(snapshot);
-          console.log('Upload is ' + progress + '% done');
-          $scope.progress = progress;
-        }, function(error) {
-          console.log("error in uploading." + error);
-        }, function() {
-          $scope.photoURL = profileRef.snapshot.downloadURL;
-          $scope.$apply();
-        });
-
-      }, function(error) {
-        console.error(error);
-      });
+      navigator.camera.getPicture(function(imageData) {
+        Upload.profile(imageData).then(function(downloadURL) {
+          $scope.imageLoading = false;
+          $scope.photoURL = downloadURL;
+        })
+      }, function(message) {
+        console.log('Failed because: ' + message);
+        $scope.imageLoading = false;
+        $scope.$apply();
+      }, Upload.getOptions(index));
+      $scope.imageLoading = true;
     }
-
-    // $scope.editProfile = function(user) {
-    //   $scope.optionsPopover.hide();
-    //   var userRef = Database.usersReference().child(User.auth().$id);
-    //   console.log(user.firstName)
-    //   console.log(user.lastName)
-    //   console.log(user.descriptionName)
-    //   userRef.set({
-    //     firstName: user.firstName,
-    //     lastName: user.lastName,
-    //     displayName: user.displayName,
-    //     description: user.description,
-    //     // image: $scope.imageURL
-    //   })
-    //   $scope.editProfileModal.hide();
-    // }
 
     $scope.editProfile = function(user) {
       $scope.optionsPopover.hide();
@@ -168,7 +144,7 @@ app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover
       userRef.update({
         photoURL: $scope.photoURL
       })
-      $scope.progress = null;
+      // $scope.progress = null;
       $scope.editPhotoModal.hide();
     }
 

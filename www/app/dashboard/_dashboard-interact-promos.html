@@ -7,7 +7,7 @@
 
     <div class="list">
       <a class="item item-thumbnail-left item-icon-right" ng-repeat="promo in promos">
-        <img src="cover.jpg">
+        <img ng-src="{{promo.photoURL}}">
         <h2>{{promo.name}}</h2>
         <p>{{promo.description}}</p>
         <p>

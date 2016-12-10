@@ -1,12 +1,28 @@
-app.controller('DashboardInteractPromosCtrl', function($scope, $stateParams, $ionicModal, $ionicLoading, $ionicPopup, Promo, Restaurant) {
+app.controller('DashboardInteractPromosCtrl', function($scope, $stateParams, $ionicModal, $ionicLoading, $ionicPopup, Promo, Restaurant, Upload) {
   console.log('eheheh lleo');
   $scope.restaurantId = $stateParams.restaurantId;
+
+  $scope.imageURL = "";
+  $scope.upload = function(index) {
+    navigator.camera.getPicture(function(imageData) {
+      Upload.promo(imageData).then(function(downloadURL) {
+        $scope.imageLoading = false;
+        $scope.imageURL = downloadURL;
+      })
+    }, function(message) {
+      console.log('Failed because: ' + message);
+      $scope.imageLoading = false;
+      $scope.$apply();
+    }, Upload.getOptions(index));
+    $scope.imageLoading = true;
+  }
 
   $scope.newPromo = function(promo) {
     $ionicLoading.show();
     console.log(promo);
     Promo.create({
       restaurant_id: $scope.restaurantId,
+      photoURL: $scope.imageURL,
       name: promo.name,
       description: promo.description,
       startDate: promo.startDate.getTime(),
