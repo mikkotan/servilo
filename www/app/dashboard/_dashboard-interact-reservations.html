@@ -5,7 +5,9 @@
   <ion-content class="padding">
     <h3>Manage Reservations for {{restaurantId}}</h3>
     <ion-item ng-repeat="reservation in reservations | orderBy:'-details.timestamp'" ng-if="reservation.ready">
-      <h4>Reference #{{reservation.details.timestamp}}</h4>
+      <h4>Reference #{{reservation.details.timestamp}} <span class="button button-outline button-small button-balanced" ng-if="today === reservation.day">Today</span></h4>
+
+
       <p ng-if="reservation.details.name == undefined">
         Customer Name: {{reservation.customer_name}}
       </p>
@@ -25,7 +27,7 @@
         <button class="button button-small button-outline button-balanced" ng-click="confirm(reservation.details)" ng-show="reservation.details.status === 'pending'">
           Confirm
         </button>
-        <button class="button button-small button-outline button-royal" ng-click="confirm(reservation.details)" ng-show="reservation.details.status === 'confirmed'">
+        <button class="button button-small button-outline button-royal" ng-click="remind(reservation.details)" ng-show="reservation.details.status === 'confirmed'">
           Remind
         </button>
         <button class="button button-small button-outline button-assertive" ng-click="reject(reservation.details)" ng-show="reservation.details.status !== 'cancelled'" >

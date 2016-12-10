@@ -70,8 +70,11 @@
                     <img class="center" ng-show="!imageURL && !eRestaurant.photoURL" ng-src="img/ionic.png" width="100%" />
                     <img class="center" ng-show="!imageURL && eRestaurant.photoURL" ng-src="{{eRestaurant.photoURL}}" width="100%" />
                     <img class="center" ng-show="imageURL" ng-src="{{imageURL}}" width="100%" />
-                    <div ng-show="progress" class="progress-bar" style="width: {{progress}}%;">
+                    <!-- <div ng-show="progress" class="progress-bar" style="width: {{progress}}%;">
                       <p class="percent">{{progress}}%</p>
+                    </div> -->
+                    <div class="col text-center">
+                      <ion-spinner ng-if="imageLoading" icon="android"></ion-spinner>
                     </div>
                   </div>
                 </div>

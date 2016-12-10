@@ -6,11 +6,11 @@
 </div>
   </ion-header-bar>
   <ion-content class="padding">
-    <form ng-submit="addReply(rep)">
+    <form ng-submit="newReply ? addReply(reply) : editReply(reply)">
       <div class="list">
         <label class="item item-input item-floating-label">
           <span class="input-label has-input">Write review here . . . </span>
-          <textarea type="text" placeholder="Write review here . . . " ng-model="rep.content" rows="6" required></textarea>
+          <textarea type="text" placeholder="Write review here . . . " ng-model="reply.content" rows="6" required></textarea>
         </label>
         <div class="padding row">
           <button type="submit" class="button button-block button-positive">Save</button>
