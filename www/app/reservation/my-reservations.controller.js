@@ -1,5 +1,5 @@
-app.controller('MyReservationsCtrl', ["$scope", "reservations", "Restaurant", "Database", "$ionicPopup",
-  function($scope, reservations, Restaurant, Database, $ionicPopup) {
+app.controller('MyReservationsCtrl', ["$scope", "reservations", "Restaurant", "Database", "$ionicPopup", "Reservation",
+  function($scope, reservations, Restaurant, Database, $ionicPopup, Reservation) {
     console.log('my reservations ctrl launched');
     $scope.test = "hello world";
 
@@ -39,6 +39,21 @@ app.controller('MyReservationsCtrl', ["$scope", "reservations", "Restaurant", "D
           }
         })
 
+    }
+
+    $scope.confirmRemind = function(reservation) {
+      var confirmRemind = $ionicPopup.confirm({
+        title: "Confirm Remind State",
+        template: "Confirming the remind state means you are sure to go to your booked reservation. Are you sure?"
+      })
+        .then((res) => {
+          if (res) {
+            Reservation.update(reservation, 'confirmed')
+          }
+          else {
+           console.log('tapp cancel')
+          }
+        })
     }
 
   }

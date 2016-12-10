@@ -8,9 +8,9 @@
   <ion-content>
     <form ng-submit="bookReservation(reservation)">
       <div class="list">
-        <label class="item item-input item-floating-label">
+        <label class="item item-input item-floating-label" ng-if="reservation.name !== undefined">
           <span class="input-label has-input">Name</span>
-          <input type="text" placeholder="Name" ng-model="reservation.name" ng-if="reservation.name !== undefined"/>
+          <input type="text" placeholder="Name" ng-model="reservation.name">
         </label>
         <label class="item item-input item-floating-label">
           <span class="input-label has-input">No. of seats to reserve</span>
