@@ -2,7 +2,7 @@
   <ion-floating-menu has-footer="true" menu-color="#886aea" menu-icon="ion-plus" menu-open-color="#444">
     <ion-floating-item icon="ion-ios-calendar-outline" button-color="#387ef5" click="walkinReservation()" text="Add Reservation"></ion-floating-item>
   </ion-floating-menu>
-  <ion-content class="padding">
+  <ion-content class="padding has-tabs-top">
     <h3>Manage Reservations for {{restaurantId}}</h3>
     <ion-item ng-repeat="reservation in reservations | orderBy:'-details.timestamp'" ng-if="reservation.ready">
       <h4>Reference #{{reservation.details.timestamp}} <span class="button button-outline button-small button-balanced" ng-if="today === reservation.day">Today</span></h4>

@@ -11,5 +11,10 @@ app.controller('DashboardInteractCtrl', ['$scope', '$state', '$stateParams',
       console.log('click go to reservations');
       $state.go('tabs.dashboard.reservations', {restaurantId: $stateParams.restaurantId});
     }
+
+    $scope.goToReviews = function() {
+      console.log('click go to reviews');
+      $state.go('tabs.dashboard.reviews', {restaurantId: $stateParams.restaurantId});
+    }
   }
 ])

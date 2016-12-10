@@ -295,6 +295,18 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
         }
       }
     })
+    .state('tabs.dashboard.reviews', {
+      url: "/reviews",
+      params: {
+        restaurantId: null
+      },
+      views: {
+        'dashboard-page' : {
+          templateUrl: "app/dashboard/_dashboard-interact-reviews.html",
+          controller: "ViewRestaurantCtrl"
+        }
+      }
+    })
     .state('tabs.dashboard.main', {
       url: "/main",
       views: {
