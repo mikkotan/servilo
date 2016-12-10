@@ -5,7 +5,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     $scope.data= {detail:""};
     // $scope.facilities = $firebaseArray(firebase.database().ref().child('facilities'));
     $scope.facilities = Database.facilities();
-    $scope.pendingRestaurants = Restaurant.getPendingRestaurants();
+    // $scope.pendingRestaurants = Restaurant.getPendingRestaurants();
     $scope.displayRestaurants = User.getAuthRestaurants();
     $scope.AppUser = User.auth();
 
@@ -237,24 +237,24 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     //   };
     // }
 
-    $scope.approveRestaurant = function(restaurant) {
-      $scope.pendingRestaurants.$remove(restaurant)
-        .then(() => {
-          var add = Restaurant.addRestaurant(restaurant);
-          add.ref
-            .then(() => {
-              Restaurant.getTimestamp(add.key).transaction(function(currentTimestamp) {
-                return firebase.database.ServerValue.TIMESTAMP;
-              })
-            })
-            .catch((err) => {
-              console.log(err)
-            })
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    }
+    // $scope.approveRestaurant = function(restaurant) {
+    //   $scope.pendingRestaurants.$remove(restaurant)
+    //     .then(() => {
+    //       var add = Restaurant.addRestaurant(restaurant);
+    //       add.ref
+    //         .then(() => {
+    //           Restaurant.getTimestamp(add.key).transaction(function(currentTimestamp) {
+    //             return firebase.database.ServerValue.TIMESTAMP;
+    //           })
+    //         })
+    //         .catch((err) => {
+    //           console.log(err)
+    //         })
+    //     })
+    //     .catch((err) => {
+    //       console.log(err)
+    //     })
+    // }
 
     $scope.newRestaurant = function() {
       $scope.restaurant = {

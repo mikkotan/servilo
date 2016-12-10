@@ -1,5 +1,6 @@
-app.controller('DashboardInteractOrdersCtrl', function($scope, $stateParams, Restaurant, Order, User, Menu) {
+app.controller('DashboardInteractOrdersCtrl', function($scope, $stateParams, Restaurant, Order, User, Menu , $state) {
   var restaurantId = $stateParams.restaurantId;
+  $scope.restaurantId = restaurantId
   console.log('dashboard interact orders ctrl');
 
   Restaurant.getOrders(restaurantId).$loaded()
@@ -42,6 +43,11 @@ app.controller('DashboardInteractOrdersCtrl', function($scope, $stateParams, Res
       console.log('fail');
       console.log(err);
     })
+
+    $scope.walkInOrder = function(){
+      $state.go('tabs.viewRestaurant.main',{restaurantId:restaurantId});
+      console.log("walk in order has been clicked");
+    }
 
     $scope.changeOrderStatus = function(orderId, key, val) {
       console.log('orderId: ' + orderId);

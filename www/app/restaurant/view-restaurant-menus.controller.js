@@ -1,5 +1,6 @@
 app.controller("ViewRestaurantMenus", ["$scope", "$state", "restaurantId", "CartData", "$ionicModal", "Cart", "Restaurant", "ionicToast", "Menu", "$ionicLoading",
   function($scope, $state, restaurantId, CartData, $ionicModal, Cart, Restaurant, ionicToast, Menu, $ionicLoading) {
+    console.log("This is view restaurant menus");
     $ionicLoading.show();
     $scope.restaurantId = restaurantId
     $scope.restaurantMenus = Restaurant.getMenus(restaurantId);

@@ -32,7 +32,14 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
       url: "/tab",
       cache: false,
       abstract: true,
-      templateUrl: "templates/tabs.html"
+      templateUrl: "templates/tabs.html",
+      controller: 'TabsCtrl',
+      resolve: {
+        role : function(Auth, Role) {
+          console.log("Auth ID: " + Auth.$getAuth().uid)
+          return Role.get(Auth.$getAuth().uid);
+        }
+      }
     })
     .state('tabs.home', {
       url: "/home",
@@ -41,6 +48,20 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
           templateUrl: "app/home/_home.html",
           controller: 'HomeTabCtrl',
           controllerAs: 'home',
+          resolve: {
+            currentAuth: function(Auth) {
+              return Auth.$requireSignIn();
+            },
+          }
+        }
+      }
+    })
+    .state('tabs.pending', {
+      url: "/pending",
+      views: {
+        'pending-tab': {
+          templateUrl: "app/pendingrestaurant/_pending-restaurant.html",
+          controller: 'PendingCtrl',
           resolve: {
             currentAuth: function(Auth) {
               return Auth.$requireSignIn();
@@ -88,6 +109,9 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
     })
     .state('tabs.viewRestaurant.main', {
       url: "/main",
+      params:{
+        restaurantId : null
+      },
       views: {
         'restaurant_page': {
           templateUrl: "app/restaurant/_view-restaurant-main.html",
@@ -103,7 +127,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
     .state('tabs.viewRestaurant.reviews', {
       url: "/reviews",
       views: {
-        'restaurant-page': {
+        'restaurant_page': {
           templateUrl: "app/review/_all-reviews.html",
           controller: "ReviewCtrl",
           resolve: {
@@ -119,6 +143,9 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
     })
     .state('tabs.viewRestaurant.menus', {
       url: "/menus",
+      params:{
+        restaurantId  : null
+      },
       views: {
         'restaurant_page': {
           templateUrl: "app/restaurant/_view-restaurant-menus.html",
