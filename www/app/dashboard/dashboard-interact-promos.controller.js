@@ -1,4 +1,4 @@
-app.controller('DashboardInteractPromosCtrl', function($scope, $stateParams, $ionicModal, Promo, $ionicLoading, Restaurant) {
+app.controller('DashboardInteractPromosCtrl', function($scope, $stateParams, $ionicModal, $ionicLoading, $ionicPopup, Promo, Restaurant) {
   console.log('eheheh lleo');
   $scope.restaurantId = $stateParams.restaurantId;
 
@@ -22,7 +22,18 @@ app.controller('DashboardInteractPromosCtrl', function($scope, $stateParams, $io
         $scope.addPromoModal.hide();
         alert(err)
       })
+  }
 
+  $scope.delete = function(promo) {
+    $ionicPopup.confirm({
+      title: "Delete Promo",
+      template: "Delete '" + promo.name + "' promo?"
+    })
+      .then((res) => {
+        if (res) {
+          return Promo.delete(promo)
+        }
+      })
   }
 
   Restaurant.getPromos($scope.restaurantId).$loaded()

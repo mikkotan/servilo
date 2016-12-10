@@ -6,14 +6,18 @@
     <h6>Manage Promos for {{restaurantId}}</h6>
 
     <div class="list">
-      <a class="item item-thumbnail-left" ng-repeat="promo in promos">
+      <a class="item item-thumbnail-left item-icon-right" ng-repeat="promo in promos">
         <img src="cover.jpg">
         <h2>{{promo.name}}</h2>
         <p>{{promo.description}}</p>
         <p>
           Promo Duration: {{promo.startDate | date: "MMM d, y"}} to {{promo.endDate| date: "MMM d, y"}}
         </p>
+        <span class="item-note">
+          <button class="icon button  assertive button-small ion-android-delete" ng-click="delete(promo)"></button>
+        </span>
       </a>
+
   </div>
 
   </ion-content>
