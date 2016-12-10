@@ -13,6 +13,7 @@
     "ion-gallery": "^0.1.14",
     "ionic-image-lazy-load": "ion-image-lazy-load#*",
     "ion-floating-menu": "~1.0.5",
-    "ion-google-place": "~0.0.1"
+    "ion-google-place": "~0.0.1",
+    "ion-google-autocomplete": "~0.1.0"
   }
 }
