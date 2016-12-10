@@ -1,0 +1,20 @@
+<ion-view view-title="Interact :: Promos">
+  <ion-floating-menu has-footer="true" menu-color="#886aea" menu-icon="ion-plus" menu-open-color="#444">
+    <ion-floating-item icon="ion-ios-pricetags" button-color="#387ef5" text="Add Promo" click="addPromoModal.show()"></ion-floating-item>
+  </ion-floating-menu>
+  <ion-content class="padding has-tabs-top">
+    <h6>Manage Promos for {{restaurantId}}</h6>
+
+    <div class="list">
+      <a class="item item-thumbnail-left" ng-repeat="promo in promos">
+        <img src="cover.jpg">
+        <h2>{{promo.name}}</h2>
+        <p>{{promo.description}}</p>
+        <p>
+          Promo Duration: {{promo.startDate | date: "MMM d, y"}} to {{promo.endDate| date: "MMM d, y"}}
+        </p>
+      </a>
+  </div>
+
+  </ion-content>
+</ion-view>

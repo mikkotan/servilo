@@ -307,6 +307,18 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
         }
       }
     })
+    .state('tabs.dashboard.promos', {
+      url: "/promos",
+      params: {
+        restaurantId: null
+      },
+      views: {
+        'dashboard-page' : {
+          templateUrl: "app/dashboard/_dashboard-interact-promos.html",
+          controller: "DashboardInteractPromosCtrl"
+        }
+      }
+    })
     .state('tabs.dashboard.main', {
       url: "/main",
       views: {

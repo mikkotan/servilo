@@ -1,0 +1,35 @@
+<ion-modal-view view-title="Promo">
+  <ion-header-bar class="bar bar-header bar-assertive">
+    <h1 class="title">Create a Promo</h1>
+    <div class="buttons">
+    <button class="button button-clear button-primary" ng-click="addPromoModal.hide()"><i class="icon ion-ios-close"></i></button>
+</div>
+  </ion-header-bar>
+  <ion-content>
+    <form ng-submit="newPromo(promo)">
+      <div class="list">
+        <label class="item item-input item-floating-label">
+          <span class="input-label has-input">Promo Name</span>
+          <input type="text" placeholder="Name" ng-model="promo.name">
+        </label>
+        <label class="item item-input item-floating-label">
+          <span class="input-label has-input">Promo Description</span>
+          <textarea type="text" placeholder="Write Promo Mechanics . . . " ng-model="promo.description" rows="3" required></textarea>
+        </label>
+        <div class="item item-icon-left" ion-datetime-picker date ng-model="promo.startDate" only-valid="{'after' : 'today', 'inclusive': 'true'}">
+          <i class="icon ion-ios-barcode-outline positive"></i> Promo Start Date
+          <br>
+          <strong>{{promo.startDate| date: "MMM d, y"}}</strong>
+        </div>
+        <div class="item item-icon-left" ion-datetime-picker date ng-model="promo.endDate" only-valid="{'after' : promo.startDate, 'inclusive': 'true'}">
+          <i class="icon ion-ios-barcode-outline positive"></i> Promo End Date
+          <br>
+          <strong>{{promo.endDate| date: "MMM d, y"}}</strong>
+        </div>
+      </div>
+      <div class="padding">
+        <button type="submit" class="button button-block button-positive">Add Promo</button>
+      </div>
+    </form>
+  </ion-content>
+</ion-modal-view>
