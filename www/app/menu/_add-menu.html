@@ -38,6 +38,9 @@
               </div>
             </div>
             <img ng-src="{{photoURL}}" width="40%" />
+            <div class="col text-center">
+              <ion-spinner ng-if="imageLoading" icon="android"></ion-spinner>
+            </div>
             <div class="row">
               <button class="button button-block button-balanced ink">Submit</button>
             </div>

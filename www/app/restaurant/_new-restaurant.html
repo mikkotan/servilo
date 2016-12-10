@@ -60,8 +60,11 @@
                 <div class="row">
                   <div class="col">
                     <img class="center" ng-show="imageURL" ng-src="{{imageURL}}" width="100%" />
-                    <div ng-show="progress" class="progress-bar" style="width: {{progress}}%;">
+                    <!-- <div ng-show="progress" class="progress-bar" style="width: {{progress}}%;">
                       <p class="percent">{{progress}}%</p>
+                    </div> -->
+                    <div class="col text-center">
+                      <ion-spinner ng-if="imageLoading" icon="android"></ion-spinner>
                     </div>
                   </div>
                 </div>
