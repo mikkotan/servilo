@@ -105,7 +105,7 @@
     <variable name="XWALK_MODE" value="embedded"/>
     <variable name="XWALK_MULTIPLEAPK" value="true"/>
   </plugin>
-</widget>
+<widget>
   <plugin name="cordova-plugin-camera" spec="~2.2.0"/>
   <plugin name="cordova-plugin-image-resizer" spec="~1.0.0"/>
   <allow-navigation href="http://192.168.0.125:8100"/>
