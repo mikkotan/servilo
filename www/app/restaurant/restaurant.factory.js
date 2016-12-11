@@ -37,7 +37,11 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
             count ++;
             total += reviews[key].rating
           }
-          return (total/count).toFixed(1);
+          if (count === 0) {
+            return (0).toFixed(1);
+          } else {
+            return (total/count).toFixed(1);
+          }
         })
     },
     getMenus : function(restaurantId) {
