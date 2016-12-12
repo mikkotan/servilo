@@ -1,28 +1,27 @@
 <ion-view view-title="{{restaurant.name}}">
   <ion-content class="padding has-tabs-top">
     <img ng-if="restaurant.photoURL" ng-src="{{restaurant.photoURL}}" width="100%" />
-    <img ng-if="!restaurant.photoURL" ng-src="img/wow.jpg" width="100%">
+    <img ng-if="!restaurant.photoURL" ng-src="img/wow.jpg" width="50%">
     <div class="padding">
       <h3>{{restaurant.name}}</h3>
-        <!-- <button ng-repeat="service in restaurant.services" class="button button-calm"  ng-disabled="!service.status" ng-click="goToMenus(restaurant, service)">
-          {{service.name}}
-        </button> -->
-        <button class="button button-calm" ng-if="restaurant.facilities.Online" ui-sref="tabs.viewRestaurant.menus">Online Order</button>
-        <button class="button button-calm" ng-if="restaurant.facilities.Reservation" ng-click="showAddReservationModal()">Reservation</button>
-        <button class="button button-calm" ng-if="!hasFavored" ng-click="addToFavorites()">Add to Favorites</button>
-      </div>
-      <p ng-if="getRestaurantStatus">ONLINE</p>
-      <p ng-if="!getRestaurantStatus">OFFLINE</p>
+      <!-- <button ng-repeat="service in restaurant.services" class="button button-calm"  ng-disabled="!service.status" ng-click="goToMenus(restaurant, service)">
+        {{service.name}}
+      </button> -->
+      <button class="button button-calm" ng-if="restaurant.facilities.Online" ui-sref="tabs.viewRestaurant.menus">Online Order</button>
+      <button class="button button-calm" ng-if="restaurant.facilities.Reservation" ng-click="showAddReservationModal()">Reservation</button>
+      <button class="button button-calm" ng-if="!hasFavored" ng-click="addToFavorites(restaurant)">Add to Favorites</button>
+    <p ng-if="getRestaurantStatus">ONLINE</p>
+    <p ng-if="!getRestaurantStatus">OFFLINE</p>
 
-      <p ng-if="restaurantOpenStatus">Restaurant is: Open</p>
-      <p ng-if="!restaurantOpenStatus">Restaurant is: Closed</p>
+    <p ng-if="restaurantOpenStatus">Restaurant is: Open</p>
+    <p ng-if="!restaurantOpenStatus">Restaurant is: Closed</p>
 
-      <p ng-if="restaurantOpenStatus" style="color:green;">
-        Restaurant Hours: {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}
-      </p>
-      <p ng-if="!restaurantOpenStatus" style="color:red;">
-        Opens at {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}
-      </p>
+    <p ng-if="restaurantOpenStatus" style="color:green;">
+      Restaurant Hours: {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}
+    </p>
+    <p ng-if="!restaurantOpenStatus" style="color:red;">
+      Opens at {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}
+    </p>
       <ion-list>
         <ion-item>
           Cuisine: {{restaurant.cuisine}}
@@ -44,7 +43,7 @@
       <div class="list">
         <div class="item item-divider">
           Reviews
-          <ion-spinner ng-if="loadingReviews" icon="spiral"></ion-spinner>
+          <ion-spinner ng-if="!loadingReviews" icon="spiral"></ion-spinner>
         </div>
         <ul>
           <li class="item" ng-repeat="review in restaurantReviews" ng-init="reviewer=getName(review.reviewer_id)">
@@ -54,21 +53,17 @@
               {{review.content}} <span class="badge badge-balanced">{{review.rating}}</span>
             </h3>
             <p>
-              Displayname: {{reviewer.displayName}} <br>
-              Reviewed by: {{reviewer.firstName}} {{reviewer.lastName}}
-              <!-- Reviewed by: {{getReviewer(review).firstName}} {{getReviewer(review).lastName}} -->
+              Displayname: {{reviewer.displayName}}
             </p>
-            <!-- <ion-gallery ion-gallery-items="images"></ion-gallery> -->
             <div class="container-class">
-              <!-- <ion-scroll width="100px; height: 100px" direction="x" overflow-scroll="false"> -->
-
-                <hscroller ng-if="review.images">
-                  <hcard ng-repeat="img in review.images" index="{{$index}}" desc="" image="{{img.src}}" ng-click="showImages($index)" ng-show="$index < 5"></hcard>
-                  <hcard index="{{$index}}" desc="" image="img/plus.jpg" ng-click="showGallery(review.images)" ui-sref="tabs.viewRestaurant.gallery"></hcard>
-                </hscroller>
+              <hscroller ng-if="review.images">
+                <hcard ng-repeat="img in review.images" index="{{$index}}" desc="" image="{{img.thumb}}" ng-click="showImages($index)" ng-show="$index < 5"></hcard>
+                <hcard index="{{$index}}" desc="" image="img/plus.jpg" ng-click="showGallery(review.images)" ui-sref="tabs.viewRestaurant.gallery"></hcard>
+              </hscroller>
               <!-- </ion-scroll>  -->
-              <button ng-click="openReplyModal(review)" ng-init="replies=getReplies(review.$id)">Reply</button>
-              <div ng-repeat="reply in replies" ng-init="replyName=getName(reply.user_id)">
+              <!-- <button ng-click="openReplyModal(review)">Reply</button> -->
+               <!-- ng-init="replies=getReplies(review.$id)" -->
+              <!-- <div ng-repeat="reply in replies" ng-init="replyName=getName(reply.user_id)">
                 <div>
                   <strong>{{replyName.firstName}} {{replyName.lastName}}:</strong>
                   {{reply.content}}
@@ -77,10 +72,10 @@
                     <a class="icon ion-ios-close-outline" ng-click="replies.$remove(reply)">Remove</a>
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>
           </li>
-          <li class="item" ng-hide="loadingReviews" ui-sref="tabs.viewRestaurant.reviews">
+          <li class="item" ng-hide="!loadingReviews" ui-sref="tabs.viewRestaurant.reviews">
             See all reviews
           </li>
         </ul>

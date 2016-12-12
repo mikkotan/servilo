@@ -95,7 +95,10 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
           resolve: {
             "currentAuth": ["Auth", function(Auth) {
               return Auth.$requireSignIn();
-            }]
+            }],
+            restaurantId: function($stateParams) {
+              return $stateParams.restaurantId
+            }
           }
         }
       }

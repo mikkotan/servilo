@@ -50,4 +50,4 @@ gulp.task('git-check', function(done) {
   done();
 });
 
-gulp.task('serve:before', ['default','watch']);
+// gulp.task('serve:before', ['default','watch']);

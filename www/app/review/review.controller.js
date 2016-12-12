@@ -24,7 +24,6 @@ app.controller("ReviewCtrl", ["$scope", "restaurantId", "$ionicModal", "$ionicLi
 
     $scope.getReplies = function(reviewId) {
       return Review.getReplies(restaurantId, reviewId);
-      // return $firebaseObject(Database.reviewsReference().child(reviewId).child('replies'))
     }
 
     $scope.getName = function(reviewerId) {
@@ -38,27 +37,11 @@ app.controller("ReviewCtrl", ["$scope", "restaurantId", "$ionicModal", "$ionicLi
     })
 
     $scope.openReplyModal = function(review) {
-      $scope.reply = {};
-      console.log('hihihi')
-      $scope.newReply = true;
-      $scope.replyTitle = "New Reply";
-      $scope.reply.content = "";
-      $scope.addReplyModal.show();
-      $scope.reviewId = review.$id;
+      Restaurant.openReplyModal($scope, review);
     }
 
     $scope.openEditReplyModal = function(reply, reviewId) {
-      $scope.newReply = false;
-      $scope.replyTitle = "Edit Reply";
-      $scope.addReplyModal.show();
-      $scope.reply = {
-        content: reply.content,
-        $id: reply.$id,
-        oldContent: reply.content,
-        user_id: reply.user_id,
-        reviewId: reviewId,
-        restaurantId: restaurantId
-      }
+      Restaurant.openEditReplyModal($scope, reply, reviewId, restaurantId);
     }
 
     $scope.addReply = function(reply) {
