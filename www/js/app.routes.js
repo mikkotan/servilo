@@ -2,7 +2,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
   ionGalleryConfigProvider.setGalleryConfig({
     action_label: 'Close',
     toggle: true,
-    row_size: 3,
+    row_size: 4,
     fixed_row_size: true
   });
   firebase.initializeApp(firebaseConfigProvider.$get());
@@ -74,7 +74,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
       views: {
         'search-tab': {
           templateUrl: "app/restaurant/_view-restaurant.html",
-          // controller: "ViewRestaurantCtrl",
+          controller: "ViewRestaurantCtrl",
           resolve: {
             currentAuth: function(Auth) {
               return Auth.$requireSignIn();
@@ -106,7 +106,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
     .state('tabs.viewRestaurant.reviews', {
       url: "/reviews",
       views: {
-        'restaurant_page': {
+        'restaurant-page': {
           templateUrl: "app/review/_all-reviews.html",
           controller: "ReviewCtrl",
           resolve: {
@@ -116,20 +116,6 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
             restaurantId: function($stateParams) {
               return $stateParams.restaurantId
             }
-          }
-        }
-      }
-    })
-    .state('tabs.viewRestaurant.gallery', {
-      url: "/gallery",
-      views: {
-        'restaurant_page': {
-          templateUrl: "app/gallery/_gallery.html",
-          controller: "GalleryCtrl",
-          resolve: {
-            "currentAuth": ["Auth", function(Auth) {
-              return Auth.$requireSignIn();
-            }],
           }
         }
       }
@@ -228,13 +214,13 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
         }
       }
     })
-    .state('tabs.orders', {
+    .state('tabs.dashboard.orders', {
       url: "/orders",
       params: {
         restaurantId: null
       },
       views: {
-        'order-tab': {
+        'dashboard-page': {
           templateUrl: "app/dashboard/_dashboard-interact-orders.html",
           controller: "DashboardInteractOrdersCtrl"
         }
@@ -300,15 +286,39 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
         }
       }
     })
-    .state('tabs.reservations', {
+    .state('tabs.dashboard.reservations', {
       url: "/reservations",
       params: {
         restaurantId: null
       },
       views: {
-        'reservations-tab' : {
+        'dashboard-page' : {
           templateUrl: "app/dashboard/_dashboard-interact-reservations.html",
           controller: "DashboardInteractReservationsCtrl"
+        }
+      }
+    })
+    .state('tabs.dashboard.reviews', {
+      url: "/reviews",
+      params: {
+        restaurantId: null
+      },
+      views: {
+        'dashboard-page' : {
+          templateUrl: "app/dashboard/_dashboard-interact-reviews.html",
+          controller: "ViewRestaurantCtrl"
+        }
+      }
+    })
+    .state('tabs.dashboard.promos', {
+      url: "/promos",
+      params: {
+        restaurantId: null
+      },
+      views: {
+        'dashboard-page' : {
+          templateUrl: "app/dashboard/_dashboard-interact-promos.html",
+          controller: "DashboardInteractPromosCtrl"
         }
       }
     })
@@ -344,15 +354,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
       views: {
         'restaurant-tab': {
           templateUrl: "app/restaurant/_restaurants.html",
-          controller: "RestaurantCtrl",
-          resolve: {
-            "currentAuth": ["Auth", function(Auth) {
-              return Auth.$requireSignIn();
-            }],
-            currentGeoLocation: function(CordovaGeolocation) {
-              return CordovaGeolocation.get();
-            }
-          }
+          controller: "RestaurantCtrl"
         }
       }
     })

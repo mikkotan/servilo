@@ -224,7 +224,7 @@ ion-popover-view.fit ion-content {
   display: block; }
 
 .image-list-thumb {
-  padding: 2px 2px 2px 2px;
+  padding: 2px;
   height: 150px; }
 
 .image-modal {
@@ -282,6 +282,18 @@ ion-slides .card {
   max-height: 100%;
   margin: auto;
   display: block; }
+
+.button-bar > .button {
+  border: 1px solid #cfcfcf; }
+
+.button-bar > .button:last-child {
+  border-radius: 0 20px 20px 0 !important; }
+
+.button-bar > .button:first-child {
+  border-radius: 20px 0 0 20px !important; }
+
+a.button.button-block {
+  width: 100%; }
 
 .gallery-view .image-container {
   position: relative;

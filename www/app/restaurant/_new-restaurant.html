@@ -5,10 +5,11 @@
     <button class="button button-clear button-primary" ng-click="restaurantModal.hide()"><i class="icon ion-ios-close"></i></button>
 </div>
   </ion-header-bar>
-  <ion-content class="padding">
-    <ion-list>
-      <div class="card">
-        <ion-item id="form-input">
+  <!-- <ion-content class="padding"> -->
+  <ion-content>
+    <!-- <ion-list> -->
+      <!-- <div class="card"> -->
+        <!-- <ion-item id="form-input"> -->
           <form ng-submit="addRestaurant(restaurant)">
             <div class="list">
               <label class="item item-input item-floating-label">
@@ -44,13 +45,14 @@
               <div class="item">
                 <a class="button button-block button-royal icon-left ion-plus-circled" ng-click="setOpenDays()">Set Open Days</a>
               </div>
-              <div class="item item-input-inset">
+              <!-- <div class="item item-input-inset"> -->
+
                 <label class="item-input item-floating-label">
                   <span class="input-label has-input">Location of Restaurant</span>
-                  <input type="text" placeholder="Location of Restaurant" ng-model="restaurant.location" details="data.detail" googleplace/>
+                  <input type="text" placeholder="Location of Restaurant" ng-model="restaurant.location" details="data.detail"/>
                 </label>
-                <a class="button button-royal icon ion-map" ng-click="showMap()"></a>
-              </div>
+                <a class="button button-block button-royal icon-left ion-map" ng-click="showMap()">Choose using Map</a>
+              <!-- </div> -->
               <div class="item">
                 <div class="row">
                   <div class="col text-center">
@@ -83,8 +85,8 @@
             </div>
 
           </form>
-        </ion-item>
-      </div>
-    </ion-list>
+        <!-- </ion-item> -->
+      <!-- </div> -->
+    <!-- </ion-list> -->
   </ion-content>
 </ion-modal-view>

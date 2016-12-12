@@ -46,9 +46,9 @@ app.factory("Upload", ["Database", "$firebaseArray", "$q",
               });
             }, function (error) {
               console.log("Error : \r\n" + error);
-            }, base64Cut, 
+            }, base64Cut,
             150,
-            150, 
+            150,
             {
               resizeType: ImageResizer.RESIZE_TYPE_PIXEL,
               imageDataType: ImageResizer.IMAGE_DATA_TYPE_BASE64,
@@ -150,6 +150,20 @@ app.factory("Upload", ["Database", "$firebaseArray", "$q",
         deferred.resolve(error);
       }, function() {
         deferred.resolve(menuRef.snapshot.downloadURL);
+      });
+      return deferred.promise;
+    },
+    promo : function(base64) {
+      var deferred = $q.defer();
+      var promoRef = storageRef.child(getChild('promo')).putString(base64, 'base64', metadata);
+      promoRef.on('state_changed', function(snapshot) {
+        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+      }, function(error) {
+        console.log("error in uploading." + error);
+        deferred.resolve(error);
+      }, function() {
+        deferred.resolve(promoRef.snapshot.downloadURL);
       });
       return deferred.promise;
     }

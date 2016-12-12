@@ -4,12 +4,22 @@ app.controller('DashboardInteractCtrl', ['$scope', '$state', '$stateParams',
 
     console.log($stateParams.restaurantId);
     $scope.goToOrders = function() {
-      $state.go('tabs.orders', {restaurantId: $stateParams.restaurantId});
+      $state.go('tabs.dashboard.orders', {restaurantId: $stateParams.restaurantId});
     }
 
     $scope.goToReservations = function() {
       console.log('click go to reservations');
-      $state.go('tabs.reservations', {restaurantId: $stateParams.restaurantId});
+      $state.go('tabs.dashboard.reservations', {restaurantId: $stateParams.restaurantId});
+    }
+
+    $scope.goToReviews = function() {
+      console.log('click go to reviews');
+      $state.go('tabs.dashboard.reviews', {restaurantId: $stateParams.restaurantId});
+    }
+
+    $scope.goToPromos = function() {
+      console.log('click go to promos');
+      $state.go('tabs.dashboard.promos', {restaurantId: $stateParams.restaurantId});
     }
   }
 ])
