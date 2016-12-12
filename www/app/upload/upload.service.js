@@ -100,6 +100,14 @@ app.factory("Upload", ["Database", "$firebaseArray", "$q",
         saveToPhotoAlbum: false
       }
     },
+    getMultipleUploadOptions : function() {
+      var options = {
+        maximumImagesCount: 10,
+        width: 400,
+        quality: 20
+      }
+      return options;
+    },
     getProgress : function(snapshot) {
       return (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
     },

@@ -225,6 +225,29 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
     },
     delete: function(restaurantId) {
       return Database.restaurantsReference().child(restaurantId).remove()
+    },
+    //////////////repeated functions
+    openReplyModal : function($scope, review) {
+      $scope.reply = {};
+      console.log('new reply')
+      $scope.newReply = true;
+      $scope.replyTitle = "New Reply";
+      $scope.reply.content = "";
+      $scope.addReplyModal.show();
+      $scope.reviewId = review.$id;
+    },
+    openEditReplyModal : function($scope, reply, reviewId, restaurantId) {
+      $scope.newReply = false;
+      $scope.replyTitle = "Edit Reply";
+      $scope.addReplyModal.show();
+      $scope.reply = {
+        content: reply.content,
+        $id: reply.$id,
+        oldContent: reply.content,
+        user_id: reply.user_id,
+        reviewId: reviewId,
+        restaurantId: restaurantId
+      }
     }
   }
 

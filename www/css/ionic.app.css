@@ -278,11 +278,6 @@ body.menu-open ion-side-menu-content {
 ion-slides {
   height: 40vh !important; }
 
-ion-slides .slider-imgs {
-  max-height: 100%;
-  margin: auto;
-  display: block; }
-
 ion-slides .card {
   max-height: 100%;
   margin: auto;
