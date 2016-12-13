@@ -29,7 +29,7 @@
           Location: {{restaurant.location}}
         </ion-item>
         <div ng-show="!exists">
-          <button ng-click="reviewModal.show()" class="button button-block button-balanced">
+          <button ng-click="openReviewModal()" class="button button-block button-balanced ink">
             <icon class="ion-plus"></icon> Write Review</button>
         </div>
         <div class="button-bar" ng-show="exists">

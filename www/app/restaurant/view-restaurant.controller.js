@@ -130,6 +130,11 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
       $scope.images = [];
     }
 
+    $scope.openReviewModal = function() {
+      $scope.reviewModal.show();
+      $scope.$emit('applyInk');
+    }
+
     $scope.addReview = function(review) {
       $ionicLoading.show();
       var newReview = Review.addReview(restaurantId, review);
