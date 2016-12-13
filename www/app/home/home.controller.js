@@ -1,8 +1,29 @@
-app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal", "$state", "ionicMaterialInk", "ionicMaterialMotion", "$ionicLoading", "Home", "$timeout", "User", "Auth", "CordovaGeolocation",
-  function($scope, $ionicSlideBoxDelegate, $ionicModal, $state, ionicMaterialInk, ionicMaterialMotion, $ionicLoading, Home, $timeout, User, Auth, CordovaGeolocation) {
+app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal", "$state", "ionicMaterialInk", "ionicMaterialMotion", "$ionicLoading", "Home", "$timeout", "User", "Auth", "CordovaGeolocation", "Advertisement", "Restaurant",
+  function($scope, $ionicSlideBoxDelegate, $ionicModal, $state, ionicMaterialInk, ionicMaterialMotion, $ionicLoading, Home, $timeout, User, Auth, CordovaGeolocation, Advertisement, Restaurant) {
     // ionicMaterialInk.displayEffect();
     var vm = this;
     $scope.currentLocation = CordovaGeolocation.get();
+
+    Advertisement.getRestaurants().$loaded()
+      .then((restaurants) => {
+        $scope.advertisedRestaurants = restaurants
+
+        $scope.$watchCollection('advertisedRestaurants', function(watchedAdvertisements) {
+          $scope.newAdvertisements = watchedAdvertisements.map(function(advertisement) {
+            var a = {
+              get : Restaurant.get(advertisement.$id).$loaded()
+                .then((restaurant) => {
+                  a.details = restaurant
+                })
+            }
+            return a
+          })
+        })
+
+      })
+      .catch((err) => {
+        alert(err)
+      })
 
     $scope.$on('ngLastRepeat.workorderlist',function(e) {
         $scope.materialize();
@@ -14,7 +35,7 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
             ionicMaterialInk.displayEffect();
           },0);
     };
-    
+
     Auth.$onAuthStateChanged(function(firebaseUser) {
       console.log('on auth state changed running');
       if (firebaseUser) {
@@ -96,6 +117,14 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
       });
       return data;
     }
+    
+    $scope.CallNumber = function(number) {
+      window.plugins.CallNumber.callNumber(function() {
+        console.log("call success");
+      }, function() {
+        console.log("call failed");
+      }, number)
+    };
 
     //getting the distance
     $scope.getDistance = function(restaurant) {
