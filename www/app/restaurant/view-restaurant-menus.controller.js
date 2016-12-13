@@ -3,6 +3,33 @@ app.controller("ViewRestaurantMenus", ["$scope", "$state", "restaurantId", "Cart
     $ionicLoading.show();
     $scope.restaurantId = restaurantId
     $scope.restaurantMenus = Restaurant.getMenus(restaurantId);
+    $scope.options = {
+      loop: true,
+      effect: 'slide',
+      autoplay: 5000,
+      speed: 500,
+    }
+    $scope.data = {};
+    $scope.$watch('data.slider', function(nv, ov) {
+      $scope.slider = $scope.data.slider;
+    })
+
+    $scope.promoFilter = function() {
+      return function(promo) {
+        var now = new Date();
+        promo.start = new Date(promo.startDate)
+        promo.end = new Date(promo.endDate)
+
+        return promo.start.setHours(0) <= now.setHours(0) && promo.end.setHours(23) >= now.setHours(0)
+      }
+    }
+    
+    Restaurant.getPromos(restaurantId).$loaded()
+      .then((promos) => {
+        $scope.promos = promos
+      })
+      .catch((err) => { alert(err) })
+
     Restaurant.getMenus(restaurantId).$loaded()
       .then((menus) => {
         if (menus.length == 0) {

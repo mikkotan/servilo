@@ -19,7 +19,8 @@ app.controller('DashboardInteractPromosCtrl', function($scope, $stateParams, $io
 
   $scope.newPromo = function(promo) {
     $ionicLoading.show();
-    console.log(promo);
+    promo.startDate.setHours(0);
+    promo.endDate.setHours(23);
     Promo.create({
       restaurant_id: $scope.restaurantId,
       photoURL: $scope.imageURL,
