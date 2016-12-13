@@ -1,5 +1,5 @@
-app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera", "CordovaGeolocation", "currentGeoLocation", "Upload", "$ionicPopup", "Order", "Database", "Reservation",
-  function($scope, $firebaseArray, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation, currentGeoLocation, Upload, $ionicPopup, Order, Database, Reservation) {
+app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera", "CordovaGeolocation", "Upload", "$ionicPopup", "Order", "Database", "Reservation",
+  function($scope, $firebaseArray, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation, Upload, $ionicPopup, Order, Database, Reservation) {
 
     $scope.modalControl = {};
     // $scope.facilities = $firebaseArray(firebase.database().ref().child('facilities'));
@@ -19,7 +19,6 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     }
 
     $scope.showMap = function() {
-
       var lat = $scope.marker.coords.latitude;
       var long = $scope.marker.coords.longitude;
       $scope.setMarker(lat, long);
@@ -81,41 +80,6 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
       Restaurant.changeAvailability(restaurant);
     };
 
-    $scope.testPhoto = function() {
-      navigator.camera.getPicture(onSuccess, onFail, {
-        sourceType: Camera.PictureSourceType.CAMERA,
-        quality: 50,
-        destinationType: Camera.DestinationType.DATA_URL,
-        encodingType: Camera.EncodingType.JPEG,
-        mediaType: Camera.MediaType.PICTURE,
-        correctOrientation: true,
-      });
-
-      function onSuccess(imageURI) {
-        var storageRef = firebase.storage().ref();
-        var metadata = {
-          contentType: 'image/jpeg'
-        };
-        storageRef.child('test.jpg').putString(imageURI, 'base64', metadata);
-        window.imageResizer.resizeImage(
-          function(data) {
-            storageRef.child('test-thumb.jpg').putString(data.imageData, 'base64', metadata);
-          },
-          function(error) {
-            console.log("Error : \r\n" + error);
-          }, imageURI, 0.1, 0.1, {
-            resizeType: ImageResizer.RESIZE_TYPE_FACTOR,
-            imageDataType: ImageResizer.IMAGE_DATA_TYPE_BASE64,
-            format: ImageResizer.FORMAT_JPG
-          }
-        );
-      }
-
-      function onFail(message) {
-        alert('Failed because: ' + message);
-      }
-    }
-
     $scope.imageURL = "";
     $scope.upload = function(index) {
       navigator.camera.getPicture(function(imageData) {
@@ -154,17 +118,21 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     }
 
     $scope.addRestaurant = function(restaurant) {
-      var location = $scope.data.location.formatted_address
-      var lat = $scope.marker.coords.latitude
-      var long = $scope.marker.coords.longitude
-      Restaurant.addPendingRestaurant(restaurant, location, lat, long, $scope.imageURL);
-      clearFields(restaurant);
-      $scope.restaurantModal.hide();
+      try {
+        var location = $scope.data.location.formatted_address
+        var lat = $scope.marker.coords.latitude
+        var long = $scope.marker.coords.longitude
+        Restaurant.addPendingRestaurant(restaurant, location, lat, long, $scope.imageURL);
+        clearFields(restaurant);
+        $scope.restaurantModal.hide();
+      } catch (e) {
+        $scope.submitError = true;
+      }
     }
 
     $scope.edit = function(restaurant) {
       console.log(JSON.stringify(restaurant, null, 4));
-      
+
       Restaurant.editRestaurant(restaurant, $scope.marker, $scope.imageURL)
         .then(function() {
           $scope.imageURL = null;

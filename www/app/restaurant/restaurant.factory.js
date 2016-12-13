@@ -14,6 +14,7 @@ app.factory("Restaurant", ["$firebaseArray", "User", "Database", "$firebaseObjec
     var Restaurant = {
       all: function() {
         return Database.restaurants();
+
       },
       getAuthUserRestaurants: function() {
         var authUserId = User.auth().$id;
@@ -37,7 +38,11 @@ app.factory("Restaurant", ["$firebaseArray", "User", "Database", "$firebaseObjec
               count++;
               total += reviews[key].rating
             }
-            return (total / count).toFixed(1);
+            if (count === 0) {
+              return (0).toFixed(1);
+            } else {
+              return (total / count).toFixed(1);
+            }
           })
       },
       getMenus: function(restaurantId) {
@@ -220,20 +225,21 @@ app.factory("Restaurant", ["$firebaseArray", "User", "Database", "$firebaseObjec
             totalRatingCount: 0,
             avgRate: 0
           }
+
         }
         var pendingRef = Database.pendingsReference().push();
         return pendingRef.set(restObj);
       },
-      editRestaurant: function(restaurant, marker, imageURL) {
+      editRestaurant: function(restaurant, location, lat, long, imageURL) {
         console.log(JSON.stringify(restaurant, null, 4));
         var resRef = restaurants.child(restaurant.$id);
         var OT = new Date(restaurant.openTime);
         var CT = new Date(restaurant.closeTime);
         var restObj = {
           name: restaurant.name,
-          location: restaurant.location,
-          latitude: marker.coords.latitude,
-          longitude: marker.coords.longitude,
+          location: location,
+          latitude: lat,
+          longitude: long,
           facilities: restaurant.facilities,
           openDays: restaurant.openDays,
           type: restaurant.type,
@@ -247,9 +253,31 @@ app.factory("Restaurant", ["$firebaseArray", "User", "Database", "$firebaseObjec
       },
       delete: function(restaurantId) {
         return Database.restaurantsReference().child(restaurantId).remove()
+      },
+      //////////////repeated functions
+      openReplyModal: function($scope, review) {
+        $scope.reply = {};
+        console.log('new reply')
+        $scope.newReply = true;
+        $scope.replyTitle = "New Reply";
+        $scope.reply.content = "";
+        $scope.addReplyModal.show();
+        $scope.reviewId = review.$id;
+      },
+      openEditReplyModal: function($scope, reply, reviewId, restaurantId) {
+        $scope.newReply = false;
+        $scope.replyTitle = "Edit Reply";
+        $scope.addReplyModal.show();
+        $scope.reply = {
+          content: reply.content,
+          $id: reply.$id,
+          oldContent: reply.content,
+          user_id: reply.user_id,
+          reviewId: reviewId,
+          restaurantId: restaurantId
+        }
       }
     }
-
     return Restaurant;
   }
 ]);

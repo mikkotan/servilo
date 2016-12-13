@@ -1,10 +1,51 @@
-app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMaterialInk", "$ionicPopup", "CordovaGeolocation", "ionicToast", "$ionicLoading", "Search", "currentGeoLocation", "Restaurant",
-  function($scope, Auth, $state, User, ionicMaterialInk, $ionicPopup, CordovaGeolocation, ionicToast, $ionicLoading, Search, currentGeoLocation, Restaurant) {
+app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMaterialInk", "$timeout", "$ionicPopup", "CordovaGeolocation", "ionicToast", "$ionicLoading", "Search", "currentGeoLocation", "Restaurant", "$ionicActionSheet",
+  function($scope, Auth, $state, User, ionicMaterialInk, $timeout, $ionicPopup, CordovaGeolocation, ionicToast, $ionicLoading, Search, currentGeoLocation, Restaurant, $ionicActionSheet) {
 
+    $scope.$on('ngLastRepeat.workorderlist',function(e) {
+      $scope.materialize();
+    });
+
+    $scope.materialize = function(){
+      $timeout(function(){
+        // ionicMaterialMotion.fadeSlideInRight();
+        ionicMaterialInk.displayEffect();
+        },0);
+    };
+
+    $scope.showActionsheet = function(restaurant) {
+      $ionicActionSheet.show({
+        titleText: '<p class="capitalize">' + restaurant.name + '</p>',
+        buttons: [
+          { text: '<i class="icon ion-arrow-right-b"></i> View' },
+          { text: '<i class="icon ion-ios-telephone"></i> Call' }
+        ],
+        // destructiveText: 'Delete',
+        cancelText: 'Cancel',
+        cancel: function() {
+          console.log('CANCELLED');
+        },
+        buttonClicked: function(index) {
+          console.log("ari ko d??")
+          switch(index) {
+            case 0:
+              $state.go("tabs.viewRestaurant.main", {"restaurantId":restaurant.$id});
+              break;
+            case 1:
+              $scope.CallNumber(restaurant.phonenumber);
+              break;
+          }
+          console.log('BUTTON CLICKED', index);
+          return true;
+        },
+        // destructiveButtonClicked: function() {
+        //   console.log('DESTRUCT');
+        //   return true;
+        // }
+      });
+    }
     console.log('SearchTabCtrl');
     $scope.restaurants = [];
     $scope.markers = [];
-    ionicMaterialInk.displayEffect();
     $scope.map = Search.getMap();
     var isMarkerCanChange = true;
     $scope.mapText = "Nearest restaurant to your location (1km)";
@@ -18,10 +59,10 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
     $scope.goToMyOrders = function() {
       $state.go("tabs.myOrders")
     }
+
     $scope.$watch('restaurants', function() {
       console.log('restaurants changed');
     })
-
 
     $scope.$watchCollection('restaurants', function(newRestaurants) {
       console.log('WATCH COLLECTION BEING RUN');
@@ -187,6 +228,8 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
         $scope.restaurants = []
       }
       $scope.map.zoom = 12;
+      $scope.map.center.latitude = 10.729984;
+      $scope.map.center.longitude = 122.549298;
       isMarkerCanChange = true;
     }
 

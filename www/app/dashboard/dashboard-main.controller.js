@@ -43,7 +43,7 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
         $scope.setMarker($scope.data.location.geometry.location.lat(), $scope.data.location.geometry.location.lng());
       }
     });
-    
+
     $scope.setHours = function() {
       var hoursPopup = $ionicPopup.confirm({
         title: 'Set Opening and Closing Hours',
@@ -209,8 +209,9 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
         location: restaurant.location,
         photoURL: restaurant.photoURL
       };
-
-      $scope.data.location = restaurant.location;
+      $scope.data.location = {
+        formatted_address : restaurant.location
+      };
       $scope.restaurantEditModal.show();
       if (restaurant.photoURL) {
         $scope.imageURL = restaurant.photoURL;
@@ -237,7 +238,10 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
 
     $scope.edit = function(restaurant) {
       $ionicLoading.show();
-      Restaurant.editRestaurant(restaurant, $scope.marker, $scope.imageURL)
+      var location = $scope.data.location.formatted_address
+      var lat = $scope.marker.coords.latitude
+      var long = $scope.marker.coords.longitude
+      Restaurant.editRestaurant(restaurant, location, lat, long, $scope.imageURL)
         .then(function() {
           $scope.imageURL = null;
           $scope.progress = null;

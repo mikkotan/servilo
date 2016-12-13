@@ -2,38 +2,51 @@
   <ion-floating-menu has-footer="true" menu-color="#886aea" menu-icon="ion-plus" menu-open-color="#444" backdrop="true">
     <ion-floating-item icon="ion-ios-calendar-outline" button-color="#387ef5" click="walkinReservation()" text="Add Reservation"></ion-floating-item>
   </ion-floating-menu>
-  <ion-content class="padding">
-    <h3>Manage Reservations for {{restaurantId}}</h3>
-    <ion-item ng-repeat="reservation in reservations | orderBy:'-details.timestamp'" ng-if="reservation.ready">
-      <h4>Reference #{{reservation.details.timestamp}} <span class="button button-outline button-small button-balanced" ng-if="today === reservation.day">Today</span></h4>
-
-
+  <ion-content class="padding has-tabs-top">
+    <h3>Displaying {{filterType}} reservations.</h3>
+    <div class="button-bar">
+      <button class="button button-small button-balanced" ng-click="setFilter('today')">View Today</button>
+      <button class="button button-small button-balanced" ng-click="setFilter('all')">View All</button>
+      <button class="button button-small button-balanced" ng-click="setFilter('upcoming')">View Upcoming</button>
+      <button class="button button-small button-balanced" ng-click="setFilter('confirmed')">View Confirmed</button>
+    </div>
+    <ion-item ng-repeat="reservation in reservations | orderBy:'-details.timestamp' | filter: reservationFilter(filterType)" ng-if="reservation.ready">
+      <h4>
+        <icon class="ion-ios-barcode-outline"></icon> Reference #{{reservation.details.timestamp}}
+        <span class="button button-outline button-small button-balanced" ng-if="today === reservation.day">Today</span>
+      </h4>
       <p ng-if="reservation.details.name == undefined">
-        Customer Name: {{reservation.customer_name}}
+        <icon class="ion-person"></icon> Customer Name: {{reservation.customer_name}}
       </p>
       <p ng-if="reservation.details.name">
+        <icon class="ion-person"></icon>
         Customer Name: {{reservation.details.name}}
       </p>
       <p>
-        Pax: {{reservation.details.number_of_persons}}
+        <icon class="ion-person-stalker"></icon>
+        Number of seats: {{reservation.details.number_of_persons}}
       </p>
       <p>
+        <icon class="ion-ios-calendar-outline"></icon>
         Date: {{reservation.details.datetime | date: "MMM d, y h:mm a"}}
       </p>
       <p ng-show="reservation.details.status">
         Status: {{reservation.details.status}}
       </p>
-      <div ng-if="reservation.details.status !== 'walk-in'">
-        <button class="button button-small button-outline button-balanced" ng-click="confirm(reservation.details)" ng-show="reservation.details.status === 'pending'">
+      <!-- <div class='button-bar' ng-if="reservation.details.status !== 'walk-in'> -->
+      <div class="button-bar" ng-if="reservation.details.status !== 'walk-in'">
+        <button class="button button-small button-outline button-balanced" ng-click="confirm(reservation.details)" ng-if="reservation.details.status === 'pending'">
           Confirm
         </button>
-        <button class="button button-small button-outline button-royal" ng-click="remind(reservation.details)" ng-show="reservation.details.status === 'confirmed'">
+        <button class="button button-small button-outline button-royal" ng-click="remind(reservation.details)" ng-if="reservation.details.status === 'confirmed'">
           Remind
         </button>
-        <button class="button button-small button-outline button-assertive" ng-click="reject(reservation.details)" ng-show="reservation.details.status !== 'cancelled'" >
+        <button class="button button-small button-outline button-assertive" ng-click="reject(reservation.details)" ng-if="reservation.details.status !== 'cancelled'" >
           Reject
         </button>
       </div>
+
+      <!-- </div> -->
 
     </ion-item>
   </ion-content>

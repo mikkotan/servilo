@@ -38,11 +38,11 @@
     <ion-list>
       <h3>Results</h3>
       <ion-spinner ng-show="loading" icon="lines"></ion-spinner>
-      <div class="card padding" ng-repeat="restaurant in (filteredItems = newRestaurants)" ng-if="restaurant.ready">
+      <div class="card ink" ng-repeat="restaurant in newRestaurants" ng-if="restaurant.ready" ui-sref="tabs.viewRestaurant.main({restaurantId:restaurant.details.$id})" ng-last-repeat="workorderlist" on-hold="showActionsheet(restaurant.details)">
         <div class="item item-thumbnail-left">
           <img class="img-thumbnail" ng-if="restaurant.details.photoURL" ng-src="{{restaurant.details.photoURL}}" />
           <img ng-if="!restaurant.details.photoURL" ng-src="img/wow.jpg">
-          <h3 ng-init="addMarkers(restaurant.details)" ui-sref="tabs.viewRestaurant.main({restaurantId:restaurant.details.$id})">
+          <h3 ng-init="addMarkers(restaurant.details)" class="capitalize">
             <icon class="ion-spoon"></icon> {{restaurant.details.name}}
             <span style="color:green">
               <icon class="ion-android-star-outline"></icon> {{restaurant.avg}}
