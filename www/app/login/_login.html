@@ -3,27 +3,29 @@
     <section class="login-container">
       <button class="button button-block button-assertive ink" ui-sref="landing">Back</button>
       <div class="card padding">
-        <form ng-submit="login(user)">
+        <form ng-submit="login(user)" name="loginForm" novalidate>
           <div class="list">
             <label class="item item-input item-floating-label">
               <span class="input-label has-input">E-mail Address</span>
-              <input type="text" placeholder="E-mail Address" ng-model="user.email">
+              <input type="text" placeholder="E-mail Address" ng-model="user.email" name="email" ng-required=true>
+              <div class="error" ng-show="loginForm.email.$touched">
+                <p ng-show="loginForm.email.$error.required">* Email address is required</p>
+              </div>
             </label>
-            <label class="item item-input item-floating-label" ng-show="showPasswordIsChecked">
+            <label class="item item-input item-floating-label">
               <span class="input-label has-input">Password</span>
-              <input type="text" placeholder="Password" ng-model="user.password" ng-focus="onPasswordFocus()" ng-blur="onPasswordBlur()" required>
-            </label>
-            <label class="item item-input item-floating-label" ng-show="!showPasswordIsChecked">
-              <span class="input-label has-input">Password</span>
-              <input type="password" placeholder="Password" ng-model="user.password" required>
+              <input type="{{passwordType}}" placeholder="Password" ng-model="user.password" ng-required=true>
             </label>
             <div class="item item-checkbox">
               <label class="checkbox">
-                <input type="checkbox" ng-model="showPasswordIsChecked"> </label> Show Password
+                <input type="checkbox" ng-click="showHidePassword()"> </label> Show Password
             </div>
           </div>
           <div class="list">
-            <button type="submit" class="button button-block button-balanced ink">Login</button>
+            <button type="submit" class="button button-block button-balanced ink" >Login</button>
+          </div>
+          <div ng-show="invalids">
+              *Invlid email address or password
           </div>
         </form>
       </div>

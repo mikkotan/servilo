@@ -1,6 +1,6 @@
 app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMenuDelegate", "ionicMaterialMotion", "User", "$state", "$ionicLoading", "$ionicModal", "Database", "IonicPushService", "$ionicPopup", "$timeout",
   function($scope, Auth, ionicMaterialInk, $ionicSideMenuDelegate, ionicMaterialMotion, User, $state, $ionicLoading, $ionicModal, Database, IonicPushService, $ionicPopup, $timeout) {
-
+    $scope.passwordType= "password";
     ionicMaterialInk.displayEffect();
     $timeout(function() {
       ionicMaterialMotion.blinds({
@@ -277,5 +277,13 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMe
     }, {
       scope: $scope
     });
+
+    $scope.showHidePassword = function(){
+      if ($scope.passwordType == 'password'){
+        $scope.passwordType= 'text';
+      }else{
+          $scope.passwordType = 'password';
+      }
+    }
   }
 ]);

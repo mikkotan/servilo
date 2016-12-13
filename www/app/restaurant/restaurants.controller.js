@@ -71,8 +71,8 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     };
 
     $scope.testPhoto = function() {
-      navigator.camera.getPicture(onSuccess, onFail, 
-        { 
+      navigator.camera.getPicture(onSuccess, onFail,
+        {
           sourceType: Camera.PictureSourceType.CAMERA,
           quality: 50,
           destinationType: Camera.DestinationType.DATA_URL,
@@ -141,9 +141,13 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     }
 
     $scope.addRestaurant = function(restaurant) {
-      Restaurant.addPendingRestaurant(restaurant, $scope.marker, $scope.imageURL);
-      clearFields(restaurant);
-      $scope.restaurantModal.hide();
+      try{
+        Restaurant.addPendingRestaurant(restaurant, $scope.marker, $scope.imageURL);
+        clearFields(restaurant);
+        $scope.restaurantModal.hide();
+      }catch(e){
+        $scope.submitError =true;
+      }
     }
 
     $scope.edit = function(restaurant) {
