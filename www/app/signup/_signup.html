@@ -3,29 +3,40 @@
     <section class="login-container">
       <button class="button button-block button-assertive ink" ui-sref="landing">Back</button>
       <div class="card padding">
-        <form ng-submit="createUser(user)">
+        <form ng-submit="createUser(user)" name="form" novalidate>
             <div class="list">
               <label class="item item-input item-floating-label">
                 <span class="input-label has-input">First Name</span>
-                <input type="text" placeholder="First Name" ng-model="user.firstName">
+                <input type="text" placeholder="First Name" ng-model="user.firstName" name="firstName" ng-required=true>
+                <div class="error" ng-show="form.firstName.$touched || submitError">
+                  <p ng-show="form.firstName.$error.required">* First name is required</p>
+                </div>
               </label>
               <label class="item item-input item-floating-label">
                 <span class="input-label has-input">Last Name</span>
-                <input type="text" placeholder="Last Name" ng-model="user.lastName">
+                <input type="text" placeholder="Last Name" ng-model="user.lastName" name="lastName" ng-required=true>
+                <div class="error" ng-show="form.lastName.$touched || submitError">
+                  <p ng-show="form.lastName.$error.required">* Last name is required</p>
+                </div>
               </label>
               <label class="item item-input item-floating-label">
                 <span class="input-label has-input">E-mail Address</span>
-                <input type="text" placeholder="E-mail Address" ng-model="user.email">
+                <input type="email" placeholder="E-mail Address" ng-model="user.email" name="email" ng-required=true>
+                <div ng-show="form.email.$touched || submitError" class="error">
+                  <p ng-show="form.email.$error.required">* Email is required</p>
+                  <p ng-show="form.email.$invalid">* Email should be in a form of "*******@***"</p>
+                  <p ng-show="emaillAlreadyInUse">* Email already in use please choose another one</p>
+                </div>
               </label>
-              <label class="item item-input item-floating-label" ng-show="showPasswordIsChecked">
+              <label class="item item-input item-floating-label">
                 <span class="input-label has-input">Password</span>
-                <input type="text" placeholder="Password" ng-model="user.password" ng-focus="onPasswordFocus()" ng-blur="onPasswordBlur()" required>
+                <input type="{{passwordType}}" placeholder="Password" ng-model="user.password" name="password" ng-minlength="6" ng-required=true>
               </label>
-              <label class="item item-input item-floating-label" ng-show="!showPasswordIsChecked">
-                <span class="input-label has-input">Password</span>
-                <input type="password" placeholder="Password" ng-model="user.password" required>
-              </label>
-              <ion-checkbox ng-model="showPasswordIsChecked">Show password</ion-checkbox>
+              <ion-checkbox ng-click="showHidePassword()">Show password</ion-checkbox>
+              <div ng-show="form.password.$touched || submitError" class="error">
+                <p ng-show="form.password.$error.required">* Password is required</p>
+                <p ng-show="form.password.$error.minlength">* Password is to short needed atleast 6 character</p>
+              </div>
             </div>
             <div class="list">
               <button type="submit" class="button button-block button-energized ink">Signup</button>

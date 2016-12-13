@@ -16957,7 +16957,7 @@ div.hscroller-card-animated-11 {
 /* Uncomment if you want images to fade in after the card
 
   .animate-ripple .in .item-bg-image img:last-child,
-  .animate-ripple .in .item-bg-image img:last-child { 
+  .animate-ripple .in .item-bg-image img:last-child {
     opacity: 0;
   }
 
@@ -16979,7 +16979,7 @@ div.hscroller-card-animated-11 {
     transform: scale3d(1, 1, 1);
   }
   .animate-ripple .in .item-bg-image img:last-child,
-  .animate-ripple .in .item-bg-image img:last-child { 
+  .animate-ripple .in .item-bg-image img:last-child {
     opacity: 0;
   }
 
@@ -17242,13 +17242,13 @@ div.hscroller-card-animated-11 {
 
 /*!
  * Waves v0.5.4
- * http://fian.my.id/Waves 
- * 
- * Copyright 2014 Alfiana E. Sibuea and other contributors 
+ * http://fian.my.id/Waves
+ *
+ * Copyright 2014 Alfiana E. Sibuea and other contributors
  * Forked by Zach Fitzgerald and other contributors for Ionic Material
  *
- * Released under the MIT license 
- * https://github.com/fians/Waves/blob/master/LICENSE 
+ * Released under the MIT license
+ * https://github.com/fians/Waves/blob/master/LICENSE
  *
  */
 .ink, .button-fab, .button-flat, .button-raised, .button-clear, .popup .button {
@@ -18431,3 +18431,7 @@ a {
 ==================================*/
 .button {
   overflow: hidden !important; }
+
+.error p{
+    color:red;
+  }
