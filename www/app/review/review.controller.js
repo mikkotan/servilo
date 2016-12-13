@@ -1,5 +1,17 @@
-app.controller("ReviewCtrl", ["$scope", "restaurantId", "$ionicModal", "$ionicListDelegate", "Restaurant", "Review", "$ionicPopup", "User",
-  function($scope, restaurantId, $ionicModal, $ionicListDelegate, Restaurant, Review, $ionicPopup, User) {
+app.controller("ReviewCtrl", ["$scope", "restaurantId", "$ionicModal", "$ionicListDelegate", "Restaurant", "Review", "$ionicPopup", "User", "ionicMaterialInk", "$timeout",
+  function($scope, restaurantId, $ionicModal, $ionicListDelegate, Restaurant, Review, $ionicPopup, User, ionicMaterialInk, $timeout) {
+
+    ionicMaterialInk.displayEffect();
+
+    $scope.$on('ngLastRepeat.reviewList',function(e) {
+      $scope.materialize();
+    });
+
+    $scope.materialize = function(){
+      $timeout(function(){
+        ionicMaterialInk.displayEffect();
+        },0);
+    };
 
     Restaurant.getReviews(restaurantId).$loaded().then(function(reviews) {
       $scope.reviews = reviews;
