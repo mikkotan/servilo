@@ -95,7 +95,10 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
           resolve: {
             "currentAuth": ["Auth", function(Auth) {
               return Auth.$requireSignIn();
-            }]
+            }],
+            restaurantId: function($stateParams) {
+              return $stateParams.restaurantId
+            }
           }
         }
       }
@@ -103,7 +106,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
     .state('tabs.viewRestaurant.reviews', {
       url: "/reviews",
       views: {
-        'restaurant-page': {
+        'restaurant_page': {
           templateUrl: "app/review/_all-reviews.html",
           controller: "ReviewCtrl",
           resolve: {
@@ -113,6 +116,20 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
             restaurantId: function($stateParams) {
               return $stateParams.restaurantId
             }
+          }
+        }
+      }
+    })
+    .state('tabs.viewRestaurant.gallery', {
+      url: "/gallery",
+      views: {
+        'restaurant_page': {
+          templateUrl: "app/gallery/_gallery.html",
+          controller: "GalleryCtrl",
+          resolve: {
+            "currentAuth": ["Auth", function(Auth) {
+              return Auth.$requireSignIn();
+            }],
           }
         }
       }

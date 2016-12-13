@@ -6,8 +6,8 @@
 
 var app = angular.module('app', ['ui.mask', 'ionic', 'ionic.cloud', 'ionMdInput', 'ionic-material', 'ion-floating-menu', 'firebase', 'ionic.rating', 'ionic-toast', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker', 'yaru22.angular-timeago', 'ui.select', 'ngSanitize', '$actionButton', 'ion-gallery', 'ionicLazyLoad', 'ionic.contrib.ui.hscrollcards', 'ion-google-autocomplete'])
 
-app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushService", "User", "Database", "$cordovaGeolocation", "$ionicPopup", "$cordovaPushV5", "Cart", "$ionicLoading",
-  function($ionicPlatform, $rootScope, $state, $templateCache, IonicPushService, User, Database, $cordovaGeolocation, $ionicPopup, $cordovaPushV5, Cart, $ionicLoading) {
+app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushService", "User", "Database", "$cordovaGeolocation", "$ionicPopup", "$cordovaPushV5", "Cart", "$ionicLoading", "Auth",
+  function($ionicPlatform, $rootScope, $state, $templateCache, IonicPushService, User, Database, $cordovaGeolocation, $ionicPopup, $cordovaPushV5, Cart, $ionicLoading, Auth) {
     $ionicPlatform.ready()
       .then(() => {
         if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
@@ -83,6 +83,9 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
           })
           .then((res) => {
             if (res) {
+              console.log('tapped ok');
+              console.log("isRestaurantOwner: "+data.additionalData.isRestaurantOwner)
+              console.log("url: "+data.additionalData.url)
               if (data.additionalData.url === 'reservation') {
                 $state.go('tabs.restaurant')
                   .then(() => {
@@ -95,7 +98,18 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
                   })
               } else if (data.additionalData.url === 'order_status') {
                 $state.go('tabs.myOrders');
+              } else if (data.additionalData.url === 'approve') {
+                console.log(typeof data.additionalData.isRestaurantOwner);
+                if (data.additionalData.isRestaurantOwner === 'true') {
+                  console.log('restaurantOwner already')
+                  $state.go('tabs.restaurant');
+                } else {
+                  console.log('approve first time');
+                  Auth.$signOut();
+                  $state.go("landing");
+                }
               }
+
             }
           })
       } else {
@@ -304,3 +318,16 @@ app.directive('groupedRadio', function() {
     }
   };
 });
+
+app.directive('ngLastRepeat', function ($timeout) {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attr) {
+            if (scope.$last === true) {
+                $timeout(function () {
+                    scope.$emit('ngLastRepeat'+ (attr.ngLastRepeat ? '.'+attr.ngLastRepeat : ''));
+                });
+            }
+        }
+    };
+})

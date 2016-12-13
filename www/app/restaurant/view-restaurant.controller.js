@@ -1,6 +1,13 @@
-app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upload", "Database", "$ionicLoading", "$ionicModal", "$ionicPopup", "CordovaGeolocation", "$stateParams", "Restaurant", "User", "Review", "Reservation", "$ionicLoading", "Notification", "$ionicSlideBoxDelegate", "$ionicScrollDelegate", "Gallery",
-  function($scope, $state, $firebaseArray, Upload, Database, $ionicLoading, $ionicModal, $ionicPopup, CordovaGeolocation, $stateParams, Restaurant, User, Review, Reservation, $ionicLoading, Notification, $ionicSlideBoxDelegate, $ionicScrollDelegate, Gallery) {
-
+app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParams", "ionicMaterialInk", "$ionicLoading", "$ionicModal", "$ionicPopup", "CordovaGeolocation", "Restaurant", "User", "Review", "Reservation", "$ionicLoading", "Notification", "$ionicSlideBoxDelegate", "$ionicScrollDelegate", "Gallery", "$timeout",
+  function($scope, $state, Upload, $stateParams, ionicMaterialInk, $ionicLoading, $ionicModal, $ionicPopup, CordovaGeolocation, Restaurant, User, Review, Reservation, $ionicLoading, Notification, $ionicSlideBoxDelegate, $ionicScrollDelegate, Gallery, $timeout) {
+    
+    $ionicLoading.show();
+    // ionicMaterialInk.displayEffect();
+    $scope.$on('applyInk',function(e) {
+      ionicMaterialInk.displayEffect();
+    })
+    $scope.$emit('applyInk');
+    
     console.log("View Restaurant Ctrl")
     
     $scope.rating = {
@@ -9,6 +16,45 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
     }
     $scope.user = User.auth();
 
+    var restaurantId = $stateParams.restaurantId;
+    var userReviewsRef = Review.userReview(restaurantId);
+    $scope.loadingReviews = false;
+    Restaurant.get(restaurantId).$loaded()
+      .then(function(restaurant) {
+        $scope.restaurant = restaurant;
+        User.hasFavored(restaurant.$id)
+          .then((val) => {
+            console.log('Hasfavored from controller : '+val)
+            $scope.hasFavored = val
+            $scope.restaurantOpenStatus = Restaurant.getRestaurantOpenStatus(restaurant);
+            var restaurantStatus = Restaurant.getRestaurantStatus(restaurant.owner_id)
+            restaurantStatus.on('value', function(snap) {
+              $scope.getRestaurantStatus = snap.val() ? true : false;
+              $ionicLoading.hide();
+            })
+          })
+          .catch((err) => {
+            console.log('Has favored error');
+            console.log(err);
+          })
+        
+        Restaurant.getReviews(restaurant.$id).$loaded().then(function(reviews) {
+          $scope.restaurantReviews = reviews;
+          $scope.loadingReviews = true;
+          console.log('done loading reviews')
+          $ionicLoading.hide();
+        });
+      })
+
+    $scope.isAlreadyReviewed = function() {
+      userReviewsRef.once('value', function(snapshot) {
+        $scope.exists = snapshot.val();
+        if ($scope.exists !== null) {
+          $scope.review = Review.get(restaurantId, snapshot.val());
+        }
+      })
+    }
+    $scope.isAlreadyReviewed();
 
     $scope.getImages = function(images) {
       var items = [];
@@ -17,11 +63,6 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
       }
       return items;
     }
-
-    // $scope.pushImage = function(image) {
-    //   $scope.items.push(image);
-    //   console.log($scope.items)
-    // }
 
     $scope.bookReservation = function(reservation) {
       var confirmReservation = $ionicPopup.confirm({
@@ -37,7 +78,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
             number_of_persons: reservation.number_of_persons,
             status: 'pending',
             user_id: User.auth().$id,
-            restaurant_id: id,
+            restaurant_id: restaurantId,
             timestamp: firebase.database.ServerValue.TIMESTAMP
           })
             .then(() => {
@@ -53,55 +94,12 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
       });
     }
 
-    $scope.getName = function(id) {
-      return Review.reviewer(id);
+    $scope.getName = function(userId) {
+      return Review.reviewer(userId);
     }
 
-    var id = $stateParams.restaurantId;
-    var userReviewsRef = Review.userReview(id);
-    Restaurant.get(id).$loaded()
-      .then(function(restaurant) {
-        $scope.loadingReviews = true;
-        $scope.restaurant = restaurant;
-        // $scope.getReviewer = Review.reviewer;
-        var restaurantStatus = Restaurant.getRestaurantStatus(restaurant.owner_id)
-        restaurantStatus.on('value', function(snap) {
-          $scope.getRestaurantStatus = snap.val() ? true : false;
-        })
-        $scope.getFacilityName = Restaurant.getFacilityName;
-
-        User.hasFavored(restaurant.$id)
-          .then((val) => {
-            console.log('Hasfavored from controller : '+val)
-            $scope.hasFavored = val
-          })
-          .catch((err) => {
-            console.log('Has favored error');
-            console.log(err);
-          })
-
-        $scope.hasFavored = User.hasFavored(restaurant.$id);
-        $scope.restaurantOpenStatus = Restaurant.getRestaurantOpenStatus(restaurant);
-
-        Restaurant.getReviews(restaurant.$id).$loaded().then(function(reviews) {
-          $scope.restaurantReviews = reviews;
-          $scope.loadingReviews = false;
-          console.log('done loading reviews')
-        });
-      })
-
-    $scope.isAlreadyReviewed = function() {
-      userReviewsRef.once('value', function(snapshot) {
-        $scope.exists = snapshot.val();
-        if ($scope.exists !== null) {
-          $scope.review = Review.get(id, snapshot.val());
-        }
-      })
-    }
-    $scope.isAlreadyReviewed();
-
-    $scope.addToFavorites = function() {
-      User.addToFavorites($scope.restaurant);
+    $scope.addToFavorites = function(restaurant) {
+      User.addToFavorites(restaurant);
     }
 
     $scope.showAddReservationModal = function() {
@@ -113,52 +111,44 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
     }
 
     $scope.images = [];
-    $scope.thumbs = [];
-
     $scope.selImages = function() {
-      window.imagePicker.getPictures(
-        function(results) {
-          for (var i = 0; i < results.length; i++) {
-            Upload.review(results[i]).then(function(downloadURL) {
-              $scope.images.push(downloadURL);
-            })
-          }
-        },
-        function(error) {
-          console.log('Error: ' + JSON.stringify(error));
-        }, {
-          maximumImagesCount: 10,
-          width: 400,
-          quality: 20
+      window.imagePicker.getPictures(function(results) {
+        for (var i = 0; i < results.length; i++) {
+          Upload.review(results[i]).then(function(downloadURL) {
+            $scope.images.push(downloadURL);
+          })
         }
+        }, function(error) {
+           console.log('Error: ' + JSON.stringify(error));
+        }, Upload.getMultipleUploadOptions()
       );
     };
 
+    var clearReview = function(review) {
+      review.content = '';
+      review.rating = 0;
+      $scope.images = [];
+    }
+
     $scope.addReview = function(review) {
       $ionicLoading.show();
-      var newReview = Review.addReview(id, review);
+      var newReview = Review.addReview(restaurantId, review);
       newReview.ref
         .then(function() {
           $ionicLoading.hide();
-          // var list = Upload.getMultipleUpload(id, newReview.key);
-          Upload.uploadMultiple($scope.images, id, newReview.key)
+          Upload.uploadMultiple($scope.images, restaurantId, newReview.key)
           console.log("add review done");
           $scope.isAlreadyReviewed();
           $scope.reviewModal.hide();
-          review.content = '';
-          review.rating = 0;
-          $scope.images = [];
-          $scope.thumbs = [];
+          clearReview(review);
           $ionicLoading.hide();
-          Review.userReview(id).set(newReview.key).then(function() {
+          Review.userReview(restaurantId).set(newReview.key).then(function() {
             console.log('added to user_reviews')
           });
-          // var restaurant_owner = Restaurant.getOwner($scope.restaurant.$id);
           Notification.create({
             sender_id: User.auth().$id,
-            // receiver_id: restaurant_owner.$id,
             receiver_id: $scope.restaurant.owner_id,
-            restaurant_id: id,
+            restaurant_id: restaurantId,
             type: 'review',
             timestamp: firebase.database.ServerValue.TIMESTAMP
           })
@@ -170,17 +160,16 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
     }
 
     $scope.openEditModal = function(review) {
-      console.log("open edit modal");
       $scope.editReviewModal.show();
-      $scope.editImages = Upload.getMultipleUpload(id, review.$id);
+      $scope.$emit('applyInk');
+      $scope.editImages = Upload.getMultipleUpload(restaurantId, review.$id);
     }
 
     $scope.updateReview = function(review) {
-      // var reviewRef = Review.getReview(review.$id);
-      Review.editReview(id, review)
+      Review.editReview(restaurantId, review)
         .then(function() {
           console.log("finished updating review.");
-          Upload.uploadMultiple($scope.images, id, review.$id);
+          Upload.uploadMultiple($scope.images, restaurantId, review.$id);
           $scope.images = [];
           $scope.editReviewModal.hide();
         })
@@ -217,36 +206,20 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
       scope: $scope
     })
 
-    $ionicModal.fromTemplateUrl('app/review/_edit-reply.html', function(editReplyModal) {
-      $scope.editReplyModal = editReplyModal;
-    }, {
-      scope: $scope
-    })
-
     $scope.getReplies = function(reviewId) {
-      return Review.getReplies(id, reviewId);
-      // return $firebaseObject(Database.reviewsReference().child(reviewId).child('replies'))
+      return Review.getReplies(restaurantId, reviewId);
     }
 
     $scope.openReplyModal = function(review) {
-      $scope.addReplyModal.show();
-      $scope.reviewId = review.$id;
+      Restaurant.openReplyModal($scope, review);
     }
 
     $scope.openEditReplyModal = function(reply, reviewId) {
-      $scope.editReplyModal.show();
-      $scope.ereply = {
-        content: reply.content,
-        $id: reply.$id,
-        oldContent: reply.content,
-        user_id: reply.user_id,
-        reviewId: reviewId,
-        restaurantId: id
-      }
+      Restaurant.openEditReplyModal($scope, reply, reviewId, restaurantId);
     }
 
     $scope.addReply = function(reply) {
-      Review.addReply(id, reply, $scope.reviewId)
+      Review.addReply(restaurantId, reply, $scope.reviewId)
       .then(function() {
         reply.content = "";
         $scope.addReplyModal.hide();
@@ -267,7 +240,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
       })
 
       confirmDelete.then(function(res) {
-        var reviewsDeleteRef = Review.getReview(id, review.$id);
+        var reviewsDeleteRef = Review.getReview(restaurantId, review.$id);
         if (res) {
           reviewsDeleteRef.remove();
           userReviewsRef.remove();
@@ -278,107 +251,24 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
       })
     }
 
-    //put in restaurant dashboard
-    $scope.deleteRestaurant = function(restaurant) {
-      console.log(restaurant + 'delete');
-      // var resObj = restaurant;
-      // // $scope.displayRestaurants.$remove(resObj).then(function() {
-      // //   console.log('deleted?');
-      // // });
-      // Restaurant.delete(restaurant.$id)
-      //   .then(() => {
-      //     console.log('Success deleting ');
-      //   })
-      //   .catch((err) => {
-      //     console.log('Error on deleting: '+err);
-      //   })
-      // // for (var menu in resObj.menus) {
-      // //   var menusRef = firebase.database().ref().child('menus');
-      // //   menusRef.child(menu).set(null);
-      // // }
-      // //
-      // // for (var review in resObj.reviews) {
-      // //   var reviewsRef = firebase.database().ref().child('reviews');
-      // //   reviewsRef.child(review).set(null);
-      // // }
-      // //
-      // // for (var reviewer in resObj.reviewers) {
-      // //   var userReviewedRestaurantsRef = firebase.database().ref().child('users').child(reviewer).child('reviewed_restaurants');
-      // //   console.log('reviewer ref' + userReviewedRestaurantsRef);
-      // //   userReviewedRestaurantsRef.child(resObj.$id).set(null);
-      // // }
-      // Database.restaurantMenusReference().child(resObj.$id).remove();
-      //
-      // Database.restaurantReservationsReference().child(resObj.$id).once('value')
-      //   .then((snapshot) => {
-      //     for (var reservation in snapshot.val()) {
-      //       console.log(reservation);
-      //       Reservation.delete(reservation)
-      //         .then(() => {
-      //           console.log('delete sucess')
-      //           alert('delete success');
-      //         })
-      //         .catch((err) => {
-      //           console.log(err)
-      //           alert(err);
-      //         })
-      //     }
-      //   })
-      //
-      // Database.restaurantOrdersReference().child(resObj.$id).once('value')
-      //   .then((snapshot) => {
-      //     for (var order in snapshot.val()) {
-      //       console.log(order);
-      //       Order.delete(order)
-      //         .then(() => {
-      //           console.log('success')
-      //         })
-      //         .catch((err) => {
-      //           console.log(err)
-      //           alert(err);
-      //         })
-      //     }
-      //   })
-    }
-
     $scope.showGallery = function(allImages) {
       Gallery.set(allImages);
     }
 
-    $scope.zoomMin = 1;
+    $scope.deleteImage = function(images, image) {
+      var confirmDelete = $ionicPopup.confirm({
+        title: "Delete Photo",
+        template: "Are you sure you want to delete this photo?"
+      })
 
-    // $ionicModal.fromTemplateUrl('app/restaurant/_gallery.html', function(galleryModal) {
-    //   $scope.galleryModal = galleryModal;
-    // }, {
-    //   scope: $scope
-    // });
-
-    $scope.showImages = function(index) {
-      $scope.activeSlide = index;
-      $scope.showModal('app/restaurant/_gallery-zoomview.html');
-    };
-     
-    $scope.showModal = function(templateUrl) {
-      $ionicModal.fromTemplateUrl(templateUrl, {
-        scope: $scope
-      }).then(function(modal) {
-        $scope.modal = modal;
-        $scope.modal.show();
-      });
+      confirmDelete.then(function(res) {
+        if (res) {
+          images.$remove(image);
+          console.log("image removed")
+        } else {
+          console.log("delete failed");
+        }
+      })
     }
-     
-    $scope.closeModal = function() {
-      $scope.modal.hide();
-      $scope.modal.remove()
-    };
-     
-    $scope.updateSlideStatus = function(slide) {
-      var zoomFactor = $ionicScrollDelegate.$getByHandle('scrollHandle' + slide).getScrollPosition().zoom;
-      if (zoomFactor == $scope.zoomMin) {
-        $ionicSlideBoxDelegate.enableSlide(true);
-      } else {
-        $ionicSlideBoxDelegate.enableSlide(false);
-      }
-    };
   }
 ]);

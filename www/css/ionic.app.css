@@ -295,6 +295,20 @@ ion-slides .card {
 a.button.button-block {
   width: 100%; }
 
+.platform-android .action-sheet-cancel {
+  display: block !important; }
+
+.img-holder {
+  position: relative;
+  width: 100px; }
+
+.img-holder .link {
+  position: absolute;
+  bottom: 10px;
+  /*your button position*/
+  right: 10px;
+  /*your button position*/ }
+
 .gallery-view .image-container {
   position: relative;
   overflow: hidden;

@@ -105,6 +105,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
       }
     }
 
+
     $scope.imageURL = "";
     $scope.upload = function(index) {
       navigator.camera.getPicture(function(imageData) {

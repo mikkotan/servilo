@@ -8,7 +8,7 @@
   <ion-content class="padding">
     <form ng-submit="updateReview(review)">
       <div class="list">
-        <a class="button button-block button-balanced" ng-click="selImages()">
+        <a class="button button-block button-balanced ink" ng-click="selImages()">
                     Add Images From Gallery
                   </a>
         <label class="item item-input item-floating-label">
@@ -23,16 +23,20 @@
           <rating ng-model="review.rating" max="rating.max"></rating>
         </div>
         <div class="padding row">
-          <button type="submit" class="button button-block button-positive">Save</button>
+          <button type="submit" class="button button-block button-positive ink">Save</button>
         </div>
       </div>
     </form>
-    <p ng-repeat="img in editImages">
-      <img ng-src="{{img.src}}" style="width: 100px">
-      <button ng-click="editImages.$remove(img)">Remove</button>
+    <p ng-repeat="image in editImages">
+<!--       <div class="img-holder" ng-repeat="image in editImages">
+        <img ng-src="{{image.thumb}}"/>
+        <a class="link" href="">hah</a>
+      </div> -->
+      <img ng-src="{{image.thumb}}" style="width: 100px">
+      <button class="button button-assertive ink" ng-click="deleteImage(editImages, image)">Remove</button>
     </p>
     <p ng-repeat="img in images  track by $index">
-      <img ng-src="{{img}}" style="max-width:250px;max-height:250px" />
+      <img ng-src="{{img.thumb}}" style="max-width:250px;max-height:250px" />
     </p>
     </div>
   </ion-content>

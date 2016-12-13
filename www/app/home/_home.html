@@ -1,6 +1,6 @@
 <ion-view view-title="Home">
   <ion-content>
-
+  <button class="button button-calm ink">INK MEH</button>
     <ion-slides options="options" slider="data.slider">
       <ion-slide-page>
         <!-- <div><img class="slider-imgs" ng-src="img/material-wall.jpg"></div> -->
@@ -31,7 +31,7 @@
     <ion-refresher pulling-text="Pull to refresh..." on-refresh="doRefresh()">
     </ion-refresher>
     <ion-list>
-      <ion-item ng-repeat="rest in home.restaurants | orderBy:'distance'" item="rest">
+      <ion-item class="ink" ng-repeat="rest in home.restaurants | orderBy:'distance'" item="rest" ng-last-repeat="workorderlist">
         {{rest.name}}
       </ion-item>
     </ion-list>
