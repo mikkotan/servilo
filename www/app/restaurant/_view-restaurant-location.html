@@ -3,17 +3,17 @@
     <div ng-init='setMap(restaurant)'>
       <h3>{{restaurant.location}}</h3>
     </div>
-      <img ng-src="https://maps.googleapis.com/maps/api/staticmap?center={{restaurant.latitude}},{{restaurant.longitude}}
+    <img ng-src="https://maps.googleapis.com/maps/api/staticmap?center={{restaurant.latitude}},{{restaurant.longitude}}
           &zoom=16
           &size=300x300
           &markers={{restaurant.latitude}},{{restaurant.longitude}}
           &key=AIzaSyCTNmJQD-Z3qn5QmhC-Jfp4iZr6P6QV_tE" alt="Restaurant Map" ng-click="openMapModal(restaurant)">
-      <div class="row">
-          <h4><b>Driving Path Distance:</b> {{drivingD}} KM</h4>
-      </div>
-      <div class="row">
-          <h4><b>Walking Path Distance: </b> {{walkingD}} KM</h4>
-      </div>
+    <div class="row">
+      <h4><b>Driving Path Distance:</b> {{drivingD}} KM</h4>
+    </div>
+    <div class="row">
+      <h4><b>Walking Path Distance: </b> {{walkingD}} KM</h4>
+    </div>
     </div>
   </ion-content>
 </ion-view>

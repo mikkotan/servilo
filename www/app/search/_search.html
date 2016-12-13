@@ -12,8 +12,14 @@
 
   </ion-header-bar>
   <ion-content class="padding has-header">
-      <input type="text" placeholder="Change address" google-autocomplete-suggestion location="data.location" on-selection="onAddressSelection(location)" country-code="{{countryCode}}" ng-model="data.location.formatted_address" readonly />
-    <h4 class="text-center">Search by:</h4>
+
+    <div class="list list-inset">
+      <label class="item item-input">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input type="text" placeholder="Search address" google-autocomplete-suggestion location="data.location" on-selection="onAddressSelection(location)" country-code="{{countryCode}}" ng-model="data.location.formatted_address" readonly />
+      </label>
+    </div>
+        <h4 class="text-center">Search by:</h4>
     <div class="button-bar">
       <a grouped-radio="item.value" ng-repeat="item in searchFilter" ng-value="item.value" ng-model="data.filter">{{item.text}}</a>
     </div>

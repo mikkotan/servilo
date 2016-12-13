@@ -24,7 +24,8 @@
     "cordova-plugin-splashscreen",
     "cordova-plugin-statusbar",
     "ionic-plugin-keyboard",
-    "cordova-plugin-image-resizer"
+    "cordova-plugin-image-resizer",
+    "cordova-plugin-image-resizer@~1.0.0"
   ],
   "cordovaPlatforms": [
     "android"

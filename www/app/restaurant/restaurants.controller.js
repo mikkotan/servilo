@@ -2,18 +2,29 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
   function($scope, $firebaseArray, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation, currentGeoLocation, Upload, $ionicPopup, Order, Database, Reservation) {
 
     $scope.modalControl = {};
-    $scope.data= {detail:""};
     // $scope.facilities = $firebaseArray(firebase.database().ref().child('facilities'));
     $scope.facilities = Database.facilities();
     $scope.pendingRestaurants = Restaurant.getPendingRestaurants();
     $scope.displayRestaurants = User.getAuthRestaurants();
     $scope.AppUser = User.auth();
 
+    $scope.data = {};
+    $scope.countryCode = 'PH';
+
     console.log($scope.AppUser);
 
+    $scope.rating = {
+      rate: 0,
+      max: 5
+    }
+
     $scope.showMap = function() {
+
+      var lat = $scope.marker.coords.latitude;
+      var long = $scope.marker.coords.longitude;
+      $scope.setMarker(lat, long);
       var mapPopup = $ionicPopup.confirm({
-        title: 'Choose Location',
+        title: 'Set Markers',
         templateUrl: 'app/restaurant/_googleMapsPopout.html',
         cssClass: 'custom-popup',
         scope: $scope
@@ -71,15 +82,14 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     };
 
     $scope.testPhoto = function() {
-      navigator.camera.getPicture(onSuccess, onFail, 
-        { 
-          sourceType: Camera.PictureSourceType.CAMERA,
-          quality: 50,
-          destinationType: Camera.DestinationType.DATA_URL,
-          encodingType: Camera.EncodingType.JPEG,
-          mediaType: Camera.MediaType.PICTURE,
-          correctOrientation: true,
-        });
+      navigator.camera.getPicture(onSuccess, onFail, {
+        sourceType: Camera.PictureSourceType.CAMERA,
+        quality: 50,
+        destinationType: Camera.DestinationType.DATA_URL,
+        encodingType: Camera.EncodingType.JPEG,
+        mediaType: Camera.MediaType.PICTURE,
+        correctOrientation: true,
+      });
 
       function onSuccess(imageURI) {
         var storageRef = firebase.storage().ref();
@@ -90,7 +100,8 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
         window.imageResizer.resizeImage(
           function(data) {
             storageRef.child('test-thumb.jpg').putString(data.imageData, 'base64', metadata);
-          }, function (error) {
+          },
+          function(error) {
             console.log("Error : \r\n" + error);
           }, imageURI, 0.1, 0.1, {
             resizeType: ImageResizer.RESIZE_TYPE_FACTOR,
@@ -101,7 +112,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
       }
 
       function onFail(message) {
-          alert('Failed because: ' + message);
+        alert('Failed because: ' + message);
       }
     }
 
@@ -138,16 +149,22 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
       restaurant.closeTime = "";
       $scope.imageURL = null;
       $scope.progress = null;
+      $scope.data.location = "";
+      $scope.marker.coords = "";
     }
 
     $scope.addRestaurant = function(restaurant) {
-      Restaurant.addPendingRestaurant(restaurant, $scope.marker, $scope.imageURL);
+      var location = $scope.data.location.formatted_address
+      var lat = $scope.marker.coords.latitude
+      var long = $scope.marker.coords.longitude
+      Restaurant.addPendingRestaurant(restaurant, location, lat, long, $scope.imageURL);
       clearFields(restaurant);
       $scope.restaurantModal.hide();
     }
 
     $scope.edit = function(restaurant) {
       console.log(JSON.stringify(restaurant, null, 4));
+      
       Restaurant.editRestaurant(restaurant, $scope.marker, $scope.imageURL)
         .then(function() {
           $scope.imageURL = null;
@@ -173,6 +190,15 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     }, {
       scope: $scope
     })
+
+    $scope.$watch('data.location.formatted_address', function(newValue) {
+      if (newValue == undefined) {
+        console.log('Empty');
+      } else {
+        console.log('Has content');
+        $scope.setMarker($scope.data.location.geometry.location.lat(), $scope.data.location.geometry.location.lng());
+      }
+    });
 
     $scope.showAddCategoryModal = function(resId) {
       console.log('show add category');
@@ -203,23 +229,23 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
           console.log('Success deleting ');
         })
         .catch((err) => {
-          console.log('Error on deleting: '+err);
+          console.log('Error on deleting: ' + err);
         })
-      // for (var menu in resObj.menus) {
-      //   var menusRef = firebase.database().ref().child('menus');
-      //   menusRef.child(menu).set(null);
-      // }
-      //
-      // for (var review in resObj.reviews) {
-      //   var reviewsRef = firebase.database().ref().child('reviews');
-      //   reviewsRef.child(review).set(null);
-      // }
-      //
-      // for (var reviewer in resObj.reviewers) {
-      //   var userReviewedRestaurantsRef = firebase.database().ref().child('users').child(reviewer).child('reviewed_restaurants');
-      //   console.log('reviewer ref' + userReviewedRestaurantsRef);
-      //   userReviewedRestaurantsRef.child(resObj.$id).set(null);
-      // }
+        // for (var menu in resObj.menus) {
+        //   var menusRef = firebase.database().ref().child('menus');
+        //   menusRef.child(menu).set(null);
+        // }
+        //
+        // for (var review in resObj.reviews) {
+        //   var reviewsRef = firebase.database().ref().child('reviews');
+        //   reviewsRef.child(review).set(null);
+        // }
+        //
+        // for (var reviewer in resObj.reviewers) {
+        //   var userReviewedRestaurantsRef = firebase.database().ref().child('users').child(reviewer).child('reviewed_restaurants');
+        //   console.log('reviewer ref' + userReviewedRestaurantsRef);
+        //   userReviewedRestaurantsRef.child(resObj.$id).set(null);
+        // }
       Database.restaurantMenusReference().child(resObj.$id).remove();
 
       Database.restaurantReservationsReference().child(resObj.$id).once('value')
@@ -304,6 +330,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
       $scope.imageURL = null;
     }
 
+
     $scope.marker = {
       id: 0
     };
@@ -313,7 +340,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
         latitude: 10.73016704689235,
         longitude: 122.54616022109985
       },
-      zoom: 14,
+      zoom: 20,
       options: {
         scrollwheel: false
       },
@@ -344,13 +371,26 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
       $scope.setMarker(currentLocation.latitude, currentLocation.longitude);
     }
 
+
+    $scope.useCurrent = function() {
+      var currentLocation = CordovaGeolocation.get();
+      $scope.setMarker(currentLocation.latitude, currentLocation.longitude);
+      Restaurant.getLocation(currentLocation.latitude, currentLocation.longitude).then(function(data) {
+        $scope.data.location = data;
+        //   $scope.data.location.geometry.location.lat = currentLocation.latitude;
+        //   $scope.data.location.geometry.location.lng = currentLocation.longitude;
+        // $scope.restaurant.location = data
+        // console.log($scope.restaurant.location)
+      });
+    }
+
     $scope.placeName = function(latitude, longitude) {
-        Restaurant.getLocationName(latitude, longitude).then(function(data) {
+      Restaurant.getLocationName(latitude, longitude).then(function(data) {
         $scope.restaurant.location = data
       });
     }
 
-      //change the marker location
+    //change the marker location
     $scope.setMarker = function(latitude, longitude) {
       $scope.marker = Restaurant.getMarker(latitude, longitude);
       $scope.map.center = {
@@ -360,16 +400,20 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     }
 
 
-    $scope.$watch(function($scope){return $scope.data.detail;},
-      function(newValue, oldValue){
-        if(oldValue !== newValue){
-          if (angular.isDefined(newValue)){
+
+    $scope.$watch(function($scope) {
+        return $scope.data.detail;
+      },
+      function(newValue, oldValue) {
+        if (oldValue !== newValue) {
+          if (angular.isDefined(newValue)) {
             var lat = newValue.lat();
             var lng = newValue.lng();
             $scope.setMarker(lat, lng);
-         }
+          }
         }
-    });
+      });
+
 
 
     $scope.days = {

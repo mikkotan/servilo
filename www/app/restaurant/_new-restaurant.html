@@ -2,91 +2,100 @@
   <ion-header-bar class="bar bar-header bar-assertive">
     <h1 class="title">New Restaurant</h1>
     <div class="buttons">
-    <button class="button button-clear button-primary" ng-click="restaurantModal.hide()"><i class="icon ion-ios-close"></i></button>
-</div>
+      <button class="button button-clear button-primary" ng-click="restaurantModal.hide()"><i class="icon ion-ios-close"></i></button>
+    </div>
   </ion-header-bar>
   <!-- <ion-content class="padding"> -->
   <ion-content>
     <!-- <ion-list> -->
-      <!-- <div class="card"> -->
-        <!-- <ion-item id="form-input"> -->
-          <form ng-submit="addRestaurant(restaurant)">
-            <div class="list">
-              <label class="item item-input item-floating-label">
-                <span class="input-label has-input">Name of Restaurant</span>
-                <input type="text" placeholder="Name of Restaurant" ng-model="restaurant.name">
-              </label>
-              <label class="item item-input item-floating-label">
-                <span class="input-label has-input">Contact Number</span>
-                <input type="number" placeholder="Contact Number" ng-model="restaurant.phonenumber">
-              </label>
-              <label class="item item-input item-floating-label">
-                <span class="input-label has-input">Type of Restaurant</span>
-                <input type="text" placeholder="Type of Restaurant" ng-model="restaurant.type">
-              </label>
-              <label class="item item-input item-floating-label">
-                <span class="input-label has-input">Cuisine of Restaurant</span>
-                <input type="text" placeholder="Cuisine of Restaurant" ng-model="restaurant.cuisine">
-              </label>
-              <div class="item">
-                <a class="button button-block button-royal icon-left ion-plus-circled" ng-click="setHours()">Set Hours</a>
-                <div class="col text-center" ng-show="restaurant.openTime && restaurant.closeTime">
-                  Opening Hours : {{restaurant.openTime| date: "h:mm a"}} - {{restaurant.closeTime| date: "h:mm a"}}
-                </div>
-              </div>
-              <div class="item">
-                <a class="button button-block button-royal icon-left ion-plus-circled" ng-click="setFacilities()">Set Facilities</a>
-                <div class="col text-center">
-                  <p ng-repeat="(key, val) in restaurant.facilities" ng-if="val">
-                    {{key}}
-                  </p>
-                </div>
-              </div>
-              <div class="item">
-                <a class="button button-block button-royal icon-left ion-plus-circled" ng-click="setOpenDays()">Set Open Days</a>
-              </div>
-              <!-- <div class="item item-input-inset"> -->
+    <!-- <div class="card"> -->
+    <!-- <ion-item id="form-input"> -->
+    <form ng-submit="addRestaurant(restaurant)">
+      <div class="list">
+        <label class="item item-input item-floating-label">
+          <span class="input-label has-input">Name of Restaurant</span>
+          <input type="text" placeholder="Name of Restaurant" ng-model="restaurant.name">
+        </label>
+        <label class="item item-input item-floating-label">
+          <span class="input-label has-input">Contact Number</span>
+          <input type="number" placeholder="Contact Number" ng-model="restaurant.phonenumber">
+        </label>
+        <label class="item item-input item-floating-label">
+          <span class="input-label has-input">Type of Restaurant</span>
+          <input type="text" placeholder="Type of Restaurant" ng-model="restaurant.type">
+        </label>
+        <label class="item item-input item-floating-label">
+          <span class="input-label has-input">Cuisine of Restaurant</span>
+          <input type="text" placeholder="Cuisine of Restaurant" ng-model="restaurant.cuisine">
+        </label>
+        <div class="item">
+          <a class="button button-block button-royal icon-left ion-plus-circled" ng-click="setHours()">Set Hours</a>
+          <div class="col text-center" ng-show="restaurant.openTime && restaurant.closeTime">
+            Opening Hours : {{restaurant.openTime| date: "h:mm a"}} - {{restaurant.closeTime| date: "h:mm a"}}
+          </div>
+        </div>
+        <div class="item">
+          <a class="button button-block button-royal icon-left ion-plus-circled" ng-click="setFacilities()">Set Facilities</a>
+          <div class="col text-center">
+            <p ng-repeat="(key, val) in restaurant.facilities" ng-if="val">
+              {{key}}
+            </p>
+          </div>
+        </div>
+        <div class="item">
+          <a class="button button-block button-royal icon-left ion-plus-circled" ng-click="setOpenDays()">Set Open Days</a>
+        </div>
+        <!-- <div class="item item-input-inset"> -->
+        <a class="button button-small button-balanced" ng-click="useCurrent()">Use Current Location</a>
+        <label class="item-input item-floating-label">
+          <span class="input-label has-input">Location of Restaurant</span>
+          <input type="text" placeholder="Change address" google-autocomplete-suggestion location="data.location" country-code="{{countryCode}}" ng-model="data.location.formatted_address" readonly />
+          <!-- <input type="text" placeholder="Location of Restaurant" ng-model="restaurant.location" details="data.detail"/> -->
 
-                <label class="item-input item-floating-label">
-                  <span class="input-label has-input">Location of Restaurant</span>
-                  <input type="text" placeholder="Location of Restaurant" ng-model="restaurant.location" details="data.detail"/>
-                </label>
-                <a class="button button-block button-royal icon-left ion-map" ng-click="showMap()">Choose using Map</a>
-              <!-- </div> -->
-              <div class="item">
-                <div class="row">
-                  <div class="col text-center">
-                    Add image
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <img class="center" ng-show="imageURL" ng-src="{{imageURL}}" width="100%" />
-                    <!-- <div ng-show="progress" class="progress-bar" style="width: {{progress}}%;">
+        </label>
+        
+        <img ng-src="https://maps.googleapis.com/maps/api/staticmap?center={{marker.coords.latitude}},{{marker.coords.longitude}}
+                        &zoom=18
+                        &size=500x300
+                        &markers={{marker.coords.latitude}},{{marker.coords.longitude}}
+                        &key=AIzaSyCTNmJQD-Z3qn5QmhC-Jfp4iZr6P6QV_tE" ng-if="marker.coords.latitude && marker.coords.longitude">
+
+        <a class="button button-block button-royal icon-left ion-map" ng-click="showMap()" ng-disabled="!data.location.formatted_address">Edit marker on map</a>
+        <!-- </div> -->
+        <div class="item">
+          <div class="row">
+            <div class="col text-center">
+              Add image
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <img class="center" ng-show="imageURL" ng-src="{{imageURL}}" width="100%" />
+              <!-- <div ng-show="progress" class="progress-bar" style="width: {{progress}}%;">
                       <p class="percent">{{progress}}%</p>
                     </div> -->
-                    <div class="col text-center">
-                      <ion-spinner ng-if="imageLoading" icon="android"></ion-spinner>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <a class="button button-block button-positive icon ion-camera" ng-click="upload(1)"></a>
-                  </div>
-                  <div class="col">
-                    <a class="button button-block button-calm icon ion-image" ng-click="upload(2)"></a>
-                  </div>
-                </div>
-              </div>
-              <div class="padding">
-                <button type="submit" class="button button-block button-balanced">Add Restaurant</button>
+              <div class="col text-center">
+                <ion-spinner ng-if="imageLoading" icon="android"></ion-spinner>
               </div>
             </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <a class="button button-block button-positive icon ion-camera" ng-click="upload(1)"></a>
+            </div>
+            <div class="col">
+              <a class="button button-block button-calm icon ion-image" ng-click="upload(2)"></a>
+            </div>
+          </div>
+        </div>
+        <div class="padding">
+          <button type="submit" class="button button-block button-balanced">Add Restaurant</button>
+        </div>
+      </div>
 
-          </form>
-        <!-- </ion-item> -->
-      <!-- </div> -->
+    </form>
+    <!-- </ion-item> -->
+    <!-- </div> -->
     <!-- </ion-list> -->
   </ion-content>
 </ion-modal-view>

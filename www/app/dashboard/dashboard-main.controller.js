@@ -1,6 +1,9 @@
-app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionicModal", "$ionicPopup", "$firebaseArray", "Restaurant", "Database", "$ionicLoading", "Upload", "$cordovaCamera",
-  function($scope, $state, $stateParams, $ionicModal, $ionicPopup, $firebaseArray, Restaurant, Database, $ionicLoading, Upload, $cordovaCamera) {
+app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionicModal", "$ionicPopup", "$firebaseArray", "Restaurant", "Database", "$ionicLoading", "Upload", "$cordovaCamera", "CordovaGeolocation",
+  function($scope, $state, $stateParams, $ionicModal, $ionicPopup, $firebaseArray, Restaurant, Database, $ionicLoading, Upload, $cordovaCamera, CordovaGeolocation) {
     $ionicLoading.show();
+    $scope.data = {};
+    $scope.countryCode = 'PH';
+
 
     Restaurant.get($stateParams.restaurantId).$loaded()
       .then((restaurant) => {
@@ -24,6 +27,23 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
       });
     };
 
+    $scope.setMarker = function(latitude, longitude) {
+      $scope.marker = Restaurant.getMarker(latitude, longitude);
+      $scope.map.center = {
+        latitude: latitude,
+        longitude: longitude
+      };
+    }
+
+    $scope.$watch('data.location.formatted_address', function(newValue) {
+      if (newValue == undefined) {
+        console.log('Empty');
+      } else {
+        console.log('Has content');
+        $scope.setMarker($scope.data.location.geometry.location.lat(), $scope.data.location.geometry.location.lng());
+      }
+    });
+    
     $scope.setHours = function() {
       var hoursPopup = $ionicPopup.confirm({
         title: 'Set Opening and Closing Hours',
@@ -55,10 +75,10 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
 
     $scope.showDelete = function(restaurant) {
       var deletePopup = $ionicPopup.confirm({
-        title: 'Sure to delete?',
-        cssClass: 'custom-popup',
-        scope: $scope
-      })
+          title: 'Sure to delete?',
+          cssClass: 'custom-popup',
+          scope: $scope
+        })
         .then(function(res) {
           if (res) {
             $scope.deleteRestaurant(restaurant);
@@ -73,23 +93,23 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
           console.log('Success deleting ');
         })
         .catch((err) => {
-          console.log('Error on deleting: '+err);
+          console.log('Error on deleting: ' + err);
         })
-      // for (var menu in resObj.menus) {
-      //   var menusRef = firebase.database().ref().child('menus');
-      //   menusRef.child(menu).set(null);
-      // }
-      //
-      // for (var review in resObj.reviews) {
-      //   var reviewsRef = firebase.database().ref().child('reviews');
-      //   reviewsRef.child(review).set(null);
-      // }
-      //
-      // for (var reviewer in resObj.reviewers) {
-      //   var userReviewedRestaurantsRef = firebase.database().ref().child('users').child(reviewer).child('reviewed_restaurants');
-      //   console.log('reviewer ref' + userReviewedRestaurantsRef);
-      //   userReviewedRestaurantsRef.child(resObj.$id).set(null);
-      // }
+        // for (var menu in resObj.menus) {
+        //   var menusRef = firebase.database().ref().child('menus');
+        //   menusRef.child(menu).set(null);
+        // }
+        //
+        // for (var review in resObj.reviews) {
+        //   var reviewsRef = firebase.database().ref().child('reviews');
+        //   reviewsRef.child(review).set(null);
+        // }
+        //
+        // for (var reviewer in resObj.reviewers) {
+        //   var userReviewedRestaurantsRef = firebase.database().ref().child('users').child(reviewer).child('reviewed_restaurants');
+        //   console.log('reviewer ref' + userReviewedRestaurantsRef);
+        //   userReviewedRestaurantsRef.child(resObj.$id).set(null);
+        // }
       Database.restaurantMenusReference().child(resObj.$id).remove();
 
       Database.restaurantReservationsReference().child(resObj.$id).once('value')
@@ -136,6 +156,11 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
 
     $scope.editRestaurant = function(restaurant) {
 
+      $scope.rating = {
+        rate: 0,
+        max: 5
+      }
+
       $scope.map = {
         center: {
           latitude: restaurant.latitude,
@@ -166,7 +191,9 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
           }
         }
       }
-      $scope.marker = {id: 0};
+      $scope.marker = {
+        id: 0
+      };
       $scope.timeD = restaurant.openTime;
       $scope.eRestaurant = {
         resto: restaurant.name,
@@ -182,6 +209,8 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
         location: restaurant.location,
         photoURL: restaurant.photoURL
       };
+
+      $scope.data.location = restaurant.location;
       $scope.restaurantEditModal.show();
       if (restaurant.photoURL) {
         $scope.imageURL = restaurant.photoURL;
@@ -193,6 +222,17 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
         latitude: restaurant.latitude,
         longitude: restaurant.longitude
       };
+    }
+    $scope.useCurrent = function() {
+      var currentLocation = CordovaGeolocation.get();
+      $scope.setMarker(currentLocation.latitude, currentLocation.longitude);
+      Restaurant.getLocation(currentLocation.latitude, currentLocation.longitude).then(function(data) {
+        $scope.data.location = data;
+        //   $scope.data.location.geometry.location.lat = currentLocation.latitude;
+        //   $scope.data.location.geometry.location.lng = currentLocation.longitude;
+        // $scope.restaurant.location = data
+        // console.log($scope.restaurant.location)
+      });
     }
 
     $scope.edit = function(restaurant) {
@@ -207,8 +247,8 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
     }
 
     $scope.closeEditRestaurant = function() {
-        $scope.restaurantEditModal.hide();
-        $scope.imageURL = null;
+      $scope.restaurantEditModal.hide();
+      $scope.imageURL = null;
     }
 
     $ionicModal.fromTemplateUrl('app/restaurant/_edit-restaurant.html', function(restaurantEditModal) {
