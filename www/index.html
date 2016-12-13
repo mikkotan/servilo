@@ -26,7 +26,7 @@
   <script src="lib/ion-gallery/dist/ion-gallery.min.js"></script>
   <script src="lib/ionic-image-lazy-load/ionic-image-lazy-load.js"></script>
   <script src="lib/ion-floating-menu/dist/ion-floating-menu.js"></script>
-
+  <script src="lib/ionic-ion-horizontal-scroll-cards/ionic.hscrollcards.js"></script>
   <!-- map -->
   <script src="lib/angular-simple-logger/dist/angular-simple-logger.min.js"></script>
   <script src="lib/angular-google-maps/dist/angular-google-maps.min.js"></script>
@@ -110,6 +110,9 @@
   <script src="app/pendingrestaurant/pending-restaurant.controller.js"></script>
   <!-- ionicPush -->
   <script src="app/ionicPush/ionicPush.service.js"></script>
+  <!-- gallery -->
+  <script src="app/gallery/gallery.controller.js"></script>
+  <script src="app/gallery/gallery.factory.js"></script>
   <!-- cordova -->
   <script src="lib/ngCordova/dist/ng-cordova.min.js"></script>
   <script src="lib/ng-cordova-oauth/dist/ng-cordova-oauth.js"></script>
@@ -127,6 +130,7 @@
 <body ng-app="app">
   <ion-side-menus ng-controller="AppCtrl" ng-cloak>
     <ion-side-menu-content>
+      <!-- <div ng-class="{'grey-bg' : sidemenuopened}"></div> -->
       <ion-nav-bar class="bar-assertive">
         <ion-nav-back-button class="button-icon ion-arrow-left-c">
         </ion-nav-back-button>
@@ -139,11 +143,13 @@
       <ion-nav-view animation="slide-left"></ion-nav-view>
     </ion-side-menu-content>
 
-    <ion-side-menu  side="left" enable-menu-with-back-views="false">
-      <ion-header-bar ng-show="userRole.isAny" class="bar-profile bar-stable">
+
+    <ion-side-menu side="left" enable-menu-with-back-views="false">
+      <ion-header-bar class="bar-profile">
+
         <div ng-show="firebaseUser" class="profile">
           <img class="sidebar-picture" ng-show="newPhotoURL" ng-src="{{currentUser.photoURL}}" style="width: 50px; height: 50px">
-          <img class="sidebar-picture" ng-show="!newPhotoURL" ng-src="img/ionic.png" style="width: 50px; height: 50px">
+          <img class="sidebar-picture" ng-show="!newPhotoURL" ng-src="img/wow.jpg" style="width: 50px; height: 50px">
           <h3 class="sidebar-name" ng-if="firebaseUser.provider !== email">{{firebaseUser.displayName}}</h3>
           <h3 class="sidebar-name" ng-if="firebaseUser.provider === email">{{firebaseUser.firstName}} {{firebaseUser.lastName}}</h3>
         </div>
@@ -152,7 +158,7 @@
         </div>
       </ion-header-bar>
 
-      <ion-content ng-show="userRole.isAny" has-header="true">
+      <ion-content class="custom" has-header="true">
         <ion-list>
           <!-- <a class="item" href="#/tab/home">Home</a>
             <a class="item" href="#/tab/home">Search</a>
@@ -181,7 +187,8 @@
           <ion-item menu-close ng-if="userRole.isAny" class="item-borderless">
             Notifications
           </ion-item>
-          <ion-item menu-close ng-if="userRole.isUser" class="item-borderless">
+
+          <ion-item menu-close ng-controller="RestaurantCtrl" ng-if="userRole.isUser" class="item-borderless" ng-click="newRestaurant()">
             Create Restaurant
           </ion-item>
           <hr ng-show="firebaseUser">

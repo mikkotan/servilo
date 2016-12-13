@@ -1,5 +1,5 @@
-app.factory("Upload", ["Database", "$firebaseArray",
-  function(Database, $firebaseArray){
+app.factory("Upload", ["Database", "$firebaseArray", "$q",
+  function(Database, $firebaseArray, $q){
 
   var storageRef = firebase.storage().ref();
   var options = {
@@ -18,11 +18,47 @@ app.factory("Upload", ["Database", "$firebaseArray",
   }
 
   return  {
-    get : function(base64){
-      var d = new Date();
-      var child = 'reviews/' + d.getTime() + '.jpg';
-      var reviewsRef = storageRef.child(child).putString(base64, 'data_url', metadata);
-      return reviewsRef;
+    review : function(result){
+      var deferred = $q.defer();
+      window.plugins.Base64.encodeFile(result, function(base64) {
+        var reviewsRef = storageRef.child(getChild('reviews')).putString(base64, 'data_url', metadata);
+        reviewsRef.on('state_changed', function(snapshot) {
+          var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+        }, function(error) {
+          console.log("error in uploading." + error);
+        }, function() {
+          var downloadURL = reviewsRef.snapshot.downloadURL;
+          // deferred.resolve(downloadURL);
+          ///thumb
+          var base64Cut = base64.substring(34);
+          window.imageResizer.resizeImage(
+            function(data) {
+              var thumbnailRef = storageRef.child(getChild('reviews-thumb')).putString(data.imageData, 'base64', metadata);
+              thumbnailRef.on('state_changed', function(snapshot) {
+                var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Thumb Upload is ' + progress + '% done');
+              }, function(error) {
+                console.log("error in thumb uploading." + error);
+              }, function() {
+                var thumbURL = thumbnailRef.snapshot.downloadURL;
+                deferred.resolve({original: downloadURL, thumb: thumbURL});
+              });
+            }, function (error) {
+              console.log("Error : \r\n" + error);
+            }, base64Cut, 
+            150,
+            150, 
+            {
+              resizeType: ImageResizer.RESIZE_TYPE_PIXEL,
+              imageDataType: ImageResizer.IMAGE_DATA_TYPE_BASE64,
+              format: ImageResizer.FORMAT_JPG
+            }
+          );
+          ///thumb
+        });
+      });
+      return deferred.promise;
     },
     getMultipleUpload : function(restaurantId, reviewId) {
       var ref = Database.restaurantReviewsReference().child(restaurantId).child(reviewId).child('images');
@@ -32,7 +68,8 @@ app.factory("Upload", ["Database", "$firebaseArray",
       var list = this.getMultipleUpload(restaurantId, reviewId);
       for (var i = 0; i < images.length; i++) {
         list.$add({
-          src: images[i]
+          src: images[i].original,
+          thumb: images[i].thumb
         })
         .then(function(ref) {
           console.log("added..." + ref);

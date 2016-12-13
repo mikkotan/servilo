@@ -1,8 +1,8 @@
-app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upload", "Database", "$ionicLoading", "$ionicModal", "$ionicPopup", "CordovaGeolocation", "$stateParams", "Restaurant", "User", "Review", "Reservation", "$ionicLoading", "Notification",
-  function($scope, $state, $firebaseArray, Upload, Database, $ionicLoading, $ionicModal, $ionicPopup, CordovaGeolocation, $stateParams, Restaurant, User, Review, Reservation, $ionicLoading, Notification) {
+app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upload", "Database", "$ionicLoading", "$ionicModal", "$ionicPopup", "CordovaGeolocation", "$stateParams", "Restaurant", "User", "Review", "Reservation", "$ionicLoading", "Notification", "$ionicSlideBoxDelegate", "$ionicScrollDelegate", "Gallery",
+  function($scope, $state, $firebaseArray, Upload, Database, $ionicLoading, $ionicModal, $ionicPopup, CordovaGeolocation, $stateParams, Restaurant, User, Review, Reservation, $ionicLoading, Notification, $ionicSlideBoxDelegate, $ionicScrollDelegate, Gallery) {
 
     console.log("View Restaurant Ctrl")
-    $scope.items = [];
+    
     $scope.rating = {
       rate: 0,
       max: 5
@@ -17,6 +17,11 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
       }
       return items;
     }
+
+    // $scope.pushImage = function(image) {
+    //   $scope.items.push(image);
+    //   console.log($scope.items)
+    // }
 
     $scope.bookReservation = function(reservation) {
       var confirmReservation = $ionicPopup.confirm({
@@ -108,25 +113,15 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
     }
 
     $scope.images = [];
+    $scope.thumbs = [];
 
     $scope.selImages = function() {
       window.imagePicker.getPictures(
         function(results) {
           for (var i = 0; i < results.length; i++) {
-            window.plugins.Base64.encodeFile(results[i], function(base64) {
-              var reviewsRef = Upload.get(base64);
-              reviewsRef.on('state_changed', function(snapshot) {
-                var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                console.log('Upload is ' + progress + '% done');
-                // $scope.progress = progress;
-              }, function(error) {
-                console.log("error in uploading." + error);
-              }, function() {
-                var downloadURL = reviewsRef.snapshot.downloadURL;
-                $scope.images.push(downloadURL);
-                $scope.$apply();
-              });
-            });
+            Upload.review(results[i]).then(function(downloadURL) {
+              $scope.images.push(downloadURL);
+            })
           }
         },
         function(error) {
@@ -153,6 +148,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
           review.content = '';
           review.rating = 0;
           $scope.images = [];
+          $scope.thumbs = [];
           $ionicLoading.hide();
           Review.userReview(id).set(newReview.key).then(function() {
             console.log('added to user_reviews')
@@ -167,7 +163,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
             timestamp: firebase.database.ServerValue.TIMESTAMP
           })
         })
-        .catch(function() {
+        .catch(function(err) {
           alert(err);
           // $ionicLoading.hide();
         })
@@ -182,12 +178,12 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
     $scope.updateReview = function(review) {
       // var reviewRef = Review.getReview(review.$id);
       Review.editReview(id, review)
-      .then(function() {
-        console.log("finished updating review.");
-        Upload.uploadMultiple($scope.images, id, review.$id);
-        $scope.images = [];
-        $scope.editReviewModal.hide();
-      })
+        .then(function() {
+          console.log("finished updating review.");
+          Upload.uploadMultiple($scope.images, id, review.$id);
+          $scope.images = [];
+          $scope.editReviewModal.hide();
+        })
       $scope.isAlreadyReviewed();
     };
 
@@ -344,5 +340,45 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "$firebaseArray", "Upl
       //     }
       //   })
     }
+
+    $scope.showGallery = function(allImages) {
+      Gallery.set(allImages);
+    }
+
+    $scope.zoomMin = 1;
+
+    // $ionicModal.fromTemplateUrl('app/restaurant/_gallery.html', function(galleryModal) {
+    //   $scope.galleryModal = galleryModal;
+    // }, {
+    //   scope: $scope
+    // });
+
+    $scope.showImages = function(index) {
+      $scope.activeSlide = index;
+      $scope.showModal('app/restaurant/_gallery-zoomview.html');
+    };
+     
+    $scope.showModal = function(templateUrl) {
+      $ionicModal.fromTemplateUrl(templateUrl, {
+        scope: $scope
+      }).then(function(modal) {
+        $scope.modal = modal;
+        $scope.modal.show();
+      });
+    }
+     
+    $scope.closeModal = function() {
+      $scope.modal.hide();
+      $scope.modal.remove()
+    };
+     
+    $scope.updateSlideStatus = function(slide) {
+      var zoomFactor = $ionicScrollDelegate.$getByHandle('scrollHandle' + slide).getScrollPosition().zoom;
+      if (zoomFactor == $scope.zoomMin) {
+        $ionicSlideBoxDelegate.enableSlide(true);
+      } else {
+        $ionicSlideBoxDelegate.enableSlide(false);
+      }
+    };
   }
 ]);

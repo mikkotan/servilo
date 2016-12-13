@@ -1,5 +1,5 @@
-app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera", "CordovaGeolocation", "currentGeoLocation", "Upload", "$ionicPopup", "Order", "Database", "Reservation",
-  function($scope, $firebaseArray, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation, currentGeoLocation, Upload, $ionicPopup, Order, Database, Reservation) {
+app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera", "CordovaGeolocation","Upload", "$ionicPopup", "Order", "Database", "Reservation",
+  function($scope, $firebaseArray, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation,Upload, $ionicPopup, Order, Database, Reservation) {
 
     $scope.modalControl = {};
     $scope.data= {detail:""};
@@ -35,7 +35,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     };
 
     $scope.setFacilities = function() {
-      var facilities = $ionicPopup.confirm({
+      var facilities = $ionicPopup.alert({
         title: 'Set Facilities Offered',
         templateUrl: 'app/restaurant/_facilitiesPopout.html',
         subTitle: 'Amenities available for the customers in your restaurant.',
@@ -45,7 +45,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     };
 
     $scope.setOpenDays = function() {
-      var openDays = $ionicPopup.confirm({
+      var openDays = $ionicPopup.alert({
         title: 'Set Open Days',
         templateUrl: 'app/restaurant/_openDaysPopout.html',
         subTitle: 'Set the days open on your restaurant.',
@@ -69,6 +69,41 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     $scope.changeAvailability = function(restaurant) {
       Restaurant.changeAvailability(restaurant);
     };
+
+    $scope.testPhoto = function() {
+      navigator.camera.getPicture(onSuccess, onFail,
+        {
+          sourceType: Camera.PictureSourceType.CAMERA,
+          quality: 50,
+          destinationType: Camera.DestinationType.DATA_URL,
+          encodingType: Camera.EncodingType.JPEG,
+          mediaType: Camera.MediaType.PICTURE,
+          correctOrientation: true,
+        });
+
+      function onSuccess(imageURI) {
+        var storageRef = firebase.storage().ref();
+        var metadata = {
+          contentType: 'image/jpeg'
+        };
+        storageRef.child('test.jpg').putString(imageURI, 'base64', metadata);
+        window.imageResizer.resizeImage(
+          function(data) {
+            storageRef.child('test-thumb.jpg').putString(data.imageData, 'base64', metadata);
+          }, function (error) {
+            console.log("Error : \r\n" + error);
+          }, imageURI, 0.1, 0.1, {
+            resizeType: ImageResizer.RESIZE_TYPE_FACTOR,
+            imageDataType: ImageResizer.IMAGE_DATA_TYPE_BASE64,
+            format: ImageResizer.FORMAT_JPG
+          }
+        );
+      }
+
+      function onFail(message) {
+          alert('Failed because: ' + message);
+      }
+    }
 
     $scope.imageURL = "";
     $scope.upload = function(index) {
@@ -106,6 +141,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     }
 
     $scope.addRestaurant = function(restaurant) {
+      console.log(restaurant);
       Restaurant.addPendingRestaurant(restaurant, $scope.marker, $scope.imageURL);
       clearFields(restaurant);
       $scope.restaurantModal.hide();

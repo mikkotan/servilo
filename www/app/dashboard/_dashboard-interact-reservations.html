@@ -1,13 +1,18 @@
 <ion-view view-title="Interact :: Reservations">
   <ion-floating-menu has-footer="true" menu-color="#886aea" menu-icon="ion-plus" menu-open-color="#444">
-    <ion-floating-item icon="ion-ios-calendar-outline" button-color="#387ef5" text="Add Reservation"></ion-floating-item>
+    <ion-floating-item icon="ion-ios-calendar-outline" button-color="#387ef5" click="walkinReservation()" text="Add Reservation"></ion-floating-item>
   </ion-floating-menu>
   <ion-content class="padding">
     <h3>Manage Reservations for {{restaurantId}}</h3>
     <ion-item ng-repeat="reservation in reservations | orderBy:'-details.timestamp'" ng-if="reservation.ready">
-      <h4>Reference #{{reservation.details.timestamp}}</h4>
-      <p>
+      <h4>Reference #{{reservation.details.timestamp}} <span class="button button-outline button-small button-balanced" ng-if="today === reservation.day">Today</span></h4>
+
+
+      <p ng-if="reservation.details.name == undefined">
         Customer Name: {{reservation.customer_name}}
+      </p>
+      <p ng-if="reservation.details.name">
+        Customer Name: {{reservation.details.name}}
       </p>
       <p>
         Pax: {{reservation.details.number_of_persons}}
@@ -18,15 +23,18 @@
       <p ng-show="reservation.details.status">
         Status: {{reservation.details.status}}
       </p>
-      <button class="button button-small button-outline button-balanced" ng-click="confirm(reservation.details)" ng-show="reservation.details.status === 'pending'">
-        Confirm
-      </button>
-      <button class="button button-small button-outline button-royal" ng-click="confirm(reservation.details)" ng-show="reservation.details.status === 'confirmed'">
-        Remind
-      </button>
-      <button class="button button-small button-outline button-assertive" ng-click="reject(reservation.details)" ng-show="reservation.details.status !== 'cancelled'">
-        Reject
-      </button>
+      <div ng-if="reservation.details.status !== 'walk-in'">
+        <button class="button button-small button-outline button-balanced" ng-click="confirm(reservation.details)" ng-show="reservation.details.status === 'pending'">
+          Confirm
+        </button>
+        <button class="button button-small button-outline button-royal" ng-click="remind(reservation.details)" ng-show="reservation.details.status === 'confirmed'">
+          Remind
+        </button>
+        <button class="button button-small button-outline button-assertive" ng-click="reject(reservation.details)" ng-show="reservation.details.status !== 'cancelled'" >
+          Reject
+        </button>
+      </div>
+
     </ion-item>
   </ion-content>
 </ion-view>

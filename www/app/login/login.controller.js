@@ -1,7 +1,13 @@
-app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMenuDelegate", "ionicMaterialMotion", "User", "$state", "$ionicLoading", "$ionicModal", "Database", "IonicPushService", "$ionicPopup",
-  function($scope, Auth, ionicMaterialInk, $ionicSideMenuDelegate, ionicMaterialMotion, User, $state, $ionicLoading, $ionicModal, Database, IonicPushService, $ionicPopup) {
+app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMenuDelegate", "ionicMaterialMotion", "User", "$state", "$ionicLoading", "$ionicModal", "Database", "IonicPushService", "$ionicPopup", "$timeout",
+  function($scope, Auth, ionicMaterialInk, $ionicSideMenuDelegate, ionicMaterialMotion, User, $state, $ionicLoading, $ionicModal, Database, IonicPushService, $ionicPopup, $timeout) {
 
     ionicMaterialInk.displayEffect();
+    $timeout(function() {
+      ionicMaterialMotion.blinds({
+        startVelocity: 3000
+      });
+    }, 500);
+
     $scope.$on('$ionicView.enter', function() {
       $ionicSideMenuDelegate.canDragContent(false);
     });

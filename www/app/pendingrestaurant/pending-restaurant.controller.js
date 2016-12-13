@@ -1,9 +1,14 @@
-app.controller('PendingCtrl',["$scope","Auth","Restaurant",function($scope ,Auth,Restaurant){
+app.controller('PendingCtrl',["$scope","Auth","Restaurant",'User',function($scope ,Auth,Restaurant,User){
 
   console.log("PendingCtrl");
+  $scope.pendingRestaurants = Restaurant.getPendingRestaurants();
+
   $scope.approveRestaurant = function(restaurant) {
+
     $scope.pendingRestaurants.$remove(restaurant)
       .then(() => {
+        User.removeFromUser(restaurant.owner_id)
+        User.setAsRestaurantOwner(restaurant.owner_id)
         var add = Restaurant.addRestaurant(restaurant);
         add.ref
           .then(() => {
@@ -20,6 +25,6 @@ app.controller('PendingCtrl',["$scope","Auth","Restaurant",function($scope ,Auth
       })
   }
 
-      $scope.pendingRestaurants = Restaurant.getPendingRestaurants();
+
 
 }])

@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 
-var app = angular.module('app', ['ui.mask', 'ionic','ionic.cloud', 'ionMdInput', 'ionic-material','ion-floating-menu', 'firebase', 'ionic.rating','ionic-toast', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker', 'yaru22.angular-timeago', 'ui.select', 'ngSanitize', '$actionButton', 'ion-gallery', 'ionicLazyLoad'])
+var app = angular.module('app', ['ui.mask', 'ionic','ionic.cloud', 'ionMdInput', 'ionic-material','ion-floating-menu', 'firebase', 'ionic.rating','ionic-toast', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker', 'yaru22.angular-timeago', 'ui.select', 'ngSanitize', '$actionButton', 'ion-gallery', 'ionicLazyLoad', 'ionic.contrib.ui.hscrollcards'])
 
 app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushService", "User", "Database", "$cordovaGeolocation", "$ionicPopup", "$cordovaPushV5","CartData","$ionicLoading",
   function($ionicPlatform, $rootScope, $state, $templateCache, IonicPushService, User, Database, $cordovaGeolocation, $ionicPopup, $cordovaPushV5,CartData,$ionicLoading) {
@@ -108,9 +108,8 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
       console.log(e.message);
     });
 
-
     $rootScope.$on('$stateChangeStart',function(event, toState, toParams, fromState, fromParams, options){
-      if(typeof fromState.views.restaurant_page !== "undefined" && typeof toState.views.restaurant_page == "undefined"){
+      if(fromState.class == "Restaurant" && toState.class !== "Restaurant"){
           if(!CartData.isEmpty()){
               event.preventDefault();
               var leavingRestaurantPopup = $ionicPopup.confirm({
@@ -128,34 +127,32 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
                   console.log("ngaa gn cancel mo?");
                 }
               });
-
-            }else{
-              console.log("HI");
-            }
-        }else if(toState){
-          console.log(toState)
-            //$ionicLoading.show();
-        }else {
-          console.log("Free Will")
         }
-      })
+
+      } else if (toState) {
+      //  $ionicLoading.show();
+      } else {
+        console.log("Free Will")
+      }
+    })
     $rootScope.$on("$stateChangeSuccess",
       function(event, toState, toParams, fromState, fromParams, options) {
           //$ionicLoading.hide();
     })
 
+
     $rootScope.$on("$stateChangeError",
       function(event, toState, toParams, fromState, fromParams, error) {
-        $ionicLoading.hide()
         if (error === "AUTH_REQUIRED") {
           event.preventDefault();
           $state.go("landing")
         }
-    })
+      })
 
     $templateCache.put('template.tpl.html', '');
   }
 ]);
+
 
 app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate, Auth, User, Database, $state,
   $ionicPush, IonicPushService, $ionicPopover, $cordovaPushV5,ionicMaterialInk , Role) {
@@ -177,7 +174,6 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
     function(ratio) {
       $scope.sidemenuopened = (ratio == 1);
     });
-
 
   $scope.signOut = function() {
     $ionicLoading.show({
@@ -209,7 +205,6 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
 
   Auth.$onAuthStateChanged(function(firebaseUser) {
     if (firebaseUser) {
-
       User.auth().$loaded().then(function(data) {
         $scope.userRole = Role.get(data.$id)
         $scope.currentUser = User.auth();
@@ -226,6 +221,7 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
     }
   });
 })
+
 .controller('TabsCtrl', function($scope, $state, Auth ,role) {
   $scope.goToHome = function() {
     $state.go("tabs.home")
@@ -251,6 +247,7 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
   $scope.goToPending = () =>{
     $state.go("tabs.pending")
   }
+
 
   $scope.userRole = role
 

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <widget id="com.ionicframework.todo334097" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>todo</name>
-  <description>
-    An Ionic Framework and Cordova project.
+  <description>&#xD;&#xD;&#xD;&#xD;
+    An Ionic Framework and Cordova project.&#xD;&#xD;&#xD;&#xD;
   </description>
-  <author email="you@example.com" href="http://example.com.com/">
-    Your Name Here
+  <author email="you@example.com" href="http://example.com.com/">&#xD;&#xD;&#xD;&#xD;
+    Your Name Here&#xD;&#xD;&#xD;&#xD;
   </author>
-  <content src="index.html"/>
+  <content src="http://192.168.0.106:8100" original-src="index.html"/>
   <access origin="*"/>
   <preference name="xwalkVersion" value="xwalk_core_library_beta:19+"/>
   <preference name="webviewbounce" value="false"/>
@@ -82,7 +82,6 @@
   <plugin name="cordova-plugin-statusbar" spec="~2.1.3"/>
   <plugin name="cordova-plugin-whitelist" spec="~1.2.2"/>
   <plugin name="ionic-plugin-keyboard" spec="~2.2.1"/>
-  <plugin name="cordova-plugin-camera" spec="~2.2.0"/>
   <plugin name="mx.ferreyra.callnumber" spec="https://github.com/Rohfosho/CordovaCallNumberPlugin.git"/>
   <plugin name="cordova-plugin-compat" spec="~1.0.0"/>
   <plugin name="cordova-plugin-image-picker" spec="https://github.com/Findiglay/cordova-imagePicker.git"/>
@@ -109,6 +108,7 @@
     <variable name="XWALK_MODE" value="embedded"/>
     <variable name="XWALK_MULTIPLEAPK" value="true"/>
   </plugin>
-  <allow-navigation href="http://192.168.0.130:8100"/>
-  <allow-navigation href="http://192.168.0.118:8100"/>
+  <plugin name="cordova-plugin-camera" spec="~2.2.0"/>
+  <plugin name="cordova-plugin-image-resizer" spec="~1.0.0"/>
+  <allow-navigation href="http://192.168.0.125:8100"/>
 </widget>

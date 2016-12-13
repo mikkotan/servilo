@@ -89,6 +89,9 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
     }
 
     $scope.buy = function(cart, location) {
+
+      $ionicLoading.show();
+
       if (location) {
         Order.create({
           restaurant_id: $scope.restaurantId,
@@ -122,6 +125,7 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
             timestamp: firebase.database.ServerValue.TIMESTAMP
           })
             .then(() => {
+              $ionicLoading.hide();
               alert('Success');
             })
             .catch((err) => {

@@ -29,9 +29,7 @@
   <ion-tab ng-if="userRole.isRestaurantOwner" title="Orders" icon="ion-android-list">
     <ion-nav-view name="order-tab"></ion-nav-view>
   </ion-tab>
-  <!-- <ion-tab ng-if="firebaseUser" title="Notifications" icon="ion-android-notifications" ng-click="goToNotifications()">
-    <ion-nav-view name="notifications-tab"></ion-nav-view>
-  </ion-tab> -->
+
   <ion-tab ng-if="userRole.isRestaurantOwner" title="Reservations" icon="ion-android-notifications">
     <ion-nav-view name="reservations-tab"></ion-nav-view>
   </ion-tab>

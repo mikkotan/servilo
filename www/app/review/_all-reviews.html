@@ -17,9 +17,9 @@
         <div>
           {{review.content}} <span class="badge badge-balanced">{{review.rating}}</span>
         </div>
-        <div ng-if="review.images" ng-repeat="img in review.images">
-           <img image-lazy-src="{{img.src}}" style="width:100px" image-lazy-loader="spiral">
-        </div>
+        <!-- <hscroller ng-if="review.images">
+           <hcard ng-repeat="img in review.images" index="{{$index}}" desc="" image="{{img.src}}"></hcard>
+        </hscroller> -->
         <button class="ion-reply-all button button-calm" ng-click="openReplyModal(review)" ng-init="replies=getReplies(review.$id)">Reply</button>
         <div ng-repeat="reply in replies" ng-init="replyName=getName(reply.user_id)">
           <div>
