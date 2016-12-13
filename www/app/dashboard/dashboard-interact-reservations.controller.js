@@ -2,13 +2,41 @@ app.controller('DashboardInteractReservationsCtrl', function($scope, $stateParam
   console.log('dashboard interact reservations ctrl');
   $ionicLoading.show();
   $scope.restaurantId = $stateParams.restaurantId;
-  $scope.today = (new Date()).getDay();
-
+  $scope.today = new Date();
+  $scope.filterType = 'all'
   $scope.reservation = {
     name : '',
     number_of_persons : 2,
     datetime: new Date()
   }
+
+  $scope.setFilter = function(type) {
+    $scope.filterType = type
+  }
+
+  $scope.reservationFilter = function(type) {
+    return function(reservation) {
+      reservation.date = new Date(reservation.details.datetime)
+      if (type === 'today') {
+        return reservation.date.getDate() === $scope.today.getDate() && reservation.date.getYear() === $scope.today.getYear()
+      }
+      else if (type === 'upcoming') {
+        return reservation.date > $scope.today
+      }
+      else if (type === 'all') {
+        return reservation
+      }
+      else if (type === 'confirmed') {
+        return reservation.details.status === 'confirmed'
+      }
+    }
+  }
+
+  // $scope.upcomingFilter = function() {
+  //   return function(reservation) {
+  //     reservation.date = new Date(reservation.details.datetime)
+  //   }
+  // }
 
   $scope.bookReservation = function(reservation) {
     reservation.datetime = reservation.datetime.getTime()
