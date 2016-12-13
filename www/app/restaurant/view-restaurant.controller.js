@@ -1,6 +1,13 @@
-app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParams", "$ionicLoading", "$ionicModal", "$ionicPopup", "CordovaGeolocation", "Restaurant", "User", "Review", "Reservation", "$ionicLoading", "Notification", "$ionicSlideBoxDelegate", "$ionicScrollDelegate", "Gallery", "$timeout",
-  function($scope, $state, Upload, $stateParams, $ionicLoading, $ionicModal, $ionicPopup, CordovaGeolocation, Restaurant, User, Review, Reservation, $ionicLoading, Notification, $ionicSlideBoxDelegate, $ionicScrollDelegate, Gallery, $timeout) {
+app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParams", "ionicMaterialInk", "$ionicLoading", "$ionicModal", "$ionicPopup", "CordovaGeolocation", "Restaurant", "User", "Review", "Reservation", "$ionicLoading", "Notification", "$ionicSlideBoxDelegate", "$ionicScrollDelegate", "Gallery", "$timeout",
+  function($scope, $state, Upload, $stateParams, ionicMaterialInk, $ionicLoading, $ionicModal, $ionicPopup, CordovaGeolocation, Restaurant, User, Review, Reservation, $ionicLoading, Notification, $ionicSlideBoxDelegate, $ionicScrollDelegate, Gallery, $timeout) {
+    
     $ionicLoading.show();
+    // ionicMaterialInk.displayEffect();
+    $scope.$on('applyInk',function(e) {
+      ionicMaterialInk.displayEffect();
+    })
+    $scope.$emit('applyInk');
+    
     console.log("View Restaurant Ctrl")
     
     $scope.rating = {
@@ -154,6 +161,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
 
     $scope.openEditModal = function(review) {
       $scope.editReviewModal.show();
+      $scope.$emit('applyInk');
       $scope.editImages = Upload.getMultipleUpload(restaurantId, review.$id);
     }
 
@@ -247,5 +255,20 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
       Gallery.set(allImages);
     }
 
+    $scope.deleteImage = function(images, image) {
+      var confirmDelete = $ionicPopup.confirm({
+        title: "Delete Photo",
+        template: "Are you sure you want to delete this photo?"
+      })
+
+      confirmDelete.then(function(res) {
+        if (res) {
+          images.$remove(image);
+          console.log("image removed")
+        } else {
+          console.log("delete failed");
+        }
+      })
+    }
   }
 ]);

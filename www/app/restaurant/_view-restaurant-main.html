@@ -7,9 +7,9 @@
       <!-- <button ng-repeat="service in restaurant.services" class="button button-calm"  ng-disabled="!service.status" ng-click="goToMenus(restaurant, service)">
         {{service.name}}
       </button> -->
-      <button class="button button-calm" ng-if="restaurant.facilities.Online" ui-sref="tabs.viewRestaurant.menus">Online Order</button>
-      <button class="button button-calm" ng-if="restaurant.facilities.Reservation" ng-click="showAddReservationModal()">Reservation</button>
-      <button class="button button-calm" ng-if="!hasFavored" ng-click="addToFavorites(restaurant)">Add to Favorites</button>
+      <button class="button button-calm ink" ng-show="restaurant.facilities.Online" ui-sref="tabs.viewRestaurant.menus">Online Order</button>
+      <button class="button button-calm ink" ng-show="restaurant.facilities.Reservation" ng-click="showAddReservationModal()">Reservation</button>
+      <button class="button button-calm ink" ng-show="!hasFavored" ng-click="addToFavorites(restaurant)">Add to Favorites</button>
     <p ng-if="getRestaurantStatus">ONLINE</p>
     <p ng-if="!getRestaurantStatus">OFFLINE</p>
 
@@ -29,14 +29,14 @@
         <ion-item>
           Location: {{restaurant.location}}
         </ion-item>
-        <div ng-if="!exists">
+        <div ng-show="!exists">
           <button ng-click="reviewModal.show()" class="button button-block button-balanced">
             <icon class="ion-plus"></icon> Write Review</button>
         </div>
-        <div class="button-bar" ng-if="exists">
-          <button ng-click="openEditModal(review)" class="button button-balanced">
+        <div class="button-bar" ng-show="exists">
+          <button ng-click="openEditModal(review)" class="button button-balanced ink">
             <icon class="ion-plus"></icon> Edit Review</button>
-          <button ng-click="showConfirmDelete(review)" class="button button-assertive">
+          <button ng-click="showConfirmDelete(review)" class="button button-assertive ink">
             <icon class="ion-android-delete"></icon> Delete Review</button>
         </div>
       </ion-list>
@@ -75,7 +75,7 @@
               </div> -->
             </div>
           </li>
-          <li class="item" ng-hide="!loadingReviews" ui-sref="tabs.viewRestaurant.reviews">
+          <li class="item ink" ng-hide="!loadingReviews" ui-sref="tabs.viewRestaurant.reviews">
             See all reviews
           </li>
         </ul>

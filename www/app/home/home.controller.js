@@ -1,9 +1,20 @@
-app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal", "$state", "ionicMaterialInk", "$ionicLoading", "Home", "$timeout", "User", "Auth", "CordovaGeolocation",
-  function($scope, $ionicSlideBoxDelegate, $ionicModal, $state, ionicMaterialInk, $ionicLoading, Home, $timeout, User, Auth, CordovaGeolocation) {
-
+app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal", "$state", "ionicMaterialInk", "ionicMaterialMotion", "$ionicLoading", "Home", "$timeout", "User", "Auth", "CordovaGeolocation",
+  function($scope, $ionicSlideBoxDelegate, $ionicModal, $state, ionicMaterialInk, ionicMaterialMotion, $ionicLoading, Home, $timeout, User, Auth, CordovaGeolocation) {
+    // ionicMaterialInk.displayEffect();
     var vm = this;
     $scope.currentLocation = CordovaGeolocation.get();
 
+    $scope.$on('ngLastRepeat.workorderlist',function(e) {
+        $scope.materialize();
+    });
+
+    $scope.materialize = function(){
+        $timeout(function(){
+            // ionicMaterialMotion.fadeSlideInRight();
+            ionicMaterialInk.displayEffect();
+          },0);
+    };
+    
     Auth.$onAuthStateChanged(function(firebaseUser) {
       console.log('on auth state changed running');
       if (firebaseUser) {

@@ -6,7 +6,7 @@
       </div>
     </div>
     <ion-list>
-      <ion-item ng-repeat="review in reviews" ng-init="reviewer=getName(review.reviewer_id)">
+      <ion-item ng-repeat="review in reviews" ng-init="reviewer=getName(review.reviewer_id)" ng-last-repeat="reviewList">
         <div>
           <h3>
             <img ng-if="reviewer.photoURL" class="sidebar-picture" ng-src="{{reviewer.photoURL}}" style="width: 50px; height: 50px">
@@ -20,13 +20,13 @@
         <!-- <hscroller ng-if="review.images">
            <hcard ng-repeat="img in review.images" index="{{$index}}" desc="" image="{{img.src}}"></hcard>
         </hscroller> -->
-        <button class="ion-reply-all button button-calm" ng-click="openReplyModal(review)" ng-init="replies=getReplies(review.$id)">Reply</button>
+        <button class="ion-reply-all button button-calm ink" ng-click="openReplyModal(review)" ng-init="replies=getReplies(review.$id)">Reply</button>
         <div ng-repeat="reply in replies" ng-init="replyName=getName(reply.user_id)">
           <div>
             <strong>{{replyName.displayName}}:</strong> {{reply.content}}
             <span ng-if="reply.user_id == user.$id">
-              <a class="button button-balanced icon ion-edit" ng-click="openEditReplyModal(reply, review.$id)">Edit</a>
-              <a class="button button-assertive icon ion-ios-close-outline" ng-click="replies.$remove(reply)">Remove</a>
+              <a class="button button-balanced icon ion-edit ink" ng-click="openEditReplyModal(reply, review.$id)">Edit</a>
+              <a class="button button-assertive icon ion-ios-close-outline ink" ng-click="replies.$remove(reply)">Remove</a>
             </span>
           </div>
         </div>
