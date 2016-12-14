@@ -1,0 +1,25 @@
+<ion-modal-view view-title="{{restaurant.name}}">
+  <ion-header-bar class="bar bar-header bar-assertive">
+    <h1 class="title">{{restaurant.name}}</h1>
+    <div class="buttons">
+      <button class="button button-clear button-primary" ng-click="viewReviewModal.hide()"><i class="icon ion-ios-close"></i></button>
+    </div>
+  </ion-header-bar>
+  <ion-content class="padding">
+    <div>
+      <img ng-if="!viewReviewer.photoURL" src="img/ionic.png" style="width: 50px; height: 50px">
+      <img ng-if="viewReviewer.photoURL" src="{{viewReviewer.photoURL}}" style="width: 50px; height: 50px">
+    </div>
+    <h3>
+      {{viewReviewer.displayName}}
+    </h3>
+    <div>
+      {{viewReview.content}}
+    </div>
+    <div ng-show="viewReview.images">
+      <p ng-repeat="image in viewReview.images">
+        <img ng-src="{{image.thumb}}" width="100px">
+      </p>
+    </div>
+  </ion-content>
+</ion-modal-view>
