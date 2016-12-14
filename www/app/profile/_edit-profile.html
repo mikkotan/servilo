@@ -8,22 +8,28 @@
     <ion-list>
       <div class="card">
         <ion-item id="form-input">
-          <form ng-submit="editProfile(currentUser)">
+          <form ng-submit="editProfile(currentUser)" name="editProfileForm">
             <label class="item item-input item-floating-label">
               <span class="input-label has-input">Display Name</span>
-              <input type="text" placeholder="Display Name" ng-model="currentUser.displayName">
+              <input type="text" placeholder="Display Name" ng-model="currentUser.displayName" name="displayName">
             </label>
             <label class="item item-input item-floating-label">
               <span class="input-label has-input">First Name</span>
-              <input type="text" placeholder="First Name" ng-model="currentUser.firstName">
+              <input type="text" placeholder="First Name" ng-model="currentUser.firstName" name="firstName" ng-required=true>
+              <div class="error" ng-show="editProfileForm.firstName.$touched">
+                <p ng-show="editProfileForm.firstName.$error.required"> * First name is required</p>
+              </div>
             </label>
             <label class="item item-input item-floating-label">
               <span class="input-label has-input">Last Name</span>
-              <input type="text" placeholder="Last Name" ng-model="currentUser.lastName">
+              <input type="text" placeholder="Last Name" ng-model="currentUser.lastName" name="lastName" ng-required=true>
+              <div class="error" ng-show="editProfileForm.lastName.$touched">
+                <p ng-show="editProfileForm.lastName.$error.required"> * Last name is required</p>
+              </div>
             </label>
             <label class="item item-input item-floating-label">
               <span class="input-label has-input">Description</span>
-              <input type="text" placeholder="Description" ng-model="currentUser.description">
+              <input type="text" placeholder="Description" ng-model="currentUser.description" name="description">
             </label>
             <div class="row">
               <button class="button button-block button-balanced ink">Submit</button>

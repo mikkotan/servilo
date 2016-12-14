@@ -23,6 +23,7 @@ app.factory("Database", ["$firebaseArray", "$firebaseObject", "$firebaseAuth",
     var userReviewsRef = rootRef.child('user_reviews');
     var facilitiesRef = rootRef.child('facilities');
     var promosRef = rootRef.child('promos');
+    var advertisementsRef = rootRef.child('advertisements');
 
 
 
@@ -92,6 +93,9 @@ app.factory("Database", ["$firebaseArray", "$firebaseObject", "$firebaseAuth",
       },
       promosReference : function() {
         return promosRef;
+      },
+      advertisementsReference : function() {
+        return advertisementsRef;
       },
       services : function(){
         return $firebaseArray(serviceRef)
