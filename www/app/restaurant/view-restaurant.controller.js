@@ -1,15 +1,15 @@
 app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParams", "ionicMaterialInk", "$ionicLoading", "$ionicModal", "$ionicPopup", "CordovaGeolocation", "Restaurant", "User", "Review", "Reservation", "$ionicLoading", "Notification", "$ionicSlideBoxDelegate", "$ionicScrollDelegate", "Gallery", "$timeout",
   function($scope, $state, Upload, $stateParams, ionicMaterialInk, $ionicLoading, $ionicModal, $ionicPopup, CordovaGeolocation, Restaurant, User, Review, Reservation, $ionicLoading, Notification, $ionicSlideBoxDelegate, $ionicScrollDelegate, Gallery, $timeout) {
-    
+
     $ionicLoading.show();
     // ionicMaterialInk.displayEffect();
     $scope.$on('applyInk',function(e) {
       ionicMaterialInk.displayEffect();
     })
     $scope.$emit('applyInk');
-    
+
     console.log("View Restaurant Ctrl")
-    
+
     $scope.rating = {
       rate: 0,
       max: 5
@@ -37,7 +37,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
             console.log('Has favored error');
             console.log(err);
           })
-        
+
         Restaurant.getReviews(restaurant.$id).$loaded().then(function(reviews) {
           $scope.restaurantReviews = reviews;
           $scope.loadingReviews = true;
@@ -78,6 +78,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
             number_of_persons: reservation.number_of_persons,
             status: 'pending',
             user_id: User.auth().$id,
+            note: reservation.note,
             restaurant_id: restaurantId,
             timestamp: firebase.database.ServerValue.TIMESTAMP
           })
