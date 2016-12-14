@@ -66,7 +66,7 @@
                   </p>
                 </div>
               </div>
-              <div class="item item-input-inset">
+              <!-- <div class="item item-input-inset">
                 <label class="item-input item-floating-label">
                   <span class="input-label has-input">Location of Restaurant</span>
                   <input type="text" placeholder="Location of Restaurant" ng-model="eRestaurant.location" name="location" ng-required="true">
@@ -75,7 +75,22 @@
                   </div>
                 </label>
                 <a class="button button-royal icon ion-map" ng-click="showMap()"></a>
-              </div>
+              </div> -->
+              <a class="button button-small button-balanced" ng-click="useCurrent()">Use Current Location</a>
+              <label class="item-input item-floating-label">
+                <span class="input-label has-input">Location of Restaurant</span>
+                <input type="text" placeholder="Change address" google-autocomplete-suggestion location="data.location" country-code="{{countryCode}}" ng-model="data.location.formatted_address" readonly />
+                <!-- <input type="text" placeholder="Location of Restaurant" ng-model="restaurant.location" details="data.detail"/> -->
+
+              </label>
+
+              <img ng-src="https://maps.googleapis.com/maps/api/staticmap?center={{marker.coords.latitude}},{{marker.coords.longitude}}
+                              &zoom=18
+                              &size=500x300
+                              &markers={{marker.coords.latitude}},{{marker.coords.longitude}}
+                              &key=AIzaSyCTNmJQD-Z3qn5QmhC-Jfp4iZr6P6QV_tE" ng-if="marker.coords.latitude && marker.coords.longitude">
+
+              <a class="button button-block button-royal icon-left ion-map" ng-click="showMap()" ng-disabled="!data.location.formatted_address">Edit marker on map</a>
               <div class="item">
                 <div class="row">
                   <div class="col text-center">

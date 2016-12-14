@@ -3,13 +3,19 @@
     <ion-floating-item icon="ion-android-clipboard" button-color="#387ef5" text="Walk-in Order"></ion-floating-item>
   </ion-floating-menu>
   <ion-content class="padding has-tabs-top">
-    <h3>Manage Orders for {{restaurantId}}</h3>
+    <h3>Displaying {{filterType}} reservations</h3>
     <!-- hehehe
     <h3 ng-repeat="order in orders" ng-if="order.ready">
       {{order.customer}}    {{orders.length}} {{order.menus}}
     </h3> -->
+    <div class="button-bar">
+      <button class="button button-small button-balanced" ng-click="setFilter('today')">View Today</button>
+      <button class="button button-small button-balanced" ng-click="setFilter('all')">View All</button>
+      <button class="button button-small button-balanced" ng-click="setFilter('month')">View Month</button>
+    </div>
 
-    <ion-item  ng-repeat="order in orders">
+    <ion-item  ng-repeat="order in orders | orderBy:'-details.order_details.timestamp' | filter:orderFilter(filterType) ">
+      <h6>Order Reference #{{order.details.order_details.timestamp}}</h6>
       <p>
       Customer Name: {{order.customer}}
       </p>

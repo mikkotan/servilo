@@ -3,13 +3,12 @@
     <img ng-if="restaurant.photoURL" ng-src="{{restaurant.photoURL}}" width="100%" />
     <img ng-if="!restaurant.photoURL" ng-src="img/wow.jpg" width="50%">
     <div class="padding">
-      <h3>{{restaurant.name}}</h3>
-      <!-- <button ng-repeat="service in restaurant.services" class="button button-calm"  ng-disabled="!service.status" ng-click="goToMenus(restaurant, service)">
-        {{service.name}}
-      </button> -->
-      <button class="button button-calm ink" ng-show="restaurant.facilities.Online" ui-sref="tabs.viewRestaurant.menus">Online Order</button>
-      <button class="button button-calm ink" ng-show="restaurant.facilities.Reservation" ng-click="showAddReservationModal()">Reservation</button>
-      <button class="button button-calm ink" ng-show="!hasFavored" ng-click="addToFavorites(restaurant)">Add to Favorites</button>
+    <h3>{{restaurant.name}}</h3>
+    <div class="button-bar">
+      <button class="button button-calm ink" ng-if="restaurant.facilities.Online" ui-sref="tabs.viewRestaurant.menus">Online Order</button>
+      <button class="button button-calm ink" ng-if="restaurant.facilities.Reservation" ng-click="showAddReservationModal()">Reservation</button>
+    </div>
+    <button class="button button-calm ink" ng-show="!hasFavored" ng-click="addToFavorites(restaurant)">Add to Favorites</button>
     <p ng-if="getRestaurantStatus">ONLINE</p>
     <p ng-if="!getRestaurantStatus">OFFLINE</p>
 
@@ -30,7 +29,7 @@
           Location: {{restaurant.location}}
         </ion-item>
         <div ng-show="!exists">
-          <button ng-click="reviewModal.show()" class="button button-block button-balanced">
+          <button ng-click="openReviewModal()" class="button button-block button-balanced ink">
             <icon class="ion-plus"></icon> Write Review</button>
         </div>
         <div class="button-bar" ng-show="exists">

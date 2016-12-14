@@ -8,7 +8,7 @@
   <ion-content class="padding">
     <form ng-submit="addReview(review)">
       <div class="list">
-        <a class="button button-block button-balanced" ng-click="selImages()">
+        <a class="button button-block button-balanced ink" ng-click="selImages()">
                     Add Images From Gallery
                   </a>
         <label class="item item-input item-floating-label">
@@ -22,14 +22,14 @@
           <rating ng-model="review.rating" max="rating.max"></rating>
         </div>
         <div class="padding row">
-          <button type="submit" class="button button-block button-positive">Save</button>
+          <button type="submit" class="button button-block button-positive ink">Save</button>
         </div>
       </div>
     </form>
-    <p ng-repeat="img in images track by $index">
+<!--     <p ng-repeat="img in images track by $index">
       <img ng-src="{{img.original}}" style="max-width:200px" />
     </p>
-    THUMBS BABEH
+    THUMBS BABEH -->
     <p ng-repeat="img in images track by $index">
       <img ng-src="{{img.thumb}}" style="max-width:200px" />
     </p>

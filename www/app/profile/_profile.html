@@ -2,34 +2,35 @@
   <ion-nav-buttons side="right">
     <button class="button button-icon icon ion-android-options ink" ng-click="openPopover($event, firebaseUser)"></button>
   </ion-nav-buttons>
-  <ion-content id="content">
-    <div id="profile-info" class="hero slide-up" style="background-image: url('img/material-wall.jpg');">
-      <div class="content">
-        <img class="avatar" ng-show="firebaseUser.photoURL" ng-src="{{firebaseUser.photoURL}}">
-        <img class="avatar" ng-show="!firebaseUser.photoURL" ng-src="img/ionic.png">
-        <h3 ng-if="firebaseUser.provider !== email" class="light">{{firebaseUser.displayName}}</h3>
-        <h3 ng-if="firebaseUser.provider === email" class="light">{{firebaseUser.firstName}} {{firebaseUser.lastName}}</h3>
-        <h4 id="profile-description" ng-if="firebaseUser.description"> {{ firebaseUser.description }} </h4>
-        <h4 id="profile-description" ng-if="!firebaseUser.description"> <a ng-click="openEditProfile()">Add a description</a> </h4>
+  <ion-content>
+    <div id="content">
+      <div id="profile-info" class="hero slide-up" style="background-image: url('img/material-wall.jpg');">
+        <div class="content">
+          <img class="avatar" ng-show="firebaseUser.photoURL" ng-src="{{firebaseUser.photoURL}}">
+          <img class="avatar" ng-show="!firebaseUser.photoURL" ng-src="img/ionic.png">
+          <h3 ng-if="firebaseUser.provider !== email" class="light">{{firebaseUser.displayName}}</h3>
+          <h3 ng-if="firebaseUser.provider === email" class="light">{{firebaseUser.firstName}} {{firebaseUser.lastName}}</h3>
+          <h4 id="profile-description" ng-if="firebaseUser.description"> {{ firebaseUser.description }} </h4>
+          <h4 id="profile-description" ng-if="!firebaseUser.description"> <a ng-click="openEditProfile()">Add a description</a> </h4>
+        </div>
       </div>
+
+      <h4 class="content">Favorites</h4>
+      <ion-list class="list animate-fade-slide-in-right">
+        <ion-item ng-repeat="restaurant in userFavorites">
+          <p>
+            {{restaurant.name}}
+          </p>
+          <ion-option-button class="button-royal" ng-click="remove(restaurant)">
+            Delete
+          </ion-option-button>
+
+        </ion-item>
+      </ion-list>
+
+      <!-- <a class="item" href="#" ng-repeat="restaurant in userFavorites">
+            {{restaurant.name}}
+          </a> -->
     </div>
-
-    <h4 class="content padding double-padding-x">Favorites</h4>
-    <ion-list class="list animate-fade-slide-in-right">
-      <ion-item ng-repeat="restaurant in userFavorites">
-        <p>
-          {{restaurant.name}}
-        </p>
-        <ion-option-button class="button-royal" ng-click="remove(restaurant)">
-          Delete
-        </ion-option-button>
-
-      </ion-item>
-    </ion-list>
-
-    <!-- <a class="item" href="#" ng-repeat="restaurant in userFavorites">
-          {{restaurant.name}}
-        </a> -->
-
   </ion-content>
 </ion-view>
