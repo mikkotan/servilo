@@ -10,23 +10,37 @@
     <ion-list>
       <div class="card">
         <ion-item id="form-input">
-          <form ng-submit="edit(eRestaurant)">
+          <form ng-submit="edit(eRestaurant)" name="editRestaurantForm">
             <div class="list">
               <label class="item item-input item-floating-label">
                 <span class="input-label has-input">Name of Restaurant</span>
-                <input type="text" placeholder="Name of Restaurant" ng-model="eRestaurant.name">
+                <input type="text" placeholder="Name of Restaurant" ng-model="eRestaurant.name" name="name" ng-required="true">
+                <div class="error" ng-show="editRestaurantForm.name.$touched">
+                  <p ng-show="editRestaurantForm.name.$error.required">* Restaurant name is required</p>
+                </div>
               </label>
               <label class="item item-input item-floating-label">
                 <span class="input-label has-input">Contact Number</span>
-                <input type="number" placeholder="Contact Number" ng-model="eRestaurant.phonenumber">
+                <input type="number" placeholder="Contact Number" ng-model="eRestaurant.phonenumber" name="phonenumber" ng-required="true" ng-minlength="5" ng-maxlength="16" min="0">
+                <div ng-show="editRestaurantForm.phonenumber.$touched" class="error">
+                  <p ng-show="editRestaurantForm.phonenumber.$error.required">* Contact Number's is required</p>
+                  <p ng-show="editRestaurantForm.phonenumber.$error.minlength">* Contact Number must be longer than 5</p>
+                  <p ng-show="editRestaurantForm.phonenumber.$error.maxlength">* Contact Number must be shorter than 16</p>
+                </div>
               </label>
               <label class="item item-input item-floating-label">
                 <span class="input-label has-input">Type of Restaurant</span>
-                <input type="text" placeholder="Type of Restaurant" ng-model="eRestaurant.type">
+                <input type="text" placeholder="Type of Restaurant" ng-model="eRestaurant.type" name="type" ng-required="true">
+                <div class="error" ng-show="editRestaurantForm.type.$touched">
+                  <p ng-show="editRestaurantForm.type.$error.required">* Restaurant's type is required</p>
+                </div>
               </label>
               <label class="item item-input item-floating-label">
                 <span class="input-label has-input">Cuisine of Restaurant</span>
-                <input type="text" placeholder="Cuisine of Restaurant" ng-model="eRestaurant.cuisine">
+                <input type="text" placeholder="Cuisine of Restaurant" ng-model="eRestaurant.cuisine" name="cuisine" ng-required="true">
+                <div class="error" ng-show="editRestaurantForm.cuisine.$touched">
+                  <p ng-show="editRestaurantForm.cuisine.$error.required">* Restaurant's cuisine is required</p>
+                </div>
               </label>
               <div class="item item-text-wrap">
                 <a class="button button-block button-royal icon-left ion-plus-circled" ng-click="setHours()">Set Hours</a>
@@ -55,7 +69,10 @@
               <div class="item item-input-inset">
                 <label class="item-input item-floating-label">
                   <span class="input-label has-input">Location of Restaurant</span>
-                  <input type="text" placeholder="Location of Restaurant" ng-model="eRestaurant.location">
+                  <input type="text" placeholder="Location of Restaurant" ng-model="eRestaurant.location" name="location" ng-required="true">
+                  <div class="error" ng-show="editRestaurantForm.location.$touched">
+                    <p ng-show="editRestaurantForm.location.$error.required">* Restaurant's location is required</p>
+                  </div>
                 </label>
                 <a class="button button-royal icon ion-map" ng-click="showMap()"></a>
               </div>
