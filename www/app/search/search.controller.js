@@ -14,7 +14,6 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
     };
 
     $scope.changeFilter = function() {
-      console.log("clicked filter")
       var confirmPopup = $ionicPopup.alert({
         title: 'Search by',
         templateUrl: 'app/search/_search.filter.html',
@@ -23,9 +22,9 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
 
       confirmPopup.then(function(res) {
         if(res) {
-          console.log('You are sure');
+          // console.log('You are sure');
         } else {
-         console.log('You are not sure');
+         // console.log('You are not sure');
         }
       });
     }
@@ -43,7 +42,6 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
           console.log('CANCELLED');
         },
         buttonClicked: function(index) {
-          console.log("ari ko d??")
           switch(index) {
             case 0:
               $state.go("tabs.viewRestaurant.main", {"restaurantId":restaurant.$id});
@@ -83,9 +81,9 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
     })
 
     $scope.$watchCollection('restaurants', function(newRestaurants) {
+      $scope.loading = false;
       console.log('WATCH COLLECTION BEING RUN');
       $scope.newRestaurants = newRestaurants.map(function(restaurant) {
-        console.log('hehe hellow')
         console.log(restaurant);
         var r = {
           details: restaurant,
@@ -171,17 +169,14 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
 
     $scope.$watch('data.location.formatted_address', function(newValue){
       if(newValue == undefined){
-        console.log('Empty');
         $scope.allowMarkerChange('', 'name');
       } else {
-        console.log('Has content');
         $ionicLoading.show();
         $scope.locationSearch();
       }
     });
 
     $scope.locationSearch = function() {
-      console.log($scope.data.location.geometry.location)
       var lat = $scope.data.location.geometry.location.lat();
       var long = $scope.data.location.geometry.location.lng();
       $scope.markers.push(Search.getInputLocation(lat, long));
@@ -231,6 +226,7 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
         }
       } else {
         $scope.restaurants = []
+        $scope.loading = false;
       }
       $scope.map.zoom = 12;
       $scope.map.center.latitude = 10.729984;

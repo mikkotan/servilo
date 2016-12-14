@@ -1,0 +1,23 @@
+<ion-modal-view view-title="Advertise">
+  <ion-header-bar class="bar bar-header bar-assertive">
+    <h1 class="title">Advertise your Restaurant</h1>
+    <div class="buttons">
+    <button class="button button-clear button-primary" ng-click="advertiseModal.hide()"><i class="icon ion-ios-close"></i></button>
+</div>
+  </ion-header-bar>
+  <ion-content>
+    <form ng-submit="createAdvertisement(ad)">
+      <div class="list">
+
+        <div class="item item-icon-left" ion-datetime-picker date ng-model="ad.endDate" only-valid="{'after' : 'today', 'inclusive': 'true'}">
+          <i class="icon ion-ios-barcode-outline positive"></i> Restaurant Advertisement will run until your chosen date.
+          <br>
+          <strong>{{ad.endDate| date: "MMM d, y"}}</strong>
+        </div>
+      </div>
+      <div class="padding">
+        <button type="submit" class="button button-block button-positive">Save</button>
+      </div>
+    </form>
+  </ion-content>
+</ion-modal-view>

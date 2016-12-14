@@ -159,6 +159,17 @@ app.factory("Restaurant", ["$firebaseArray", "User", "Database", "$firebaseObjec
         });
         return deferred.promise;
       },
+      getPromos: function(restaurantId) {
+        // var now = new Date()
+        // now.setHours(0)
+        // now.setMinutes(0)
+        // now.setSeconds(0)
+        // now.setMilliseconds(0)
+        // console.log("now start gettime "+now.getTime())
+        // now.setHours(23)
+        // console.log("now end gettime "+now.getTime())
+        return $firebaseArray(Database.promosReference().child(restaurantId))
+      },
       getFacilityName: function(facilityId) {
         return facilities.$getRecord(facilityId).name;
       },
