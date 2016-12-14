@@ -153,9 +153,6 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
       var currentLocation = CordovaGeolocation.get();
       $scope.markers.push(Search.getYouAreHere());
       $scope.loading = true;
-      // $ionicLoading.show({
-      //   template: '<p>Searching. . .</p><ion-spinner icon="lines"></ion-spinner>'
-      // });
       Search.getRestaurant().on("child_added", function(snapshot) {
         if (Search.getNear(snapshot.key, snapshot.val())) {
           $scope.loading = false;
@@ -163,20 +160,7 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
           $scope.markers.push(getNear.marker);
           $scope.restaurants.push(getNear.restaurant);
         }
-        //  else {
-        //   $scope.loading = false;
-        //   ionicToast.show('NO RESTAURANTS MAN', 'bottom', false, 2500);
-        // }
       })
-
-      // Search.getRestaurant().$loaded().then(function(result) {
-      //   // $ionicLoading.hide();
-      //   $scope.markers = Search.getNearestRestaurants(result);
-      //   // $scope.restaurants = $scope.markers;
-      //   if($scope.markers.length == 1) {
-      //     alert("There are no restaruant nearby!!");
-      //   }
-      // })
       $scope.map.zoom = 14;
       $scope.map.center = {
         latitude: currentLocation.latitude,
