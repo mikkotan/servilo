@@ -4,6 +4,13 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
     var vm = this;
     $scope.currentLocation = CordovaGeolocation.get();
 
+    $scope.goToRestaurant = function(id) {
+      return $state.go('tabs.search')
+        .then(() => {
+          $state.go('tabs.viewRestaurant.main', {restaurantId: id})
+        })
+    }
+
     Advertisement.getRestaurants().$loaded()
       .then((restaurants) => {
         $scope.advertisedRestaurants = restaurants
