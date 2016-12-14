@@ -209,14 +209,15 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
 
     $scope.allowMarkerChange = function(inputText, filter) {
       var input = inputText.toLowerCase();
-      // console.log(inputText)
       $scope.markers.length = 0;
       if (input !== '') {
+        $scope.loading = true;
         if (filter == 'name') {
           Search.searchName(input).$loaded().then(function(data) {
             if (data.length <= 0) {
               ionicToast.show('NO RESTAURANTS MAN', 'bottom', false, 2500);
             }
+            $scope.loading = false;
             $scope.restaurants = data;
           });
         } else if (filter == 'menu') {

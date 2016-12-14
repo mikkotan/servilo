@@ -211,6 +211,12 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
       scope: $scope
     })
 
+    $ionicModal.fromTemplateUrl('app/review/_view-review.html', function(viewReviewModal) {
+      $scope.viewReviewModal = viewReviewModal;
+    }, {
+      scope: $scope
+    })
+
     $scope.getReplies = function(reviewId) {
       return Review.getReplies(restaurantId, reviewId);
     }
@@ -257,6 +263,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
     }
 
     $scope.showGallery = function(allImages) {
+      console.log('cleck')
       Gallery.set(allImages);
     }
 
@@ -274,6 +281,14 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
           console.log("delete failed");
         }
       })
+    }
+
+    $scope.showReviewModal = function(review, reviewer) {
+      $scope.showGallery(review.images);
+      $scope.viewReviewModal.show();
+      $scope.viewReview = review;
+      $scope.viewReviewer = reviewer;
+      $scope.viewItems = Gallery.get();
     }
   }
 ]);
