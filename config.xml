@@ -111,10 +111,4 @@
   </plugin>
   <plugin name="cordova-plugin-camera" spec="~2.2.0"/>
   <plugin name="cordova-plugin-image-resizer" spec="~1.0.0"/>
-<<<<<<< HEAD
-  <allow-navigation href="http://192.168.0.125:8100"/>
-=======
-  <allow-navigation href="http://192.168.0.102:8100"/>
-  <allow-navigation href="http://192.168.0.127:8100"/>
->>>>>>> 1ef2827d417d96460f6ffe5a21d7ef292407f151
 </widget>
