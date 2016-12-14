@@ -25,6 +25,7 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
                     .then((avg) => {
                       a.avg = avg
                       a.ready = true
+                      $scope.$apply()
                     })
                 })
             }
