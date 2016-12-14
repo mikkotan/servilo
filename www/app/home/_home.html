@@ -4,14 +4,14 @@
   <div class="padding">
     <h6>Ads</h6>
     <ion-slides options="options" slider="data.slider">
-      <ion-slide-page ng-repeat="advertisement in newAdvertisements">
+      <ion-slide-page ng-repeat="advertisement in newAdvertisements" ng-if="advertisement.ready">
         <div class="card ink" ui-sref="tabs.viewRestaurant.main({restaurantId:advertisement.details.$id})" >
           <div class="item item-thumbnail-left">
             <img class="img-thumbnail" ng-if="advertisement.details.photoURL" ng-src="{{advertisement.details.photoURL}}" />
             <img ng-if="!advertisement.details.photoURL" ng-src="img/wow.jpg">
               <icon class="ion-spoon"></icon> {{advertisement.details.name}}
               <span style="color:green">
-                <icon class="ion-android-star-outline"></icon> 4.8
+                <icon class="ion-android-star-outline"></icon> {{advertisement.avg}}
               </span>
             <p>
               Sponsored

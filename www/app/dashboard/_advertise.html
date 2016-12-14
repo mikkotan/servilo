@@ -6,13 +6,13 @@
 </div>
   </ion-header-bar>
   <ion-content>
-    <form ng-submit="createAdvertisement(advertisement)">
+    <form ng-submit="createAdvertisement(ad)">
       <div class="list">
 
-        <div class="item item-icon-left" ion-datetime-picker date ng-model="advertisement.endDate" only-valid="{'after' : 'today', 'inclusive': 'true'}">
+        <div class="item item-icon-left" ion-datetime-picker date ng-model="ad.endDate" only-valid="{'after' : 'today', 'inclusive': 'true'}">
           <i class="icon ion-ios-barcode-outline positive"></i> Restaurant Advertisement will run until your chosen date.
           <br>
-          <strong>{{advertisement.endDate| date: "MMM d, y"}}</strong>
+          <strong>{{ad.endDate| date: "MMM d, y"}}</strong>
         </div>
       </div>
       <div class="padding">

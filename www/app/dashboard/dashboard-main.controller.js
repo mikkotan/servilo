@@ -28,12 +28,9 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
         if (isAd) {
           Advertisement.get($stateParams.restaurantId).$loaded()
             .then((ad) => {
+              var today = new Date()
               $scope.ad = ad
-              $scope.valid = ad.endDate > new Date()
-              console.log(typeof $scope.valid)
-              console.log(ad.endDate > new Date())
-              console.log(ad.endDate < new Date())
-              console.log('tanda @@@@@@@@@@@@@@@')
+              $scope.isValid = ad.endDate > new Date()
             })
         }
       })

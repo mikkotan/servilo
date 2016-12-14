@@ -14,6 +14,11 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
               get : Restaurant.get(advertisement.$id).$loaded()
                 .then((restaurant) => {
                   a.details = restaurant
+                  Restaurant.getAverageRating(restaurant.$id)
+                    .then((avg) => {
+                      a.avg = avg
+                      a.ready = true
+                    })
                 })
             }
             return a
@@ -117,7 +122,7 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
       });
       return data;
     }
-    
+
     $scope.CallNumber = function(number) {
       window.plugins.CallNumber.callNumber(function() {
         console.log("call success");
