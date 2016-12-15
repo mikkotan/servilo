@@ -1,9 +1,42 @@
-app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionicModal", "$ionicPopup", "$firebaseArray", "Restaurant", "Database", "$ionicLoading", "Upload", "$cordovaCamera", "CordovaGeolocation",
-  function($scope, $state, $stateParams, $ionicModal, $ionicPopup, $firebaseArray, Restaurant, Database, $ionicLoading, Upload, $cordovaCamera, CordovaGeolocation) {
+app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionicModal", "$ionicPopup", "$firebaseArray", "Restaurant", "Database", "$ionicLoading", "Upload", "$cordovaCamera", "CordovaGeolocation", "Advertisement",
+  function($scope, $state, $stateParams, $ionicModal, $ionicPopup, $firebaseArray, Restaurant, Database, $ionicLoading, Upload, $cordovaCamera, CordovaGeolocation, Advertisement) {
     $ionicLoading.show();
     $scope.data = {};
     $scope.countryCode = 'PH';
 
+
+    $scope.advertise = function(restaurant) {
+      $scope.advertiseModal.show()
+    }
+
+    $scope.createAdvertisement = function(advertisement) {
+      advertisement.endDate.setHours(23);
+      Advertisement.create({
+        endDate : advertisement.endDate.getTime(),
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+      }, $stateParams.restaurantId)
+        .then(() => {
+          alert('Advertisement Successfully created')
+          $scope.advertiseModal.hide()
+        })
+        .catch((err) => {
+          alert(err)
+          $scope.advertiseModal.hide()
+        })
+    }
+
+    Advertisement.isAdvertised($stateParams.restaurantId)
+      .then((isAd) => {
+        $scope.isAdvertised = isAd;
+        if (isAd) {
+          Advertisement.get($stateParams.restaurantId).$loaded()
+            .then((ad) => {
+              var today = new Date()
+              $scope.ad = ad
+              $scope.isValid = ad.endDate > new Date()
+            })
+        }
+      })
 
     Restaurant.get($stateParams.restaurantId).$loaded()
       .then((restaurant) => {
@@ -260,6 +293,12 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
     }, {
       scope: $scope
     });
+
+    $ionicModal.fromTemplateUrl('app/dashboard/_advertise.html', function(advertiseModal) {
+      $scope.advertiseModal = advertiseModal;
+    }, {
+      scope: $scope
+    })
 
     $scope.facilities = $firebaseArray(firebase.database().ref().child('facilities'));
     // $scope.facilities = $firebaseArray(Database.facilitiesReference());

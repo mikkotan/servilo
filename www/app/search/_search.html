@@ -1,20 +1,15 @@
 <ion-view view-title="Search" ng-class="{'bar-subheader-slide-away': slideHeader}">
-  <ion-header-bar class="bar bar-subheader bar-light item-input-inset">
-
-    <label class="item-input-wrapper">
-      <i class="icon ion-search placeholder-icon"></i>
-      <input ng-show="data.filter == 'name' || data.filter == 'menu'" placeholder="Search by {{data.filter}}..." type="search" ng-model="searchRestaurant" ng-model-options="{ debounce: 500 }" ng-change="allowMarkerChange(searchRestaurant, data.filter)" />
-      <input ng-show="data.filter == 'location'" class="input-form" type="text" placeholder="Search by location..." google-autocomplete-suggestion location="data.location" on-selection="onAddressSelection(location)" country-code="{{countryCode}}" ng-model="data.location.formatted_address" ng-change="locationSearch()" readonly />
-    </label>
-    <a class="clear" ng-show="searchRestaurant" ng-click="clearField()">
-      <span class="icon ion-close-circled"></span>
-    </a>
-    <a class="clear" ng-show="data.location.formatted_address" ng-click="clearLocationField()">
-      <span class="icon ion-close-circled"></span>
-    </a>
-    <button class="button button-light ink" ng-click="changeFilter()">
-      <span class="icon ion-levels"></span>
-    </button>
+  <ion-header-bar class="bar bar-subheader bar-assertive item-input-inset">
+    <div class="item item-input-inset">
+      <label class="item-input-wrapper">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input ng-show="data.filter == 'name' || data.filter == 'menu'" placeholder="Search by {{data.filter}}..." type="search" ng-model="searchRestaurant" ng-model-options="{ debounce: 500 }" ng-change="allowMarkerChange(searchRestaurant, data.filter)" />
+        <input ng-show="data.filter == 'location'" class="input-form" type="text" placeholder="Search by location..." google-autocomplete-suggestion location="data.location" on-selection="onAddressSelection(location)" country-code="{{countryCode}}" ng-model="data.location.formatted_address" readonly />
+      </label>
+      <button class="button button-assertive icon ion-close-circled" ng-show="searchRestaurant" ng-click="clearField()"></button>
+      <button class="button button-assertive icon ion-close-circled" ng-show="data.location.formatted_address" ng-click="clearLocationField()"></button>
+      <button class="button button-assertive ink icon ion-levels" ng-click="changeFilter()"></button>
+    </div>
   </ion-header-bar>
   <ion-content class="padding has-header">
 

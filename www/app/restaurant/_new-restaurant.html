@@ -60,6 +60,8 @@
                 <a class="button button-block button-royal icon-left ion-plus-circled" ng-click="setOpenDays()">Set Open Days</a>
               </div>
               <!-- <div class="item item-input-inset"> -->
+
+              <a class="button button-small button-balanced" ng-click="useCurrent()">Use Current Location</a>
                 <label class="item-input item-floating-label">
                   <span class="input-label has-input">Location of Restaurant</span>
                   <input type="text" placeholder="Change address" google-autocomplete-suggestion location="data.location" country-code="{{countryCode}}" name="location" ng-model="data.location.formatted_address" readonly ng-required=true />

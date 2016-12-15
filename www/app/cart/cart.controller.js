@@ -1,19 +1,26 @@
-app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "Restaurant", "CordovaGeolocation", "$ionicPopup", "Notification", "Order", "$ionicLoading",
-  function($scope, User, CartData, Cart, Database, Restaurant, CordovaGeolocation, $ionicPopup, Notification, Order, $ionicLoading) {
+app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "Restaurant", "CordovaGeolocation", "$ionicPopup", "ionicToast", "Notification", "Order", "$ionicLoading",
+  function($scope, User, CartData, Cart, Database, Restaurant, CordovaGeolocation, $ionicPopup, ionicToast, Notification, Order, $ionicLoading) {
 
     // $scope.order = Database.orders();
     $scope.cartData = CartData.get();
     $scope.totalPrice = CartData.totalPrice();
-    $scope.data ={location:"", detail: ""};
+    // $scope.data ={location:"", detail: ""};
+
+    $scope.data = {};
+    $scope.countryCode = 'PH';
 
     $scope.add = function(orderMenu) {
       var order = $scope.cartData.indexOf(orderMenu);
       $scope.cartData[order].quantity += 1;
 
     };
+
     $scope.showMap = function() {
+      var lat = $scope.marker.coords.latitude;
+      var long = $scope.marker.coords.longitude;
+      $scope.setMarker(lat, long);
       var mapPopup = $ionicPopup.confirm({
-        title: 'Choose Location',
+        title: 'Set Markers',
         templateUrl: 'app/restaurant/_googleMapsPopout.html',
         cssClass: 'custom-popup',
         scope: $scope
@@ -56,7 +63,14 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
       });
 
     };
-
+    $scope.$watch('data.location.formatted_address', function(newValue) {
+      if (newValue == undefined) {
+        console.log('Empty');
+      } else {
+        console.log('Has content');
+        $scope.setMarker($scope.data.location.geometry.location.lat(), $scope.data.location.geometry.location.lng());
+      }
+    });
     $scope.$watch('cartData', function(newArray) {
       $scope.menus = newArray.map(function(menu) {
         if (Cart.menuId($scope.totalPrice, "id", menu.id) === null) {
@@ -90,6 +104,17 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
       $scope.total = price;
     }, true);
 
+    $scope.useCurrent = function() {
+      var currentLocation = CordovaGeolocation.get();
+      $scope.setMarker(currentLocation.latitude, currentLocation.longitude);
+      Restaurant.getLocation(currentLocation.latitude, currentLocation.longitude).then(function(data) {
+        $scope.data.location = data;
+        //   $scope.data.location.geometry.location.lat = currentLocation.latitude;
+        //   $scope.data.location.geometry.location.lng = currentLocation.longitude;
+        // $scope.restaurant.location = data
+        // console.log($scope.restaurant.location)
+      });
+    }
 
     var scanCart = function(Cart) {
       var scanMenu = []
@@ -106,52 +131,57 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
       $scope.restaurantCart.hide();
     }
 
-    $scope.buy = function(cart, location) {
+    $scope.buy = function(cart) {
       $ionicLoading.show();
+      var location = $scope.data.location.formatted_address;
       if (location) {
         // $scope.order.$add({
         Order.create({
-          restaurant_id: $scope.restaurantId,
-          customer_id: User.auth().$id,
-          order_details: {
-            location: location,
-            latitude: $scope.marker.coords.latitude,
-            longitude: $scope.marker.coords.longitude,
-            menus: scanCart(cart),
-            totalprice: $scope.total,
-            timestamp: firebase.database.ServerValue.TIMESTAMP,
-            status: 'pending',
-          },
-          orderStatus: {
-            cancelled: false,
-            confirmed: false
-          },
-        })
-        .then(() => {
-          $scope.hideCartModal();
-          console.log('restaurantOrder done');
-          CartData.get().length = 0;
-          CartData.totalPrice().length = 0;
-          var restaurant_owner = Restaurant.getOwner($scope.restaurantId);
-          Notification.create({
-            sender_id: User.auth().$id,
-            receiver_id: restaurant_owner.$id,
             restaurant_id: $scope.restaurantId,
-            type: 'order',
-            timestamp: firebase.database.ServerValue.TIMESTAMP
+            customer_id: User.auth().$id,
+            order_details: {
+              location: location,
+              latitude: $scope.marker.coords.latitude,
+              longitude: $scope.marker.coords.longitude,
+              menus: scanCart(cart),
+              note: cart.note,
+              totalprice: $scope.total,
+              timestamp: firebase.database.ServerValue.TIMESTAMP,
+              status: 'pending',
+            },
+            orderStatus: {
+              cancelled: false,
+              confirmed: false
+            },
           })
-            .then(() => {
-              $ionicLoading.hide();
-              alert('Success');
-            })
-            .catch((err) => { alert(err) })
-        })
-        .catch((error) => {
-          alert(error);
-          console.log(error);
-        });
+          .then(() => {
+            $scope.hideCartModal();
+            console.log('restaurantOrder done');
+            CartData.get().length = 0;
+            CartData.totalPrice().length = 0;
+            var restaurant_owner = Restaurant.getOwner($scope.restaurantId);
+            Notification.create({
+                sender_id: User.auth().$id,
+                receiver_id: restaurant_owner.$id,
+                restaurant_id: $scope.restaurantId,
+                type: 'order',
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+              })
+              .then(() => {
+                $ionicLoading.hide();
+                ionicToast.show('SUCCESS', 'bottom', false, 2500);
+              })
+              .catch((err) => {
+                alert(err)
+              })
+          })
+          .catch((error) => {
+            alert(error);
+            console.log(error);
+          });
       } else {
         alert("please fill up Location");
+        ionicToast.show('NO LOCATION', 'bottom', false, 2500);
       }
     }
 
@@ -206,33 +236,10 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
 
     //function that converts LatLng coordinates to word
     $scope.placeName = function(latitude, longitude) {
-      var geocoder = new google.maps.Geocoder;
-      var latLng = {
-        lat: latitude,
-        lng: longitude
-      };
-      geocoder.geocode({
-        'location': latLng
-      }, function(results, status) {
-        if (status === 'OK') {
-          $scope.data.location = results[0].formatted_address;
-          $scope.$apply();
-        } else {
-          alert('Geocoder failed due to: ' + status);
-        }
+      Restaurant.getLocationName(latitude, longitude).then(function(data) {
+        $scope.restaurant.location = data
       });
     }
-
-    $scope.$watch(function($scope){return $scope.data.detail;},
-      function(newValue, oldValue){
-        if(oldValue !== newValue){
-          if (angular.isDefined(newValue)){
-            var lat = newValue.lat();
-            var lng = newValue.lng();
-            $scope.setMarker(lat, lng);
-         }
-        }
-    });
 
     $scope.setMarker = function(latitude, longitude) {
       $scope.marker = {

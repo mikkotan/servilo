@@ -159,6 +159,9 @@ app.factory("Restaurant", ["$firebaseArray", "User", "Database", "$firebaseObjec
         });
         return deferred.promise;
       },
+      getPromos: function(restaurantId) {
+        return $firebaseArray(Database.promosReference().child(restaurantId))
+      },
       getFacilityName: function(facilityId) {
         return facilities.$getRecord(facilityId).name;
       },

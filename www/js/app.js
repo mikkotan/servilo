@@ -98,6 +98,8 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
                   })
               } else if (data.additionalData.url === 'order_status') {
                 $state.go('tabs.myOrders');
+              } else if (data.additionalData.url === 'reservation_status') {
+                $state.go('tabs.myReservations')
               } else if (data.additionalData.url === 'approve') {
                 console.log(typeof data.additionalData.isRestaurantOwner);
                 if (data.additionalData.isRestaurantOwner === 'true') {

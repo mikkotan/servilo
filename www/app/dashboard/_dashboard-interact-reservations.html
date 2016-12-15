@@ -30,6 +30,10 @@
         <icon class="ion-ios-calendar-outline"></icon>
         Date: {{reservation.details.datetime | date: "MMM d, y h:mm a"}}
       </p>
+      <p>
+        <icon class="ion-ios-list-outline"></icon>
+        Note: {{reservation.details.note}}
+      </p>
       <p ng-show="reservation.details.status">
         Status: {{reservation.details.status}}
       </p>

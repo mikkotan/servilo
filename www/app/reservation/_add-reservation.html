@@ -27,6 +27,10 @@
           <br>
           <strong>{{reservation.datetime| date: "MMM d, y h:mm a"}}</strong>
         </div>
+        <label class="item item-input item-floating-label">
+          <span class="input-label has-input">Note</span>
+          <textarea type="text" placeholder="Note" ng-model="reservation.note" rows="3"></textarea>
+        </label>
       </div>
       <div class="padding">
         <button type="submit" class="button button-block button-positive">Book Now</button>
