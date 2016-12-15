@@ -1,27 +1,31 @@
 <ion-view view-title="Search" ng-class="{'bar-subheader-slide-away': slideHeader}">
-  <ion-header-bar class="bar bar-subheader bar-assertive item-input-inset">
-    <div class="item item-input-inset">
-      <label class="item-input-wrapper">
-        <i class="icon ion-search placeholder-icon"></i>
-        <input ng-show="data.filter == 'name' || data.filter == 'menu'" placeholder="Search by {{data.filter}}..." type="search" ng-model="searchRestaurant" ng-model-options="{ debounce: 500 }" ng-change="allowMarkerChange(searchRestaurant, data.filter)" />
-        <input ng-show="data.filter == 'location'" class="input-form" type="text" placeholder="Search by location..." google-autocomplete-suggestion location="data.location" on-selection="onAddressSelection(location)" country-code="{{countryCode}}" ng-model="data.location.formatted_address" readonly />
-      </label>
-      <button class="button button-assertive icon ion-close-circled" ng-show="searchRestaurant" ng-click="clearField()"></button>
-      <button class="button button-assertive icon ion-close-circled" ng-show="data.location.formatted_address" ng-click="clearLocationField()"></button>
-      <button class="button button-assertive ink icon ion-levels" ng-click="changeFilter()"></button>
+  <ion-header-bar class="bar bar-subheader bar-light item-input-inset">
+    <div class="item item-input">
+      <input ng-show="data.filter == 'name' || data.filter == 'menu'" placeholder="Search by {{data.filter}}..." type="search" ng-model="searchRestaurant" ng-model-options="{ debounce: 500 }" ng-change="allowMarkerChange(searchRestaurant, data.filter)" />
+      <input ng-show="data.filter == 'location'" class="input-form" type="text" placeholder="Search by location..." google-autocomplete-suggestion location="data.location" on-selection="onAddressSelection(location)" country-code="{{countryCode}}" ng-model="data.location.formatted_address"
+          readonly />
+
+      <button class="button button-icon icon ion-close-circled" ng-show="searchRestaurant" ng-click="clearField()"></button>
+      <button class="button button-icon icon ion-close-circled" ng-show="data.location.formatted_address" ng-click="clearLocationField()"></button>
+    </div>
+    <div class="buttons">
+      <button class="button button-assertive no-padding ink icon ion-levels" ng-click="changeFilter()"></button>
+      <button class="button button-royal no-padding ink icon ion-map" ng-show="showList" ng-click="mapView()"></button>
+      <button class="button button-royal no-padding ink icon ion-ios-list-outline" ng-show="showMap" ng-click="listView()"></button>
+
     </div>
   </ion-header-bar>
   <ion-content class="padding has-header">
-
-    <button class="button button-small button-balanced ink" ng-click="showNear()">Nearby Restaurants(1km)</button>
-    <div>
+    <button class="button button-block button-balanced ink" ng-click="showNear()">Nearby Restaurants(1km)</button>
+    <div ng-if="showMap">
+    <!-- <div> -->
       <ui-gmap-google-map zoom='map.zoom' center="map.center" options='map.options' bounds='map.bounds' control='map.control' refresh=map.refresh events=map.events ng-cloak>
         <ui-gmap-markers models="markers" coords="'coords'" icon="'icon'" events="markerEvents" doRebuildAll="true"></ui-gmap-markers>
         <ui-gmap-map-control position="top-right">
         </ui-gmap-map-control>
       </ui-gmap-google-map>
     </div>
-    <ion-list>
+    <ion-list ng-show="showList">
       <h3>Results</h3>
       <ion-spinner ng-show="loading" icon="lines"></ion-spinner>
       <div class="card ink" ng-repeat="restaurant in newRestaurants" ng-if="restaurant.ready" ui-sref="tabs.viewRestaurant.main({restaurantId:restaurant.details.$id})" ng-last-repeat="workorderlist" on-hold="showActionsheet(restaurant.details)">
