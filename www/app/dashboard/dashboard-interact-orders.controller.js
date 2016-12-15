@@ -1,7 +1,9 @@
-app.controller('DashboardInteractOrdersCtrl', function($scope, $stateParams, Restaurant, Order, User, Menu) {
+app.controller('DashboardInteractOrdersCtrl', function($scope, $stateParams, Restaurant, Order, User, Menu, CordovaGeolocation) {
   var restaurantId = $stateParams.restaurantId;
   $scope.filterType = 'all'
+  $scope.currentLocation = CordovaGeolocation.get();
   console.log('dashboard interact orders ctrl');
+  $scope.restaurant  = Restaurant.get();
 
   Restaurant.getOrders(restaurantId).$loaded()
     .then((orders) => {
@@ -76,6 +78,89 @@ app.controller('DashboardInteractOrdersCtrl', function($scope, $stateParams, Res
       console.log('val: ' + val);
       return Order.updateStatus(orderId, key, val);
     }
+    $scope.markers = [];
+    $scope.markers.push({
+      id: Date.now(),
+      coords: {
+        latitude: $scope.order.latitude,
+        longitude: $scope.order.longitude
+      }
+    });
+    $scope.map = {
+        center: {
+          latitude: $scope.order.latitude,
+          longitude: $scope.order.longitude
+        },
+        zoom: 12,
+        options: {
+          scrollwheel: false
+        },
+        bounds: {},
+        control: {},
+        refresh: true,
+        events: {
+          tilesloaded: function(map) {
+            google.maps.event.trigger(map, "resize");
+          }
+        }
+      };
+
+      $scope.pathByRestaurant = function(){
+          $scope.showPath($scope.restaurant.latitude, $scope.restaurant.longitude, $scope.order.latitude, $scope.order.longitude);
+      };
+      $scope.pathByCurrentLocation = function(){
+        $scope.currentLocation = CordovaGeolocation.get();
+        $scope.showPath($scope.currentLocation.latitude, $scope.currentLocation.longitude, $scope.order.latitude, $scope.order.longitude);
+      };
+
+      $scope.showPath = function(fromLat, fromLng, toLat, toLng) {
+        $scope.map.zoom = 12;
+        var mapDirection = new google.maps.DirectionsService();
+        var request = {
+          origin: {
+            lat: fromLat,
+            lng: fromLng
+          },
+          destination: {
+            lat: toLat,
+            lng: toLng
+          },
+          travelMode: google.maps.DirectionsTravelMode['DRIVING'],
+          optimizeWaypoints: true
+        };
+        $scope.markers.length = 1;
+
+        $scope.restaurantMarkers.push({
+          id: Date.now(),
+          coords: {
+            latitude: fromLat,
+            longitude: fromLng
+          }
+        });
+
+        mapDirection.route(request, function(response, status) {
+          var steps = response.routes[0].legs[0].steps;
+          var distance = response.routes[0].legs[0].distance.value / 1000;
+          distance = distance.toFixed(2);
+          for (i = 0; i < steps.length; i++) {
+            var strokeColor = '#049ce5';
+            if ((i % 2) == 0) {
+              strokeColor = '#FF9E00';
+            }
+            $scope.mapDirection.push({
+              id: i,
+              paths: steps[i].path,
+              stroke: {
+                color: strokeColor,
+                weight: 5
+              }
+            });
+          }
+          // $scope.rmarkers[0].icon = new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_bubble_icon_texts_big&chld=restaurant|edge_bc|FFBB00|000000|' +
+          //   restaurant.name + '|Distance: ' + distance + 'km');
+          $scope.$apply();
+        });
+      };
 
 
 })
