@@ -144,6 +144,7 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
               latitude: $scope.marker.coords.latitude,
               longitude: $scope.marker.coords.longitude,
               menus: scanCart(cart),
+              note: cart.note,
               totalprice: $scope.total,
               timestamp: firebase.database.ServerValue.TIMESTAMP,
               status: 'pending',

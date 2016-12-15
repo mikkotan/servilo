@@ -36,6 +36,11 @@
           <!-- <input type="text" placeholder="Location of Restaurant" ng-model="restaurant.location" details="data.detail"/> -->
         </label>
 
+        <label class="item item-input item-floating-label">
+          <span class="input-label has-input">Note</span>
+          <textarea type="text" placeholder="Note" ng-model="menus.note" rows="3"></textarea>
+        </label>
+
         <img ng-src="https://maps.googleapis.com/maps/api/staticmap?center={{marker.coords.latitude}},{{marker.coords.longitude}}
                           &zoom=18
                           &size=500x300

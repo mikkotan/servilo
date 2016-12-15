@@ -39,7 +39,7 @@ app.factory("Menu",["$firebaseAuth","$firebaseArray","$firebaseObject","Restaura
         .then(() => {
           Database.restaurantMenusReference().child(menu.restaurant_id).child(pushId.key).set(true)
             .then(() => {
-              return Database.restaurantsReference().child(menu.restaurant_id).child(menu.category_id).child('menus').child(pushId.key).set(true)
+              return Database.restaurantsReference().child(menu.restaurant_id).child('menu_categories').child(menu.category_id).child('menus').child(pushId.key).set(true)
             })
         })
     },

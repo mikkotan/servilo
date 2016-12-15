@@ -44,6 +44,7 @@ app.controller('DashboardInteractReservationsCtrl', function($scope, $stateParam
     reservation.user_id = User.auth().$id
     reservation.timestamp = firebase.database.ServerValue.TIMESTAMP
     reservation.restaurant_id = $scope.restaurantId
+    reservation.note = reservation.note
 
     console.log(JSON.stringify(reservation));
     $scope.walkinReservationModal.hide();
