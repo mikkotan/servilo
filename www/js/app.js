@@ -83,9 +83,6 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
           })
           .then((res) => {
             if (res) {
-              console.log('tapped ok');
-              console.log("isRestaurantOwner: "+data.additionalData.isRestaurantOwner)
-              console.log("url: "+data.additionalData.url)
               if (data.additionalData.url === 'reservation') {
                 $state.go('tabs.restaurant')
                   .then(() => {
@@ -111,7 +108,6 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
                   $state.go("landing");
                 }
               }
-
             }
           })
       } else {
