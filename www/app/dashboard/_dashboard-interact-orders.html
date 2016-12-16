@@ -41,11 +41,7 @@
       <ion-checkbox ng-repeat="(key, val) in order.details.orderStatus" ng-model="order.details.orderStatus[key]" ng-change="changeOrderStatus(order.details.$id, key, order.details.orderStatus[key])">
         {{key}}
       </ion-checkbox>
+      <button class="button button-positive" ng-click="openMapModal(order)">Open Map</button>
     </ion-item>
-    <button type="button" name="button" ng-click="pathByRestaurant()">Show Path to customer from Restaurant</button>
-    <button type="button" name="button" ng-click="pathByCurrentLocation()">Show Path to customer from Current location</button>
-    <ui-gmap-google-map zoom='map.zoom' events='map.events' center='map.center' options='map.options' bounds='map.bounds' control="modalControl">
-      <ui-gmap-markers models="markers" coords="'coords'" icon="'icon'" events="markerEvents" doRebuildAll="true"></ui-gmap-markers>
-    </ui-gmap-google-map>
   </ion-content>
 </ion-view>

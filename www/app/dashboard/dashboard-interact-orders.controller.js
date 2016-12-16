@@ -1,9 +1,10 @@
-app.controller('DashboardInteractOrdersCtrl', function($scope, $stateParams, Restaurant, Order, User, Menu, CordovaGeolocation) {
+app.controller('DashboardInteractOrdersCtrl', function($scope, $stateParams, Restaurant, Order, User, Menu, CordovaGeolocation, $ionicModal) {
   var restaurantId = $stateParams.restaurantId;
   $scope.filterType = 'all'
   $scope.currentLocation = CordovaGeolocation.get();
   console.log('dashboard interact orders ctrl');
-  $scope.restaurant  = Restaurant.get();
+  $scope.modalControl ={};
+  $scope.restaurant  = Restaurant.get(restaurantId);
 
   Restaurant.getOrders(restaurantId).$loaded()
     .then((orders) => {
@@ -79,17 +80,18 @@ app.controller('DashboardInteractOrdersCtrl', function($scope, $stateParams, Res
       return Order.updateStatus(orderId, key, val);
     }
     $scope.markers = [];
-    $scope.markers.push({
-      id: Date.now(),
-      coords: {
-        latitude: $scope.order.latitude,
-        longitude: $scope.order.longitude
-      }
-    });
+    // $scope.markers.push({
+    //   id: Date.now(),
+    //   coords: {
+    //     latitude: $scope.order.latitude,
+    //     longitude: $scope.order.longitude
+    //   }
+    // });
+
     $scope.map = {
         center: {
-          latitude: $scope.order.latitude,
-          longitude: $scope.order.longitude
+          latitude: 10.729984,
+          longitude: 122.549298
         },
         zoom: 12,
         options: {
@@ -105,15 +107,17 @@ app.controller('DashboardInteractOrdersCtrl', function($scope, $stateParams, Res
         }
       };
 
-      $scope.pathByRestaurant = function(){
-          $scope.showPath($scope.restaurant.latitude, $scope.restaurant.longitude, $scope.order.latitude, $scope.order.longitude);
+      $scope.pathByRestaurant = function(order){
+          $scope.showPath($scope.restaurant.latitude, $scope.restaurant.longitude, order.latitude, order.longitude);
       };
-      $scope.pathByCurrentLocation = function(){
+      $scope.pathByCurrentLocation = function(order){
         $scope.currentLocation = CordovaGeolocation.get();
-        $scope.showPath($scope.currentLocation.latitude, $scope.currentLocation.longitude, $scope.order.latitude, $scope.order.longitude);
+        $scope.showPath($scope.currentLocation.latitude, $scope.currentLocation.longitude, order.latitude, order.longitude);
       };
-
+      $scope.mapDirection =[];
       $scope.showPath = function(fromLat, fromLng, toLat, toLng) {
+        $scope.mapDirection =[];
+        console.log(fromLat+"::"+ fromLng+"::"+ toLat+"::"+ toLng)
         $scope.map.zoom = 12;
         var mapDirection = new google.maps.DirectionsService();
         var request = {
@@ -130,7 +134,7 @@ app.controller('DashboardInteractOrdersCtrl', function($scope, $stateParams, Res
         };
         $scope.markers.length = 1;
 
-        $scope.restaurantMarkers.push({
+        $scope.markers.push({
           id: Date.now(),
           coords: {
             latitude: fromLat,
@@ -156,11 +160,31 @@ app.controller('DashboardInteractOrdersCtrl', function($scope, $stateParams, Res
               }
             });
           }
-          // $scope.rmarkers[0].icon = new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_bubble_icon_texts_big&chld=restaurant|edge_bc|FFBB00|000000|' +
-          //   restaurant.name + '|Distance: ' + distance + 'km');
+          $scope.markers[0].icon = new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_bubble_icon_texts_big&chld=flag|edge_bc|FFBB00|000000|Orders+Here');
           $scope.$apply();
         });
       };
 
+      $ionicModal.fromTemplateUrl('app/dashboard/_popout-orders-google-maps.html', function(mapModal) {
+        $scope.mapModal = mapModal;
+      }, {
+        scope: $scope
+      });
+
+      $scope.openMapModal = function(order){
+        $scope.mapModal.show();
+        $scope.modalControl.refresh({
+          latitude: order.details.order_details.latitude,
+          longitude: order.details.order_details.longitude
+        });
+        $scope.order = order;
+        $scope.markers.push({
+          id: Date.now(),
+          coords: {
+            latitude: order.details.order_details.latitude,
+            longitude: order.details.order_details.longitude
+          }
+        });
+      }
 
 })
