@@ -106,6 +106,7 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
 
 
     $scope.buy = function(cart) {
+      console.log($scope.marker.coords);
       $ionicLoading.show();
       var location = $scope.data.location.formatted_address;
       if (location) {
@@ -144,11 +145,12 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
                 ionicToast.show('SUCCESS', 'bottom', false, 2500);
               })
               .catch((err) => {
-                alert(err)
+                $ionicLoading.hide();
+             console.log(error);
               })
           })
           .catch((error) => {
-                $ionicLoading.hide();
+            $ionicLoading.hide();
             console.log(error);
           });
       } else {

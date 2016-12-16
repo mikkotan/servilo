@@ -214,6 +214,7 @@ app.factory("Restaurant", ["$firebaseArray", "User", "Database", "$firebaseObjec
         var restObj = {
           name: restaurant.name.toLowerCase(),
           facilities: restaurant.facilities,
+          categories: restaurant.categories,
           openDays: restaurant.openDays,
           categories: "wa",
           location: location,

@@ -2,9 +2,10 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
   function($scope, $firebaseArray, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation,Upload, $ionicPopup, Order, Database, Reservation) {
 
     $scope.modalControl = {};
-    // $scope.facilities = $firebaseArray(firebase.database().ref().child('facilities'));
     $scope.facilities = Database.facilities();
-    // $scope.pendingRestaurants = Restaurant.getPendingRestaurants();
+
+    $scope.categories = Database.categories();
+
     $scope.displayRestaurants = User.getAuthRestaurants();
     $scope.AppUser = User.auth();
 
@@ -53,6 +54,16 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
         scope: $scope
       });
     };
+
+    $scope.setCategories = function() {
+      var categories = $ionicPopup.alert({
+        title: 'Set Category of your restaurant. You may select 1 or more',
+        templateUrl: 'app/restaurant/_categoriesPopout.html',
+        subTitle: 'Choose the specific category of your restaurant to be categorized later.',
+        cssClass: 'custom-popup',
+        scope: $scope
+      })
+    }
 
     $scope.setOpenDays = function() {
       var openDays = $ionicPopup.alert({
@@ -153,6 +164,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     }
 
     $scope.addRestaurant = function(restaurant) {
+      console.log(restaurant.categories);
       try {
         console.log("wala aw");
         var location = $scope.data.location.formatted_address
