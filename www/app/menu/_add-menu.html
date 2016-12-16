@@ -9,26 +9,34 @@
     <ion-list>
       <div class="card">
         <ion-item id="form-input">
-          <form ng-submit="addMenu(menu)">
+          <form ng-submit="addMenu(menu)" name="addMenuForm" novalidate>
             <label class="item item-input item-floating-label">
               <span class="input-label has-input">Name</span>
-              <input type="text" placeholder="Name" ng-model="menu.name">
+              <input type="text" placeholder="Name" ng-model="menu.name" name="name" ng-required=true>
+              <div class="error" ng-show="addMenuForm.name.$touched || submitError">
+                <p ng-show="addMenuForm.name.$error.required">* Menu's name is required</p>
+              </div>
             </label>
             <label class="item item-input item-floating-label">
               <span class="input-label has-input">Price</span>
-              <input type="number" placeholder="Price" ng-model="menu.price" min="0">
+              <input type="number" placeholder="Price" ng-model="menu.price" min="0" name="price" ng-required=true>
+              <div class="error" ng-show="addMenuForm.price.$touched || submitError">
+                <p ng-show="addMenuForm.price.$error.required">* Menu's price is required</p>
+              </div>
             </label>
             <label class="item item-input item-select">
               <div class="input-label">
                 Category
               </div>
-              <select ng-model="menu.category">
+              <select ng-model="menu.category" name="category" ng-required=true>
                 <option ng-repeat="category in categories" value="{{category.$id}}">
                   {{category.name}}
                 </option>
               </select>
             </label>
-
+            <div class="error" ng-show="addMenuForm.category.$touched || submitError">
+              <p ng-show="addMenuForm.category.$error.required">* Menu's category is required</p>
+            </div>
             <div class="row">
               <div class="col">
                 <a class="button button-block button-positive icon ion-camera" ng-click="upload(1)"></a>
@@ -42,7 +50,7 @@
               <ion-spinner ng-if="imageLoading" icon="android"></ion-spinner>
             </div>
             <div class="row">
-              <button class="button button-block button-balanced ink">Submit</button>
+              <button type="submit" class="button button-block button-balanced ink">Submit</button>
             </div>
           </form>
         </ion-item>

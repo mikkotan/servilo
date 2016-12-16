@@ -9,7 +9,7 @@
     <ion-list>
       <div class="card">
         <ion-item id="form-input">
-          <form ng-submit="sendToCart(menu)">
+          <form ng-submit="sendToCart(menu)" name="addCartForm">
             <img id="profile-image" ng-src="{{menuPhoto}}">
             <label class="item item-input item-floating-label">
               <span class="input-label has-input">Menu Name</span>
@@ -21,7 +21,10 @@
             </label>
             <label class="item item-input item-floating-label">
               <span class="input-label has-input">Quantity</span>
-              <input type="number" placeholder="Quantity" ng-model="menu.quantity" min="0">
+              <input type="number" placeholder="Quantity" ng-model="menu.quantity" min="0" ng-required=true name="quantity" autofocus>
+              <div class="error">
+                <p ng-show="submitUndefined">* Quantity is undefined</p>
+              </div>
             </label>
             <label class="item item-input item-floating-label">
               <span class="input-label has-input">Subtotal</span>

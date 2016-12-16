@@ -42,13 +42,18 @@ app.controller("DashboardMenusCtrl", ["$scope", "$stateParams", "$ionicModal", "
     }
 
     $scope.addCategory = function(category) {
-      Restaurant.addCategory(category)
-        .then(function() {
-          console.log('ADDED CATEGORY!! ')
-        })
-      $scope.category.name = "";
-      $scope.category.restaurant_id = "";
-      $scope.addCategoryModal.hide();
+      try{
+        Restaurant.addCategory(category)
+          .then(function() {
+            console.log('ADDED CATEGORY!! ')
+          })
+        $scope.category.name = "";
+        $scope.category.restaurant_id = "";
+        $scope.addCategoryModal.hide();
+      }
+      catch(e){
+        $scope.submitError = true;
+      }
     }
 
 
@@ -65,7 +70,7 @@ app.controller("DashboardMenusCtrl", ["$scope", "$stateParams", "$ionicModal", "
       }, Upload.getOptions(index));
       $scope.imageLoading = true;
     }
-    
+
     $scope.openAddModal = function() {
       $scope.addMenuModal.show();
     }
@@ -89,23 +94,27 @@ app.controller("DashboardMenusCtrl", ["$scope", "$stateParams", "$ionicModal", "
     // }
 
     $scope.addMenu = function(menu) {
-      Menu.create({
-        name : menu.name.toLowerCase(),
-        price : menu.price,
-        restaurant_id : $scope.restoId,
-        category_id : menu.category,
-        availability : false,
-        prevPrice : menu.price,
-        photoURL : $scope.photoURL,
-        timestamp : firebase.database.ServerValue.TIMESTAMP
-      })
-        .then(() => {
-          alert('Success');
-          $scope.addMenuModal.hide();
+      try{
+        Menu.create({
+          name : menu.name.toLowerCase(),
+          price : menu.price,
+          restaurant_id : $scope.restoId,
+          category_id : menu.category,
+          availability : false,
+          prevPrice : menu.price,
+          photoURL : $scope.photoURL,
+          timestamp : firebase.database.ServerValue.TIMESTAMP
         })
-        .catch((err) => {
-          alert(err);
-        })
+          .then(() => {
+            alert('Success');
+            $scope.addMenuModal.hide();
+          })
+          .catch((err) => {
+            alert(err);
+          })
+      }catch(e){
+        $scope.submitError =true;
+      }
     }
 
     // $scope.deleteMenu = function(menu) {
@@ -134,7 +143,6 @@ app.controller("DashboardMenusCtrl", ["$scope", "$stateParams", "$ionicModal", "
 
     $scope.editMenu = function(menu) {
       console.log("editButtonModal clicked");
-      console.log(JSON.stringify(menu));
       $scope.eMenu = menu;
       $scope.categories = Menu.getMenuCategories(menu.restaurant_id);
       $scope.menuEditModal.show();
@@ -150,7 +158,6 @@ app.controller("DashboardMenusCtrl", ["$scope", "$stateParams", "$ionicModal", "
     }
 
     $scope.updateMenu = function(menu) {
-      console.log(JSON.stringify(menu));
       Database.menusReference().child(menu.$id).update({
         name: menu.name,
         price: menu.price,

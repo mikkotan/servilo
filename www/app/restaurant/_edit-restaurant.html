@@ -23,7 +23,7 @@
                 <span class="input-label has-input">Contact Number</span>
                 <input type="number" placeholder="Contact Number" ng-model="eRestaurant.phonenumber" name="phonenumber" ng-required="true" ng-minlength="5" ng-maxlength="16" min="0">
                 <div ng-show="editRestaurantForm.phonenumber.$touched" class="error">
-                  <p ng-show="editRestaurantForm.phonenumber.$error.required">* Contact Number's is required</p>
+                  <p ng-show="editRestaurantForm.phonenumber.$error.required">* Contact Number is required</p>
                   <p ng-show="editRestaurantForm.phonenumber.$error.minlength">* Contact Number must be longer than 5</p>
                   <p ng-show="editRestaurantForm.phonenumber.$error.maxlength">* Contact Number must be shorter than 16</p>
                 </div>

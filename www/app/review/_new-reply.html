@@ -6,11 +6,14 @@
 </div>
   </ion-header-bar>
   <ion-content class="padding">
-    <form ng-submit="newReply ? addReply(reply) : editReply(reply)">
+    <form ng-submit="newReply ? addReply(reply) : editReply(reply)" name="replyForm">
       <div class="list">
         <label class="item item-input item-floating-label">
           <span class="input-label has-input">Write review here . . . </span>
-          <textarea type="text" placeholder="Write review here . . . " ng-model="reply.content" rows="6" required></textarea>
+          <textarea type="text" placeholder="Write review here . . . " ng-model="reply.content" rows="6" name="content" ng-required=true autofocus></textarea>
+          <div class="error" ng-show="replyForm.content.$touched">
+            <p ng-show="replyForm.content.$error.required">* Content is required</p>
+          </div>
         </label>
         <div class="padding row">
           <button type="submit" class="button button-block button-positive">Save</button>

@@ -6,7 +6,7 @@
 </div>
   </ion-header-bar>
   <ion-content class="padding">
-    <form ng-submit="updateReview(review)">
+    <form ng-submit="updateReview(review)" name="updateReviewForm">
       <div class="list">
         <a class="button button-block button-balanced ink" ng-click="selImages()">
                     Add Images From Gallery
@@ -14,7 +14,10 @@
         <label class="item item-input item-floating-label">
           <span class="input-label has-input">Write review here . . . </span>
           <div>
-            <textarea type="text" placeholder="Write review here . . . " ng-model="review.content" rows="6" required></textarea>
+            <textarea type="text" placeholder="Write review here . . . " ng-model="review.content" rows="6" name="content" ng-required=true></textarea>
+          </div>
+          <div class="error" ng-show="updateReviewForm.content.$touched">
+            <p ng-show="updateReviewForm.content.$error.required">* Writing the review is required</p>
           </div>
         </label>
         <div class="item item-input">
