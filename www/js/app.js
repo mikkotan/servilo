@@ -8,10 +8,10 @@ var app = angular.module('app', ['ui.mask', 'ionic', 'ionic.cloud', 'ionMdInput'
 
 app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushService", "User", "Database", "$cordovaGeolocation", "$ionicPopup", "$cordovaPushV5","CartData","$ionicLoading","Auth",
   function($ionicPlatform, $rootScope, $state, $templateCache, IonicPushService, User, Database, $cordovaGeolocation, $ionicPopup, $cordovaPushV5,CartData, $ionicLoading,Auth) {
+
     $ionicPlatform.ready()
       .then(() => {
         if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
-          // IonicPushService.registerDevice();
           localStorage.myPush = '';
           $cordovaPushV5.initialize({
               android: {
@@ -153,6 +153,7 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
         }
 
       } else if (toState) {
+        console.log(toState);
       //  $ionicLoading.show();
       } else {
         console.log("Free Will")
@@ -269,7 +270,6 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
   $scope.goToPending = () =>{
     $state.go("tabs.pending")
   }
-  console.log(role);
 
   Auth.$onAuthStateChanged(function(firebaseUser) {
     if (firebaseUser) {

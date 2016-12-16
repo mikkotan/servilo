@@ -189,6 +189,7 @@ app.factory("Restaurant", ["$firebaseArray", "User", "Database", "$firebaseObjec
       },
       addCategory: function(category) {
         var categoryRef = restaurants.child(category.restaurant_id).child('menu_categories').push();
+
         return categoryRef.set({
           name: category.name
         })

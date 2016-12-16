@@ -44,6 +44,7 @@ app.controller("DashboardMenusCtrl", ["$scope", "$stateParams", "$ionicModal", "
     $scope.addCategory = function(category) {
       Restaurant.addCategory(category)
         .then(function() {
+          console.log(category);
           console.log('ADDED CATEGORY!! ')
         })
       $scope.category.name = "";
@@ -65,7 +66,7 @@ app.controller("DashboardMenusCtrl", ["$scope", "$stateParams", "$ionicModal", "
       }, Upload.getOptions(index));
       $scope.imageLoading = true;
     }
-    
+
     $scope.openAddModal = function() {
       $scope.addMenuModal.show();
     }

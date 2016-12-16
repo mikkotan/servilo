@@ -46,6 +46,7 @@
       <ion-checkbox ng-repeat="(key, val) in order.details.orderStatus" ng-model="order.details.orderStatus[key]" ng-change="changeOrderStatus(order.details.$id, key, order.details.orderStatus[key])">
         {{key}}
       </ion-checkbox>
+        <button class="button button-positive" ng-click="navigate(order)">WAZE</button>
       <button class="button button-positive" ng-click="openMapModal(order)">Open Map</button>
     </ion-item>
   </ion-content>

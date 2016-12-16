@@ -217,30 +217,30 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
       },
         class : 'Menu'
     })
-    .state('tabs.cart', {
-      url: "/cart",
-      params: {
-        restaurantId: null
-      },
-      views: {
-        'cart-tab': {
-          templateUrl: "app/cart/_cart.html",
-          controller: "CartCtrl",
-          resolve: {
-            orders: function(Order) {
-              return Order.all().$loaded();
-            },
-            authUser: function(User) {
-              return User.auth().$loaded();
-            },
-            restaurantId: function($stateParams) {
-              return $stateParams.restaurantId
-            }
-          }
-        }
-      },
-      class : 'Cart'
-    })
+    // .state('tabs.cart', {
+    //   url: "/cart",
+    //   params: {
+    //     restaurantId: null
+    //   },
+    //   views: {
+    //     'cart-tab': {
+    //       templateUrl: "app/cart/_cart.html",
+    //       controller: "CartCtrl",
+    //       resolve: {
+    //         orders: function(Order) {
+    //           return Order.all().$loaded();
+    //         },
+    //         authUser: function(User) {
+    //           return User.auth().$loaded();
+    //         },
+    //         restaurantId: function($stateParams) {
+    //           return $stateParams.restaurantId
+    //         }
+    //       }
+    //     }
+    //   },
+    //   class : 'Cart'
+    // })
     .state('tabs.dashboard.orders', {
       url: "/orders",
       params: {
@@ -329,7 +329,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
           controller: "DashboardInteractReservationsCtrl"
         }
       },
-      class : 'Reservation'
+      class : 'Dashboard'
     })
     .state('tabs.dashboard.reviews', {
       url: "/reviews",
@@ -341,7 +341,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
           templateUrl: "app/dashboard/_dashboard-interact-reviews.html",
           controller: "ViewRestaurantCtrl"
         }
-      }
+      },
+      class : 'Dashboard'
     })
     .state('tabs.dashboard.promos', {
       url: "/promos",
@@ -353,7 +354,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
           templateUrl: "app/dashboard/_dashboard-interact-promos.html",
           controller: "DashboardInteractPromosCtrl"
         }
-      }
+      },
+      class : 'Dashboard'
     })
     .state('tabs.dashboard.main', {
       url: "/main",
@@ -425,5 +427,5 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
       controller: "ProfileCtrl",
       class:'Profile'
     });
-  $urlRouterProvider.otherwise("/tab/home");
+  // $urlRouterProvider.otherwise("/tab/home");
 })
