@@ -2,16 +2,13 @@
   <ion-content class="padding has-tabs-top">
     <img ng-if="restaurant.photoURL" ng-src="{{restaurant.photoURL}}" width="100%" />
     <img ng-if="!restaurant.photoURL" ng-src="img/wow.jpg" width="50%">
-    <div class="padding">
-      <h3>{{restaurant.name}}</h3>
-      <!-- <button ng-repeat="service in restaurant.services" class="button button-calm"  ng-disabled="!service.status" ng-click="goToMenus(restaurant, service)">
-        {{service.name}}
-      </button> -->
-      <button class="button button-calm" ng-if="restaurant.facilities.Online" ui-sref="tabs.viewRestaurant.menus">Online Order</button>
-      <button class="button button-calm" ng-if="restaurant.facilities.Reservation" ng-click="showAddReservationModal()">Reservation</button>
-      <button class="button button-calm" ng-if="!hasFavored" ng-click="addToFavorites(restaurant)">Add to Favorites</button>
-    <p ng-if="getRestaurantStatus">ONLINE</p>
-    <p ng-if="!getRestaurantStatus">OFFLINE</p>
+    <div class="">
+    <h3 class="capitalize">{{restaurant.name}}</h3>
+    <button class="button button-calm ink" ng-show="restaurant.facilities.Online" ui-sref="tabs.viewRestaurant.menus">Online Order</button>
+    <button class="button button-calm ink" ng-show="restaurant.facilities.Reservation" ng-click="showAddReservationModal()">Reservation</button>
+    <button class="button icon-left ion-star button-positive ink" ng-show="!hasFavored" ng-click="addToFavorites(restaurant)">Favorites</button>
+<!--     <p ng-if="getRestaurantStatus">ONLINE</p>
+    <p ng-if="!getRestaurantStatus">OFFLINE</p> -->
 
     <p ng-if="restaurantOpenStatus">Restaurant is: Open</p>
     <p ng-if="!restaurantOpenStatus">Restaurant is: Closed</p>
@@ -29,14 +26,14 @@
         <ion-item>
           Location: {{restaurant.location}}
         </ion-item>
-        <div ng-if="!exists">
-          <button ng-click="reviewModal.show()" class="button button-block button-balanced">
+        <div ng-show="!exists">
+          <button ng-click="openReviewModal()" class="button button-block button-balanced ink">
             <icon class="ion-plus"></icon> Write Review</button>
         </div>
-        <div class="button-bar" ng-if="exists">
-          <button ng-click="openEditModal(review)" class="button button-balanced">
+        <div class="button-bar" ng-show="exists">
+          <button ng-click="openEditModal(review)" class="button button-balanced ink">
             <icon class="ion-plus"></icon> Edit Review</button>
-          <button ng-click="showConfirmDelete(review)" class="button button-assertive">
+          <button ng-click="showConfirmDelete(review)" class="button button-assertive ink">
             <icon class="ion-android-delete"></icon> Delete Review</button>
         </div>
       </ion-list>
@@ -47,39 +44,47 @@
         </div>
         <ul>
           <li class="item" ng-repeat="review in restaurantReviews" ng-init="reviewer=getName(review.reviewer_id)">
-          <!-- ng-init="reviewer=getReviewer(review)" -->
-          <!-- ng-init="images=getImages(review.images)" -->
-            <h3>
-              {{review.content}} <span class="badge badge-balanced">{{review.rating}}</span>
-            </h3>
-            <p>
-              Displayname: {{reviewer.displayName}}
-            </p>
-            <div class="container-class">
-              <hscroller ng-if="review.images">
-                <hcard ng-repeat="img in review.images" index="{{$index}}" desc="" image="{{img.thumb}}" ng-click="showImages($index)" ng-show="$index < 5"></hcard>
-                <hcard index="{{$index}}" desc="" image="img/plus.jpg" ng-click="showGallery(review.images)" ui-sref="tabs.viewRestaurant.gallery"></hcard>
-              </hscroller>
-              <!-- </ion-scroll>  -->
-              <!-- <button ng-click="openReplyModal(review)">Reply</button> -->
-               <!-- ng-init="replies=getReplies(review.$id)" -->
-              <!-- <div ng-repeat="reply in replies" ng-init="replyName=getName(reply.user_id)">
-                <div>
-                  <strong>{{replyName.firstName}} {{replyName.lastName}}:</strong>
-                  {{reply.content}}
-                  <div ng-if="reply.user_id == user.$id">
-                    <a class="icon ion-edit" ng-click="openEditReplyModal(reply, review.$id)">Edit</a>
-                    <a class="icon ion-ios-close-outline" ng-click="replies.$remove(reply)">Remove</a>
-                  </div>
-                </div>
-              </div> -->
+            <div class="row">
+              <div class="col col-20">
+                <img ng-if="!reviewer.photoURL" src="img/ionic.png" style="width: 50px; height: 50px">
+                <img ng-if="reviewer.photoURL" src="{{reviewer.photoURL}}" style="width: 50px; height: 50px">
+              </div>
+              <div class="col col-80">
+                <h3 ng-click="showReviewModal(review, reviewer)">{{reviewer.displayName}}</h3>
+                <p>
+                  {{review.content}} <span class="badge badge-balanced">{{review.rating}}</span>
+                </p>
+                <hscroller ng-if="review.images">
+                  <hcard ng-repeat="img in review.images" index="{{$index}}" desc="" image="{{img.thumb}}" ng-click="showImages($index)" ng-show="$index < 5"></hcard>
+                  <hcard index="{{$index}}" desc="" image="img/plus.jpg" ng-click="showGallery(review.images)" ui-sref="tabs.viewRestaurant.gallery"></hcard>
+                </hscroller>
+              </div>
             </div>
           </li>
-          <li class="item" ng-hide="!loadingReviews" ui-sref="tabs.viewRestaurant.reviews">
+          <li class="item ink" ng-if="restaurantReviews.length > 0" ng-hide="!loadingReviews" ui-sref="tabs.viewRestaurant.reviews">
             See all reviews
           </li>
+          <li class="item ink" ng-if="restaurantReviews.length == 0">
+            No reviews
+          </li>
         </ul>
-
+<!--         <li class="item item-avatar" ng-repeat="review in restaurantReviews" ng-init="reviewer=getName(review.reviewer_id)">
+          <img ng-if="!reviewer.photoURL" src="img/ionic.png">
+          <img ng-if="reviewer.photoURL" src="{{reviewer.photoURL}}">
+          <h2>{{reviewer.displayName}}</h2>
+          <span class="badge badge-balanced">{{review.rating}}</span>
+          <p>{{review.content}}</p>
+          <hscroller ng-if="review.images">
+            <hcard ng-repeat="img in review.images" index="{{$index}}" desc="" image="{{img.thumb}}" ng-click="showImages($index)" ng-show="$index < 5"></hcard>
+            <hcard index="{{$index}}" desc="" image="img/plus.jpg" ng-click="showGallery(review.images)" ui-sref="tabs.viewRestaurant.gallery"></hcard>
+          </hscroller>
+        </li>
+        <a class="item ink" ng-if="restaurantReviews.length > 0" ng-hide="!loadingReviews" ui-sref="tabs.viewRestaurant.reviews">
+          See all reviews
+        </a>
+        <a class="item ink" ng-if="restaurantReviews.length == 0">
+          No reviews
+        </a> -->
         <div class="item item-divider">
           Contact
         </div>

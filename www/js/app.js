@@ -83,6 +83,9 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
           })
           .then((res) => {
             if (res) {
+              console.log('tapped ok');
+              console.log("isRestaurantOwner: "+data.additionalData.isRestaurantOwner)
+              console.log("url: "+data.additionalData.url)
               if (data.additionalData.url === 'reservation') {
                 $state.go('tabs.restaurant')
                   .then(() => {
@@ -95,9 +98,20 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
                   })
               } else if (data.additionalData.url === 'order_status') {
                 $state.go('tabs.myOrders');
+              } else if (data.additionalData.url === 'reservation_status') {
+                $state.go('tabs.myReservations')
               } else if (data.additionalData.url === 'approve') {
-                    Auth.$signOut();
+                console.log(typeof data.additionalData.isRestaurantOwner);
+                if (data.additionalData.isRestaurantOwner === 'true') {
+                  console.log('restaurantOwner already')
+                  $state.go('tabs.restaurant');
+                } else {
+                  console.log('approve first time');
+                  Auth.$signOut();
+                  $state.go("landing");
+                }
               }
+
             }
           })
       } else {
@@ -195,6 +209,8 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
           console.log("success user loaded deleted");
           var firebaseUser = Auth.$getAuth();
           if (ionic.Platform.isIOS() || ionic.Platform.isAndroid()) {
+            window.plugins.googleplus.disconnect();
+            facebookConnectPlugin.logout();
             var ionicToken = localStorage.myPush;
             var results = ionicToken.split(':');
             Database.usersReference().child(firebaseUser.uid).child('device_token').child(results[0]).set(null);
@@ -234,9 +250,6 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
 .controller('TabsCtrl', function($scope, $state, Auth ,role) {
   $scope.goToHome = function() {
     $state.go("tabs.home")
-  }
-  $scope.goToOrders = function() {
-    $state.go("tabs.orders")
   }
   $scope.goToNotifications = function() {
     $state.go("tabs.notifications")
@@ -290,3 +303,16 @@ app.directive('groupedRadio', function() {
     }
   };
 });
+
+app.directive('ngLastRepeat', function ($timeout) {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attr) {
+            if (scope.$last === true) {
+                $timeout(function () {
+                    scope.$emit('ngLastRepeat'+ (attr.ngLastRepeat ? '.'+attr.ngLastRepeat : ''));
+                });
+            }
+        }
+    };
+})

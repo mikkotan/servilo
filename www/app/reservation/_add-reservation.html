@@ -6,21 +6,31 @@
 </div>
   </ion-header-bar>
   <ion-content>
-    <form ng-submit="bookReservation(reservation)">
+    <form ng-submit="bookReservation(reservation)" name="newReservationForm">
       <div class="list">
         <label class="item item-input item-floating-label" ng-if="reservation.name !== undefined">
           <span class="input-label has-input">Name</span>
-          <input type="text" placeholder="Name" ng-model="reservation.name">
+          <input type="text" placeholder="Name" ng-model="reservation.name" name="name" ng-required=true>
+          <div class="error" ng-show="newReservationForm.name.$touched">
+            <p ng-show="newReservationForm.name.$error.required">* Reservation's name is required</p>
+          </div>
         </label>
         <label class="item item-input item-floating-label">
           <span class="input-label has-input">No. of seats to reserve</span>
-          <input type="number" placeholder="No. of seats to reserve" ng-model="reservation.number_of_persons">
+          <input type="number" placeholder="No. of seats to reserve" ng-model="reservation.number_of_persons" name="numberOfPersons" min="1" ng-required=true>
+          <div class="error" ng-show="newReservationForm.numberOfPersons.$touched">
+            <p ng-show="newReservationForm.numberOfPersons.$error.required">* Number of seats is required is required</p>
+          </div>
         </label>
         <div class="item item-icon-left" ion-datetime-picker am-pm ng-model="reservation.datetime" only-valid="{'after' : 'today', 'inclusive': 'true'}">
           <i class="icon ion-ios-barcode-outline positive"></i> Date and Time of Reservation
           <br>
           <strong>{{reservation.datetime| date: "MMM d, y h:mm a"}}</strong>
         </div>
+        <label class="item item-input item-floating-label">
+          <span class="input-label has-input">Note</span>
+          <textarea type="text" placeholder="Note" ng-model="reservation.note" rows="3"></textarea>
+        </label>
       </div>
       <div class="padding">
         <button type="submit" class="button button-block button-positive">Book Now</button>

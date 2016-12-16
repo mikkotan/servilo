@@ -1,0 +1,21 @@
+<ion-modal-view view-title="GoogleMap">
+  <ion-header-bar class="bar bar-header bar-assertive">
+    <h1 class="title">Map Path Representation</h1>
+    <button class="button button-clear button-primary" ng-click="mapModal.hide()"><i class="icon ion-ios-close"></i></button>
+  </ion-header-bar>
+  <ion-content class="padding">
+    <div>
+      <h3>{{location}}</h3>
+    </div>
+    <div>
+      <ui-gmap-google-map zoom='map.zoom' center="map.center" options='map.options' bounds='map.bounds' events='map.events' control="modalControl" dorebuildall=true>
+        <ui-gmap-markers models="markers" coords="'coords'" icon="'icon'"></ui-gmap-markers>
+        <ui-gmap-polylines models="mapDirection" path="'paths'" stroke="'stroke'"></ui-gmap-polylines>
+      </ui-gmap-google-map>
+    </div>
+    <div>
+      <button class="button button-positive" ng-click="pathByRestaurant(order.details.order_details)">Show Path to customer from Restaurant</button>
+      <button class="button button-positive" ng-click="pathByCurrentLocation(order.details.order_details)">Show Path to customer from Current location</button>
+    </div>
+  </ion-content>
+</ion-modal-view>

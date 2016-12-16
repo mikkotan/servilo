@@ -16,7 +16,7 @@
       <ion-item class="text-wrap" ng-repeat="restaurant in displayRestaurants">
 
         <button class="button button-small button-calm" ui-sref="tabs.dashboard.main({restaurantId:restaurant.$id})">View in dash</button>
-        <h3><icon class="ion-spoon"></icon> {{restaurant.name}}</h3>
+        <h3 class="capitalize"><icon class="ion-spoon"></icon> {{restaurant.name}}</h3>
         <!-- {{restaurant}} -->
         <p>
           <icon class="ion-ios-location-outline"></icon> {{restaurant.location}}

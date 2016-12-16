@@ -1,8 +1,15 @@
-app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParams", "$ionicLoading", "$ionicModal", "$ionicPopup", "CordovaGeolocation", "Restaurant", "User", "Review", "Reservation", "$ionicLoading", "Notification", "$ionicSlideBoxDelegate", "$ionicScrollDelegate", "Gallery", "$timeout",
-  function($scope, $state, Upload, $stateParams, $ionicLoading, $ionicModal, $ionicPopup, CordovaGeolocation, Restaurant, User, Review, Reservation, $ionicLoading, Notification, $ionicSlideBoxDelegate, $ionicScrollDelegate, Gallery, $timeout) {
+app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParams", "ionicMaterialInk", "$ionicLoading", "$ionicModal", "$ionicPopup", "CordovaGeolocation", "Restaurant", "User", "Review", "Reservation", "$ionicLoading", "Notification", "$ionicSlideBoxDelegate", "$ionicScrollDelegate", "Gallery", "$timeout",
+  function($scope, $state, Upload, $stateParams, ionicMaterialInk, $ionicLoading, $ionicModal, $ionicPopup, CordovaGeolocation, Restaurant, User, Review, Reservation, $ionicLoading, Notification, $ionicSlideBoxDelegate, $ionicScrollDelegate, Gallery, $timeout) {
+
     $ionicLoading.show();
+    // ionicMaterialInk.displayEffect();
+    $scope.$on('applyInk',function(e) {
+      ionicMaterialInk.displayEffect();
+    })
+    $scope.$emit('applyInk');
+
     console.log("View Restaurant Ctrl")
-    
+
     $scope.rating = {
       rate: 0,
       max: 5
@@ -30,7 +37,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
             console.log('Has favored error');
             console.log(err);
           })
-        
+
         Restaurant.getReviews(restaurant.$id).$loaded().then(function(reviews) {
           $scope.restaurantReviews = reviews;
           $scope.loadingReviews = true;
@@ -71,6 +78,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
             number_of_persons: reservation.number_of_persons,
             status: 'pending',
             user_id: User.auth().$id,
+            note: reservation.note,
             restaurant_id: restaurantId,
             timestamp: firebase.database.ServerValue.TIMESTAMP
           })
@@ -123,6 +131,11 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
       $scope.images = [];
     }
 
+    $scope.openReviewModal = function() {
+      $scope.reviewModal.show();
+      $scope.$emit('applyInk');
+    }
+
     $scope.addReview = function(review) {
       $ionicLoading.show();
       var newReview = Review.addReview(restaurantId, review);
@@ -154,6 +167,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
 
     $scope.openEditModal = function(review) {
       $scope.editReviewModal.show();
+      $scope.$emit('applyInk');
       $scope.editImages = Upload.getMultipleUpload(restaurantId, review.$id);
     }
 
@@ -194,6 +208,12 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
 
     $ionicModal.fromTemplateUrl('app/review/_new-reply.html', function(addReplyModal) {
       $scope.addReplyModal = addReplyModal;
+    }, {
+      scope: $scope
+    })
+
+    $ionicModal.fromTemplateUrl('app/review/_view-review.html', function(viewReviewModal) {
+      $scope.viewReviewModal = viewReviewModal;
     }, {
       scope: $scope
     })
@@ -244,8 +264,32 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
     }
 
     $scope.showGallery = function(allImages) {
+      console.log('cleck')
       Gallery.set(allImages);
     }
 
+    $scope.deleteImage = function(images, image) {
+      var confirmDelete = $ionicPopup.confirm({
+        title: "Delete Photo",
+        template: "Are you sure you want to delete this photo?"
+      })
+
+      confirmDelete.then(function(res) {
+        if (res) {
+          images.$remove(image);
+          console.log("image removed")
+        } else {
+          console.log("delete failed");
+        }
+      })
+    }
+
+    $scope.showReviewModal = function(review, reviewer) {
+      $scope.showGallery(review.images);
+      $scope.viewReviewModal.show();
+      $scope.viewReview = review;
+      $scope.viewReviewer = reviewer;
+      $scope.viewItems = Gallery.get();
+    }
   }
 ]);

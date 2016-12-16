@@ -26,13 +26,7 @@
   <!-- <ion-tab ng-if="firebaseUser" title="Restaurantmenus" icon="ion-spoon" ui-sref="tabs.restaurantMenus">
     <ion-nav-view name="restaurantmenus-tab"></ion-nav-view>
   </ion-tab> -->
-  <ion-tab ng-if="userRole.isRestaurantOwner" title="Orders" icon="ion-android-list">
-    <ion-nav-view name="order-tab"></ion-nav-view>
-  </ion-tab>
 
-  <ion-tab ng-if="userRole.isRestaurantOwner" title="Reservations" icon="ion-android-notifications">
-    <ion-nav-view name="reservations-tab"></ion-nav-view>
-  </ion-tab>
   <ion-tab ng-if="userRole.isAny" title="My Orders" icon="ion-android-notifications" ng-click="goToMyOrders()">
     <ion-nav-view name="myorders-tab"></ion-nav-view>
   </ion-tab>

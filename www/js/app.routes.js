@@ -136,7 +136,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
     .state('tabs.viewRestaurant.reviews', {
       url: "/reviews",
       views: {
-        'restaurant-page': {
+        'restaurant_page': {
           templateUrl: "app/review/_all-reviews.html",
           controller: "ReviewCtrl",
           resolve: {

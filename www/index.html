@@ -79,6 +79,8 @@
   <script src="app/restaurant/view-restaurant.controller.js"></script>
   <script src="app/restaurant/view-restaurant-location.controller.js"></script>
   <script src="app/restaurant/view-restaurant-menus.controller.js"></script>
+  <!-- advertisement -->
+  <script src="app/advertisement/advertisement.service.js"></script>
   <!-- dashboard -->
   <script src="app/dashboard/dashboard-main.controller.js"></script>
   <script src="app/dashboard/dashboard-menus.controller.js"></script>
@@ -153,7 +155,7 @@
       <ion-header-bar class="bar-profile">
 
         <div ng-show="firebaseUser" class="profile">
-          <img class="sidebar-picture" ng-show="newPhotoURL" ng-src="{{currentUser.photoURL}}" style="width: 50px; height: 50px">
+          <img class="sidebar-picture" ng-show="newPhotoURL" ng-src="{{firebaseUser.photoURL}}" style="width: 50px; height: 50px">
           <img class="sidebar-picture" ng-show="!newPhotoURL" ng-src="img/wow.jpg" style="width: 50px; height: 50px">
           <h3 class="sidebar-name" ng-if="firebaseUser.provider !== email">{{firebaseUser.displayName}}</h3>
           <h3 class="sidebar-name" ng-if="firebaseUser.provider === email">{{firebaseUser.firstName}} {{firebaseUser.lastName}}</h3>

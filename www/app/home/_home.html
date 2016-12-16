@@ -1,37 +1,40 @@
 <ion-view view-title="Home">
   <ion-content>
-
+  <div class="padding">
+    <h6>Ads</h6>
     <ion-slides options="options" slider="data.slider">
-      <ion-slide-page>
-        <!-- <div><img class="slider-imgs" ng-src="img/material-wall.jpg"></div> -->
-        <h1>ADVERTISEMENTSU</h1>
-        <div class="card padding">
+      <ion-slide-page ng-repeat="advertisement in newAdvertisements" ng-if="advertisement.ready">
+        <div class="card ink" ng-click="goToRestaurant(advertisement.details.$id)">
           <div class="item item-thumbnail-left">
-            <img class="img-thumbnail" ng-src="img/wow.jpg" />
-            <h3>
-              <icon class="ion-spoon"></icon> SNIPER ISLAND 2
+            <img class="img-thumbnail" ng-if="advertisement.details.photoURL" ng-src="{{advertisement.details.photoURL}}" />
+            <img ng-if="!advertisement.details.photoURL" ng-src="img/wow.jpg">
+              <icon class="ion-spoon"></icon> {{advertisement.details.name}}
               <span style="color:green">
-                <icon class="ion-android-star-outline"></icon> 5 STARS
+                <icon class="ion-android-star-outline"></icon> {{advertisement.avg}}
               </span>
-            </h3>
             <p>
-              1000000 PESOS
+              Sponsored
             </p>
             <p>
-              <icon class="ion-ios-location-outline"></icon> IN YOUR HEART
+              {{advertisement.details.secured_data.avgPrice.toFixed(2) | currency:"₱"}}
             </p>
-            <button class="button button-balanced button-small button-outline">
+            <p>
+              <icon class="ion-ios-location-outline"></icon> {{advertisement.details.location}}
+            </p>
+            <button class="button button-balanced button-small button-outline" ng-click="CallNumber(advertisement.details.phonenumber)">
               <icon class="ion-android-call"></icon> Call Us
             </button>
           </div>
         </div>
       </ion-slide-page>
     </ion-slides>
+  </div>
+
     HOME HERE
     <ion-refresher pulling-text="Pull to refresh..." on-refresh="doRefresh()">
     </ion-refresher>
     <ion-list>
-      <ion-item ng-repeat="rest in home.restaurants | orderBy:'distance'" item="rest">
+      <ion-item class="ink" ng-repeat="rest in home.restaurants | orderBy:'distance'" item="rest" ng-last-repeat="workorderlist">
         {{rest.name}}
       </ion-item>
     </ion-list>

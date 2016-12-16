@@ -2,31 +2,45 @@
   <ion-header-bar class="bar bar-header bar-assertive">
     <h1 class="title">New Restaurant</h1>
     <div class="buttons">
-    <button class="button button-clear button-primary" ng-click="restaurantModal.hide()"><i class="icon ion-ios-close"></i></button>
-</div>
+      <button class="button button-clear button-primary" ng-click="restaurantModal.hide()"><i class="icon ion-ios-close"></i></button>
+    </div>
   </ion-header-bar>
   <!-- <ion-content class="padding"> -->
   <ion-content>
     <!-- <ion-list> -->
       <!-- <div class="card"> -->
         <!-- <ion-item id="form-input"> -->
-          <form ng-submit="addRestaurant(restaurant)">
+          <form ng-submit="addRestaurant(restaurant)" name="newRestaurantform" novalidate>
             <div class="list">
               <label class="item item-input item-floating-label">
                 <span class="input-label has-input">Name of Restaurant</span>
-                <input type="text" placeholder="Name of Restaurant" ng-model="restaurant.name">
+                <input type="text" placeholder="Name of Restaurant" ng-model="restaurant.name" name="name" ng-required=true>
+                <div class="error" ng-show="newRestaurantform.name.$touched || submitError">
+                  <p ng-show="newRestaurantform.name.$error.required">* Restaurant name is required</p>
+                </div>
               </label>
               <label class="item item-input item-floating-label">
                 <span class="input-label has-input">Contact Number</span>
-                <input type="number" placeholder="Contact Number" ng-model="restaurant.phonenumber">
+                <input type="number" placeholder="Contact Number" ng-model="restaurant.phonenumber" name="phonenumber" ng-minlength="5" ng-maxlength="16" min="0" ng-required=true>
+                <div ng-show="newRestaurantform.phonenumber.$touched || submitError" class="error">
+                  <p ng-show="newRestaurantform.phonenumber.$error.required">* Contact Number's is required</p>
+                  <p ng-show="newRestaurantform.phonenumber.$error.minlength">* Contact Number must be longer than 5</p>
+                  <p ng-show="newRestaurantform.phonenumber.$error.maxlength">* Contact Number must be shorter than 16</p>
+                </div>
               </label>
               <label class="item item-input item-floating-label">
                 <span class="input-label has-input">Type of Restaurant</span>
-                <input type="text" placeholder="Type of Restaurant" ng-model="restaurant.type">
+                <input type="text" placeholder="Type of Restaurant" ng-model="restaurant.type" name="type" ng-required=true>
+                <div class="error" ng-show="newRestaurantform.type.$touched || submitError">
+                  <p ng-show="newRestaurantform.type.$error.required">* Restaurant's type is required</p>
+                </div>
               </label>
               <label class="item item-input item-floating-label">
                 <span class="input-label has-input">Cuisine of Restaurant</span>
-                <input type="text" placeholder="Cuisine of Restaurant" ng-model="restaurant.cuisine">
+                <input type="text" placeholder="Cuisine of Restaurant" ng-model="restaurant.cuisine" name="cuisine" ng-required=true>
+                <div class="error" ng-show="newRestaurantform.cuisine.$touched || submitError">
+                  <p ng-show="newRestaurantform.cuisine.$error.required">* Restaurant's cuisine is required</p>
+                </div>
               </label>
               <div class="item">
                 <a class="button button-block button-royal icon-left ion-plus-circled" ng-click="setHours()">Set Hours</a>
@@ -47,11 +61,23 @@
               </div>
               <!-- <div class="item item-input-inset"> -->
 
+              <a class="button button-small button-balanced" ng-click="useCurrent()">Use Current Location</a>
                 <label class="item-input item-floating-label">
                   <span class="input-label has-input">Location of Restaurant</span>
-                  <input type="text" placeholder="Location of Restaurant" ng-model="restaurant.location" details="data.detail"/>
+                  <input type="text" placeholder="Change address" google-autocomplete-suggestion location="data.location" country-code="{{countryCode}}" name="location" ng-model="data.location.formatted_address" readonly ng-required=true />
+                  <!-- <input type="text" placeholder="Location of Restaurant" ng-model="restaurant.location" details="data.detail"/> -->
+                  <div class="error" ng-show="newRestaurantform.location.$touched || submitError">
+                    <p ng-show="newRestaurantform.location.$error.required">* Restaurant's location is required</p>
+                  </div>
                 </label>
-                <a class="button button-block button-royal icon-left ion-map" ng-click="showMap()">Choose using Map</a>
+
+                <img ng-src="https://maps.googleapis.com/maps/api/staticmap?center={{marker.coords.latitude}},{{marker.coords.longitude}}
+                                &zoom=18
+                                &size=500x300
+                                &markers={{marker.coords.latitude}},{{marker.coords.longitude}}
+                                &key=AIzaSyCTNmJQD-Z3qn5QmhC-Jfp4iZr6P6QV_tE" ng-if="marker.coords.latitude && marker.coords.longitude">
+
+                <a class="button button-block button-royal icon-left ion-map" ng-click="showMap()" ng-disabled="!data.location.formatted_address">Edit marker on map</a>
               <!-- </div> -->
               <div class="item">
                 <div class="row">
@@ -65,28 +91,28 @@
                     <!-- <div ng-show="progress" class="progress-bar" style="width: {{progress}}%;">
                       <p class="percent">{{progress}}%</p>
                     </div> -->
-                    <div class="col text-center">
-                      <ion-spinner ng-if="imageLoading" icon="android"></ion-spinner>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <a class="button button-block button-positive icon ion-camera" ng-click="upload(1)"></a>
-                  </div>
-                  <div class="col">
-                    <a class="button button-block button-calm icon ion-image" ng-click="upload(2)"></a>
-                  </div>
-                </div>
-              </div>
-              <div class="padding">
-                <button type="submit" class="button button-block button-balanced">Add Restaurant</button>
+              <div class="col text-center">
+                <ion-spinner ng-if="imageLoading" icon="android"></ion-spinner>
               </div>
             </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <a class="button button-block button-positive icon ion-camera" ng-click="upload(1)"></a>
+            </div>
+            <div class="col">
+              <a class="button button-block button-calm icon ion-image" ng-click="upload(2)"></a>
+            </div>
+          </div>
+        </div>
+        <div class="padding">
+          <button type="submit" class="button button-block button-balanced">Add Restaurant</button>
+        </div>
+      </div>
 
-          </form>
-        <!-- </ion-item> -->
-      <!-- </div> -->
+    </form>
+    <!-- </ion-item> -->
+    <!-- </div> -->
     <!-- </ion-list> -->
   </ion-content>
 </ion-modal-view>

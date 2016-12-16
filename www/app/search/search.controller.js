@@ -1,10 +1,82 @@
-app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMaterialInk", "$ionicPopup", "CordovaGeolocation", "ionicToast", "$ionicLoading", "Search", "currentGeoLocation", "Restaurant",
-  function($scope, Auth, $state, User, ionicMaterialInk, $ionicPopup, CordovaGeolocation, ionicToast, $ionicLoading, Search, currentGeoLocation, Restaurant) {
+app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMaterialInk", "$timeout", "$ionicPopup", "CordovaGeolocation", "ionicToast", "$ionicLoading", "Search", "currentGeoLocation", "Restaurant", "$ionicActionSheet",
+  function($scope, Auth, $state, User, ionicMaterialInk, $timeout, $ionicPopup, CordovaGeolocation, ionicToast, $ionicLoading, Search, currentGeoLocation, Restaurant, $ionicActionSheet) {
 
+    ionicMaterialInk.displayEffect();
+    $scope.$on('ngLastRepeat.workorderlist', function(e) {
+      $scope.materialize();
+    });
+    $scope.showList = true;
+    $scope.showMap = false;
+
+    $scope.mapView = function() {
+
+      $scope.showList = false;
+      $scope.showMap = true;
+    }
+    $scope.listView = function() {
+
+      $scope.showList = true;
+      $scope.showMap = false;
+
+    }
+    $scope.materialize = function() {
+      $timeout(function() {
+        // ionicMaterialMotion.fadeSlideInRight();
+        ionicMaterialInk.displayEffect();
+      }, 0);
+    };
+
+    $scope.changeFilter = function() {
+      var confirmPopup = $ionicPopup.alert({
+        title: 'Search by',
+        templateUrl: 'app/search/_search.filter.html',
+        scope: $scope
+      });
+
+      confirmPopup.then(function(res) {
+        if (res) {
+          $scope.clearField();
+          $scope.clearLocationField();
+        }
+      });
+    }
+
+    $scope.showActionsheet = function(restaurant) {
+      $ionicActionSheet.show({
+        titleText: '<p class="capitalize">' + restaurant.name + '</p>',
+        buttons: [{
+          text: '<i class="icon ion-arrow-right-b"></i> View'
+        }, {
+          text: '<i class="icon ion-ios-telephone"></i> Call'
+        }],
+        // destructiveText: 'Delete',
+        cancelText: 'Cancel',
+        cancel: function() {
+          console.log('CANCELLED');
+        },
+        buttonClicked: function(index) {
+          switch (index) {
+            case 0:
+              $state.go("tabs.viewRestaurant.main", {
+                "restaurantId": restaurant.$id
+              });
+              break;
+            case 1:
+              $scope.CallNumber(restaurant.phonenumber);
+              break;
+          }
+          console.log('BUTTON CLICKED', index);
+          return true;
+        },
+        // destructiveButtonClicked: function() {
+        //   console.log('DESTRUCT');
+        //   return true;
+        // }
+      });
+    }
     console.log('SearchTabCtrl');
     $scope.restaurants = [];
     $scope.markers = [];
-    ionicMaterialInk.displayEffect();
     $scope.map = Search.getMap();
     var isMarkerCanChange = true;
     $scope.mapText = "Nearest restaurant to your location (1km)";
@@ -18,15 +90,15 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
     $scope.goToMyOrders = function() {
       $state.go("tabs.myOrders")
     }
+
     $scope.$watch('restaurants', function() {
       console.log('restaurants changed');
     })
 
-
     $scope.$watchCollection('restaurants', function(newRestaurants) {
+      $scope.loading = false;
       console.log('WATCH COLLECTION BEING RUN');
       $scope.newRestaurants = newRestaurants.map(function(restaurant) {
-        console.log('hehe hellow')
         console.log(restaurant);
         var r = {
           details: restaurant,
@@ -79,9 +151,13 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
       $scope.markers.push(Search.getMarker(item));
     };
 
+
     $scope.markerEvents = {
       click: function(marker, eventName, model) {
         if (model.id != '0') {
+
+        //   infowindow.open(marker);
+
           $state.go("tabs.viewRestaurant.main", {
             restaurantId: model.id
           });
@@ -94,9 +170,6 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
       var currentLocation = CordovaGeolocation.get();
       $scope.markers.push(Search.getYouAreHere());
       $scope.loading = true;
-      // $ionicLoading.show({
-      //   template: '<p>Searching. . .</p><ion-spinner icon="lines"></ion-spinner>'
-      // });
       Search.getRestaurant().on("child_added", function(snapshot) {
         if (Search.getNear(snapshot.key, snapshot.val())) {
           $scope.loading = false;
@@ -104,20 +177,7 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
           $scope.markers.push(getNear.marker);
           $scope.restaurants.push(getNear.restaurant);
         }
-        //  else {
-        //   $scope.loading = false;
-        //   ionicToast.show('NO RESTAURANTS MAN', 'bottom', false, 2500);
-        // }
       })
-
-      // Search.getRestaurant().$loaded().then(function(result) {
-      //   // $ionicLoading.hide();
-      //   $scope.markers = Search.getNearestRestaurants(result);
-      //   // $scope.restaurants = $scope.markers;
-      //   if($scope.markers.length == 1) {
-      //     alert("There are no restaruant nearby!!");
-      //   }
-      // })
       $scope.map.zoom = 14;
       $scope.map.center = {
         latitude: currentLocation.latitude,
@@ -126,52 +186,57 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
       isMarkerCanChange = false;
     };
 
-    $scope.locationSearch = function() {
-      console.log("FINISH BLUR");
-      $scope.allowMarkerChange('', 'name');
-      if (!$scope.data.location) {
-        ionicToast.show('NO LOCATION MAN', 'bottom', false, 2500);
+    $scope.$watch('data.location.formatted_address', function(newValue) {
+      if (newValue == undefined) {
+        $scope.allowMarkerChange('', 'name');
       } else {
-
-        console.log($scope.data.location.geometry.location)
-        var lat = $scope.data.location.geometry.location.lat();
-        var long = $scope.data.location.geometry.location.lng();
-        $scope.markers.push(Search.getInputLocation(lat, long));
-        $scope.loading = true;
-        // $ionicLoading.show({
-        //   template: '<p>Searching. . .</p><ion-spinner icon="lines"></ion-spinner>'
-        // });
-        Search.getRestaurant().on("child_added", function(snapshot) {
-          if (Search.getNearLocation(snapshot.key, snapshot.val(), lat, long)) {
-            $scope.loading = false;
-            var m = Search.getNearLocation(snapshot.key, snapshot.val(), lat, long);
-            $scope.markers.push(m.marker);
-            $scope.restaurants.push(m.restaurant);
-          }
-        //   else {
-        //     $scope.loading = false;
-        //     ionicToast.show('NO RESTAURANTS MAN', 'bottom', false, 2500);
-        //   }
-        })
-
-        $scope.map.zoom = 14;
-        $scope.map.center = {
-          latitude: $scope.data.location.geometry.location.lat(),
-          longitude: $scope.data.location.geometry.location.lng()
-        };
-        isMarkerCanChange = false;
+        $ionicLoading.show();
+        $scope.locationSearch();
       }
+    });
+
+    $scope.locationSearch = function() {
+      var lat = $scope.data.location.geometry.location.lat();
+      var long = $scope.data.location.geometry.location.lng();
+      $scope.markers.push(Search.getInputLocation(lat, long));
+      $scope.loading = true;
+      // $ionicLoading.show({
+      //   template: '<p>Searching. . .</p><ion-spinner icon="lines"></ion-spinner>'
+      // });
+      Search.getRestaurant().on("child_added", function(snapshot) {
+        if (Search.getNearLocation(snapshot.key, snapshot.val(), lat, long)) {
+          $ionicLoading.hide();
+          $scope.loading = false;
+          var m = Search.getNearLocation(snapshot.key, snapshot.val(), lat, long);
+          $scope.markers.push(m.marker);
+          $scope.restaurants.push(m.restaurant);
+        }
+        //  else {
+        //   $ionicLoading.hide();
+        //   $scope.loading = false;
+        //   ionicToast.show('NO RESTAURANTS MAN', 'bottom', false, 2500);
+        // }
+      })
+
+      $scope.map.zoom = 14;
+      $scope.map.center = {
+        latitude: $scope.data.location.geometry.location.lat(),
+        longitude: $scope.data.location.geometry.location.lng()
+      };
+      isMarkerCanChange = false;
     };
 
     $scope.allowMarkerChange = function(inputText, filter) {
       var input = inputText.toLowerCase();
       $scope.markers.length = 0;
       if (input !== '') {
+        $scope.loading = true;
         if (filter == 'name') {
           Search.searchName(input).$loaded().then(function(data) {
             if (data.length <= 0) {
-              console.log('no results found! :(');
+              ionicToast.show('NO RESTAURANTS MAN', 'bottom', false, 2500);
             }
+            $scope.loading = false;
             $scope.restaurants = data;
           });
         } else if (filter == 'menu') {
@@ -185,8 +250,11 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
         }
       } else {
         $scope.restaurants = []
+        $scope.loading = false;
       }
       $scope.map.zoom = 12;
+      $scope.map.center.latitude = 10.729984;
+      $scope.map.center.longitude = 122.549298;
       isMarkerCanChange = true;
     }
 
@@ -204,11 +272,23 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
     }, {
       text: "Menu",
       value: "menu"
+    }, {
+      text: "Location",
+      value: "location"
     }];
 
     $scope.data = {
       filter: 'name'
     };
 
+    $scope.clearField = function() {
+      $scope.searchRestaurant = '';
+      $scope.allowMarkerChange('', 'name');
+    }
+
+    $scope.clearLocationField = function() {
+      $scope.data.location.formatted_address = "";
+      $scope.allowMarkerChange('', 'location');
+    }
   }
 ]);

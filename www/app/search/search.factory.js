@@ -52,7 +52,6 @@ app.factory("Search", ["$firebaseObject", "$firebaseAuth", "$firebaseArray", "Da
         }
       },
       getNearLocation: function(id, restaurant, lat, long) {
-        var currentLocation = CordovaGeolocation.get();
         var marker = {
           id: id,
           coords: {

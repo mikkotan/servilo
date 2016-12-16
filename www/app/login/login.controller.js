@@ -1,6 +1,6 @@
 app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMenuDelegate", "ionicMaterialMotion", "User", "$state", "$ionicLoading", "$ionicModal", "Database", "IonicPushService", "$ionicPopup", "$timeout",
   function($scope, Auth, ionicMaterialInk, $ionicSideMenuDelegate, ionicMaterialMotion, User, $state, $ionicLoading, $ionicModal, Database, IonicPushService, $ionicPopup, $timeout) {
-
+    $scope.passwordType= "password";
     ionicMaterialInk.displayEffect();
     $timeout(function() {
       ionicMaterialMotion.blinds({
@@ -16,7 +16,6 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMe
     });
 
     $scope.googleLogin = function() {
-      console.log("initiated");
       window.plugins.googleplus.login({
           // 'scopes': '... ', // optional, space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
           // 'webClientId': 'client id of the web app/server side', // optional clientId of your Web application from Credentials settings of your project - On Android, this MUST be included to get an idToken. On iOS, it is not required.
@@ -30,10 +29,8 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMe
             function(success) {
               console.log("google login success");
               var ref = firebase.database().ref().child("users").child(success.uid);
-
               ref.once('value', function(snapshot) {
                 var googleUser = snapshot.val();
-
                 if (googleUser === null) {
                   ref.set({
                     displayName: success.displayName,
@@ -44,11 +41,9 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMe
                     startedAt: firebase.database.ServerValue.TIMESTAMP
                   })
                 }
-
                 if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
                   IonicPushService.registerToAuth();
                 }
-                // IonicPushService.registerToAuth();
                 console.log('Firebase Google login success');
                 $state.go("tabs.home");
               })
@@ -86,10 +81,8 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMe
           Auth.$signInWithCredential(firebase.auth.TwitterAuthProvider.credential(result.token, result.secret)).then(
             function(success) {
               var ref = firebase.database().ref().child("users").child(success.uid);
-
               ref.once('value', function(snapshot) {
                 var twitterUser = snapshot.val()
-
                 if (twitterUser === null) {
                   ref.set({
                     displayName: success.displayName,
@@ -100,15 +93,11 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMe
                     startedAt: firebase.database.ServerValue.TIMESTAMP
                   })
                 }
-
                 if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
                   IonicPushService.registerToAuth();
                 }
-
-                console.log(success.displayName);
                 console.log('Firebase Twitter login success');
                 $state.go("tabs.home");
-
               })
             },
             function(error) {
@@ -120,26 +109,18 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMe
         }
       );
     }
-
     $scope.auth = Auth;
-
     $scope.login = function(user) {
-      // console.log(user.password);
-      // var ionicTok = $ionicPush.token.token; //comment if testing in browser
-      // var res = ionicTok.split(':'); //comment if testing in browser
       $ionicLoading.show({
         template: '<p>Logging in . . .</p><ion-spinner></ion-spinner>',
         duration: 2000
       });
       Auth.$signInWithEmailAndPassword(user.email, user.password)
         .then(function(authUser) {
-          // var currentAuthRef = Database.usersReference().child(User.auth().$id).child('device_token').child(res[0]); //remove if testing in browser
-          // currentAuthRef.set(res[1]); //comment if testing in browser
           if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
             console.log("android or ios platform");
             IonicPushService.registerToAuth();
           }
-          // IonicPushService.registerToAuth();
           $ionicLoading.hide();
 
           $state.go("tabs.home")
@@ -167,7 +148,6 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMe
               var ref = firebase.database().ref().child("users").child(success.uid);
               ref.once('value', function(snapshot) {
                 var fbUser = snapshot.val();
-
                 if (fbUser === null) {
                   ref.set({
                     displayName: success.displayName,
@@ -182,8 +162,6 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMe
                 if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
                   IonicPushService.registerToAuth();
                 }
-                // IonicPushService.registerToAuth();
-                console.log(success.displayName);
                 console.log('Firebase Facebook login success');
                 $ionicLoading.hide();
                 $state.go("tabs.home")
@@ -198,46 +176,6 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMe
           console.log("ERROR FB CONNECT");
           console.log(error);
         })
-    }
-
-    Auth.$onAuthStateChanged(function(firebaseUser) {
-      if (firebaseUser) {
-        $scope.firebaseUser = firebaseUser.displayName;
-        // if(firebaseUser.providerData[0].providerId == "facebook.com") {
-        //   console.log("facebook provider");
-        //   $scope.firebaseUser = firebaseUser.displayName;
-        //   $scope.photoURL = firebaseUser.providerData[0].photoURL;
-        // }
-        // else { //providerId == password
-        //   console.log("email provider");
-        //   $scope.firebaseUser = User.auth();
-        //   $scope.fullname = User.getAuthFullName();
-        // }
-      }
-    })
-
-    // $scope.signOut = function() {
-    //   Auth.$signOut();
-
-    //   console.log("logged out..");
-    //   location.reload();
-    // }
-
-    $scope.editProfile = function() {
-      $scope.editProfileModal.show();
-    }
-
-    $scope.updateProfile = function(firebaseUser) {
-      var userRef = Database.usersReference().child(User.auth().$id);
-      userRef.update({
-        firstName: firebaseUser.firstName,
-        lastName: firebaseUser.lastName
-      })
-      $scope.editProfileModal.hide();
-    }
-
-    $scope.closeEditProfile = function() {
-      $scope.editProfileModal.hide();
     }
 
     $scope.closeChangePassword = function() {
@@ -267,16 +205,18 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMe
       })
     }
 
-    $ionicModal.fromTemplateUrl('templates/edit-profile.html', function(modalEditProfile) {
-      $scope.editProfileModal = modalEditProfile;
-    }, {
-      scope: $scope
-    });
-
     $ionicModal.fromTemplateUrl('templates/change-password.html', function(modalChangePassword) {
       $scope.changePassword = modalChangePassword;
     }, {
       scope: $scope
     });
+
+    $scope.showHidePassword = function(){
+      if ($scope.passwordType == 'password'){
+        $scope.passwordType= 'text';
+      }else{
+          $scope.passwordType = 'password';
+      }
+    }
   }
 ]);
