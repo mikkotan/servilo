@@ -28,6 +28,7 @@ app.factory('Reservation', function($firebaseObject, $firebaseArray, Database, U
                 receiver_id: receiverId,
                 restaurant_id: restaurant.$id,
                 type: 'reservation_status',
+                ref_no: reservation.timestamp,
                 status: updateStatus,
                 timestamp: firebase.database.ServerValue.TIMESTAMP
               })
