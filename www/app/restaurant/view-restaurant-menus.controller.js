@@ -24,7 +24,7 @@ app.controller("ViewRestaurantMenus", ["$scope", "$state", "restaurantId", "Cart
         return promo.start.setHours(0) <= now.setHours(0) && promo.end.setHours(23) >= now.setHours(0)
       }
     }
-    
+
     Restaurant.getPromos(restaurantId).$loaded()
       .then((promos) => {
         $scope.promos = promos
@@ -149,6 +149,7 @@ app.controller("ViewRestaurantMenus", ["$scope", "$state", "restaurantId", "Cart
         $scope.error = true;
         console.log("error : " + $scope.error)
         ionicToast.show('Quantity is undefined.', 'bottom', false, 2500);
+        $scope.submitUndefined = true;
         $scope.errorMessage = "Quantity is undefined"
       }
 
