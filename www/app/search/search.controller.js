@@ -7,7 +7,6 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
     });
     $scope.showList = true;
     $scope.showMap = false;
-    $scope.selectedFilter = "name";
 
     $scope.mapView = function() {
 
@@ -28,8 +27,7 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
     };
 
     $scope.changeFilter = function() {
-      $scope.data.filter = $scope.selectedFilter;
-      var confirmPopup = $ionicPopup.confirm({
+      var confirmPopup = $ionicPopup.alert({
         title: 'Search by',
         templateUrl: 'app/search/_search.filter.html',
         scope: $scope
@@ -37,12 +35,8 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
 
       confirmPopup.then(function(res) {
         if (res) {
-          console.log($scope.data.filter)
-          $scope.selectedFilter = $scope.data.filter;
           $scope.clearField();
           $scope.clearLocationField();
-        } else {
-
         }
       });
     }
@@ -162,7 +156,7 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
       click: function(marker, eventName, model) {
         if (model.id != '0') {
 
-          //   infowindow.open(marker);
+        //   infowindow.open(marker);
 
           $state.go("tabs.viewRestaurant.main", {
             restaurantId: model.id
@@ -283,7 +277,9 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
       value: "location"
     }];
 
-
+    $scope.data = {
+      filter: 'name'
+    };
 
     $scope.clearField = function() {
       $scope.searchRestaurant = '';
