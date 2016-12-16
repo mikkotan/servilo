@@ -37,7 +37,11 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
             count ++;
             total += reviews[key].rating
           }
-          return (total/count).toFixed(1);
+          if (count === 0) {
+            return (0).toFixed(1);
+          } else {
+            return (total/count).toFixed(1);
+          }
         })
     },
     getMenus : function(restaurantId) {
@@ -132,6 +136,9 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
       });
       return deferred.promise;
     },
+    getPromos : function(restaurantId) {
+      return $firebaseArray(Database.promosReference().child(restaurantId))
+    },
     getFacilityName : function(facilityId) {
       return facilities.$getRecord(facilityId).name;
     },
@@ -175,6 +182,11 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
       }
     },
     addPendingRestaurant : function(restaurant, marker, imageURL) {
+      if(imageURL == null){
+        imageURL = ""
+      }
+      console.log(imageURL);
+
       var restObj = {
         name: restaurant.name.toLowerCase(),
         facilities: restaurant.facilities,
@@ -186,6 +198,7 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
         cuisine: restaurant.cuisine,
         owner_id: User.auth().$id,
         photoURL: imageURL,
+        menu_categories : "",
         phonenumber: restaurant.phonenumber,
         openTime: restaurant.openTime.getTime(),
         closeTime: restaurant.closeTime.getTime(),
@@ -199,6 +212,7 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
           avgRate: 0
         }
       }
+      console.log(restObj);
       var pendingRef = Database.pendingsReference().push();
       return pendingRef.set(restObj);
     },
@@ -225,6 +239,29 @@ app.factory("Restaurant",["$firebaseArray", "User", "Database", "$firebaseObject
     },
     delete: function(restaurantId) {
       return Database.restaurantsReference().child(restaurantId).remove()
+    },
+    //////////////repeated functions
+    openReplyModal : function($scope, review) {
+      $scope.reply = {};
+      console.log('new reply')
+      $scope.newReply = true;
+      $scope.replyTitle = "New Reply";
+      $scope.reply.content = "";
+      $scope.addReplyModal.show();
+      $scope.reviewId = review.$id;
+    },
+    openEditReplyModal : function($scope, reply, reviewId, restaurantId) {
+      $scope.newReply = false;
+      $scope.replyTitle = "Edit Reply";
+      $scope.addReplyModal.show();
+      $scope.reply = {
+        content: reply.content,
+        $id: reply.$id,
+        oldContent: reply.content,
+        user_id: reply.user_id,
+        reviewId: reviewId,
+        restaurantId: restaurantId
+      }
     }
   }
 

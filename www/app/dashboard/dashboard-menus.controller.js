@@ -53,27 +53,19 @@ app.controller("DashboardMenusCtrl", ["$scope", "$stateParams", "$ionicModal", "
 
 
     $scope.upload = function(index) {
-      //disable save button
-      var source = Upload.getSource(index);
-      var options = Upload.getOptions(source);
-      $cordovaCamera.getPicture(options).then(function(imageData) {
-        var menuRef = Upload.menu(imageData);
-        $scope.progress = 1;
-        menuRef.on('state_changed', function(snapshot) {
-          $scope.progress = Upload.getProgress(snapshot);
-          console.log('Upload is ' + $scope.progress + '% done');
-        }, function(error) {
-          console.log("error in uploading." + error);
-        }, function() {
-          //enable save button
-          $scope.photoURL = menuRef.snapshot.downloadURL;
-          $scope.$apply();
-        });
-
-      }, function(error) {
-        console.error(error);
-      });
-    };
+      navigator.camera.getPicture(function(imageData) {
+        Upload.menu(imageData).then(function(downloadURL) {
+          $scope.imageLoading = false;
+          $scope.photoURL = downloadURL;
+        })
+      }, function(message) {
+        console.log('Failed because: ' + message);
+        $scope.imageLoading = false;
+        $scope.$apply();
+      }, Upload.getOptions(index));
+      $scope.imageLoading = true;
+    }
+    
     $scope.openAddModal = function() {
       $scope.addMenuModal.show();
     }

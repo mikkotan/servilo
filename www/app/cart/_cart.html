@@ -7,10 +7,9 @@
   </ion-header-bar>
   <ion-content class="padding">
     <div class="card" ng-repeat="order in menus">
-      <div class="item item-text-wrap">
+      <div class="item item-text-wrap">  
         <img id="profile-image" ng-src={{order.menu.photoURL}}>
-        <p> Name: {{order.menu.name}} Price: {{order.menu.price}} Quantity: {{order.menu.quantity}} Subtotal : {{order.subtotal}}</p>
-
+        <p> Name: {{order.menu.name}} Price: {{order.menu.price | currency: '₱'}} Quantity: {{order.menu.quantity}} Subtotal : {{order.subtotal | currency: '₱'}}</p>
       </div>
       <div class="row">
         <div class="col">
@@ -26,13 +25,14 @@
       <div class="list">
         <label class="item item-input item-floating-label">
           <span class="input-label has-input">Total</span>
-          <input type="text" placeholder="Total" value="{{total}}">
+          <input type="text" placeholder="Total" value="{{total | currency: '₱'}}">
+
         </label>
 
         <div class="item item-input-inset">
           <label class="item-input item-floating-label">
             <span class="input-label has-input">Delivery Address</span>
-            <input type="text" placeholder="Delivery Address" ng-model="data.location" details="data.detail" required googleplace/>
+            <input type="text" placeholder="Delivery Address" ng-model="data.location" details="data.detail" required/>
           </label>
           <button class="button button-royal icon ion-map" ng-click="showMap()"></button>
         </div>

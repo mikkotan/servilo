@@ -17,17 +17,12 @@
             </label>
             <label class="item item-input item-floating-label">
               <span class="input-label has-input">Price</span>
-              <input type="text" placeholder="Price" value="{{menuPrice}}" readonly>
+              <input type="text" placeholder="Price" value="{{menuPrice | currency: '₱'}}" readonly>
             </label>
             <label class="item item-input item-floating-label">
               <span class="input-label has-input">Quantity</span>
               <input type="number" placeholder="Quantity" ng-model="menu.quantity">
             </label>
-            <label class="item item-input item-floating-label">
-              <span class="input-label has-input">Subtotal</span>
-              <input type="number" placeholder="Subtotal" value={{menuPrice * menu.quantity}} readonly>
-            </label>
-
             <div class="row">
               <button class="button button-block button-balanced ink">Add to Cart</button>
             </div>

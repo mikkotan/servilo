@@ -133,7 +133,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
       restaurant.name = "";
       restaurant.location = "";
       restaurant.type = "";
-      restaurant.cuisine = "";
+      restaurant  .cuisine = "";
       restaurant.phonenumber = "";
       restaurant.closeTime = "";
       $scope.imageURL = null;

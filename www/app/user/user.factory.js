@@ -137,10 +137,14 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
       })
     },
     isRestaurantOwner : function(id){
-      // var restaurantOwner = Database.roleReference().child("restaurant_owner/" + id);
+      //  return Database.roleReference().child("restaurant_owner/" + id).on('value')
+      //   .then((data)=>{
+      //     console.log(data);
+      //     return data;
+      //   })
 
       return Database.roleReference().child("restaurant_owner/" + id).once('value').then(function(snapshot){
-        return snapshot.exists;
+        return snapshot.exists();
       })
     },
     removeFromUser : function(id){

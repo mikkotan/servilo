@@ -1,35 +1,42 @@
-<ion-view view-title="Search">
+<ion-view view-title="Search" ng-class="{'bar-subheader-slide-away': slideHeader}">
   <ion-header-bar class="bar bar-subheader bar-light item-input-inset">
 
     <label class="item-input-wrapper">
       <i class="icon ion-search placeholder-icon"></i>
+      <!-- <form ng-submit="locationSearch(location)">
+        <ion-google-place placeholder="Enter an address, Apt# and ZIP" ng-model="location" ng-blur="locationSearch(location)" current-location="true" />
+        <button ng-click="locationSearch(location)">Submit</button>
+      </form> -->
       <input placeholder="Search..." type="search" ng-model="searchRestaurant" ng-model-options="{ debounce: 500 }" ng-change="allowMarkerChange(searchRestaurant, data.filter)">
     </label>
 
   </ion-header-bar>
+  <ion-content class="padding has-header">
+      <input type="text" placeholder="Change address" google-autocomplete-suggestion location="data.location" on-selection="onAddressSelection(location)" country-code="{{countryCode}}" ng-model="data.location.formatted_address" readonly />
+    <h4 class="text-center">Search by:</h4>
+    <div class="button-bar">
+      <a grouped-radio="item.value" ng-repeat="item in searchFilter" ng-value="item.value" ng-model="data.filter">{{item.text}}</a>
+    </div>
+    <button class="button button-small button-balanced" ng-disabled="!data.location.formatted_address" ng-click="locationSearch()">Search based on location</button>
+    <button class="button button-small button-balanced" ng-click="showNear()">Nearest restaurant to your location (1km)</button>
+    <div>
+      <ui-gmap-google-map zoom='map.zoom' center="map.center" options='map.options' bounds='map.bounds' control='map.control' refresh=map.refresh events=map.events ng-cloak>
+        <ui-gmap-markers models="markers" coords="'coords'" icon="'icon'" events="markerEvents" doRebuildAll="true"></ui-gmap-markers>
+        <ui-gmap-map-control position="top-right">
+        </ui-gmap-map-control>
+      </ui-gmap-google-map>
+    </div>
 
-  <ion-content class="padding has-subheader">
-    <ion-radio ng-repeat="item in searchFilter" ng-value="item.value" ng-model="data.filter" style="width:150px">
-      {{ item.text }}
-    </ion-radio>
+
+
     <ion-list>
-      <div>
-        <ui-gmap-google-map zoom='map.zoom' center="map.center" options='map.options' bounds='map.bounds' control='map.control' refresh=map.refresh events=map.events ng-cloak>
-          <ui-gmap-markers models="markers" coords="'coords'" icon="'icon'" events="markerEvents" doRebuildAll="true"></ui-gmap-markers>
-          <ui-gmap-map-control position="top-right">
-            <button class="button button-small button-balanced" ng-click="showNear()">{{mapText}}</button>
-          </ui-gmap-map-control>
-        </ui-gmap-google-map>
-      </div>
-
-
       <h3>Results</h3>
       <ion-spinner ng-show="loading" icon="lines"></ion-spinner>
-      <div class="card padding" ng-repeat="restaurant in (filteredItems = newRestaurants)" ng-if="restaurant.ready">
+      <div class="card padding" ng-repeat="restaurant in (filteredItems = newRestaurants)" ng-if="restaurant.ready" ui-sref="tabs.viewRestaurant.main({restaurantId:restaurant.details.$id})">
         <div class="item item-thumbnail-left">
           <img class="img-thumbnail" ng-if="restaurant.details.photoURL" ng-src="{{restaurant.details.photoURL}}" />
           <img ng-if="!restaurant.details.photoURL" ng-src="img/wow.jpg">
-          <h3 ng-init="addMarkers(restaurant.details)" ui-sref="tabs.viewRestaurant.main({restaurantId:restaurant.details.$id})">
+          <h3 ng-init="addMarkers(restaurant.details)">
             <icon class="ion-spoon"></icon> {{restaurant.details.name}}
             <span style="color:green">
               <icon class="ion-android-star-outline"></icon> {{restaurant.avg}}
@@ -46,7 +53,6 @@
           </button>
         </div>
       </div>
-      <!-- <div ng-cloak>{{addMarkers(filteredItems)}}</div> -->
     </ion-list>
   </ion-content>
 </ion-view>
