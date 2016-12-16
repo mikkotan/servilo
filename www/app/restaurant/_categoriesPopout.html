@@ -1,0 +1,8 @@
+<ul class="list">
+  <li class="item item-checkbox" ng-repeat="category in categories">
+    <label class="checkbox">
+      <input type="checkbox" ng-model="restaurant.categories[category.$id]">
+    </label>
+    {{category.$id}}
+  </li>
+</ul>

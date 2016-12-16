@@ -32,7 +32,15 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
       url: "/tab",
       cache: false,
       abstract: true,
-      templateUrl: "templates/tabs.html"
+      templateUrl: "templates/tabs.html",
+      controller: 'TabsCtrl',
+      resolve: {
+        role : function(Auth, Role) {
+          console.log("Auth ID: " + Auth.$getAuth().uid)
+          return Role.get(Auth.$getAuth().uid);
+        }
+      },
+      class : 'Tab'
     })
     .state('tabs.home', {
       url: "/home",
@@ -47,7 +55,23 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
             },
           }
         }
-      }
+      },
+      class : 'Home'
+    })
+    .state('tabs.pending', {
+      url: "/pending",
+      views: {
+        'pending-tab': {
+          templateUrl: "app/pendingrestaurant/_pending-restaurant.html",
+          controller: 'PendingCtrl',
+          resolve: {
+            currentAuth: function(Auth) {
+              return Auth.$requireSignIn();
+            },
+          }
+        }
+      },
+      class : 'Pending'
     })
     .state('tabs.search', {
       url: "/search",
@@ -67,7 +91,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
             }
           }
         }
-      }
+      },
+      class : 'Search'
     })
     .state('tabs.viewRestaurant', {
       url: "/viewRestaurant/:restaurantId",
@@ -84,10 +109,14 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
             }
           }
         }
-      }
+      },
+      class : 'ViewRestaurant'
     })
     .state('tabs.viewRestaurant.main', {
       url: "/main",
+      params:{
+        restaurantId : null
+      },
       views: {
         'restaurant_page': {
           templateUrl: "app/restaurant/_view-restaurant-main.html",
@@ -101,7 +130,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
             }
           }
         }
-      }
+      },
+      class : 'Restaurant'
     })
     .state('tabs.viewRestaurant.reviews', {
       url: "/reviews",
@@ -118,7 +148,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
             }
           }
         }
-      }
+      },
+      class : 'Restaurant'
     })
     .state('tabs.viewRestaurant.gallery', {
       url: "/gallery",
@@ -132,10 +163,14 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
             }],
           }
         }
-      }
+      },
+      class : 'Restaurant'
     })
     .state('tabs.viewRestaurant.menus', {
       url: "/menus",
+      params:{
+        restaurantId  : null
+      },
       views: {
         'restaurant_page': {
           templateUrl: "app/restaurant/_view-restaurant-menus.html",
@@ -149,7 +184,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
             }
           }
         }
-      }
+      },
+      class : 'Restaurant'
     })
     .state('tabs.viewRestaurant.location', {
       url: "/location",
@@ -163,25 +199,9 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
             }
           }
         }
-      }
+      },
+      class : 'Restaurant'
     })
-    // .state('tabs.addMenu', {
-    //   url: "/menu/add/:restaurantId",
-    //   views: {
-    //     'restaurant-tab': {
-    //       templateUrl: "app/menu/_add-menu.html",
-    //       controller: "AddMenuCtrl",
-    //       resolve: {
-    //         // menus: function(Menu) {
-    //         //   return Menu.all().$loaded();
-    //         // },
-    //         restaurantId: function($stateParams) {
-    //           return $stateParams.restaurantId
-    //         }
-    //       }
-    //     }
-    //   }
-    // })
     .state('tabs.menu', {
       url: "/menu",
       views: {
@@ -194,16 +214,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
             }
           }
         }
-      }
-    })
-    .state('tabs.contact', {
-      url: "/contact",
-      views: {
-        'contact-tab': {
-          templateUrl: "app/user/_users.html",
-          controller: "UsersCtrl"
-        }
-      }
+      },
+        class : 'Menu'
     })
     .state('tabs.cart', {
       url: "/cart",
@@ -226,7 +238,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
             }
           }
         }
-      }
+      },
+      class : 'Cart'
     })
     .state('tabs.dashboard.orders', {
       url: "/orders",
@@ -238,7 +251,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
           templateUrl: "app/dashboard/_dashboard-interact-orders.html",
           controller: "DashboardInteractOrdersCtrl"
         }
-      }
+      },
+      class : 'Order'
     })
     .state('tabs.notifications', {
       url: "/notifications",
@@ -252,7 +266,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
             }
           }
         }
-      }
+      },
+      class : 'Notification'
     })
 
   .state('tabs.myOrders', {
@@ -267,7 +282,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
             }
           }
         }
-      }
+      },
+      class : 'MyOrder'
     })
     .state('tabs.myReservations', {
       url: "/myreservations",
@@ -276,12 +292,13 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
           templateUrl: "app/reservation/_my-reservations.html",
           controller: "MyReservationsCtrl",
           resolve: {
-            "reservations": function(User) {
+            reservations: function(User) {
               return User.getAuthReservations().$loaded();
             }
           }
         }
-      }
+      },
+      class : 'MyReservation'
     })
     .state('tabs.dashboard', {
       url: "/dashboard/:restaurantId",
@@ -298,7 +315,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
             }
           }
         }
-      }
+      },
+      class : 'Dashboard'
     })
     .state('tabs.dashboard.reservations', {
       url: "/reservations",
@@ -310,7 +328,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
           templateUrl: "app/dashboard/_dashboard-interact-reservations.html",
           controller: "DashboardInteractReservationsCtrl"
         }
-      }
+      },
+      class : 'Reservation'
     })
     .state('tabs.dashboard.reviews', {
       url: "/reviews",
@@ -343,7 +362,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
           templateUrl: "app/dashboard/_dashboard-main.html",
           controller: "DashboardMainCtrl"
         }
-      }
+      },
+      class : 'Dashboard'
     })
     .state('tabs.dashboard.menus', {
       url: "/menus",
@@ -352,7 +372,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
           templateUrl: "app/dashboard/_dashboard-menus.html",
           controller: "DashboardMenusCtrl"
           }
-        }
+        },
+      class : 'Dashboard'
     })
     .state('tabs.dashboard.interact', {
       url: "/interact",
@@ -361,7 +382,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
           templateUrl: "app/dashboard/_dashboard-interact.html",
           controller: "DashboardInteractCtrl"
         }
-      }
+      },
+      class : 'Dashboard'
     })
     .state('tabs.restaurant', {
       url: "/restaurant",
@@ -370,32 +392,38 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
           templateUrl: "app/restaurant/_restaurants.html",
           controller: "RestaurantCtrl"
         }
-      }
+      },
+        class : 'ViewRestaurant'
     })
     .state('landing', {
       url: "/landing",
       templateUrl: "app/login/_landing.html",
-      controller: "LoginCtrl"
+      controller: "LoginCtrl",
+      class:'Login'
     })
     .state('login', {
       url: "/login",
       templateUrl: "app/login/_login.html",
-      controller: "LoginCtrl"
+      controller: "LoginCtrl",
+      class:'Login'
     })
     .state('signup', {
       url: "/signup",
       templateUrl: "app/signup/_signup.html",
-      controller: "SignUpCtrl"
+      controller: "SignUpCtrl",
+      class:'Signup'
     })
     .state('profile', {
       url: "/profile",
       templateUrl: "app/profile/_profile.html",
-      controller: "ProfileCtrl"
+      controller: "ProfileCtrl",
+      class:"Profile"
     })
     .state('edit-profile', {
       url: "/edit-profile",
       templateUrl: "app/profile/_edit-profile.html",
-      controller: "ProfileCtrl"
+      controller: "ProfileCtrl",
+      class:'Profile'
     });
   $urlRouterProvider.otherwise("/tab/home");
 })

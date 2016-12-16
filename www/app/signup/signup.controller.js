@@ -1,12 +1,16 @@
+
 app.controller("SignUpCtrl", ["$scope", "Auth", "User", "$state", "IonicPushService", "Database", "$ionicSideMenuDelegate",
   function($scope, Auth, User, $state, IonicPushService, Database, $ionicSideMenuDelegate) {
+
     $scope.passwordType = "password";
+
     $scope.$on('$ionicView.enter', function() {
       $ionicSideMenuDelegate.canDragContent(false);
     });
     $scope.$on('$ionicView.leave', function() {
       $ionicSideMenuDelegate.canDragContent(true);
     });
+
 
     $scope.createUser = function(user) {
           try{
@@ -28,9 +32,9 @@ app.controller("SignUpCtrl", ["$scope", "Auth", "User", "$state", "IonicPushServ
                 startedAt: firebase.database.ServerValue.TIMESTAMP
               }, function(error) {
                 if (error) {
-
                   console.log("hello error" + error);
                 } else {
+                  User.setAsUser(firebaseUser.uid);
                   console.log("no error means succues");
                   if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
                     IonicPushService.registerToAuth();

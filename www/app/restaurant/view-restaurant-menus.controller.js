@@ -1,5 +1,6 @@
 app.controller("ViewRestaurantMenus", ["$scope", "$state", "restaurantId", "CartData", "$ionicModal", "Cart", "Restaurant", "ionicToast", "Menu", "$ionicLoading",
   function($scope, $state, restaurantId, CartData, $ionicModal, Cart, Restaurant, ionicToast, Menu, $ionicLoading) {
+    console.log("This is view restaurant menus");
     $ionicLoading.show();
     $scope.restaurantId = restaurantId
     $scope.restaurantMenus = Restaurant.getMenus(restaurantId);
@@ -83,26 +84,25 @@ app.controller("ViewRestaurantMenus", ["$scope", "$state", "restaurantId", "Cart
     };
 
     $scope.viewCart = function() {
-      if (CartData.get().length > 0) {
+      if (!CartData.isEmpty()) {
         $scope.restaurantCart.show();
-        console.log(JSON.stringify(CartData.get(), null, 4));
+        console.log(JSON.stringify(CartData.get().menus, null, 4));
       } else {
         alert("No food in your cart");
       }
     }
 
-    $scope.back = function() {
-      if (CartData.get().length > 0) {
-        let confirmation = confirm("Leaving this restaurant will cancel all your orders, Are you sure you want to leave?")
-        if (confirmation === true) {
-          CartData.get().length = 0;
-          CartData.totalPrice().length = 0;
-          $state.go("tabs.home");
-        }
-      } else {
-        $state.go("tabs.home");
-      }
-    }
+    // $scope.back = function() {
+    //   if (!CartData.isEmpty()) {
+    //     let confirmation = confirm("Leaving this restaurant will cancel all your orders, Are you sure you want to leave?")
+    //     if (confirmation === true) {
+    //       CartData.setNull()
+    //       $state.go("tabs.home");
+    //     }
+    //   } else {
+    //     $state.go("tabs.home");
+    //   }
+    // }
 
 
     var closeModal = function() {
@@ -112,7 +112,7 @@ app.controller("ViewRestaurantMenus", ["$scope", "$state", "restaurantId", "Cart
 
     $scope.sendToCart = function(menu) {
 
-      let menuOrder = Cart.menuId(CartData.get(), "id", $scope.id);
+      let menuOrder = Cart.menuId(CartData.get().menus, "id", $scope.id);
 
       if (menu.quantity) {
         if (menu.quantity > 0) {
@@ -127,13 +127,13 @@ app.controller("ViewRestaurantMenus", ["$scope", "$state", "restaurantId", "Cart
           $scope.error = false;
 
           if (menuOrder === null) {
-            CartData.add(menuCart);
-            console.log(CartData.get())
+            CartData.addMenu(menuCart);
+            console.log(CartData.get().menus)
             ionicToast.show('Added ' + $scope.menuName + ' to cart', 'bottom', false, 2500);
             closeModal();
             menu.quantity = 0;
           } else {
-            var cartMenu = CartData.get()[menuOrder];
+            var cartMenu = CartData.get().menus[menuOrder];
             cartMenu.quantity = cartMenu.quantity + menu.quantity;
             ionicToast.show('Added ' + $scope.menuName + ' to cart', 'bottom', false, 2500);
             closeModal();

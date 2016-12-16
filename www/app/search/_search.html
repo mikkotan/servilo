@@ -1,8 +1,8 @@
 <ion-view view-title="Search" ng-class="{'bar-subheader-slide-away': slideHeader}">
   <ion-header-bar class="bar bar-subheader bar-light item-input-inset">
     <div class="item item-input">
-      <input ng-show="selectedFilter == 'name' || selectedFilter == 'menu'" placeholder="Search by {{selectedFilter}}..." type="search" ng-model="searchRestaurant" ng-model-options="{ debounce: 500 }" ng-change="allowMarkerChange(searchRestaurant, data.filter)" />
-      <input ng-show="selectedFilter == 'location'" class="input-form" type="text" placeholder="Search by location..." google-autocomplete-suggestion location="data.location" on-selection="onAddressSelection(location)" country-code="{{countryCode}}" ng-model="data.location.formatted_address"
+      <input ng-show="data.filter == 'name' || data.filter == 'menu'" placeholder="Search by {{data.filter}}..." type="search" ng-model="searchRestaurant" ng-model-options="{ debounce: 500 }" ng-change="allowMarkerChange(searchRestaurant, data.filter)" />
+      <input ng-show="data.filter == 'location'" class="input-form" type="text" placeholder="Search by location..." google-autocomplete-suggestion location="data.location" on-selection="onAddressSelection(location)" country-code="{{countryCode}}" ng-model="data.location.formatted_address"
           readonly />
 
       <button class="button button-icon icon ion-close-circled" ng-show="searchRestaurant" ng-click="clearField()"></button>

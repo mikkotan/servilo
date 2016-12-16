@@ -57,6 +57,14 @@
                 </div>
               </div>
               <div class="item">
+                <a class="button button-block button-royal icon-left ion-plus-circled" ng-click="setCategories()">Set Categories</a>
+                <div class="col text-center">
+                  <p ng-repeat="(key, val) in restaurant.categories" ng-if="val">
+                    {{key}}
+                  </p>
+                </div>
+              </div>
+              <div class="item">
                 <a class="button button-block button-royal icon-left ion-plus-circled" ng-click="setOpenDays()">Set Open Days</a>
               </div>
               <!-- <div class="item item-input-inset"> -->

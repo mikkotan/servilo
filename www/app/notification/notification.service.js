@@ -16,10 +16,6 @@ app.factory('Notification', ['$firebaseObject', '$firebaseArray', 'Database', 'U
       },
       markReadAll : function(notifications) {
         angular.forEach(notifications, (notification) => {
-          // var notifRef = Database.notificationsReference().child(User.auth().$id);
-          // $firebaseObject(notifRef).$remove()
-          //   .then(() => { console.log('successfully deleted all') })
-          //   .catch((err) => { console.log(err) })
           this.delete(notification)
             .then(() => {
               console.log('Successfully deleted')

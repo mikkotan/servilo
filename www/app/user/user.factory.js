@@ -115,32 +115,41 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
       })
     },
     setAsAdmin : function(id){
-      Database.roleReference().child("admin").child(id).set(true);
+      Database.roleReference().child("admin/" + id).child(id).set(true);
     },
     setAsUser : function(id){
-      Database.roleReference().child("user").child(id).set(true);
-      console.log("wew")
+      Database.roleReference().child("user/" + id).set(true);
     },
     setAsRestaurantOwner : function(id){
-      Database.roleReference().child("restaurant_owner").child(id).set(true);
+      Database.roleReference().child("restaurant_owner/" + id).set(true);
     },
     setAsRestaurantManager : function(id){
-      Database.roleReference().child("restaurant_manager").child(id).set(true);
+      Database.roleReference().child("restaurant_manager/" + id).set(true);
     },
     isAdmin : function(id){
-      return Database.roleReference().child("admin").child(id).once('value').then(function(snapshot){
+      return Database.roleReference().child("admin/" + id).once('value').then(function(snapshot){
         return snapshot.exists();
       })
     },
     isUser : function(id){
-      return Database.roleReference().child("user").child(id).once('value').then(function(snapshot){
+      return Database.roleReference().child("user/" + id).once('value').then(function(snapshot){
         return snapshot.exists();
       })
     },
     isRestaurantOwner : function(id){
-      return Database.roleReference().child("restaurant_owner").child(id).once('value').then(function(snapshot){
+      //  return Database.roleReference().child("restaurant_owner/" + id).on('value')
+      //   .then((data)=>{
+      //     console.log(data);
+      //     return data;
+      //   })
+
+      return Database.roleReference().child("restaurant_owner/" + id).once('value').then(function(snapshot){
         return snapshot.exists();
       })
+    },
+    removeFromUser : function(id){
+       var user = Database.roleReference().child('user/' + id)
+       user.remove().then(()=>{console.log('sucess remove')}).catch((error)=>{console.log(error)})
     }
   };
 }]);

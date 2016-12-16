@@ -2,6 +2,7 @@ app.controller('DashboardInteractOrdersCtrl', function($scope, $stateParams, Res
   var restaurantId = $stateParams.restaurantId;
   $scope.filterType = 'all'
   $scope.currentLocation = CordovaGeolocation.get();
+
   console.log('dashboard interact orders ctrl');
   $scope.modalControl ={};
   $scope.restaurant  = Restaurant.get(restaurantId);
@@ -72,6 +73,11 @@ app.controller('DashboardInteractOrdersCtrl', function($scope, $stateParams, Res
       console.log('fail');
       console.log(err);
     })
+
+    $scope.walkInOrder = function(){
+      $state.go('tabs.viewRestaurant.main',{restaurantId:restaurantId});
+      console.log("walk in order has been clicked");
+    }
 
     $scope.changeOrderStatus = function(orderId, key, val) {
       console.log('orderId: ' + orderId);

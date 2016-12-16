@@ -122,6 +122,7 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMe
             IonicPushService.registerToAuth();
           }
           $ionicLoading.hide();
+
           $state.go("tabs.home")
           user.password = "";
           user.email = "";

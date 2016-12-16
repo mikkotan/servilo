@@ -199,16 +199,24 @@ app.factory("Restaurant", ["$firebaseArray", "User", "Database", "$firebaseObjec
         delete restaurant['$$hashKey'];
         var key = restaurants.push().key;
         var restaurantRef = restaurants.child(key);
+        console.log(restaurant.categories);
         return {
           ref: restaurantRef.set(restaurant),
           key: key
         }
       },
       addPendingRestaurant: function(restaurant, location, lat, long, imageURL) {
+        if(imageURL == null) {
+          imageURL = ""
+        }
+        console.log(imageURL)
+
         var restObj = {
           name: restaurant.name.toLowerCase(),
           facilities: restaurant.facilities,
+          categories: restaurant.categories,
           openDays: restaurant.openDays,
+          categories: "wa",
           location: location,
           latitude: lat,
           longitude: long,
@@ -216,6 +224,7 @@ app.factory("Restaurant", ["$firebaseArray", "User", "Database", "$firebaseObjec
           cuisine: restaurant.cuisine,
           owner_id: User.auth().$id,
           photoURL: imageURL,
+          menu_categories : "",
           phonenumber: restaurant.phonenumber,
           openTime: restaurant.openTime.getTime(),
           closeTime: restaurant.closeTime.getTime(),
