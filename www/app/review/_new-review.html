@@ -6,20 +6,26 @@
 </div>
   </ion-header-bar>
   <ion-content class="padding">
-    <form ng-submit="addReview(review)">
+    <form ng-submit="addReview(review)" name="addReviewForm" novalidate>
       <div class="list">
         <a class="button button-block button-balanced ink" ng-click="selImages()">
                     Add Images From Gallery
                   </a>
         <label class="item item-input item-floating-label">
           <span class="input-label has-input">Write review here . . . </span>
-          <textarea type="text" placeholder="Write review here . . . " ng-model="review.content" rows="6" required></textarea>
+          <textarea type="text" placeholder="Write review here . . . " ng-model="review.content" rows="6" name="content" ng-required=true></textarea>
+          <div class="error" ng-show="addReviewForm.content.$touched || submitError">
+            <p ng-show="addReviewForm.content.$error.required">* Writing the review is required</p>
+          </div>
         </label>
         {{imgs}}
         <div class="item item-input">
           Rate us:
           <br>
-          <rating ng-model="review.rating" max="rating.max"></rating>
+          <rating ng-model="review.rating" max="rating.max" name="rating" ng-required=true></rating>
+        </div>
+        <div class="error" ng-show="submitError">
+          <p ng-show="addReviewForm.rating.$error.required">* Review's Rating is required</p>
         </div>
         <div class="padding row">
           <button type="submit" class="button button-block button-positive ink">Save</button>

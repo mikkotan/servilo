@@ -23,7 +23,7 @@
                 <span class="input-label has-input">Contact Number</span>
                 <input type="number" placeholder="Contact Number" ng-model="restaurant.phonenumber" name="phonenumber" ng-minlength="5" ng-maxlength="16" min="0" ng-required=true>
                 <div ng-show="newRestaurantform.phonenumber.$touched || submitError" class="error">
-                  <p ng-show="newRestaurantform.phonenumber.$error.required">* Contact Number's is required</p>
+                  <p ng-show="newRestaurantform.phonenumber.$error.required">* Contact Number is required</p>
                   <p ng-show="newRestaurantform.phonenumber.$error.minlength">* Contact Number must be longer than 5</p>
                   <p ng-show="newRestaurantform.phonenumber.$error.maxlength">* Contact Number must be shorter than 16</p>
                 </div>
@@ -47,6 +47,10 @@
                 <div class="col text-center" ng-show="restaurant.openTime && restaurant.closeTime">
                   Opening Hours : {{restaurant.openTime| date: "h:mm a"}} - {{restaurant.closeTime| date: "h:mm a"}}
                 </div>
+                <div class="error" ng-show="submitError">
+                  <p ng-show="restaurant.openTime==null">* Restaurant's open time is required</p>
+                  <p ng-show="restaurant.closeTime==null">* Restaurant's close time is required</p>
+                </div>
               </div>
               <div class="item">
                 <a class="button button-block button-royal icon-left ion-plus-circled" ng-click="setFacilities()">Set Facilities</a>
@@ -54,6 +58,9 @@
                   <p ng-repeat="(key, val) in restaurant.facilities" ng-if="val">
                     {{key}}
                   </p>
+                </div>
+                <div class="error" ng-show="submitError">
+                  <p ng-show="restaurant.facilities==null">* Restaurant's facilities is required</p>
                 </div>
               </div>
               <div class="item">
@@ -63,9 +70,15 @@
                     {{key}}
                   </p>
                 </div>
+                <div class="error" ng-show="submitError">
+                  <p ng-show="restaurant.categories==null">* Restaurant's categories is required</p>
+                </div>
               </div>
               <div class="item">
                 <a class="button button-block button-royal icon-left ion-plus-circled" ng-click="setOpenDays()">Set Open Days</a>
+              </div>
+              <div class="error" ng-show="submitError">
+                <p ng-show="restaurant.openDays==null">* Restaurant's open days is required</p>
               </div>
               <!-- <div class="item item-input-inset"> -->
 

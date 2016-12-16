@@ -138,31 +138,36 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
 
     $scope.addReview = function(review) {
       $ionicLoading.show();
-      var newReview = Review.addReview(restaurantId, review);
-      newReview.ref
-        .then(function() {
-          $ionicLoading.hide();
-          Upload.uploadMultiple($scope.images, restaurantId, newReview.key)
-          console.log("add review done");
-          $scope.isAlreadyReviewed();
-          $scope.reviewModal.hide();
-          clearReview(review);
-          $ionicLoading.hide();
-          Review.userReview(restaurantId).set(newReview.key).then(function() {
-            console.log('added to user_reviews')
-          });
-          Notification.create({
-            sender_id: User.auth().$id,
-            receiver_id: $scope.restaurant.owner_id,
-            restaurant_id: restaurantId,
-            type: 'review',
-            timestamp: firebase.database.ServerValue.TIMESTAMP
+      try{
+        var newReview = Review.addReview(restaurantId, review);
+        newReview.ref
+          .then(function() {
+            $ionicLoading.hide();
+            Upload.uploadMultiple($scope.images, restaurantId, newReview.key)
+            console.log("add review done");
+            $scope.isAlreadyReviewed();
+            $scope.reviewModal.hide();
+            clearReview(review);
+            $ionicLoading.hide();
+            Review.userReview(restaurantId).set(newReview.key).then(function() {
+              console.log('added to user_reviews')
+            });
+            Notification.create({
+              sender_id: User.auth().$id,
+              receiver_id: $scope.restaurant.owner_id,
+              restaurant_id: restaurantId,
+              type: 'review',
+              timestamp: firebase.database.ServerValue.TIMESTAMP
+            })
           })
-        })
-        .catch(function(err) {
-          alert(err);
-          // $ionicLoading.hide();
-        })
+          .catch(function(err) {
+            alert(err);
+            // $ionicLoading.hide();
+          })
+        }catch(e){
+          $ionicLoading.hide();
+          $scope.submitError =true;
+        }
     }
 
     $scope.openEditModal = function(review) {
