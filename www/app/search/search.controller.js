@@ -196,8 +196,10 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
     });
 
     $scope.locationSearch = function() {
+      $scope.markers.length =0;
       var lat = $scope.data.location.geometry.location.lat();
       var long = $scope.data.location.geometry.location.lng();
+      console.log("location on "+$scope.data.location.geometry.location);
       $scope.markers.push(Search.getInputLocation(lat, long));
       $scope.loading = true;
       // $ionicLoading.show({
