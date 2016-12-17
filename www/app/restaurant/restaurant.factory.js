@@ -196,7 +196,7 @@ app.factory("Restaurant", ["$firebaseArray", "User", "Database", "$firebaseObjec
           console.log(category)
           console.log(restaurant.categories[category])
           if (restaurant.categories[category]) {
-            Database.categoryRestaurantsReference().child(category).child(key).set(true)
+            Database.categoryRestaurantsReference().child(category).child('restaurants').child(key).set(true)
               .then(() => { console.log('success on category adding' )})
               .catch((err) => { console.log('Error'+ err) })
           }

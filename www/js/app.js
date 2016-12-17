@@ -40,7 +40,7 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
         }
 
         var posOptions = {
-          timeout: 10000,
+          timeout: 1000,
           enableHighAccuracy: true
         }
 
@@ -103,7 +103,6 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
                   console.log('restaurantOwner already')
                   $state.go('tabs.restaurant');
                 } else {
-                  console.log('approve first time');
                   Auth.$signOut();
                   $state.go("landing");
                 }

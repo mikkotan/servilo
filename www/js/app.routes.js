@@ -425,5 +425,4 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
       controller: "ProfileCtrl",
       class:'Profile'
     });
-  $urlRouterProvider.otherwise("/tab/home");
 })

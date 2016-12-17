@@ -1,5 +1,5 @@
-app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal", "$state", "ionicMaterialInk", "ionicMaterialMotion", "$ionicLoading", "Home", "$timeout", "User", "Auth", "CordovaGeolocation", "Advertisement", "Restaurant",
-  function($scope, $ionicSlideBoxDelegate, $ionicModal, $state, ionicMaterialInk, ionicMaterialMotion, $ionicLoading, Home, $timeout, User, Auth, CordovaGeolocation, Advertisement, Restaurant) {
+app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal", "$state", "ionicMaterialInk", "ionicMaterialMotion", "$ionicLoading", "Home", "$timeout", "User", "Auth", "CordovaGeolocation", "Advertisement", "Restaurant", "Category",
+  function($scope, $ionicSlideBoxDelegate, $ionicModal, $state, ionicMaterialInk, ionicMaterialMotion, $ionicLoading, Home, $timeout, User, Auth, CordovaGeolocation, Advertisement, Restaurant, Category) {
     // ionicMaterialInk.displayEffect();
     var vm = this;
     $scope.currentLocation = CordovaGeolocation.get();
@@ -10,6 +10,32 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
           $state.go('tabs.viewRestaurant.main', {restaurantId: id})
         })
     }
+
+    Category.getAllCategories().$loaded()
+      .then((categoryRestaurants) => {
+        $scope.categories = categoryRestaurants
+
+        $scope.$watchCollection('categories', function(newCategories) {
+          $scope.newCategories = newCategories.map(function(category) {
+            var c = {
+              get : Category.getRestaurants(category.$id).$loaded()
+                .then((restaurants) => {
+                  c.restaurants = restaurants.map(function(restaurant) {
+                    var r = {
+                      get : Restaurant.get(restaurant.$id).$loaded()
+                        .then((restaurant) => {
+                          r.details = restaurant
+                        })
+                    }
+                    return r
+                  })
+                })
+            }
+            return c
+          })
+        })
+      })
+
 
     Advertisement.getRestaurants().$loaded()
       .then((restaurants) => {
