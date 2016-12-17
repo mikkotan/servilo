@@ -457,5 +457,11 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
         name: 'Sunday'
       }
     }
+    $scope.checkIfAllfalse = function(arr) {
+        for (var i in arr) {
+            if (arr[i] === true) return false;
+        }
+        return true;
+    }
   }
 ])
