@@ -325,5 +325,11 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
       }, Upload.getOptions(index));
       $scope.imageLoading = true;
     }
+    $scope.checkIfAllfalse = function(arr) {
+        for (var i in arr) {
+            if (arr[i] === true) return false;
+        }
+        return true;
+    }
   }
 ]);

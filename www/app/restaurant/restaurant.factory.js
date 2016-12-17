@@ -20,6 +20,8 @@ app.factory("Restaurant", ["$firebaseArray", "User", "Database", "$firebaseObjec
         return $firebaseArray(restaurants.orderByChild("owner_id").equalTo(authUserId))
       },
       get: function(restaurantId) {
+        console.log('getting restaurantId from restaurnt.get')
+        console.log(restaurantId)
         return $firebaseObject(Database.restaurantsReference().child(restaurantId));
       },
       getPendingRestaurants: function() {
@@ -178,6 +180,7 @@ app.factory("Restaurant", ["$firebaseArray", "User", "Database", "$firebaseObjec
       },
       addCategory: function(category) {
         var categoryRef = restaurants.child(category.restaurant_id).child('menu_categories').push();
+
         return categoryRef.set({
           name: category.name
         })

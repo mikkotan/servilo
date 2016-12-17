@@ -18,6 +18,7 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
         $scope.$watchCollection('categories', function(newCategories) {
           $scope.newCategories = newCategories.map(function(category) {
             var c = {
+              id: category.$id,
               get : Category.getRestaurants(category.$id).$loaded()
                 .then((restaurants) => {
                   c.restaurants = restaurants.map(function(restaurant) {
@@ -25,6 +26,9 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
                       get : Restaurant.get(restaurant.$id).$loaded()
                         .then((restaurant) => {
                           r.details = restaurant
+                        })
+                        .catch((err) => {
+                          console.log(err)
                         })
                     }
                     return r

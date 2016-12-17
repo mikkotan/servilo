@@ -7,6 +7,22 @@ app.controller('DashboardInteractOrdersCtrl', function($scope, $stateParams, Res
   $scope.modalControl ={};
   $scope.restaurant  = Restaurant.get(restaurantId);
 
+  $scope.navigate = function(order){
+            console.log(JSON.stringify(order.details.order_details.latitude));
+    launchnavigator.isAppAvailable(launchnavigator.APP.WAZE, function(isAvailable){
+        var app;
+        if(isAvailable){
+            app = launchnavigator.APP.WAZE;
+        }else{
+            console.log("Please install waze");
+        }
+        launchnavigator.navigate([order.details.order_details.latitude , order.details.order_details.longitude],  {
+            app: app
+        });
+    });
+  }
+
+
   Restaurant.getOrders(restaurantId).$loaded()
     .then((orders) => {
       console.log(JSON.stringify(orders));
