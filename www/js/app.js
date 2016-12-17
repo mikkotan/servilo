@@ -132,6 +132,10 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
     });
 
     $rootScope.$on('$stateChangeStart',function(event, toState, toParams, fromState, fromParams, options){
+      console.log(toState.name);
+      if(toState.name == "tabs.home"){
+        $ionicLoading.show()
+      }
       if(fromState.class == "Restaurant" && toState.class !== "Restaurant"){
           if(!CartData.isEmpty()){
               event.preventDefault();
@@ -152,16 +156,13 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
               });
         }
 
-      } else if (toState) {
-        console.log(toState);
-      //  $ionicLoading.show();
-      } else {
+      }else {
         console.log("Free Will")
       }
     })
     $rootScope.$on("$stateChangeSuccess",
       function(event, toState, toParams, fromState, fromParams, options) {
-          //$ionicLoading.hide();
+        $ionicLoading.hide();
     })
 
 
@@ -169,6 +170,7 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
       function(event, toState, toParams, fromState, fromParams, error) {
         if (error === "AUTH_REQUIRED") {
           event.preventDefault();
+          console.log(error);
           $state.go("landing")
         }
       })
@@ -180,6 +182,7 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
 
 app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate, Auth, User, Database, $state,
   $ionicPush, IonicPushService, $ionicPopover, $cordovaPushV5,ionicMaterialInk , Role) {
+    console.log("App Ctrl");
 
 
   ionicMaterialInk.displayEffect();
@@ -231,6 +234,7 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
   Auth.$onAuthStateChanged(function(firebaseUser) {
     if (firebaseUser) {
       $scope.userRole = Role.get(firebaseUser.uid)
+        console.log("shots fired: " + firebaseUser.uid);
       User.auth().$loaded().then(function(data) {
 
         $scope.currentUser = User.auth();
@@ -248,7 +252,12 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
   });
 })
 
-.controller('TabsCtrl', function($scope, $state, Auth ,role) {
+.controller('TabsCtrl', function($scope, $state,currentAuth ,Role) {
+
+  console.log(currentAuth.uid);
+  console.log("TAbs Controller");
+
+  $scope.userRole = Role.get(currentAuth.uid)
   $scope.goToHome = function() {
     $state.go("tabs.home")
   }
@@ -271,11 +280,7 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
     $state.go("tabs.pending")
   }
 
-  Auth.$onAuthStateChanged(function(firebaseUser) {
-    if (firebaseUser) {
-      $scope.userRole = role
-    }
-  })
+
 
 });
 app.directive('groupedRadio', function() {

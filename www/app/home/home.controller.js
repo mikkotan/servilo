@@ -1,7 +1,13 @@
-app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal", "$state", "ionicMaterialInk", "ionicMaterialMotion", "$ionicLoading", "Home", "$timeout", "User", "Auth", "CordovaGeolocation", "Advertisement", "Restaurant",
-  function($scope, $ionicSlideBoxDelegate, $ionicModal, $state, ionicMaterialInk, ionicMaterialMotion, $ionicLoading, Home, $timeout, User, Auth, CordovaGeolocation, Advertisement, Restaurant) {
+app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal", "$state", "ionicMaterialInk", "ionicMaterialMotion",
+  "$ionicLoading", "Home", "$timeout", "User", "currentAuth", "CordovaGeolocation", "Advertisement", "Restaurant",
+    function($scope, $ionicSlideBoxDelegate, $ionicModal, $state, ionicMaterialInk, ionicMaterialMotion, $ionicLoading,
+      Home, $timeout, User,currentAuth,CordovaGeolocation, Advertisement, Restaurant) {
     // ionicMaterialInk.displayEffect();
     var vm = this;
+
+    console.log("Home controller");
+
+    User.setOnline(currentAuth.uid);
     $scope.currentLocation = CordovaGeolocation.get();
 
     $scope.goToRestaurant = function(id) {
@@ -49,21 +55,8 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
           },0);
     };
 
-    Auth.$onAuthStateChanged(function(firebaseUser) {
-      console.log('on auth state changed running');
-      if (firebaseUser) {
-        User.setOnline(firebaseUser.uid);
-        User.isAdmin(firebaseUser.uid).then(function(val) {
-          console.log("ADMIN: " + val)
-        })
-        User.isUser(firebaseUser.uid).then(function(val) {
-          console.log("USER: " + val)
-        })
-        User.isRestaurantOwner(firebaseUser.uid).then(function(val) {
-          console.log("RESTAURANT_OWNER: " + val)
-        })
-      }
-    });
+
+
 
     $scope.options = {
       loop: true,

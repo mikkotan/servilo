@@ -166,12 +166,10 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     $scope.addRestaurant = function(restaurant) {
       console.log(restaurant.categories);
       try {
-        console.log("wala aw");
         var location = $scope.data.location.formatted_address
         var lat = $scope.marker.coords.latitude
         var long = $scope.marker.coords.longitude
         Restaurant.addPendingRestaurant(restaurant, location, lat, long, $scope.imageURL);
-        console.log("wala ga kadto d");
         clearFields(restaurant);
         $scope.restaurantModal.hide();
       } catch (e) {

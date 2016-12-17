@@ -1,5 +1,7 @@
-app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMenuDelegate", "ionicMaterialMotion", "User", "$state", "$ionicLoading", "$ionicModal", "Database", "IonicPushService", "$ionicPopup", "$timeout",
-  function($scope, Auth, ionicMaterialInk, $ionicSideMenuDelegate, ionicMaterialMotion, User, $state, $ionicLoading, $ionicModal, Database, IonicPushService, $ionicPopup, $timeout) {
+app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMenuDelegate", "ionicMaterialMotion", "User",
+"$state", "$ionicLoading", "$ionicModal", "Database", "IonicPushService", "$ionicPopup", "$timeout",
+  function($scope, Auth, ionicMaterialInk, $ionicSideMenuDelegate, ionicMaterialMotion, User, $state, $ionicLoading,
+    $ionicModal, Database, IonicPushService, $ionicPopup, $timeout) {
     $scope.passwordType= "password";
     ionicMaterialInk.displayEffect();
     $timeout(function() {

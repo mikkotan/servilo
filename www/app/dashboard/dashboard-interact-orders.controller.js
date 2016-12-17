@@ -8,26 +8,21 @@ app.controller('DashboardInteractOrdersCtrl', function($scope, $stateParams, Res
   $scope.restaurant  = Restaurant.get(restaurantId);
 
   $scope.navigate = function(order){
-            console.log(JSON.stringify(order.details.order_details.latitude));
-    launchnavigator.isAppAvailable(launchnavigator.APP.WAZE, function(isAvailable){
-        var app;
+    let waze = launchnavigator.APP.WAZE
+    launchnavigator.isAppAvailable(waze, function(isAvailable){
+      let app = { app : waze }
         if(isAvailable){
-            app = launchnavigator.APP.WAZE;
+            launchnavigator.navigate([order.details.order_details.latitude , order.details.order_details.longitude], app)
         }else{
             console.log("Please install waze");
         }
-        launchnavigator.navigate([order.details.order_details.latitude , order.details.order_details.longitude],  {
-            app: app
-        });
     });
   }
-
 
   Restaurant.getOrders(restaurantId).$loaded()
     .then((orders) => {
       console.log(JSON.stringify(orders));
       $scope.tempOrders = orders
-
       $scope.orderFilter = function(type) {
         return function(order) {
           order.date = new Date(order.details.order_details.timestamp);
@@ -44,7 +39,6 @@ app.controller('DashboardInteractOrdersCtrl', function($scope, $stateParams, Res
             var endMonth = new Date();
             startMonth.setDate(1)
             endMonth.setDate(31)
-
             return order.date.getDate() >= startMonth.getDate() && order.date.getDate() <= endMonth.getDate() && order.date.getYear() === today.getYear()
           }
         }

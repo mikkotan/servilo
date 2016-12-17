@@ -108,7 +108,6 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
     $scope.buy = function(cart) {
       console.log($scope.marker.coords);
       $ionicLoading.show();
-
       var location = $scope.data.location.formatted_address;
       if (location) {
         Order.create({
@@ -119,7 +118,7 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
               latitude: $scope.marker.coords.latitude,
               longitude: $scope.marker.coords.longitude,
               menus: scanCart(cart),
-              note: typeof cart.note === 'undefined' ? '' : cart.note,
+              note: cart.note,
               totalprice: $scope.total,
               timestamp: firebase.database.ServerValue.TIMESTAMP,
               status: 'pending',
@@ -159,6 +158,7 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
         ionicToast.show('NO LOCATION', 'bottom', false, 2500);
       }
     }
+
 
 
     //Setting the map

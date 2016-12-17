@@ -1,13 +1,22 @@
-app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, firebaseConfigProvider, $ionicCloudProvider, ionGalleryConfigProvider) {
+app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, firebaseConfigProvider,
+  $ionicCloudProvider, ionGalleryConfigProvider) {
+
   ionGalleryConfigProvider.setGalleryConfig({
     action_label: 'Close',
     toggle: true,
     row_size: 4,
     fixed_row_size: true
   });
+
   firebase.initializeApp(firebaseConfigProvider.$get());
 
-  $urlRouterProvider.otherwise("/home");
+
+  $urlRouterProvider.otherwise(function($injector,$location){
+      $injector.invoke(['$state',function($state){
+        $state.go('tabs.home')
+      }])
+  })
+
   $ionicConfigProvider.tabs.position('bottom');
   $ionicCloudProvider.init({
     "core": {
@@ -35,9 +44,9 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
       templateUrl: "templates/tabs.html",
       controller: 'TabsCtrl',
       resolve: {
-        role : function(Auth, Role) {
-          console.log("Auth ID: " + Auth.$getAuth().uid)
-          return Role.get(Auth.$getAuth().uid);
+        currentAuth: function(Auth) {
+          console.log("resolve tab fired inside view!!!");
+          return Auth.$requireSignIn();
         }
       },
       class : 'Tab'
@@ -49,12 +58,13 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
           templateUrl: "app/home/_home.html",
           controller: 'HomeTabCtrl',
           controllerAs: 'home',
-          resolve: {
+          resolve : {
             currentAuth: function(Auth) {
+              console.log("resolve home fired inside view!!!");
               return Auth.$requireSignIn();
-            },
+            }
           }
-        }
+        },
       },
       class : 'Home'
     })
@@ -67,7 +77,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
           resolve: {
             currentAuth: function(Auth) {
               return Auth.$requireSignIn();
-            },
+            }
           }
         }
       },
@@ -83,9 +93,6 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
             currentAuth: function(Auth) {
               return Auth.$requireSignIn();
             },
-            // restaurants: function(Database) {
-            //   return Database.restaurants().$loaded();
-            // }
             currentGeoLocation: function(CordovaGeolocation) {
               return CordovaGeolocation.get();
             }
@@ -217,30 +224,6 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
       },
         class : 'Menu'
     })
-    // .state('tabs.cart', {
-    //   url: "/cart",
-    //   params: {
-    //     restaurantId: null
-    //   },
-    //   views: {
-    //     'cart-tab': {
-    //       templateUrl: "app/cart/_cart.html",
-    //       controller: "CartCtrl",
-    //       resolve: {
-    //         orders: function(Order) {
-    //           return Order.all().$loaded();
-    //         },
-    //         authUser: function(User) {
-    //           return User.auth().$loaded();
-    //         },
-    //         restaurantId: function($stateParams) {
-    //           return $stateParams.restaurantId
-    //         }
-    //       }
-    //     }
-    //   },
-    //   class : 'Cart'
-    // })
     .state('tabs.dashboard.orders', {
       url: "/orders",
       params: {
@@ -401,13 +384,13 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
       url: "/landing",
       templateUrl: "app/login/_landing.html",
       controller: "LoginCtrl",
-      class:'Login'
+      class:'Login',
     })
     .state('login', {
       url: "/login",
       templateUrl: "app/login/_login.html",
       controller: "LoginCtrl",
-      class:'Login'
+      class:'Login',
     })
     .state('signup', {
       url: "/signup",
@@ -427,5 +410,4 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
       controller: "ProfileCtrl",
       class:'Profile'
     });
-  // $urlRouterProvider.otherwise("/tab/home");
 })

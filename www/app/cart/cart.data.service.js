@@ -1,4 +1,4 @@
-app.factory('CartData', function(Cart){
+  app.factory('CartData', function(Cart){
 
 
   var obj = {

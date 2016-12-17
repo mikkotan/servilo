@@ -61,6 +61,7 @@ app.controller("ViewRestaurantMenus", ["$scope", "$state", "restaurantId", "Cart
         restaurantStatus.on('value', function(snap) {
           $scope.getRestaurantStatus = snap.val();
           $scope.status = restaurant.name + " is " + (snap.val() ? "Online" : "Offline");
+          console.log("Status: " + $scope.getRestaurantStatus);
         })
       })
 
