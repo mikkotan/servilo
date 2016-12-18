@@ -12,38 +12,13 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
     $ionicPlatform.ready()
       .then(() => {
         if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
-          localStorage.myPush = '';
-          $cordovaPushV5.initialize({
-              android: {
-                senderID: "155324175920"
-              },
-              ios: {
-                alert: 'true',
-                badge: true,
-                sound: 'false',
-                clearBadge: true
-              },
-              windows: {}
-            })
-            .then((result) => {
-              $cordovaPushV5.onNotification();
-              $cordovaPushV5.onError();
-              $cordovaPushV5.register()
-                .then((registerResult) => {
-                  console.log("Register Result: " + registerResult)
-                  localStorage.myPush = registerResult;
-                })
-                .catch((err) => {
-                  console.log(err)
-                })
-            })
+          IonicPushService.registerDevice()
         }
 
         var posOptions = {
-          timeout: 10000,
+          timeout: 1000,
           enableHighAccuracy: true
         }
-
 
         $cordovaGeolocation.getCurrentPosition(posOptions)
           .then((position) => {
@@ -74,6 +49,19 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
         console.log(err);
       })
 
+    $rootScope.$on("$stateChangeError",
+      function(event, toState, toParams, fromState, fromParams, error) {
+        if (error === "AUTH_REQUIRED") {
+          event.preventDefault();
+          console.log(error);
+          $ionicLoading.hide();
+          $state.go("landing")
+        }else if (error) {
+          console.log(error + " catch by stateChangeError");
+          $ionicLoading.hide();
+        }
+    })
+
     $rootScope.$on('$cordovaPushV5:notificationReceived', function(event, data) {
       if (data.additionalData.foreground == true) {
         console.log('foreground true');
@@ -83,9 +71,6 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
           })
           .then((res) => {
             if (res) {
-              console.log('tapped ok');
-              console.log("isRestaurantOwner: "+data.additionalData.isRestaurantOwner)
-              console.log("url: "+data.additionalData.url)
               if (data.additionalData.url === 'reservation') {
                 $state.go('tabs.restaurant')
                   .then(() => {
@@ -106,12 +91,10 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
                   console.log('restaurantOwner already')
                   $state.go('tabs.restaurant');
                 } else {
-                  console.log('approve first time');
                   Auth.$signOut();
-                  $state.go("landing");
+                  $state.go("login");
                 }
               }
-
             }
           })
       } else {
@@ -132,10 +115,10 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
     });
 
     $rootScope.$on('$stateChangeStart',function(event, toState, toParams, fromState, fromParams, options){
-      console.log(toState.name);
-      if(toState.name == "tabs.home"){
-        $ionicLoading.show()
-      }
+      // if(toState.name == "tabs.home"){
+      //   $ionicLoading.show();
+      // }
+      console.error(toState.name.toUpperCase() + " ---> From Start");
       if(fromState.class == "Restaurant" && toState.class !== "Restaurant"){
           if(!CartData.isEmpty()){
               event.preventDefault();
@@ -162,18 +145,11 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
     })
     $rootScope.$on("$stateChangeSuccess",
       function(event, toState, toParams, fromState, fromParams, options) {
-        $ionicLoading.hide();
-    })
-
-
-    $rootScope.$on("$stateChangeError",
-      function(event, toState, toParams, fromState, fromParams, error) {
-        if (error === "AUTH_REQUIRED") {
-          event.preventDefault();
-          console.log(error);
-          $state.go("landing")
+        if(toState.name == "tabs.home"){
+          console.log("success home tabs");
+          $ionicLoading.hide();
         }
-      })
+    })
 
     $templateCache.put('template.tpl.html', '');
   }
@@ -182,8 +158,6 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
 
 app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate, Auth, User, Database, $state,
   $ionicPush, IonicPushService, $ionicPopover, $cordovaPushV5,ionicMaterialInk , Role) {
-    console.log("App Ctrl");
-
 
   ionicMaterialInk.displayEffect();
   $scope.showMenu = function() {
@@ -233,10 +207,10 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
 
   Auth.$onAuthStateChanged(function(firebaseUser) {
     if (firebaseUser) {
-      $scope.userRole = Role.get(firebaseUser.uid)
-        console.log("shots fired: " + firebaseUser.uid);
+      Role.get(firebaseUser.uid).then((value)=>{
+        $scope.userRole = value
+      })
       User.auth().$loaded().then(function(data) {
-
         $scope.currentUser = User.auth();
         $scope.firebaseUser = data;
         if (data.photoURL) {
@@ -252,12 +226,15 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
   });
 })
 
-.controller('TabsCtrl', function($scope, $state,currentAuth ,Role) {
+.controller('TabsCtrl',["$scope","$state","currentAuth","Role",
+function($scope, $state,currentAuth ,Role) {
 
-  console.log(currentAuth.uid);
   console.log("TAbs Controller");
 
-  $scope.userRole = Role.get(currentAuth.uid)
+  Role.get(currentAuth.uid).then((value)=>{
+    $scope.userRole = value
+  })
+  console.error(currentAuth.uid);
   $scope.goToHome = function() {
     $state.go("tabs.home")
   }
@@ -282,7 +259,7 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
 
 
 
-});
+}]);
 app.directive('groupedRadio', function() {
   return {
     restrict: 'A',

@@ -16,12 +16,8 @@ app.controller("SignUpCtrl", ["$scope", "Auth", "User", "$state", "IonicPushServ
           try{
             Auth.$createUserWithEmailAndPassword(user.email, user.password)
             .then(function(firebaseUser) {
-
               var ref = Database.usersReference().child(firebaseUser.uid);
               $scope.appUser = Database.firebaseArray(ref);
-
-              User.setAsUser(firebaseUser.uid);
-
               $scope.message = "User created with uid: " + firebaseUser.uid;
               ref.set({
                 firstName: user.firstName,

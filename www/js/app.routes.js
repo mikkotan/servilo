@@ -1,5 +1,6 @@
-app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, firebaseConfigProvider,
-  $ionicCloudProvider, ionGalleryConfigProvider) {
+app.config(["$stateProvider","$urlRouterProvider","$ionicConfigProvider","firebaseConfigProvider","$ionicCloudProvider","ionGalleryConfigProvider",
+    function($stateProvider, $urlRouterProvider, $ionicConfigProvider, firebaseConfigProvider,
+      $ionicCloudProvider, ionGalleryConfigProvider) {
 
   ionGalleryConfigProvider.setGalleryConfig({
     action_label: 'Close',
@@ -410,4 +411,4 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
       controller: "ProfileCtrl",
       class:'Profile'
     });
-})
+}])

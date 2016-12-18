@@ -60,7 +60,7 @@
                   </p>
                 </div>
                 <div class="error" ng-show="submitError">
-                  <p ng-show="restaurant.facilities==null">* Restaurant's facilities is required</p>
+                  <p ng-show="restaurant.facilities==null || checkIfAllfalse(restaurant.facilities)">* Restaurant's facilities is required</p>
                 </div>
               </div>
               <div class="item">
@@ -71,15 +71,16 @@
                   </p>
                 </div>
                 <div class="error" ng-show="submitError">
-                  <p ng-show="restaurant.categories==null">* Restaurant's categories is required</p>
+                  <p ng-show="restaurant.categories==null || checkIfAllfalse(restaurant.categories)">* Restaurant's categories is required</p>
                 </div>
               </div>
               <div class="item">
                 <a class="button button-block button-royal icon-left ion-plus-circled" ng-click="setOpenDays()">Set Open Days</a>
               </div>
               <div class="error" ng-show="submitError">
-                <p ng-show="restaurant.openDays==null">* Restaurant's open days is required</p>
+                <p ng-show="restaurant.openDays==null || checkIfAllfalse(restaurant.openDays)">* Restaurant's open days is required</p>
               </div>
+
               <!-- <div class="item item-input-inset"> -->
 
               <a class="button button-small button-balanced" ng-click="useCurrent()">Use Current Location</a>

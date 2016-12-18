@@ -2,12 +2,30 @@ app.factory('IonicPushService', function($ionicPush, User, Database, $cordovaPus
 
   var IonicPushService = {
     registerDevice: function() {
-      $ionicPush.register()
-        .then((t) => {
-          $ionicPush.saveToken(t)
+      localStorage.myPush = '';
+      $cordovaPushV5.initialize({
+          android: {
+            senderID: "155324175920"
+          },
+          ios: {
+            alert: 'true',
+            badge: true,
+            sound: 'false',
+            clearBadge: true
+          },
+          windows: {}
         })
-        .then((t) => {
-          console.log("Token saved: " + t.token)
+        .then((result) => {
+          $cordovaPushV5.onNotification();
+          $cordovaPushV5.onError();
+          $cordovaPushV5.register()
+            .then((registerResult) => {
+              console.log("Register Result: " + registerResult)
+              localStorage.myPush = registerResult;
+            })
+            .catch((err) => {
+              console.log(err)
+            })
         })
     },
     getToken: function() {
