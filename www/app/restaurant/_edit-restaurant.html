@@ -10,7 +10,7 @@
     <ion-list>
       <div class="card">
         <ion-item id="form-input">
-          <form ng-submit="edit(eRestaurant)" name="editRestaurantForm">
+          <form ng-submit="edit(eRestaurant)" name="editRestaurantForm" novalidate>
             <div class="list">
               <label class="item item-input item-floating-label">
                 <span class="input-label has-input">Name of Restaurant</span>
@@ -23,7 +23,7 @@
                 <span class="input-label has-input">Contact Number</span>
                 <input type="number" placeholder="Contact Number" ng-model="eRestaurant.phonenumber" name="phonenumber" ng-required="true" ng-minlength="5" ng-maxlength="16" min="0">
                 <div ng-show="editRestaurantForm.phonenumber.$touched" class="error">
-                  <p ng-show="editRestaurantForm.phonenumber.$error.required">* Contact Number's is required</p>
+                  <p ng-show="editRestaurantForm.phonenumber.$error.required">* Contact Number is required</p>
                   <p ng-show="editRestaurantForm.phonenumber.$error.minlength">* Contact Number must be longer than 5</p>
                   <p ng-show="editRestaurantForm.phonenumber.$error.maxlength">* Contact Number must be shorter than 16</p>
                 </div>
@@ -56,6 +56,9 @@
                     {{key}}
                   </p>
                 </div>
+                <div class="error">
+                    <p ng-show="checkIfAllfalse(eRestaurant.facilities)">* Restaurant's facilities is required</p>
+                </div>
               </div>
               <div class="item">
                 <a class="button button-block button-royal icon-left ion-plus-circled" ng-click="setOpenDays()">Set Open Days</a>
@@ -64,6 +67,9 @@
 
                     {{days[key].name}}
                   </p>
+                </div>
+                <div class="error">
+                    <p ng-show="checkIfAllfalse(eRestaurant.openDays)">* Restaurant's days is required</p>
                 </div>
               </div>
               <!-- <div class="item item-input-inset">

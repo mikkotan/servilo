@@ -9,24 +9,33 @@
     <ion-list>
       <div class="card">
         <ion-item id="form-input">
-          <form ng-submit="updateMenu(eMenu)">
+          <form ng-submit="updateMenu(eMenu)" name="editMenuForm">
             <label class="item item-input item-floating-label">
               <span class="input-label has-input">Name</span>
-              <input type="text" placeholder="Name" ng-model="eMenu.name">
+              <input type="text" placeholder="Name" ng-model="eMenu.name" name="name" ng-required="true">
+              <div class="error" ng-show="editMenuForm.name.$touched">
+                <p ng-show="editMenuForm.name.$error.required">* Menu's name is required</p>
+              </div>
             </label>
             <label class="item item-input item-floating-label">
               <span class="input-label has-input">Price</span>
-              <input type="number" placeholder="Price" ng-model="eMenu.price" min="0">
+              <input type="number" placeholder="Price" ng-model="eMenu.price" min="0" name="price" ng-required="true">
+              <div class="error" ng-show="editMenuForm.price.$touched">
+                <p ng-show="editMenuForm.price.$error.required">* Menu's price is required</p>
+              </div>
             </label>
             <label class="item item-input item-select">
               <div class="input-label">
                 Category
               </div>
               <select ng-model="eMenu.category_id">
-                <option ng-repeat="category in categories" value="{{category.$id}}" ng-selected="{{eMenu.category_id === category.$id}}">
+                <option ng-repeat="category in categories" value="{{category.$id}}" ng-selected="{{eMenu.category_id === category.$id}}" name="category" ng-required="true">
                   {{category.name}}
                 </option>
               </select>
+              <div class="error" ng-show="editMenuForm.category.$touched">
+                <p ng-show="editMenuForm.category.$error.required">* Menu's category is required</p>
+              </div>
             </label>
 
             <div class="row">
@@ -51,7 +60,7 @@
             </div>
             <img ng-src="{{photoURL}}" width="40%" />
             <div class="row">
-              <button class="button button-block button-balanced ink">Submit</button>
+              <button type="submit" class="button button-block button-balanced ink">Submit</button>
             </div>
           </form>
         </ion-item>

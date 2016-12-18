@@ -1,7 +1,12 @@
-app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal", "$state", "ionicMaterialInk", "ionicMaterialMotion", "$ionicLoading", "Home", "$timeout", "User", "Auth", "CordovaGeolocation", "Advertisement", "Restaurant",
-  function($scope, $ionicSlideBoxDelegate, $ionicModal, $state, ionicMaterialInk, ionicMaterialMotion, $ionicLoading, Home, $timeout, User, Auth, CordovaGeolocation, Advertisement, Restaurant) {
+app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal", "$state", "ionicMaterialInk", "ionicMaterialMotion",
+"$ionicLoading", "Home", "$timeout", "User", "CordovaGeolocation", "Advertisement", "Restaurant", "Category","currentAuth",
+  function($scope, $ionicSlideBoxDelegate, $ionicModal, $state, ionicMaterialInk, ionicMaterialMotion, $ionicLoading, Home, $timeout,
+    User,CordovaGeolocation, Advertisement, Restaurant, Category , currentAuth) {
+
     // ionicMaterialInk.displayEffect();
     var vm = this;
+    console.log("Home controller");
+    User.setOnline(currentAuth.uid);
     $scope.currentLocation = CordovaGeolocation.get();
 
     setTimeout(function() {
@@ -22,6 +27,36 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
       })
     }
 
+
+
+    Category.getAllCategories().$loaded()
+      .then((categoryRestaurants) => {
+        $scope.categories = categoryRestaurants
+
+        $scope.$watchCollection('categories', function(newCategories) {
+          $scope.newCategories = newCategories.map(function(category) {
+            var c = {
+              id: category.$id,
+              get : Category.getRestaurants(category.$id).$loaded()
+                .then((restaurants) => {
+                  c.restaurants = restaurants.map(function(restaurant) {
+                    var r = {
+                      get : Restaurant.get(restaurant.$id).$loaded()
+                        .then((restaurant) => {
+                          r.details = restaurant
+                        })
+                        .catch((err) => {
+                          console.log(err)
+                        })
+                    }
+                    return r
+                  })
+                })
+            }
+            return c
+          })
+        })
+      })
 
 
     Advertisement.getRestaurants().$loaded()
@@ -63,21 +98,8 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
       }, 0);
     };
 
-    Auth.$onAuthStateChanged(function(firebaseUser) {
-      console.log('on auth state changed running');
-      if (firebaseUser) {
-        User.setOnline(firebaseUser.uid);
-        User.isAdmin(firebaseUser.uid).then(function(val) {
-          console.log("ADMIN: " + val)
-        })
-        User.isUser(firebaseUser.uid).then(function(val) {
-          console.log("USER: " + val)
-        })
-        User.isRestaurantOwner(firebaseUser.uid).then(function(val) {
-          console.log("RESTAURANT_OWNER: " + val)
-        })
-      }
-    });
+
+
 
     $scope.options = {
       loop: true,

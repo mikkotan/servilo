@@ -10,14 +10,17 @@
         <!-- <a class="button icon ion-home" href="#/tab/home">Restaurant</a> -->
       <ion-list>
         <ion-item >
-          <form ng-submit="addCategory(category)">
+          <form ng-submit="addCategory(category)" name="addCategoryForm" novalidate>
             <div class="list">
               <label class="item item-input">
-                Category Name:<input type="text" ng-model="category.name" />
+                Category Name:<input type="text" ng-model="category.name" name="name" ng-required=true autofocus/>
               </label>
+              <div class="error" ng-show="submitError">
+                <p ng-show="addCategoryForm.name.$error.required">* Category's name is required</p>
+              </div>
             </div>
             <div class="padding">
-              <button type="submit" class="button button-block button-positive">Add Category</button>
+              <button class="button button-block button-positive">Add Category</button>
             </div>
           </form>
         </ion-item>

@@ -1,10 +1,12 @@
 app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera", "CordovaGeolocation", "Upload", "$ionicPopup", "Order", "Database", "Reservation", "ionicToast",
   function($scope, $firebaseArray, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation, Upload, $ionicPopup, Order, Database, Reservation, ionicToast) {
 
+
     $scope.modalControl = {};
-    // $scope.facilities = $firebaseArray(firebase.database().ref().child('facilities'));
     $scope.facilities = Database.facilities();
-    $scope.pendingRestaurants = Restaurant.getPendingRestaurants();
+
+    $scope.categories = Database.categories();
+
     $scope.displayRestaurants = User.getAuthRestaurants();
     $scope.AppUser = User.auth();
 
@@ -84,6 +86,16 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
       });
     };
 
+    $scope.setCategories = function() {
+      var categories = $ionicPopup.alert({
+        title: 'Set Category of your restaurant. You may select 1 or more',
+        templateUrl: 'app/restaurant/_categoriesPopout.html',
+        subTitle: 'Choose the specific category of your restaurant to be categorized later.',
+        cssClass: 'custom-popup',
+        scope: $scope
+      })
+    }
+
     $scope.setOpenDays = function() {
       var openDays = $ionicPopup.alert({
         title: 'Set Open Days',
@@ -110,28 +122,63 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
       Restaurant.changeAvailability(restaurant);
     };
 
+    $scope.testPhoto = function() {
+      navigator.camera.getPicture(onSuccess, onFail, {
+        sourceType: Camera.PictureSourceType.CAMERA,
+        quality: 50,
+        destinationType: Camera.DestinationType.DATA_URL,
+        encodingType: Camera.EncodingType.JPEG,
+        mediaType: Camera.MediaType.PICTURE,
+        correctOrientation: true,
+      });
+
+      function onSuccess(imageURI) {
+        var storageRef = firebase.storage().ref();
+        var metadata = {
+          contentType: 'image/jpeg'
+        };
+        storageRef.child('test.jpg').putString(imageURI, 'base64', metadata);
+        window.imageResizer.resizeImage(
+          function(data) {
+            storageRef.child('test-thumb.jpg').putString(data.imageData, 'base64', metadata);
+          },
+          function(error) {
+            console.log("Error : \r\n" + error);
+          }, imageURI, 0.1, 0.1, {
+            resizeType: ImageResizer.RESIZE_TYPE_FACTOR,
+            imageDataType: ImageResizer.IMAGE_DATA_TYPE_BASE64,
+            format: ImageResizer.FORMAT_JPG
+          }
+        );
+      }
+
+      function onFail(message) {
+        alert('Failed because: ' + message);
+      }
+    }
+
     $scope.imageURL = "";
     $scope.upload = function(index) {
-      navigator.camera.getPicture(function(imageData) {
-        Upload.restaurant(imageData).then(function(downloadURL) {
-          $scope.imageLoading = false;
-          $scope.imageURL = downloadURL;
-        })
-      }, function(message) {
-        console.log('Failed because: ' + message);
-        $scope.imageLoading = false;
-        $scope.$apply();
-      }, Upload.getOptions(index));
-      $scope.imageLoading = true;
+      var source = Upload.getSource(index);
+      var options = Upload.getOptions(source);
+      $cordovaCamera.getPicture(options).then(function(imageData) {
+        var restaurantRef = Upload.restaurant(imageData);
+        $scope.progress = 1;
+        restaurantRef.on('state_changed', function(snapshot) {
+          var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+          $scope.progress = progress;
+        }, function(error) {
+          console.log("error in uploading." + error);
+        }, function() {
+          //success upload
+          $scope.imageURL = restaurantRef.snapshot.downloadURL;
+          $scope.$apply();
+        });
 
-      // $cordovaCamera.getPicture(Upload.getOptions(index)).then(function(imageData) {
-      //   Upload.restaurant(imageData).then(function(downloadURL) {
-      //     $scope.imageLoading = false;
-      //     $scope.imageURL = downloadURL;
-      //   })
-      // }, function(error) {
-      //   console.log('Failed because: ' + error);
-      // });
+      }, function(error) {
+        console.error(error);
+      });
     }
 
     var clearFields = function(restaurant) {
@@ -148,6 +195,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     }
 
     $scope.addRestaurant = function(restaurant) {
+      console.log(restaurant.categories);
       try {
         var location = $scope.data.location.formatted_address
         var lat = $scope.marker.coords.latitude
@@ -157,6 +205,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
         $scope.restaurantModal.hide();
       } catch (e) {
         $scope.submitError = true;
+        console.log(e);
       }
     }
 
@@ -296,24 +345,24 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     //   };
     // }
 
-    $scope.approveRestaurant = function(restaurant) {
-      $scope.pendingRestaurants.$remove(restaurant)
-        .then(() => {
-          var add = Restaurant.addRestaurant(restaurant);
-          add.ref
-            .then(() => {
-              Restaurant.getTimestamp(add.key).transaction(function(currentTimestamp) {
-                return firebase.database.ServerValue.TIMESTAMP;
-              })
-            })
-            .catch((err) => {
-              console.log(err)
-            })
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    }
+    // $scope.approveRestaurant = function(restaurant) {
+    //   $scope.pendingRestaurants.$remove(restaurant)
+    //     .then(() => {
+    //       var add = Restaurant.addRestaurant(restaurant);
+    //       add.ref
+    //         .then(() => {
+    //           Restaurant.getTimestamp(add.key).transaction(function(currentTimestamp) {
+    //             return firebase.database.ServerValue.TIMESTAMP;
+    //           })
+    //         })
+    //         .catch((err) => {
+    //           console.log(err)
+    //         })
+    //     })
+    //     .catch((err) => {
+    //       console.log(err)
+    //     })
+    // }
 
     $scope.newRestaurant = function() {
       $scope.restaurant = {
@@ -436,6 +485,12 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
       '6': {
         name: 'Sunday'
       }
+    }
+    $scope.checkIfAllfalse = function(arr) {
+      for (var i in arr) {
+        if (arr[i] === true) return false;
+      }
+      return true;
     }
   }
 ])
