@@ -70,7 +70,9 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
       }
     })
     .state('tabs.viewRestaurant', {
+      abstract: true,
       url: "/viewRestaurant/:restaurantId",
+    //   templateUrl: "app/restaurant/_view-restaurant.html"
       views: {
         'search-tab': {
           templateUrl: "app/restaurant/_view-restaurant.html",
@@ -306,7 +308,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
         restaurantId: null
       },
       views: {
-        'dashboard-page' : {
+        'dashboard-page': {
           templateUrl: "app/dashboard/_dashboard-interact-reservations.html",
           controller: "DashboardInteractReservationsCtrl"
         }
@@ -318,7 +320,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
         restaurantId: null
       },
       views: {
-        'dashboard-page' : {
+        'dashboard-page': {
           templateUrl: "app/dashboard/_dashboard-interact-reviews.html",
           controller: "ViewRestaurantCtrl"
         }
@@ -330,7 +332,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
         restaurantId: null
       },
       views: {
-        'dashboard-page' : {
+        'dashboard-page': {
           templateUrl: "app/dashboard/_dashboard-interact-promos.html",
           controller: "DashboardInteractPromosCtrl"
         }
@@ -351,8 +353,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, fi
         'dashboard-page': {
           templateUrl: "app/dashboard/_dashboard-menus.html",
           controller: "DashboardMenusCtrl"
-          }
         }
+      }
     })
     .state('tabs.dashboard.interact', {
       url: "/interact",

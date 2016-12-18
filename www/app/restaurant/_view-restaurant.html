@@ -1,8 +1,23 @@
 <ion-view view-title="view-restaurant">
-  <div class="tabs tabs-dark tabs-top">
-    <a class="tab-item" ui-sref="tabs.viewRestaurant.main">Restaurant</a>
-    <a class="tab-item" ui-sref="tabs.viewRestaurant.menus">Menus</a>
-    <a class="tab-item" ui-sref="tabs.viewRestaurant.location">Location</a>
+  <div class="tabs tabs-default tabs-top">
+    <a class="tab-item ink" ui-sref="tabs.viewRestaurant.main" ui-sref-active="current">Restaurant</a>
+    <a class="tab-item ink" ui-sref="tabs.viewRestaurant.menus" ui-sref-active="current">Menus</a>
+    <a class="tab-item ink" ui-sref="tabs.viewRestaurant.location" ui-sref-active="current">Location</a>
   </div>
   <ion-nav-view name="restaurant_page"></ion-nav-view>
 </ion-view>
+
+<!--
+<ion-tabs class="tabs-messages tabs-light tabs-top tabs-icon-top has-tabs-top">
+  <ion-tab title="Main" icon-on="ion-ios-filing" icon-off="ion-ios-filing-outline" ui-sref="tabs.viewRestaurant.main">
+
+  </ion-tab>
+  <ion-tab title="Menus" icon-on="ion-ios-paperplane" icon-off="ion-ios-paperplane-outline" ui-sref="tabs.viewRestaurant.menus">
+
+  </ion-tab>
+  <ion-tab title="Locaion" icon-on="ion-ios-flag" icon-off="ion-ios-flag-outline" ui-sref="tabs.viewRestaurant.location">
+
+  </ion-tab>
+
+  <ion-nav-view name="restaurant_page"></ion-nav-view>
+</ion-tabs> -->

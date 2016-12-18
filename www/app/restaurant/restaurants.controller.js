@@ -1,5 +1,5 @@
-app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera", "CordovaGeolocation", "Upload", "$ionicPopup", "Order", "Database", "Reservation",
-  function($scope, $firebaseArray, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation, Upload, $ionicPopup, Order, Database, Reservation) {
+app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera", "CordovaGeolocation", "Upload", "$ionicPopup", "Order", "Database", "Reservation", "ionicToast",
+  function($scope, $firebaseArray, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation, Upload, $ionicPopup, Order, Database, Reservation, ionicToast) {
 
     $scope.modalControl = {};
     // $scope.facilities = $firebaseArray(firebase.database().ref().child('facilities'));
@@ -11,6 +11,36 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     $scope.data = {};
     $scope.countryCode = 'PH';
 
+    $scope.options = {
+      loop: true,
+      effect: 'slide',
+      autoplay: 5000,
+      speed: 500,
+    }
+    $scope.slide = {};
+    $scope.$watch('slide.slider', function(nv, ov) {
+      $scope.slider = $scope.slide.slider;
+    })
+
+    // $scope.restaurant = {};
+    // $scope.restaurant.main = true;
+    // $scope.restaurant.menus = false;
+    // $scope.restaurant.location = false;
+    // $scope.activeClass = function(tab) {
+    //   if (tab == 'main') {
+    //     $scope.restaurant.main = true;
+    //     $scope.restaurant.menus = false;
+    //     $scope.restaurant.location = false;
+    //   } else if (tab == 'menus') {
+    //     $scope.restaurant.menus = true;
+    //     $scope.restaurant.menus = false;
+    //     $scope.restaurant.location = false;
+    //   } else if (tab == 'location') {
+    //     $scope.restaurant.main = false;
+    //     $scope.restaurant.menus = false;
+    //     $scope.restaurant.location = true;
+    //   }
+    // }
     console.log($scope.AppUser);
 
     $scope.rating = {

@@ -141,7 +141,7 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
           var leavingRestaurantPopup = $ionicPopup.confirm({
             title: 'Leaving this restaurant will delete your orders',
             template: 'Are you sure you want to leave?',
-            cssClass: 'delete-popup',
+            cssClass: 'customPopup',
           });
 
           leavingRestaurantPopup.then(function(res) {
@@ -234,7 +234,7 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
     });
     // facebookConnectPlugin.logout();
     // TwitterConnect.logout();
-   
+
   }
 
 

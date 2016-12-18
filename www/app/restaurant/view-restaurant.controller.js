@@ -3,7 +3,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
 
     $ionicLoading.show();
     // ionicMaterialInk.displayEffect();
-    $scope.$on('applyInk',function(e) {
+    $scope.$on('applyInk', function(e) {
       ionicMaterialInk.displayEffect();
     })
     $scope.$emit('applyInk');
@@ -16,6 +16,11 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
     }
     $scope.user = User.auth();
 
+    $scope.goToOrder = function() {
+      $state.go('tabs.viewRestaurant.menus');
+    }
+
+    
     var restaurantId = $stateParams.restaurantId;
     var userReviewsRef = Review.userReview(restaurantId);
     $scope.loadingReviews = false;
@@ -24,7 +29,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
         $scope.restaurant = restaurant;
         User.hasFavored(restaurant.$id)
           .then((val) => {
-            console.log('Hasfavored from controller : '+val)
+            console.log('Hasfavored from controller : ' + val)
             $scope.hasFavored = val
             $scope.restaurantOpenStatus = Restaurant.getRestaurantOpenStatus(restaurant);
             var restaurantStatus = Restaurant.getRestaurantStatus(restaurant.owner_id)
@@ -74,14 +79,14 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
       confirmReservation.then(function(res) {
         if (res) {
           Reservation.create({
-            datetime: reservation.datetime.getTime(),
-            number_of_persons: reservation.number_of_persons,
-            status: 'pending',
-            user_id: User.auth().$id,
-            note: reservation.note,
-            restaurant_id: restaurantId,
-            timestamp: firebase.database.ServerValue.TIMESTAMP
-          })
+              datetime: reservation.datetime.getTime(),
+              number_of_persons: reservation.number_of_persons,
+              status: 'pending',
+              user_id: User.auth().$id,
+              note: reservation.note,
+              restaurant_id: restaurantId,
+              timestamp: firebase.database.ServerValue.TIMESTAMP
+            })
             .then(() => {
               console.log('success reservation')
               alert('Reservation has been booked successfully.');
@@ -119,10 +124,9 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
             $scope.images.push(downloadURL);
           })
         }
-        }, function(error) {
-           console.log('Error: ' + JSON.stringify(error));
-        }, Upload.getMultipleUploadOptions()
-      );
+      }, function(error) {
+        console.log('Error: ' + JSON.stringify(error));
+      }, Upload.getMultipleUploadOptions());
     };
 
     var clearReview = function(review) {
@@ -232,17 +236,17 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
 
     $scope.addReply = function(reply) {
       Review.addReply(restaurantId, reply, $scope.reviewId)
-      .then(function() {
-        reply.content = "";
-        $scope.addReplyModal.hide();
-      })
+        .then(function() {
+          reply.content = "";
+          $scope.addReplyModal.hide();
+        })
     }
 
     $scope.editReply = function(reply) {
       Review.editReply(reply)
-      .then(function() {
-        $scope.editReplyModal.hide();
-      })
+        .then(function() {
+          $scope.editReplyModal.hide();
+        })
     }
 
     $scope.showConfirmDelete = function(review) {

@@ -1,99 +1,53 @@
 <ion-view view-title="{{restaurant.name}}">
-  <ion-content class="padding has-tabs-top">
-    <img ng-if="restaurant.photoURL" ng-src="{{restaurant.photoURL}}" width="100%" />
-    <img ng-if="!restaurant.photoURL" ng-src="img/wow.jpg" width="50%">
-    <div class="">
-    <h3 class="capitalize">{{restaurant.name}}</h3>
-    <button class="button button-calm ink" ng-show="restaurant.facilities.Online" ui-sref="tabs.viewRestaurant.menus">Online Order</button>
-    <button class="button button-calm ink" ng-show="restaurant.facilities.Reservation" ng-click="showAddReservationModal()">Reservation</button>
-    <button class="button icon-left ion-star button-positive ink" ng-show="!hasFavored" ng-click="addToFavorites(restaurant)">Favorites</button>
-<!--     <p ng-if="getRestaurantStatus">ONLINE</p>
-    <p ng-if="!getRestaurantStatus">OFFLINE</p> -->
-
-    <p ng-if="restaurantOpenStatus">Restaurant is: Open</p>
-    <p ng-if="!restaurantOpenStatus">Restaurant is: Closed</p>
-
-    <p ng-if="restaurantOpenStatus" style="color:green;">
-      Restaurant Hours: {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}
-    </p>
-    <p ng-if="!restaurantOpenStatus" style="color:red;">
-      Opens at {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}
-    </p>
-      <ion-list>
-        <ion-item>
-          Cuisine: {{restaurant.cuisine}}
-        </ion-item>
-        <ion-item>
-          Location: {{restaurant.location}}
-        </ion-item>
-        <div ng-show="!exists">
-          <button ng-click="openReviewModal()" class="button button-block button-balanced ink">
-            <icon class="ion-plus"></icon> Write Review</button>
+  <ion-floating-menu has-footer="true" menu-color="#886aea" menu-icon="ion-more" menu-open-color="#444" menu-open-icon="ion-arrow-down-b" backdrop="true">
+    <ion-floating-item icon="ion-android-cart" ng-if="restaurant.facilities.Online" click="goToOrder()" button-color="#387ef5" text="Place an order"></ion-floating-item>
+    <ion-floating-item icon="ion-android-clipboard" ng-if="restaurant.facilities.Reservation" click="showAddReservationModal()" button-color="#387ef5" text="Book a reservation"></ion-floating-item>
+    <ion-floating-item icon="ion-heart" ng-if="!hasFavored" click="addToFavorites(restaurant)" button-color="#ffc900" text="Add to favorites"></ion-floating-item>
+    <!-- TODO MIKEL -->
+    <!-- <ion-floating-item icon="ion-heart-broken" ng-if="hasFavored" click="remove(restaurant)" button-color="#ffc900" text="Remove from favorites"></ion-floating-item> -->
+  </ion-floating-menu>
+  <ion-content class="has-tabs-top">
+    <ion-slides class="block" options="options" slider="slide.slider">
+      <ion-slide-page>
+        <div class="fill">
+          <img ng-src="img/sample.jpg">
         </div>
-        <div class="button-bar" ng-show="exists">
-          <button ng-click="openEditModal(review)" class="button button-balanced ink">
-            <icon class="ion-plus"></icon> Edit Review</button>
-          <button ng-click="showConfirmDelete(review)" class="button button-assertive ink">
-            <icon class="ion-android-delete"></icon> Delete Review</button>
+      </ion-slide-page>
+      <ion-slide-page>
+        <div class="fill">
+          <img ng-src="img/sample2.jpg">
         </div>
-      </ion-list>
-      <div class="list">
-        <div class="item item-divider">
-          Reviews
-          <ion-spinner ng-if="!loadingReviews" icon="spiral"></ion-spinner>
+      </ion-slide-page>
+    </ion-slides>
+    <div class="list card padding no-margin-top">
+      <div class="item item-thumbnail-left item-text-wrap">
+        <img ng-if="restaurant.photoURL" ng-src="{{restaurant.photoURL}}" />
+        <img ng-if="!restaurant.photoURL" ng-src="img/wow.jpg">
+        <div class="row">
+          <p id="restaurant-name" class="capitalize"> {{restaurant.name}} </p>
+          <span style="color:green">
+            <icon class="ion-android-star-outline"></icon> get kay mikel {{restaurant.avg}}
+          </span>
         </div>
-        <ul>
-          <li class="item" ng-repeat="review in restaurantReviews" ng-init="reviewer=getName(review.reviewer_id)">
-            <div class="row">
-              <div class="col col-20">
-                <img ng-if="!reviewer.photoURL" src="img/ionic.png" style="width: 50px; height: 50px">
-                <img ng-if="reviewer.photoURL" src="{{reviewer.photoURL}}" style="width: 50px; height: 50px">
-              </div>
-              <div class="col col-80">
-                <h3 ng-click="showReviewModal(review, reviewer)">{{reviewer.displayName}}</h3>
-                <p>
-                  {{review.content}} <span class="badge badge-balanced">{{review.rating}}</span>
-                </p>
-                <hscroller ng-if="review.images">
-                  <hcard ng-repeat="img in review.images" index="{{$index}}" desc="" image="{{img.thumb}}" ng-click="showImages($index)" ng-show="$index < 5"></hcard>
-                  <hcard index="{{$index}}" desc="" image="img/plus.jpg" ng-click="showGallery(review.images)" ui-sref="tabs.viewRestaurant.gallery"></hcard>
-                </hscroller>
-              </div>
-            </div>
-          </li>
-          <li class="item ink" ng-if="restaurantReviews.length > 0" ng-hide="!loadingReviews" ui-sref="tabs.viewRestaurant.reviews">
-            See all reviews
-          </li>
-          <li class="item ink" ng-if="restaurantReviews.length == 0">
-            No reviews
-          </li>
-        </ul>
-<!--         <li class="item item-avatar" ng-repeat="review in restaurantReviews" ng-init="reviewer=getName(review.reviewer_id)">
-          <img ng-if="!reviewer.photoURL" src="img/ionic.png">
-          <img ng-if="reviewer.photoURL" src="{{reviewer.photoURL}}">
-          <h2>{{reviewer.displayName}}</h2>
-          <span class="badge badge-balanced">{{review.rating}}</span>
-          <p>{{review.content}}</p>
-          <hscroller ng-if="review.images">
-            <hcard ng-repeat="img in review.images" index="{{$index}}" desc="" image="{{img.thumb}}" ng-click="showImages($index)" ng-show="$index < 5"></hcard>
-            <hcard index="{{$index}}" desc="" image="img/plus.jpg" ng-click="showGallery(review.images)" ui-sref="tabs.viewRestaurant.gallery"></hcard>
-          </hscroller>
-        </li>
-        <a class="item ink" ng-if="restaurantReviews.length > 0" ng-hide="!loadingReviews" ui-sref="tabs.viewRestaurant.reviews">
-          See all reviews
-        </a>
-        <a class="item ink" ng-if="restaurantReviews.length == 0">
-          No reviews
-        </a> -->
-        <div class="item item-divider">
-          Contact
+        <hr>
+        <div class="row">
+          <h4>{{restaurant.location}}</h4>
         </div>
-        <ul>
-          <li class="item">
-              <p> contact numbers here </p>
-          </li>
-        </ul>
       </div>
+      <div class="item item-text-wrap item-divider text-center">
+        <p ng-if="restaurantOpenStatus" style="color:green;">
+          OPEN NOW Restaurant Hours: {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}
+          <button class="button button-balanced button-small button-outline" ng-click="CallNumber(restaurant.phonenumber)">
+            <icon class="ion-android-call"></icon> Call Us
+          </button>
+        </p>
+        <p ng-if="!restaurantOpenStatus" style="color:red;">
+          CLOSED Opens at {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}
+        </p>
+      </div>
+    </div>
+
+    <div class="card padding">
     </div>
   </ion-content>
 </ion-view>

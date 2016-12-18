@@ -4,12 +4,25 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
     var vm = this;
     $scope.currentLocation = CordovaGeolocation.get();
 
+    setTimeout(function() {
+      $ionicSlideBoxDelegate.update();
+    }, 5000);
+
     $scope.goToRestaurant = function(id) {
       return $state.go('tabs.search')
         .then(() => {
-          $state.go('tabs.viewRestaurant.main', {restaurantId: id})
+          $state.go('tabs.viewRestaurant.main', {
+            restaurantId: id
+          })
         })
     }
+    $scope.goResto = function(id) {
+      $state.go('tabs.viewRestaurant.main', {
+        restaurantId: id
+      })
+    }
+
+
 
     Advertisement.getRestaurants().$loaded()
       .then((restaurants) => {
@@ -18,7 +31,7 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
         $scope.$watchCollection('advertisedRestaurants', function(watchedAdvertisements) {
           $scope.newAdvertisements = watchedAdvertisements.map(function(advertisement) {
             var a = {
-              get : Restaurant.get(advertisement.$id).$loaded()
+              get: Restaurant.get(advertisement.$id).$loaded()
                 .then((restaurant) => {
                   a.details = restaurant
                   Restaurant.getAverageRating(restaurant.$id)
@@ -26,6 +39,7 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
                       a.avg = avg
                       a.ready = true
                       $scope.$apply()
+                      $ionicSlideBoxDelegate.update();
                     })
                 })
             }
@@ -38,15 +52,15 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
         alert(err)
       })
 
-    $scope.$on('ngLastRepeat.workorderlist',function(e) {
-        $scope.materialize();
+    $scope.$on('ngLastRepeat.workorderlist', function(e) {
+      $scope.materialize();
     });
 
-    $scope.materialize = function(){
-        $timeout(function(){
-            // ionicMaterialMotion.fadeSlideInRight();
-            ionicMaterialInk.displayEffect();
-          },0);
+    $scope.materialize = function() {
+      $timeout(function() {
+        // ionicMaterialMotion.fadeSlideInRight();
+        ionicMaterialInk.displayEffect();
+      }, 0);
     };
 
     Auth.$onAuthStateChanged(function(firebaseUser) {
@@ -70,6 +84,7 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
       effect: 'slide',
       autoplay: 5000,
       speed: 500,
+      paginationHide: true
     }
     $scope.data = {};
     $scope.$watch('data.slider', function(nv, ov) {
