@@ -27,8 +27,11 @@
         <div class="error" ng-show="submitError">
           <p ng-show="addReviewForm.rating.$error.required">* Review's Rating is required</p>
         </div>
+        <div ng-show="!isUploadDone">
+          Uploading <ion-spinner icon="dots"></ion-spinner>
+        </div>
         <div class="padding row">
-          <button type="submit" class="button button-block button-positive ink">Save</button>
+          <button type="submit" class="button button-block button-positive ink" ng-disabled="!isUploadDone">Save</button>
         </div>
       </div>
     </form>

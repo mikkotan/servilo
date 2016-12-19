@@ -16,7 +16,7 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
         showDelay: 0
       });
       $rootScope.loading_message = "Loading";
-     $ionicLoading.hide(); // uncomment if using browser else comment
+     // $ionicLoading.hide(); // uncomment if using browser else comment
       window.setTimeout(function () {
         navigator.splashscreen.hide();
       }, 1000);

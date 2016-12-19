@@ -29,7 +29,6 @@ app.factory("Upload", ["Database", "$firebaseArray", "$q",
           console.log("error in uploading." + error);
         }, function() {
           var downloadURL = reviewsRef.snapshot.downloadURL;
-          // deferred.resolve(downloadURL);
           ///thumb
           var base64Cut = base64.substring(34);
           window.imageResizer.resizeImage(
