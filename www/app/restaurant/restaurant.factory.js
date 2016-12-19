@@ -292,6 +292,12 @@ app.factory("Restaurant", ["$firebaseArray", "User", "Database", "$firebaseObjec
           reviewId: reviewId,
           restaurantId: restaurantId
         }
+      },
+      checkIfAllfalse: function(arr) {
+          for (var i in arr) {
+              if (arr[i] === true) return false;
+          }
+          return true;
       }
     }
     return Restaurant;
