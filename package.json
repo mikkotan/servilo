@@ -25,7 +25,10 @@
     "cordova-plugin-statusbar",
     "ionic-plugin-keyboard",
     "cordova-plugin-image-resizer",
-    "cordova-plugin-image-resizer@~1.0.0"
+    "cordova-plugin-network-information",
+    "cordova-plugin-dialogs",
+    "cordova.plugins.diagnostic",
+    "cordova-plugin-request-location-accuracy"
   ],
   "cordovaPlatforms": [
     "android"

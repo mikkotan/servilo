@@ -8,7 +8,47 @@ var app = angular.module('app', ['ui.mask', 'ionic', 'ionic.cloud', 'ionMdInput'
 
 app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushService", "User", "Database", "$cordovaGeolocation", "$ionicPopup", "$cordovaPushV5", "Cart", "$ionicLoading", "Auth",
   function($ionicPlatform, $rootScope, $state, $templateCache, IonicPushService, User, Database, $cordovaGeolocation, $ionicPopup, $cordovaPushV5, Cart, $ionicLoading, Auth) {
-    $ionicPlatform.ready()
+    $ionicPlatform.ready(() => {
+       $ionicLoading.show({
+        templateUrl: 'templates/loading.html',
+        noBackdrop: true,
+        maxWidth: 0,
+        showDelay: 0
+      });
+      $rootScope.loading_message = "Loading";
+     $ionicLoading.hide(); // uncomment if using browser else comment
+      window.setTimeout(function () {
+        navigator.splashscreen.hide();
+      }, 1000);
+      $rootScope.loading_message = "Checking Connection.";
+      if(navigator.connection.type == Connection.NONE){
+        navigator.notification.alert(
+            'Please check your connection settings.',
+            exitApp,
+            'No internet connection',
+            'Ok'
+        );
+      }
+      else {
+        $ionicLoading.hide();
+
+        var posOptions = {
+          timeout: 5000,
+          enableHighAccuracy: true
+        }
+
+        $cordovaGeolocation.getCurrentPosition(posOptions)
+          .then((position) => {
+            console.log('Position: ' + position.coords.latitude + ',' + position.coords.longitude);
+          })
+          .catch((err) => {
+            if (window.cordova) {
+              cordova.dialogGPS();
+            }
+            console.log(err);
+          })
+      }
+    })
       .then(() => {
         if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
           // IonicPushService.registerDevice();
@@ -38,23 +78,6 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
                 })
             })
         }
-
-        var posOptions = {
-          timeout: 10000,
-          enableHighAccuracy: true
-        }
-
-
-        $cordovaGeolocation.getCurrentPosition(posOptions)
-          .then((position) => {
-            console.log('Position: ' + position.coords.latitude + ',' + position.coords.longitude);
-          })
-          .catch((err) => {
-            if (window.cordova) {
-              cordova.dialogGPS();
-            }
-            console.log(err);
-          })
 
         if (window.cordova && window.cordova.plugins.Keyboard) {
           // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -159,14 +182,14 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
         }
 
       } else if (toState) {
-        $ionicLoading.show();
+        // $ionicLoading.show();
       } else {
         console.log("Free Will")
       }
     })
     $rootScope.$on("$stateChangeSuccess",
       function(event, toState, toParams, fromState, fromParams, options) {
-        $ionicLoading.hide();
+        // $ionicLoading.hide();
       })
 
     $rootScope.$on("$stateChangeError",
@@ -179,6 +202,10 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
       })
 
     $templateCache.put('template.tpl.html', '');
+
+    function exitApp(){
+       ionic.Platform.exitApp();
+    }
   }
 ]);
 

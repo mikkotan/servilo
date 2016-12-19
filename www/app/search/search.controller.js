@@ -5,17 +5,15 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
     $scope.$on('ngLastRepeat.workorderlist', function(e) {
       $scope.materialize();
     });
+    
     $scope.showList = true;
     $scope.showMap = false;
-    $scope.selectedFilter = "name";
 
     $scope.mapView = function() {
-
       $scope.showList = false;
       $scope.showMap = true;
     }
     $scope.listView = function() {
-
       $scope.showList = true;
       $scope.showMap = false;
 
@@ -26,9 +24,9 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
         ionicMaterialInk.displayEffect();
       }, 0);
     };
-
-    $scope.changeFilter = function() {
-      $scope.data.filter = $scope.selectedFilter;
+    $scope.filterName = 'name';
+    $scope.changeFilter = function(filterName) {
+      var previousFilterName = filterName;
       var confirmPopup = $ionicPopup.confirm({
         title: 'Search by',
         templateUrl: 'app/search/_search.filter.html',
@@ -37,12 +35,12 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
 
       confirmPopup.then(function(res) {
         if (res) {
-          console.log($scope.data.filter)
-          $scope.selectedFilter = $scope.data.filter;
+          $scope.filterName = $scope.data.filter;
           $scope.clearField();
           $scope.clearLocationField();
-        } else {
-
+        }
+        else {
+          $scope.data.filter = previousFilterName;
         }
       });
     }
@@ -119,34 +117,6 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
       })
     })
 
-    // $scope.$watchCollection('notifs', function(newNotifs) {
-    //   $scope.newNotifs = newNotifs.map(function(notification) {
-    //     var n = {
-    //       getObject : Notification.getOne(notification.$id).$loaded()
-    //         .then((notif) => {
-    //         User.getUser(notif.sender_id).$loaded().then((user) => {
-    //           Restaurant.get(notif.restaurant_id).$loaded()
-    //             .then((restaurant) => {
-    //               n.restaurant_name = restaurant.name
-    //               n.sender = user.firstName + " " + user.lastName
-    //               n.status = notif.status;
-    //               n.type = notif.type;
-    //               n.timestamp = notif.timestamp;
-    //               n.order_no = notif.order_no;
-    //               n.ready = true
-    //               n.self = notif
-    //             })
-    //             .catch((err) => {
-    //               console.log(JSON.stringify(err))
-    //             })
-    //         })
-    //       })
-    //     }
-    //
-    //     return n;
-    //   })
-    // })
-
     // Auth.$onAuthStateChanged(function(firebaseUser) {
     //   if (firebaseUser) {
     //     User.setOnline(firebaseUser.uid);
@@ -162,7 +132,7 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
       click: function(marker, eventName, model) {
         if (model.id != '0') {
 
-          //   infowindow.open(marker);
+        //   infowindow.open(marker);
 
           $state.go("tabs.viewRestaurant.main", {
             restaurantId: model.id
@@ -202,29 +172,25 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
     });
 
     $scope.locationSearch = function() {
-      $scope.markers.length =0;
       var lat = $scope.data.location.geometry.location.lat();
       var long = $scope.data.location.geometry.location.lng();
-      console.log("location on "+$scope.data.location.geometry.location);
       $scope.markers.push(Search.getInputLocation(lat, long));
       $scope.loading = true;
       // $ionicLoading.show({
       //   template: '<p>Searching. . .</p><ion-spinner icon="lines"></ion-spinner>'
       // });
       Search.getRestaurant().on("child_added", function(snapshot) {
-        if (Search.getNearLocation(snapshot.key, snapshot.val(), lat, long)) {
+        if(snapshot) {
           $ionicLoading.hide();
           $scope.loading = false;
+        }
+        if (Search.getNearLocation(snapshot.key, snapshot.val(), lat, long)) {
           var m = Search.getNearLocation(snapshot.key, snapshot.val(), lat, long);
           $scope.markers.push(m.marker);
           $scope.restaurants.push(m.restaurant);
         }
-        //  else {
-        //   $ionicLoading.hide();
-        //   $scope.loading = false;
-        //   ionicToast.show('NO RESTAURANTS MAN', 'bottom', false, 2500);
-        // }
       })
+
 
       $scope.map.zoom = 14;
       $scope.map.center = {
@@ -249,6 +215,16 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
           });
         } else if (filter == 'menu') {
           var results = [];
+          const items = [];
+          Search.searchMenu(input).once('value', snap => {
+            snap.forEach(item => { items.push(item) });
+            if (items.length == 0) {
+              $scope.restaurants = items;
+              ionicToast.show('NO RESTAURANTS MAN', 'bottom', false, 2500);
+              $scope.loading = false;
+              $scope.$apply();
+            }
+          });
           Search.searchMenu(input).on("child_added", function(snapshot) {
             Search.getRestaurants(snapshot.val().restaurant_id).$loaded().then(function(rest) {
               results.push(rest);
@@ -285,7 +261,9 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
       value: "location"
     }];
 
-
+    $scope.data = {
+      filter: 'name'
+    };
 
     $scope.clearField = function() {
       $scope.searchRestaurant = '';
@@ -293,7 +271,9 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
     }
 
     $scope.clearLocationField = function() {
-      $scope.data.location.formatted_address = "";
+      if($scope.data.location) {
+        $scope.data.location.formatted_address = "";
+      }
       $scope.allowMarkerChange('', 'location');
     }
   }
