@@ -30,25 +30,6 @@ app.controller("AddMenuCtrl",["$scope", "restaurantId", "$cordovaCamera", "Resta
     }
 
     $scope.addMenu = function(menu) {
-      var categoryId = menu.category;
-      var newKey = Menu.generateKey();
-      Menu.menusRef(newKey).set({
-        name : menu.name.toLowerCase(),
-        price : menu.price,
-        restaurant_id : restaurantId,
-        category_id : categoryId,
-        availability : false,
-        prevPrice : menu.price,
-        photoURL : $scope.photoURL,
-        timestamp : firebase.database.ServerValue.TIMESTAMP
-      })
-      .then(function() {
-        Menu.getRestaurantRef(restaurantId, categoryId, newKey);
-      })
-      // $state.go('tabs.restaurant');
-    }
-
-    $scope.addMenu = function(menu) {
       Menu.create({
         name : menu.name.toLowerCase(),
         price : menu.price,

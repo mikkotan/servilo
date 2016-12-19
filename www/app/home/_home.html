@@ -1,6 +1,13 @@
 <ion-view view-title="Home">
   <ion-content>
   <div class="padding">
+    <h6>Categories</h6>
+    <li ng-repeat="n in newCategories">
+      {{n.id}}
+      <p ng-repeat="r in n.restaurants">
+        {{r.details.name}}
+      </p>
+    </li>
     <h6>Ads</h6>
     <ion-slides options="options" slider="data.slider">
       <ion-slide-page ng-repeat="advertisement in newAdvertisements" ng-if="advertisement.ready">

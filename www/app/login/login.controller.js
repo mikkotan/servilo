@@ -138,6 +138,7 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMe
               disableBack: true
             });
           })
+
           user.password = "";
           user.email = "";
         })

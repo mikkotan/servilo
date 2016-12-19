@@ -2,8 +2,7 @@
   <ion-header-bar class="bar bar-subheader bar-light item-input-inset">
     <div class="item item-input">
       <input ng-show="filterName == 'name' || filterName == 'menu'" placeholder="Search by {{filterName}}..." type="search" ng-model="searchRestaurant" ng-model-options="{ debounce: 500 }" ng-change="allowMarkerChange(searchRestaurant, filterName)" />
-      <input ng-show="filterName == 'location'" class="input-form" type="text" placeholder="Search by location..." google-autocomplete-suggestion location="data.location" on-selection="onAddressSelection(location)" country-code="{{countryCode}}" ng-model="data.location.formatted_address"
-          readonly />
+      <input ng-show="filterName == 'location'" class="input-form" type="text" placeholder="Search by location..." google-autocomplete-suggestion location="data.location" on-selection="onAddressSelection(location)" country-code="{{countryCode}}" ng-model="data.location.formatted_address" readonly />
 
       <button class="button button-icon icon ion-close-circled" ng-show="searchRestaurant" ng-click="clearField()"></button>
       <button class="button button-icon icon ion-close-circled" ng-show="data.location.formatted_address" ng-click="clearLocationField()"></button>

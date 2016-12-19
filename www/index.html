@@ -47,13 +47,14 @@
   <script src="app/cart/cart.service.js"></script>
   <!-- database -->
   <script src="app/database/database.factory.js"></script>
+  <!-- category -->
+  <script src="app/category/category.service.js"></script>
   <!-- home -->
   <script src="app/home/home.controller.js"></script>
   <script src="app/home/home.factory.js"></script>
   <!-- search -->
   <script src="app/search/search.controller.js"></script>
   <script src="app/search/search.factory.js"></script>
-  <script src="app/search/search.filter.js"></script>
   <!-- login -->
   <script src="app/login/auth.provider.js"></script>
   <script src="app/login/login.controller.js"></script>
@@ -105,12 +106,16 @@
   <!-- user -->
   <script src="app/user/users.controller.js"></script>
   <script src="app/user/user.factory.js"></script>
+  <!-- role -->
+  <script src="app/role/role.service.js"></script>
   <!-- <script src="app/user/user.module.js"></script> -->
   <script src="app/user/user.service.js"></script>
   <!-- service -->
   <script src="app/service/service.factory.js"></script>
   <!-- profile -->
   <script src="app/profile/profile.controller.js"></script>
+  <!-- pending -->
+  <script src="app/pendingrestaurant/pending-restaurant.controller.js"></script>
   <!-- ionicPush -->
   <script src="app/ionicPush/ionicPush.service.js"></script>
   <!-- gallery -->
@@ -131,7 +136,6 @@
 </head>
 
 <body ng-app="app">
-
   <ion-side-menus ng-controller="AppCtrl" ng-cloak>
     <ion-side-menu-content>
       <!-- <div ng-class="{'grey-bg' : sidemenuopened}"></div> -->
@@ -147,8 +151,10 @@
       <ion-nav-view animation="slide-left"></ion-nav-view>
     </ion-side-menu-content>
 
+
     <ion-side-menu side="left" enable-menu-with-back-views="false">
       <ion-header-bar class="bar-profile">
+
         <div ng-show="firebaseUser" class="profile">
           <img class="sidebar-picture" ng-show="newPhotoURL" ng-src="{{firebaseUser.photoURL}}" style="width: 50px; height: 50px">
           <img class="sidebar-picture" ng-show="!newPhotoURL" ng-src="img/wow.jpg" style="width: 50px; height: 50px">
@@ -167,40 +173,42 @@
             <a class="item" href="#/tab/home">Profile</a>
             <div class="item item-divider"></div>
             <a class="item" href="#/tab/home">Profile</a> -->
-          <ion-item menu-close ui-sref="tabs.home" class="item-borderless ink" ng-show="firebaseUser">
-            <h2>Home</h2>
+          <ion-item menu-close ui-sref="tabs.home" class="item-borderless" ng-if="userRole.isAny">
+            Home
           </ion-item>
-          <ion-item menu-close ui-sref="login" class="item-borderless ink" ng-hide="firebaseUser">
-            <h2>Login or Signup</h2>
+          <ion-item menu-close ui-sref="login" class="item-borderless" ng-if="!userRole.isAny">
+            Login or Signup
           </ion-item>
           <!-- <ion-item menu-close ui-sref="signup" class="item-borderless" ng-hide="firebaseUser">
             Sign Up
           </ion-item> -->
-          <ion-item menu-close ui-sref="tabs.search" ng-show="firebaseUser" class="item-borderless ink">
-            <h2>Search</h2>
+          <ion-item menu-close ui-sref="tabs.search" ng-if="userRole.isAny" class="item-borderless">
+            Search
           </ion-item>
-          <ion-item menu-close ui-sref="profile" ng-show="firebaseUser" class="item-borderless ink">
-            <h2>Profile</h2>
-          </ion-item>
-          <hr ng-show="firebaseUser">
-          <ion-item menu-close ng-show="firebaseUser" ui-sref="tabs.restaurant" class="item-borderless ink">
-            <h2>Restaurants</h2>
-          </ion-item>
-          <ion-item menu-close ng-show="firebaseUser" class="item-borderless ink">
-            <h2>Notifications</h2>
-          </ion-item>
-          <ion-item menu-close ng-show="firebaseUser" class="item-borderless ink" ui-sref="tabs.orders">
-            <h2>Orders</h2>
+          <ion-item menu-close ui-sref="profile" ng-if="userRole.isAny" class="item-borderless">
+            Profile
           </ion-item>
           <hr ng-show="firebaseUser">
-          <ion-item menu-close ng-show="firebaseUser" class="item-borderless ink" ng-click="signOut()">
-            <h2>Sign Out</h2>
+          <ion-item ng-if="userRole.isAnyExceptUser" menu-close  ui-sref="tabs.restaurant" class="item-borderless">
+            Restaurants
+          </ion-item>
+          <ion-item menu-close ng-if="userRole.isAny" class="item-borderless">
+            Notifications
+          </ion-item>
+
+          <ion-item menu-close ng-controller="RestaurantCtrl" ng-if="userRole.isUser" class="item-borderless" ng-click="newRestaurant()">
+            Create Restaurant
+          </ion-item>
+          <hr ng-show="firebaseUser">
+          <ion-item menu-close ng-if="userRole.isAny" class="item-borderless" ng-click="signOut()">
+            Sign Out
           </ion-item>
         </ion-list>
       </ion-content>
     </ion-side-menu>
 
   </ion-side-menus>
+
 </body>
 
 

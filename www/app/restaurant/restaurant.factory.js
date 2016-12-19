@@ -14,18 +14,18 @@ app.factory("Restaurant", ["$firebaseArray", "User", "Database", "$firebaseObjec
     var Restaurant = {
       all: function() {
         return Database.restaurants();
-
       },
       getAuthUserRestaurants: function() {
         var authUserId = User.auth().$id;
         return $firebaseArray(restaurants.orderByChild("owner_id").equalTo(authUserId))
       },
       get: function(restaurantId) {
+        console.log('getting restaurantId from restaurnt.get')
+        console.log(restaurantId)
         return $firebaseObject(Database.restaurantsReference().child(restaurantId));
       },
       getPendingRestaurants: function() {
         return Database.pendings();
-        // return $firebaseArray(Database.pendingsReference())
       },
       getAverageRating: function(restaurantId) {
         console.log('getting averge rating to ' + restaurantId);
@@ -66,20 +66,11 @@ app.factory("Restaurant", ["$firebaseArray", "User", "Database", "$firebaseObjec
       getReservations: function(restaurantId) {
         return $firebaseArray(Database.restaurantReservationsReference().child(restaurantId));
       },
-      // getOrders : function(restaurantId) {
-      //   console.log('getting orders in restaurant factory');
-      //   return $firebaseArray(restaurantOrders.child(restaurantId))
-      // },
       getReviews: function(restaurantId) {
-        // return $firebaseArray(reviews.orderByChild('restaurant_id').equalTo(restaurantId));
         return $firebaseArray(restaurantReviews.child(restaurantId).limitToLast(5))
       },
       getOwner: function(restaurantId) {
-        // console.log('get owner method');
-        // return $firebaseObject(users.child(ownerId));
-        console.log(restaurantId);
         var res = restaurantsArray.$getRecord(restaurantId);
-        console.log(res);
         return $firebaseObject(users.child(res.owner_id))
       },
       getOrders: function(restaurantId) {
@@ -189,25 +180,46 @@ app.factory("Restaurant", ["$firebaseArray", "User", "Database", "$firebaseObjec
       },
       addCategory: function(category) {
         var categoryRef = restaurants.child(category.restaurant_id).child('menu_categories').push();
+
         return categoryRef.set({
           name: category.name
         })
       },
       addRestaurant: function(restaurant) {
+
+        console.log('adding restaurant here @@@@@@@@@@@@@@@');
+        console.log(restaurant.categories);
         delete restaurant['$id'];
         delete restaurant['$priority'];
         delete restaurant['$$hashKey'];
         var key = restaurants.push().key;
         var restaurantRef = restaurants.child(key);
+
+        for (var category in restaurant.categories) {
+          console.log(category)
+          console.log(restaurant.categories[category])
+          if (restaurant.categories[category]) {
+            Database.categoryRestaurantsReference().child(category).child('restaurants').child(key).set(true)
+              .then(() => { console.log('success on category adding' )})
+              .catch((err) => { console.log('Error'+ err) })
+          }
+        }
+        console.log(restaurant.categories);
         return {
           ref: restaurantRef.set(restaurant),
           key: key
         }
       },
       addPendingRestaurant: function(restaurant, location, lat, long, imageURL) {
+        if(imageURL == null) {
+          imageURL = ""
+        }
+        console.log(imageURL)
+
         var restObj = {
           name: restaurant.name.toLowerCase(),
           facilities: restaurant.facilities,
+          categories: restaurant.categories,
           openDays: restaurant.openDays,
           location: location,
           latitude: lat,
@@ -216,6 +228,7 @@ app.factory("Restaurant", ["$firebaseArray", "User", "Database", "$firebaseObjec
           cuisine: restaurant.cuisine,
           owner_id: User.auth().$id,
           photoURL: imageURL,
+          menu_categories : "",
           phonenumber: restaurant.phonenumber,
           openTime: restaurant.openTime.getTime(),
           closeTime: restaurant.closeTime.getTime(),

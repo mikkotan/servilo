@@ -29,6 +29,7 @@
     "cordova-plugin-dialogs",
     "cordova.plugins.diagnostic",
     "cordova-plugin-request-location-accuracy"
+    "uk.co.workingedge.phonegap.plugin.launchnavigator"
   ],
   "cordovaPlatforms": [
     "android"

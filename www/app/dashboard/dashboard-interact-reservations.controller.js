@@ -32,12 +32,6 @@ app.controller('DashboardInteractReservationsCtrl', function($scope, $stateParam
     }
   }
 
-  // $scope.upcomingFilter = function() {
-  //   return function(reservation) {
-  //     reservation.date = new Date(reservation.details.datetime)
-  //   }
-  // }
-
   $scope.bookReservation = function(reservation) {
     reservation.datetime = reservation.datetime.getTime()
     reservation.status = 'walk-in'

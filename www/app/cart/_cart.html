@@ -9,8 +9,7 @@
     <div class="card" ng-repeat="order in menus">
       <div class="item item-text-wrap">
         <img id="profile-image" ng-src={{order.menu.photoURL}}>
-        <p> Name: {{order.menu.name}} Price: {{order.menu.price}} Quantity: {{order.menu.quantity}} Subtotal : {{order.subtotal}}</p>
-
+        <p> Name: {{order.menu.name}} Price: {{order.menu.price | currency: '₱'}} Quantity: {{order.menu.quantity}} Subtotal : {{order.subtotal | currency: '₱'}}</p>
       </div>
       <div class="row">
         <div class="col">
@@ -26,7 +25,8 @@
       <div class="list">
         <label class="item item-input item-floating-label">
           <span class="input-label has-input">Total</span>
-          <input type="text" placeholder="Total" value="{{total}}">
+          <input type="text" placeholder="Total" value="{{total | currency: '₱'}}">
+
         </label>
 
         <a class="button button-small button-balanced" ng-click="useCurrent()">Use Current Location</a>

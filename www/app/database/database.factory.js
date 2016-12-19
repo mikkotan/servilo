@@ -24,6 +24,8 @@ app.factory("Database", ["$firebaseArray", "$firebaseObject", "$firebaseAuth",
     var facilitiesRef = rootRef.child('facilities');
     var promosRef = rootRef.child('promos');
     var advertisementsRef = rootRef.child('advertisements');
+    var categoriesRef = rootRef.child('categories');
+    var categoryRestaurantsRef = rootRef.child('category_restaurants');
 
 
 
@@ -97,6 +99,12 @@ app.factory("Database", ["$firebaseArray", "$firebaseObject", "$firebaseAuth",
       advertisementsReference : function() {
         return advertisementsRef;
       },
+      categoriesReference : function() {
+        return categoriesRef;
+      },
+      categoryRestaurantsReference : function() {
+        return categoryRestaurantsRef;
+      },
       services : function(){
         return $firebaseArray(serviceRef)
       },
@@ -140,8 +148,11 @@ app.factory("Database", ["$firebaseArray", "$firebaseObject", "$firebaseAuth",
         console.log(restaurantOrderRef.child(restaurantId));
         return $firebaseArray(restaurantOrdersRef.child(restaurantId));
       },
-      promos : function(){
+      promos : function() {
         return $firebaseArray(promosRef);
+      },
+      categories : function() {
+        return $firebaseArray(categoriesRef)
       }
     }
 

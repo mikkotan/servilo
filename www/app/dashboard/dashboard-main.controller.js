@@ -15,7 +15,8 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
         endDate : advertisement.endDate.getTime(),
         timestamp: firebase.database.ServerValue.TIMESTAMP
       }, $stateParams.restaurantId)
-        .then(() => {
+        .then((ad) => {
+          $scope.ad = ad
           alert('Advertisement Successfully created')
           $scope.advertiseModal.hide()
         })
@@ -26,16 +27,9 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
     }
 
     Advertisement.isAdvertised($stateParams.restaurantId)
-      .then((isAd) => {
-        $scope.isAdvertised = isAd;
-        if (isAd) {
-          Advertisement.get($stateParams.restaurantId).$loaded()
-            .then((ad) => {
-              var today = new Date()
-              $scope.ad = ad
-              $scope.isValid = ad.endDate > new Date()
-            })
-        }
+      .then((ad) => {
+        console.log(JSON.stringify(ad))
+        $scope.ad = ad
       })
 
     Restaurant.get($stateParams.restaurantId).$loaded()
@@ -128,21 +122,7 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
         .catch((err) => {
           console.log('Error on deleting: ' + err);
         })
-        // for (var menu in resObj.menus) {
-        //   var menusRef = firebase.database().ref().child('menus');
-        //   menusRef.child(menu).set(null);
-        // }
-        //
-        // for (var review in resObj.reviews) {
-        //   var reviewsRef = firebase.database().ref().child('reviews');
-        //   reviewsRef.child(review).set(null);
-        // }
-        //
-        // for (var reviewer in resObj.reviewers) {
-        //   var userReviewedRestaurantsRef = firebase.database().ref().child('users').child(reviewer).child('reviewed_restaurants');
-        //   console.log('reviewer ref' + userReviewedRestaurantsRef);
-        //   userReviewedRestaurantsRef.child(resObj.$id).set(null);
-        // }
+
       Database.restaurantMenusReference().child(resObj.$id).remove();
 
       Database.restaurantReservationsReference().child(resObj.$id).once('value')
@@ -228,6 +208,7 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
         id: 0
       };
       $scope.timeD = restaurant.openTime;
+
       $scope.eRestaurant = {
         resto: restaurant.name,
         $id: restaurant.$id,
@@ -242,15 +223,19 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
         location: restaurant.location,
         photoURL: restaurant.photoURL
       };
+
       $scope.data.location = {
         formatted_address : restaurant.location
       };
+
       $scope.restaurantEditModal.show();
+
       if (restaurant.photoURL) {
         $scope.imageURL = restaurant.photoURL;
       } else {
         $scope.imageURL = null;
       }
+
       $scope.restaurantName = restaurant.name;
       $scope.marker.coords = {
         latitude: restaurant.latitude,
@@ -339,6 +324,12 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
         $scope.$apply();
       }, Upload.getOptions(index));
       $scope.imageLoading = true;
+    }
+    $scope.checkIfAllfalse = function(arr) {
+        for (var i in arr) {
+            if (arr[i] === true) return false;
+        }
+        return true;
     }
   }
 ]);
