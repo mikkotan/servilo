@@ -326,10 +326,7 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
       $scope.imageLoading = true;
     }
     $scope.checkIfAllfalse = function(arr) {
-        for (var i in arr) {
-            if (arr[i] === true) return false;
-        }
-        return true;
+        return Restaurant.checkIfAllfalse(arr);
     }
   }
 ]);
