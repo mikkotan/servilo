@@ -1,6 +1,29 @@
 app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMaterialInk", "$timeout", "$ionicPopup", "CordovaGeolocation", "ionicToast", "$ionicLoading", "Search", "currentGeoLocation", "Restaurant", "$ionicActionSheet",
   function($scope, Auth, $state, User, ionicMaterialInk, $timeout, $ionicPopup, CordovaGeolocation, ionicToast, $ionicLoading, Search, currentGeoLocation, Restaurant, $ionicActionSheet) {
 
+    // $scope.isLocationAvailable = false; //mobile
+    $scope.isLocationAvailable = true; //browser
+    var checkLocation = function() {
+      if(ionic.Platform.isAndroid() || ionic.Platform.isIOS()) { //uncomment if working in browser 
+      cordova.plugins.diagnostic.isLocationAvailable(function(available) {
+        console.log("Location is " + (available ? "available" : "not available"));
+        if(available) {
+          $scope.isLocationAvailable = true;
+        } else {
+          $scope.isLocationAvailable = false;
+        }
+      }, function(error) {
+        console.error("The following error occurred: "+error);
+      });
+    } //uncomment if working in browser 
+    }
+    checkLocation();
+
+    $scope.doRefresh = function() {
+      checkLocation();
+      $scope.$broadcast('scroll.refreshComplete');
+    }
+
     ionicMaterialInk.displayEffect();
     $scope.$on('ngLastRepeat.workorderlist', function(e) {
       $scope.materialize();
@@ -16,14 +39,14 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
     $scope.listView = function() {
       $scope.showList = true;
       $scope.showMap = false;
-
     }
+
     $scope.materialize = function() {
       $timeout(function() {
-        // ionicMaterialMotion.fadeSlideInRight();
         ionicMaterialInk.displayEffect();
       }, 0);
     };
+
     $scope.filterName = 'name';
     $scope.changeFilter = function(filterName) {
       var previousFilterName = filterName;
@@ -117,16 +140,9 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
       })
     })
 
-    // Auth.$onAuthStateChanged(function(firebaseUser) {
-    //   if (firebaseUser) {
-    //     User.setOnline(firebaseUser.uid);
-    //   }
-    // })
-
     $scope.addMarkers = function(item) {
       $scope.markers.push(Search.getMarker(item));
     };
-
 
     $scope.markerEvents = {
       click: function(marker, eventName, model) {
@@ -142,24 +158,31 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
     };
 
     $scope.showNear = function() {
-      $scope.allowMarkerChange('', 'name');
-      var currentLocation = CordovaGeolocation.get();
-      $scope.markers.push(Search.getYouAreHere());
-      $scope.loading = true;
-      Search.getRestaurant().on("child_added", function(snapshot) {
-        if (Search.getNear(snapshot.key, snapshot.val())) {
-          $scope.loading = false;
-          var getNear = Search.getNear(snapshot.key, snapshot.val());
-          $scope.markers.push(getNear.marker);
-          $scope.restaurants.push(getNear.restaurant);
-        }
-      })
-      $scope.map.zoom = 14;
-      $scope.map.center = {
-        latitude: currentLocation.latitude,
-        longitude: currentLocation.longitude
-      };
-      isMarkerCanChange = false;
+      cordova.plugins.diagnostic.isLocationAvailable(function(available) { //comment to work on browser
+        if(available) {                                                    //comment to work on browser
+          $scope.allowMarkerChange('', 'name');
+          var currentLocation = CordovaGeolocation.get();
+          $scope.markers.push(Search.getYouAreHere());
+          $scope.loading = true;
+          Search.getRestaurant().on("child_added", function(snapshot) {
+            if (Search.getNear(snapshot.key, snapshot.val())) {
+              $scope.loading = false;
+              var getNear = Search.getNear(snapshot.key, snapshot.val());
+              $scope.markers.push(getNear.marker);
+              $scope.restaurants.push(getNear.restaurant);
+            }
+          })
+          $scope.map.zoom = 14;
+          $scope.map.center = {
+            latitude: currentLocation.latitude,
+            longitude: currentLocation.longitude
+          };
+          isMarkerCanChange = false;
+        }                           //comment to work on browser
+        else {                      //comment to work on browser
+          $scope.requestLocation(); //comment to work on browser
+        }                           //comment to work on browser
+      });                           //comment to work on browser
     };
 
     $scope.$watch('data.location.formatted_address', function(newValue) {
@@ -276,5 +299,30 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
       }
       $scope.allowMarkerChange('', 'location');
     }
+
+    $scope.requestLocation = function() {
+      cordova.plugins.diagnostic.isLocationAvailable(function(available) {
+        console.log("Location is " + (available ? "available" : "not available"));
+        if(!available) {
+          cordova.plugins.locationAccuracy.request(function(success) {
+            console.log("Successfully requested accuracy: "+success.message);
+            $scope.isLocationAvailable = true;
+            $scope.$apply();
+          }, function(error) {
+            console.error("Accuracy request failed: error code="+error.code+"; error message="+error.message);
+             if(error.code !== cordova.plugins.locationAccuracy.ERROR_USER_DISAGREED){
+                 if(window.confirm("Failed to automatically set Location Mode to 'High Accuracy'. Would you like to switch to the Location Settings page and do this manually?")){
+                     cordova.plugins.diagnostic.switchToLocationSettings();
+                 }
+             }
+          }, cordova.plugins.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY)
+        } else {
+          $scope.isLocationAvailable = true;
+        }
+      }, function(error) {
+        console.error("The following error occurred: "+error);
+      });
+    }
+
   }
 ]);

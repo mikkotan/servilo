@@ -14,8 +14,14 @@
 
     </div>
   </ion-header-bar>
-  <ion-content class="padding has-header">
-    <button class="button button-block button-balanced ink" ng-click="showNear()">Nearby Restaurants(1km)</button>
+  <ion-content class="padding">
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="doRefresh()"></ion-refresher>
+    <div ng-show="!isLocationAvailable">
+      <img ng-src="img/sad.png" width="100px"><br>
+      It looks like your location is turned off.<br>
+      <button class="button" ng-click="requestLocation()">Turn on location</button>
+    </div>
+    <button ng-disabled="!isLocationAvailable" class="button button-block button-balanced ink" ng-click="showNear()">Nearby Restaurants(1km)</button>
     <div ng-if="showMap">
     <!-- <div> -->
       <ui-gmap-google-map zoom='map.zoom' center="map.center" options='map.options' bounds='map.bounds' control='map.control' refresh=map.refresh events=map.events ng-cloak>
