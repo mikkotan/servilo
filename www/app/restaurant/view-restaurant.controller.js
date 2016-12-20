@@ -16,14 +16,22 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
     }
     $scope.user = User.auth();
 
+
     $scope.goToOrder = function() {
       $state.go('tabs.viewRestaurant.menus');
     }
 
-    
+
     var restaurantId = $stateParams.restaurantId;
     var userReviewsRef = Review.userReview(restaurantId);
     $scope.loadingReviews = false;
+
+    Restaurant.getAverageRating(restaurantId)
+      .then((res) => {
+        $scope.avg = res
+      });
+
+
     Restaurant.get(restaurantId).$loaded()
       .then(function(restaurant) {
         $scope.restaurant = restaurant;
@@ -142,7 +150,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
 
     $scope.addReview = function(review) {
       $ionicLoading.show();
-      try{
+      try {
         var newReview = Review.addReview(restaurantId, review);
         newReview.ref
           .then(function() {
@@ -168,10 +176,10 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
             alert(err);
             // $ionicLoading.hide();
           })
-        }catch(e){
-          $ionicLoading.hide();
-          $scope.submitError =true;
-        }
+      } catch (e) {
+        $ionicLoading.hide();
+        $scope.submitError = true;
+      }
     }
 
     $scope.openEditModal = function(review) {
@@ -300,5 +308,32 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
       $scope.viewReviewer = reviewer;
       $scope.viewItems = Gallery.get();
     }
+
+
+
+    $scope.days = {
+      '0': {
+        name: 'Monday'
+      },
+      '1': {
+        name: 'Tuesday'
+      },
+      '2': {
+        name: 'Wednesday'
+      },
+      '3': {
+        name: 'Thursday'
+      },
+      '4': {
+        name: 'Friday'
+      },
+      '5': {
+        name: 'Saturday'
+      },
+      '6': {
+        name: 'Sunday'
+      }
+    }
+
   }
 ]);

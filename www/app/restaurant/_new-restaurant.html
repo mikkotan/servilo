@@ -76,6 +76,10 @@
               </div>
               <div class="item">
                 <a class="button button-block button-royal icon-left ion-plus-circled" ng-click="setOpenDays()">Set Open Days</a>
+                <p ng-repeat="(key, val) in restaurant.openDays track by $index" ng-if="val === true">
+
+                  {{days[key].name}}
+                </p>
               </div>
               <div class="error" ng-show="submitError">
                 <p ng-show="restaurant.openDays==null || checkIfAllfalse(restaurant.openDays)">* Restaurant's open days is required</p>

@@ -1,19 +1,19 @@
 <ion-view view-title="{{restaurant.name}}">
-  <ion-content overflow-scroll="true" class="padding has-tabs-top">
-    <div ng-init='setMap(restaurant)'>
-      <h3>{{restaurant.location}}</h3>
+  <ion-content class="has-tabs-top" ng-init='setMap(restaurant)'>
+    <div class="list card">
+      <div class="item item-text-wrap">
+        <h2>{{restaurant.location}}</h2>
+        <hr>
+        <h4><b>Driving Path Distance:</b> {{drivingD}} KM</h4>
+        <h4><b>Walking Path Distance: </b> {{walkingD}} KM</h4>
+      </div>
     </div>
-    <img ng-src="https://maps.googleapis.com/maps/api/staticmap?center={{restaurant.latitude}},{{restaurant.longitude}}
-          &zoom=16
-          &size=300x300
-          &markers={{restaurant.latitude}},{{restaurant.longitude}}
-          &key=AIzaSyCTNmJQD-Z3qn5QmhC-Jfp4iZr6P6QV_tE" alt="Restaurant Map" ng-click="openMapModal(restaurant)">
-    <div class="row">
-      <h4><b>Driving Path Distance:</b> {{drivingD}} KM</h4>
-    </div>
-    <div class="row">
-      <h4><b>Walking Path Distance: </b> {{walkingD}} KM</h4>
-    </div>
+    <div>
+      <img class="static-map" ng-src="https://maps.googleapis.com/maps/api/staticmap?center={{restaurant.latitude}},{{restaurant.longitude}}
+              &zoom=16
+              &size=300x300
+              &markers={{restaurant.latitude}},{{restaurant.longitude}}
+              &key=AIzaSyCTNmJQD-Z3qn5QmhC-Jfp4iZr6P6QV_tE" alt="Restaurant Map" ng-click="openMapModal(restaurant)">
     </div>
   </ion-content>
 </ion-view>

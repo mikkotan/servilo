@@ -8,7 +8,7 @@ app.controller("DashboardMenusCtrl", ["$scope", "$stateParams", "$ionicModal", "
     Restaurant.getMenus($scope.restoId).$loaded()
       .then((menus) => {
         $scope.restaurantMenus = menus;
-        
+
         if (menus.length !== 0) {
           $ionicLoading.show();
         }
@@ -33,7 +33,7 @@ app.controller("DashboardMenusCtrl", ["$scope", "$stateParams", "$ionicModal", "
     $scope.photoURL = "";
 
 
-    $scope.showAddCategoryModal = function() {
+    $scope.showAddCategoryModal = function(resId) {
       $scope.category = {
         restaurant_id: resId
       }

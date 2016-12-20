@@ -1,6 +1,9 @@
 <ion-view view-title="{{restaurant.name}}">
+  <ion-floating-menu has-footer="true" menu-color="#886aea" menu-icon="ion-android-cart" menu-open-color="#444" menu-open-icon="ion-arrow-down-b" backdrop="true">
+    <ion-floating-item icon="ion-android-cart" click="viewCart()" button-color="#387ef5" text="View Cart"></ion-floating-item>
+  </ion-floating-menu>
   <ion-content class="padding has-tabs-top">
-    <button class="button button-calm" ng-di ng-click="viewCart()"> <i class="ion-android-cart"> </i> Cart{{count}}</button>
+    <!-- <button class="button button-calm" ng-di ng-click="viewCart()"> <i class="ion-android-cart"> </i> Cart{{count}}</button> -->
     <ion-list>
       <h1>{{status}}</h1>
       <h6>Promos</h6>
@@ -23,6 +26,9 @@
           </div>
         </ion-slide-page>
       </ion-slides>
+      <ion-item ng-repeat="category in categories">
+        <h3>{{category.name}}</h3>
+      </ion-item>
       <ion-item ng-repeat="menu in menus" ng-if="menu.ready">
         <h3>{{menu.details.name}}</h3>
         <img id="profile-image" ng-src="{{menu.details.photoURL}}">
@@ -32,7 +38,21 @@
           P {{menu.details.price}}
         </p>
       </ion-item>
-    </ion-list>
 
+    </ion-list>
+<h1> New way to display </h1>
+    <ion-list>
+      <div ng-repeat="category in categories">
+        <ion-item class="item-stable" ng-click="toggleGroup(category)" ng-class="{active: isGroupShown(category)}">
+          <i class="icon" ng-class="isGroupShown(category) ? 'ion-minus' : 'ion-plus'"></i> &nbsp; {{category.name}}
+        </ion-item>
+        <ion-item class="item-accordion" ng-show="isGroupShown(category)">
+         hehehe
+        </ion-item>
+        <!-- <ion-item class="item-accordion" ng-repeat="item in group.items" ng-show="isGroupShown(category)">
+          {{item}}
+        </ion-item> -->
+      </div>
+    </ion-list>
   </ion-content>
 </ion-view>

@@ -102,9 +102,9 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
 
 
     $scope.options = {
-      loop: true,
+      loop: false,
       effect: 'slide',
-      autoplay: 5000,
+      autoplay: 3000,
       speed: 500,
       paginationHide: true
     }

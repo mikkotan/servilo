@@ -28,7 +28,8 @@ ul.rating li i {
 .tab-item.activated,
 .tab-item.active,
 .tab-item.tab-item-active {
-  color: #ef473a;
+  color: #B71C1C !important;
+  border-color: #B71C1C !important;
 }
 .angular-google-map-container {
   height: 375px;
@@ -255,8 +256,8 @@ ion-popover-view.fit ion-content {
   border: none;
   color: white;
 }
-.custom hr {
-  border: 1px solid #666;
+.custom-hr {
+  border: 1px solid #666 !important;
 }
 .custom .item-complex .item-content,
 .dark .item-radio .item-content {
@@ -343,4 +344,59 @@ a.button.button-block {
 .border-top-bottom {
   border-bottom: thin solid #000 !important;
   border-top: thin solid #000 !important;
+}
+.open h2,
+.open p {
+  color: green !important;
+}
+.closed h2,
+.closed p {
+  color: red !important;
+}
+.faded {
+  opacity: 0.5;
+}
+.bold {
+  font-weight: bold;
+}
+.gallery-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 100;
+  display: block;
+}
+.gallery-button-div {
+  display: block;
+}
+.relative {
+  position: relative !important;
+  z-index: -1;
+}
+.list .item.item-accordion {
+  line-height: 38px;
+  padding-top: 0;
+  padding-bottom: 0;
+  transition: 0.09s all linear;
+}
+.list .item.item-accordion.ng-hide {
+  line-height: 0;
+}
+.list .item.item-accordion.ng-hide-add,
+.list .item.item-accordion.ng-hide-remove {
+  display: block !important;
+}
+
+// to allow user to hold and select text for easy copy-pasting
+body {
+  -webkit-user-select: auto !important;
+  .scroll {
+    -webkit-user-select: inherit;
+  }
+}
+.title{
+   text-align: center !important;
+}
+.static-map {
+  width: 100%;
 }
