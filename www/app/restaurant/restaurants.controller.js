@@ -128,26 +128,17 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
 
     $scope.imageURL = "";
     $scope.upload = function(index) {
-      var source = Upload.getSource(index);
-      var options = Upload.getOptions(source);
-      $cordovaCamera.getPicture(options).then(function(imageData) {
-        var restaurantRef = Upload.restaurant(imageData);
-        $scope.progress = 1;
-        restaurantRef.on('state_changed', function(snapshot) {
-          var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log('Upload is ' + progress + '% done');
-          $scope.progress = progress;
-        }, function(error) {
-          console.log("error in uploading." + error);
-        }, function() {
-          //success upload
-          $scope.imageURL = restaurantRef.snapshot.downloadURL;
-          $scope.$apply();
-        });
-
-      }, function(error) {
-        console.error(error);
-      });
+      navigator.camera.getPicture(function(imageData) {
+        Upload.restaurant(imageData).then(function(downloadURL) {
+          $scope.imageLoading = false;
+          $scope.imageURL = downloadURL;
+        })
+      }, function(message) {
+        console.log('Failed because: ' + message);
+        $scope.imageLoading = false;
+        $scope.$apply();
+      }, Upload.getOptions(index));
+      $scope.imageLoading = true;
     }
 
     var clearFields = function(restaurant) {
