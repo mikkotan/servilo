@@ -89,12 +89,12 @@ app.factory("Upload", ["Database", "$firebaseArray", "$q",
         quality : 50,
         destinationType : Camera.DestinationType.DATA_URL,
         sourceType : source,
-        // allowEdit : true,
         encodingType: Camera.EncodingType.JPEG,
         popoverOptions: CameraPopoverOptions,
         targetWidth: 700,
         targetHeight: 700,
         mediaType: Camera.MediaType.PICTURE,
+        allowEdit : true,
         correctOrientation: true,
         saveToPhotoAlbum: false
       }
