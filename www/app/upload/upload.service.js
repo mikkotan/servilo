@@ -29,7 +29,6 @@ app.factory("Upload", ["Database", "$firebaseArray", "$q",
           console.log("error in uploading." + error);
         }, function() {
           var downloadURL = reviewsRef.snapshot.downloadURL;
-          // deferred.resolve(downloadURL);
           ///thumb
           var base64Cut = base64.substring(34);
           window.imageResizer.resizeImage(
@@ -90,12 +89,12 @@ app.factory("Upload", ["Database", "$firebaseArray", "$q",
         quality : 50,
         destinationType : Camera.DestinationType.DATA_URL,
         sourceType : source,
-        // allowEdit : true,
         encodingType: Camera.EncodingType.JPEG,
         popoverOptions: CameraPopoverOptions,
         targetWidth: 700,
         targetHeight: 700,
         mediaType: Camera.MediaType.PICTURE,
+        allowEdit : true,
         correctOrientation: true,
         saveToPhotoAlbum: false
       }

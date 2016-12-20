@@ -125,17 +125,24 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
     }
 
     $scope.images = [];
+    $scope.isUploadDone = true;
     $scope.selImages = function() {
       window.imagePicker.getPictures(function(results) {
+        (results.length > 0) ? ($scope.isUploadDone = false) : ($scope.isUploadDone = true);
+        $scope.$apply();
+        var count = 0;
         for (var i = 0; i < results.length; i++) {
           Upload.review(results[i]).then(function(downloadURL) {
             $scope.images.push(downloadURL);
+            count++;
+            $scope.isUploadDone = (count == results.length) ? true : false;
           })
         }
       }, function(error) {
-        console.log('Error: ' + JSON.stringify(error));
+          $scope.isUploadDone = true;
+          console.log('Error: ' + JSON.stringify(error));
       }, Upload.getMultipleUploadOptions());
-    };
+    }
 
     var clearReview = function(review) {
       review.content = '';

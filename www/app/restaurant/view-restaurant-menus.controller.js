@@ -26,14 +26,32 @@ app.controller("ViewRestaurantMenus", ["$scope", "$stateParams", "$state", "rest
       }
     }
 
+    Restaurant.getCategories(restaurantId).$loaded()
+      .then((categories) => {
+        $scope.categories = categories.map(function(category) {
+          var c = {
+            name : category.name,
+            getMenus : Menu.getMenusFromCategories(restaurantId, category.$id).$loaded()
+              .then((menus) => {
+                c.menus = menus.map(function(menu) {
+                  var m = {
+                    get: Menu.get(menu.$id).$loaded()
+                      .then((menuObj) => {
+                        m.details = menuObj
+                      })
+                  }
+                  return m
+                })
+              })
+          }
+          return c
+        })
+      })
+
     Restaurant.getPromos(restaurantId).$loaded()
       .then((promos) => {
         $scope.promos = promos
       })
-      .catch((err) => {
-        alert(err)
-      })
-
     Restaurant.getMenus(restaurantId).$loaded()
       .then((menus) => {
         if (menus.length == 0) {

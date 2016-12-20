@@ -1,22 +1,27 @@
 <ion-view view-title="Search" ng-class="{'bar-subheader-slide-away': slideHeader}">
   <ion-header-bar class="bar bar-subheader bar-light item-input-inset">
     <div class="item item-input">
-      <input ng-show="data.filter == 'name' || data.filter == 'menu'" placeholder="Search by {{data.filter}}..." type="search" ng-model="searchRestaurant" ng-model-options="{ debounce: 500 }" ng-change="allowMarkerChange(searchRestaurant, data.filter)" />
-      <input ng-show="data.filter == 'location'" class="input-form" type="text" placeholder="Search by location..." google-autocomplete-suggestion location="data.location" on-selection="onAddressSelection(location)" country-code="{{countryCode}}" ng-model="data.location.formatted_address"
-          readonly />
+      <input ng-show="filterName == 'name' || filterName == 'menu'" placeholder="Search by {{filterName}}..." type="search" ng-model="searchRestaurant" ng-model-options="{ debounce: 500 }" ng-change="allowMarkerChange(searchRestaurant, filterName)" />
+      <input ng-show="filterName == 'location'" class="input-form" type="text" placeholder="Search by location..." google-autocomplete-suggestion location="data.location" on-selection="onAddressSelection(location)" country-code="{{countryCode}}" ng-model="data.location.formatted_address" readonly />
 
       <button class="button button-icon icon ion-close-circled" ng-show="searchRestaurant" ng-click="clearField()"></button>
       <button class="button button-icon icon ion-close-circled" ng-show="data.location.formatted_address" ng-click="clearLocationField()"></button>
     </div>
     <div class="buttons">
-      <button class="button button-assertive no-padding ink icon ion-levels" ng-click="changeFilter()"></button>
+      <button class="button button-assertive no-padding ink icon ion-levels" ng-click="changeFilter(filterName)"></button>
       <button class="button button-royal no-padding ink icon ion-map" ng-show="showList" ng-click="mapView()"></button>
       <button class="button button-royal no-padding ink icon ion-ios-list-outline" ng-show="showMap" ng-click="listView()"></button>
 
     </div>
   </ion-header-bar>
-  <ion-content class="padding has-header">
-    <button class="button button-block button-balanced ink" ng-click="showNear()">Nearby Restaurants(1km)</button>
+  <ion-content class="padding">
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="doRefresh()"></ion-refresher>
+    <div ng-show="!isLocationAvailable">
+      <img ng-src="img/sad.png" width="100px"><br>
+      It looks like your location is turned off.<br>
+      <button class="button" ng-click="requestLocation()">Turn on location</button>
+    </div>
+    <button ng-disabled="!isLocationAvailable" class="button button-block button-balanced ink" ng-click="showNear()">Nearby Restaurants(1km)</button>
     <div ng-if="showMap">
     <!-- <div> -->
       <ui-gmap-google-map zoom='map.zoom' center="map.center" options='map.options' bounds='map.bounds' control='map.control' refresh=map.refresh events=map.events ng-cloak>

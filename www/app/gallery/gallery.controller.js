@@ -1,6 +1,6 @@
-app.controller("GalleryCtrl", ["$scope", "Gallery", "$timeout",
-  function($scope, Gallery, $timeout) {
-
+app.controller("GalleryCtrl", ["$scope", "Gallery", "$timeout", "$ionicLoading",
+  function($scope, Gallery, $timeout, $ionicLoading) {
+  $ionicLoading.hide()
   $scope.items = Gallery.get();
   $scope.loadContent = false;
   

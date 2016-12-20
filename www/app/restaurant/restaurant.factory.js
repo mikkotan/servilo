@@ -27,6 +27,9 @@ app.factory("Restaurant", ["$firebaseArray", "User", "Database", "$firebaseObjec
       getPendingRestaurants: function() {
         return Database.pendings();
       },
+      getCategories : function(restaurantId) {
+        return $firebaseArray(Database.restaurantsReference().child(restaurantId).child('menu_categories'))
+      },
       getAverageRating: function(restaurantId) {
         console.log('getting averge rating to ' + restaurantId);
         return Database.restaurantReviewsReference().child(restaurantId).once('value')
@@ -292,6 +295,12 @@ app.factory("Restaurant", ["$firebaseArray", "User", "Database", "$firebaseObjec
           reviewId: reviewId,
           restaurantId: restaurantId
         }
+      },
+      checkIfAllfalse: function(arr) {
+          for (var i in arr) {
+              if (arr[i] === true) return false;
+          }
+          return true;
       }
     }
     return Restaurant;

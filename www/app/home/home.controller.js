@@ -21,13 +21,24 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
           })
         })
     }
-    $scope.goResto = function(id) {
-      $state.go('tabs.viewRestaurant.main', {
-        restaurantId: id
-      })
-    }
-
-
+    //comment for now
+    // cordova.plugins.diagnostic.isLocationAvailable(function(available) {
+    //   console.log("Location is " + (available ? "available" : "not available"));
+    //   if(!available) {
+    //     cordova.plugins.locationAccuracy.request(function(success) {
+    //       console.log("Successfully requested accuracy: "+success.message);
+    //     }, function(error) {
+    //       console.error("Accuracy request failed: error code="+error.code+"; error message="+error.message);
+    //        if(error.code !== cordova.plugins.locationAccuracy.ERROR_USER_DISAGREED){
+    //            if(window.confirm("Failed to automatically set Location Mode to 'High Accuracy'. Would you like to switch to the Location Settings page and do this manually?")){
+    //                cordova.plugins.diagnostic.switchToLocationSettings();
+    //            }
+    //        }
+    //     }, cordova.plugins.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY)
+    //   }
+    // }, function(error) {
+    //   console.error("The following error occurred: "+error);
+    // });
 
     Category.getAllCategories().$loaded()
       .then((categoryRestaurants) => {
@@ -57,7 +68,6 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
           })
         })
       })
-
 
     Advertisement.getRestaurants().$loaded()
       .then((restaurants) => {
@@ -138,28 +148,28 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
       });
     };
 
-    $scope.searchChange = function(name) {
-      if (name !== '') {
-        // first solution
-        // var results = [];
-        // Home.search(name).on("child_added", function(snapshot) {
-        //   results.push(snapshot.val());
-        //   vm.restaurants = results;
-        //   $scope.$apply();
-        // })
+    // $scope.searchChange = function(name) {
+    //   if (name !== '') {
+    //     // first solution
+    //     // var results = [];
+    //     // Home.search(name).on("child_added", function(snapshot) {
+    //     //   results.push(snapshot.val());
+    //     //   vm.restaurants = results;
+    //     //   $scope.$apply();
+    //     // })
 
-        // second solution
-        Home.search(name).$loaded().then(function(data) {
-          if (data.length <= 0) {
-            console.log('no results found! :(');
-          }
-          vm.restaurants = $scope.solveDistances(data);
-          console.log(vm.restaurants);
-        });
-      } else {
-        vm.restaurants = Home.srestaurants();
-      }
-    }
+    //     // second solution
+    //     Home.search(name).$loaded().then(function(data) {
+    //       if (data.length <= 0) {
+    //         console.log('no results found! :(');
+    //       }
+    //       vm.restaurants = $scope.solveDistances(data);
+    //       console.log(vm.restaurants);
+    //     });
+    //   } else {
+    //     vm.restaurants = Home.srestaurants();
+    //   }
+    // }
 
     $scope.solveDistances = function(data) {
       angular.forEach(data, function(restaurant) {

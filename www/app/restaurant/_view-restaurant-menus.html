@@ -6,6 +6,12 @@
     <!-- <button class="button button-calm" ng-di ng-click="viewCart()"> <i class="ion-android-cart"> </i> Cart{{count}}</button> -->
     <ion-list>
       <h1>{{status}}</h1>
+      <li ng-repeat="category in categories">
+        {{category.name}}
+        <p ng-repeat="menu in category.menus">
+
+        </p>
+      </li>
       <h6>Promos</h6>
       <ion-slides options="options" slider="data.slider">
         <ion-slide-page ng-repeat="promo in promos | filter:promoFilter()">
@@ -49,9 +55,13 @@
         <ion-item class="item-accordion" ng-show="isGroupShown(category)">
          hehehe
         </ion-item>
-        <!-- <ion-item class="item-accordion" ng-repeat="item in group.items" ng-show="isGroupShown(category)">
-          {{item}}
-        </ion-item> -->
+        <ion-item class="item-accordion item-thumbnail-left" ng-repeat="menu in category.menus" ng-show="isGroupShown(category)">
+            <h3>{{menu.details.name}}</h3>
+            <img ng-src="{{menu.details.photoURL}}">
+            <button class="button button-calm" ng-disabled="!menu.details.availability" ng-click="addToCart(menu.details)">Buy</button>
+            <p>{{availability(menu.details)}}</p>
+            <p>P {{menu.details.price}}</p>
+        </ion-item>
       </div>
     </ion-list>
   </ion-content>

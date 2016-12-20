@@ -1,7 +1,5 @@
-app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMenuDelegate", "ionicMaterialMotion", "User",
-"$state", "$ionicLoading", "$ionicModal", "Database", "IonicPushService", "$ionicPopup", "$timeout",
-  function($scope, Auth, ionicMaterialInk, $ionicSideMenuDelegate, ionicMaterialMotion, User, $state, $ionicLoading,
-    $ionicModal, Database, IonicPushService, $ionicPopup, $timeout) {
+app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMenuDelegate", "ionicMaterialMotion", "User", "$state", "$ionicLoading", "$ionicModal", "Database", "IonicPushService", "$ionicPopup", "$timeout", "$ionicHistory",
+  function($scope, Auth, ionicMaterialInk, $ionicSideMenuDelegate, ionicMaterialMotion, User, $state, $ionicLoading, $ionicModal, Database, IonicPushService, $ionicPopup, $timeout, $ionicHistory) {
     $scope.passwordType= "password";
     ionicMaterialInk.displayEffect();
     $timeout(function() {
@@ -47,7 +45,12 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMe
                   IonicPushService.registerToAuth();
                 }
                 console.log('Firebase Google login success');
-                $state.go("tabs.home");
+                $state.go("tabs.home").then(function() {
+                  $ionicHistory.nextViewOptions({
+                    disableAnimate: false,
+                    disableBack: true
+                  });
+                })
               })
             },
             function(error) {
@@ -99,7 +102,12 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMe
                   IonicPushService.registerToAuth();
                 }
                 console.log('Firebase Twitter login success');
-                $state.go("tabs.home");
+                $state.go("tabs.home").then(function() {
+                  $ionicHistory.nextViewOptions({
+                    disableAnimate: false,
+                    disableBack: true
+                  });
+                })
               })
             },
             function(error) {
@@ -124,8 +132,13 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMe
             IonicPushService.registerToAuth();
           }
           $ionicLoading.hide();
+          $state.go("tabs.home").then(function() {
+            $ionicHistory.nextViewOptions({
+              disableAnimate: false,
+              disableBack: true
+            });
+          })
 
-          $state.go("tabs.home")
           user.password = "";
           user.email = "";
         })
@@ -166,7 +179,12 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMe
                 }
                 console.log('Firebase Facebook login success');
                 $ionicLoading.hide();
-                $state.go("tabs.home")
+                $state.go("tabs.home").then(function() {
+                  $ionicHistory.nextViewOptions({
+                    disableAnimate: false,
+                    disableBack: true
+                  });
+                })
               })
             },
             function(error) {
