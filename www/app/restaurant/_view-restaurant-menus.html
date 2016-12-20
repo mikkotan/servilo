@@ -3,6 +3,12 @@
     <button class="button button-calm" ng-di ng-click="viewCart()"> <i class="ion-android-cart"> </i> Cart{{count}}</button>
     <ion-list>
       <h1>{{status}}</h1>
+      <li ng-repeat="category in categories">
+        {{category.name}}
+        <p ng-repeat="menu in category.menus">
+          {{menu.details.name}}
+        </p>
+      </li>
       <h6>Promos</h6>
       <ion-slides options="options" slider="data.slider">
         <ion-slide-page ng-repeat="promo in promos | filter:promoFilter()">

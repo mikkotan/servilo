@@ -27,6 +27,9 @@ app.factory("Restaurant", ["$firebaseArray", "User", "Database", "$firebaseObjec
       getPendingRestaurants: function() {
         return Database.pendings();
       },
+      getCategories : function(restaurantId) {
+        return $firebaseArray(Database.restaurantsReference().child(restaurantId).child('menu_categories'))
+      },
       getAverageRating: function(restaurantId) {
         console.log('getting averge rating to ' + restaurantId);
         return Database.restaurantReviewsReference().child(restaurantId).once('value')
