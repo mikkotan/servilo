@@ -21,6 +21,8 @@
   </author>
   <content src="index.html"/>
   <access origin="*"/>
+  <preference name="android-minSdkVersion" value="16"/>
+  <preference name="android-targetSdkVersion" value="24"/>
   <preference name="xwalkVersion" value="xwalk_core_library_beta:19+"/>
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>

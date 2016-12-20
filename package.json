@@ -27,7 +27,6 @@
     "cordova-plugin-image-resizer",
     "cordova-plugin-network-information",
     "cordova-plugin-dialogs",
-    "cordova.plugins.diagnostic",
     "cordova-plugin-request-location-accuracy",
     "uk.co.workingedge.phonegap.plugin.launchnavigator",
     "cordova-plugin-network-information@~1.3.1",

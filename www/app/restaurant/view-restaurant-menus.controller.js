@@ -36,11 +36,7 @@ app.controller("ViewRestaurantMenus", ["$scope", "$state", "restaurantId", "Cart
                   var m = {
                     get: Menu.get(menu.$id).$loaded()
                       .then((menuObj) => {
-                        console.log(menuObj)
                         m.details = menuObj
-                        console.log('details here')
-                        console.log(m.details)
-                        $scope.$apply()
                       })
                   }
                   return m
