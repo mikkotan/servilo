@@ -24,8 +24,8 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
         $scope.restaurant = restaurant;
         User.hasFavored(restaurant.$id)
           .then((val) => {
-            console.log('Hasfavored from controller : '+val)
-            $scope.hasFavored = val
+            console.log('Hasfavored from controller : '+val.exists)
+            $scope.hasFavored = val.exists
             $scope.restaurantOpenStatus = Restaurant.getRestaurantOpenStatus(restaurant);
             var restaurantStatus = Restaurant.getRestaurantStatus(restaurant.owner_id)
             restaurantStatus.on('value', function(snap) {
@@ -100,7 +100,17 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
     }
 
     $scope.addToFavorites = function(restaurant) {
-      User.addToFavorites(restaurant);
+      $ionicPopup.confirm({
+        title: 'Add to Favorites',
+        template: "Add '" + restaurant.name + "' to favorites?"
+      })
+        .then((res) => {
+          User.addToFavorites(restaurant)
+            .then((val) => {
+              $scope.hasFavored = val.exists
+              $scope.$apply()
+            })
+        })
     }
 
     $scope.showAddReservationModal = function() {

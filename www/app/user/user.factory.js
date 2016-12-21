@@ -55,24 +55,13 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
     },
     addToFavorites : function(restaurant) {
       var authId = firebase.auth().currentUser.uid;
-      $ionicPopup.confirm({
-        title: 'Add to Favorites',
-        template: "Add '" + restaurant.name + "' to favorites?"
-      })
-        .then((res) => {
-          if (res) {
-            Database.userFavoritesReference().child(authId).child(restaurant.$id).set(true);
-            this.hasFavored(restaurant.$id);
-          }
-          else {
-            console.log('Cancel add to favorites');
-          }
+      return Database.userFavoritesReference().child(authId).child(restaurant.$id).set(true)
+        .then(() => {
+          return this.hasFavored(restaurant.$id)
         })
     },
     removeFromFavorites : function(restaurant) {
       var authId = firebase.auth().currentUser.uid;
-      console.log(restaurant.restaurant.$id);
-      console.log(restaurant.name);
       $ionicPopup.confirm({
         title: 'Remove from Favorites',
         template: "Remove '" + restaurant.name + "' from favorites?"
@@ -91,7 +80,10 @@ app.factory("User",["$firebaseObject" , "$firebaseAuth","$firebaseArray", "UserF
       return Database.userFavoritesReference().child(authId).child(restaurantId).once('value')
         .then((snapshot) => {
           console.log('hasFavored from User.service : '+ (snapshot.val() !== null))
-          return (snapshot.val() !== null)
+          return {
+            exists : (snapshot.val() !== null),
+            value : snapshot.val()
+          }
         })
     },
     register : function(userId){
