@@ -2,8 +2,8 @@
   <ion-header-bar class="bar bar-header bar-assertive">
     <h1 class="title">Order Form</h1>
     <div class="buttons">
-    <button class="button button-clear button-primary" ng-click="addToCartModal.hide()"><i class="icon ion-ios-close"></i></button>
-</div>
+      <button class="button button-clear button-primary" ng-click="addToCartModal.hide()"><i class="icon ion-ios-close"></i></button>
+    </div>
   </ion-header-bar>
   <ion-content class="padding">
     <ion-list>
@@ -21,10 +21,14 @@
             </label>
             <label class="item item-input item-floating-label">
               <span class="input-label has-input">Quantity</span>
-              <input type="number" placeholder="Quantity" ng-model="menu.quantity" min="0" ng-required=true name="quantity" autofocus>
+              <input type="number" placeholder="Quantity" ng-model="menu.quantity" ng-change="computeSubtotal(menu.quantity)" min="0" ng-required=true name="quantity" autofocus>
               <div class="error">
                 <p ng-show="submitUndefined">* Quantity is undefined</p>
               </div>
+            </label>
+            <label class="item item-input item-floating-label">
+              <span class="input-label has-input">Subtotal</span>
+              <input type="text" placeholder="Subtotal" value="{{subtotal | currency: '₱'}}" readonly>
             </label>
             <div class="row">
               <button class="button button-block button-balanced ink">Add to Cart</button>

@@ -1,23 +1,23 @@
 app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMaterialInk", "$timeout", "$ionicPopup", "CordovaGeolocation", "ionicToast", "$ionicLoading", "Search", "currentGeoLocation", "Restaurant", "$ionicActionSheet",
   function($scope, Auth, $state, User, ionicMaterialInk, $timeout, $ionicPopup, CordovaGeolocation, ionicToast, $ionicLoading, Search, currentGeoLocation, Restaurant, $ionicActionSheet) {
 
-    $scope.isLocationAvailable = false; //mobile
-    // $scope.isLocationAvailable = true; //browser
-    // var checkLocation = function() {
-    //   if(ionic.Platform.isAndroid() || ionic.Platform.isIOS()) { //uncomment if working in browser
-    //   cordova.plugins.diagnostic.isLocationAvailable(function(available) {
-    //     console.log("Location is " + (available ? "available" : "not available"));
-    //     if(available) {
-    //       $scope.isLocationAvailable = true;
-    //     } else {
-    //       $scope.isLocationAvailable = false;
-    //     }
-    //   }, function(error) {
-    //     console.error("The following error occurred: "+error);
-    //   });
-    // } //uncomment if working in browser
-    // }
-    // checkLocation();
+    // $scope.isLocationAvailable = false; //mobile
+    $scope.isLocationAvailable = true; //browser
+    var checkLocation = function() {
+      if(ionic.Platform.isAndroid() || ionic.Platform.isIOS()) { //uncomment if working in browser
+      cordova.plugins.diagnostic.isLocationAvailable(function(available) {
+        console.log("Location is " + (available ? "available" : "not available"));
+        if(available) {
+          $scope.isLocationAvailable = true;
+        } else {
+          $scope.isLocationAvailable = false;
+        }
+      }, function(error) {
+        console.error("The following error occurred: "+error);
+      });
+    } //uncomment if working in browser
+    }
+    checkLocation();
 
     $scope.doRefresh = function() {
       checkLocation();
@@ -158,8 +158,8 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
     };
 
     $scope.showNear = function() {
-      cordova.plugins.diagnostic.isLocationAvailable(function(available) { //comment to work on browser
-        if(available) {                                                    //comment to work on browser
+    //   cordova.plugins.diagnostic.isLocationAvailable(function(available) { //comment to work on browser
+    //     if(available) {                                                    //comment to work on browser
           $scope.allowMarkerChange('', 'name');
           var currentLocation = CordovaGeolocation.get();
           $scope.markers.push(Search.getYouAreHere());
@@ -178,11 +178,11 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
             longitude: currentLocation.longitude
           };
           isMarkerCanChange = false;
-        }                           //comment to work on browser
-        else {                      //comment to work on browser
-          $scope.requestLocation(); //comment to work on browser
-        }                           //comment to work on browser
-      });                           //comment to work on browser
+        // }                           //comment to work on browser
+        // else {                      //comment to work on browser
+        //   $scope.requestLocation(); //comment to work on browser
+        // }                           //comment to work on browser
+    //   });                           //comment to work on browser
     };
 
     $scope.$watch('data.location.formatted_address', function(newValue) {

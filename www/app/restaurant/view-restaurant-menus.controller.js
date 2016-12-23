@@ -88,7 +88,7 @@ app.controller("ViewRestaurantMenus", ["$scope", "$stateParams", "$state", "rest
 
 
     $scope.availability = function(menu) {
-      return menu.availability ? "Available" : "Currently not available"
+      return menu.availability ? "Add to cart" : "Currently not available"
     }
 
     $scope.addToCart = function(menu) {
@@ -130,6 +130,10 @@ app.controller("ViewRestaurantMenus", ["$scope", "$stateParams", "$state", "rest
     var closeModal = function() {
       $state.go("tabs.viewRestaurant.menus");
       $scope.addToCartModal.hide();
+    }
+
+    $scope.computeSubtotal = function(quantity){
+        $scope.subtotal = $scope.menuPrice * quantity;
     }
 
     $scope.sendToCart = function(menu) {

@@ -386,7 +386,6 @@ a.button.button-block {
 .list .item.item-accordion.ng-hide-remove {
   display: block !important;
 }
-
 // to allow user to hold and select text for easy copy-pasting
 body {
   -webkit-user-select: auto !important;
@@ -394,8 +393,8 @@ body {
     -webkit-user-select: inherit;
   }
 }
-.title{
-   text-align: center !important;
+.title {
+  text-align: center !important;
 }
 .static-map {
   width: 100%;

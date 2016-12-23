@@ -2,7 +2,7 @@ app.controller("ViewRestaurantLocation", ["$scope", "$state", "$ionicModal", "Co
   function($scope, $state, $ionicModal, CordovaGeolocation) {
   $scope.modalControl ={};
   $scope.mapDirection = [];
-  // $scope.currentLocation = CordovaGeolocation.get();
+  $scope.currentLocation = CordovaGeolocation.get();
   $scope.restaurantMarkers = [];
 
   $scope.setMap = function(restaurant) {
