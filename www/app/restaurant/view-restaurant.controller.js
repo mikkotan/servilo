@@ -21,7 +21,6 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
       $state.go('tabs.viewRestaurant.menus');
     }
 
-
     var restaurantId = $stateParams.restaurantId;
     var userReviewsRef = Review.userReview(restaurantId);
     $scope.loadingReviews = false;
@@ -34,6 +33,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
 
     Restaurant.get(restaurantId).$loaded()
       .then(function(restaurant) {
+        $scope.image = {};
         $scope.restaurant = restaurant;
         User.hasFavored(restaurant.$id)
           .then((val) => {
@@ -162,7 +162,8 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
         newReview.ref
           .then(function() {
             $ionicLoading.hide();
-            Upload.uploadMultiple($scope.images, restaurantId, newReview.key)
+            Upload.uploadMultiple($scope.images, restaurantId, newReview.key);
+            Upload.uploadMultipleRestaurant($scope.images, restaurantId);
             console.log("add review done");
             $scope.isAlreadyReviewed();
             $scope.reviewModal.hide();
@@ -316,7 +317,13 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
       $scope.viewItems = Gallery.get();
     }
 
-
+    $scope.callNumber = function(number) {
+      window.plugins.CallNumber.callNumber(function() {
+        console.log("call success");
+      }, function() {
+        console.log("call failed");
+      }, number)
+    };
 
     $scope.days = {
       '0': {

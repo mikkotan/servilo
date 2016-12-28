@@ -87,9 +87,9 @@ app.controller("ViewRestaurantMenus", ["$scope", "$stateParams", "$state", "rest
       })
 
 
-    $scope.availability = function(menu) {
-      return menu.availability ? "Add to cart" : "Currently not available"
-    }
+    // $scope.availability = function(menu) {
+    //   return menu.availability ? "Add to cart" : "Currently not available"
+    // }
 
     $scope.addToCart = function(menu) {
       console.log(menu.photoURL);

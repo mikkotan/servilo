@@ -8,14 +8,20 @@
   </ion-floating-menu>
   <ion-content class="has-tabs-top">
     <ion-slides class="block" options="options" slider="slide.slider">
-      <ion-slide-page>
+      <!-- <ion-slide-page>
         <div class="fill">
           <img ng-src="img/sample.jpg">
         </div>
-      </ion-slide-page>
+      </ion-slide-page> -->
       <ion-slide-page>
         <div class="fill">
-          <img ng-src="img/sample2.jpg">
+          <img ng-if="restaurant.photoURL" ng-src="{{restaurant.photoURL}}">
+          <img ng-if="!restaurant.photoURL" ng-src="img/sample.jpg">
+        </div>
+      </ion-slide-page>
+      <ion-slide-page ng-repeat="image in restaurant.images" ng-if="image">
+        <div class="fill">
+          <img ng-src="{{image.src}}">
         </div>
       </ion-slide-page>
     </ion-slides>
@@ -50,7 +56,7 @@
           <p>Opens at {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}</p>
         </div>
         <hr class="faded">
-        <button class="button button-balanced button-block" ng-click="CallNumber(restaurant.details.phonenumber)">
+        <button class="button button-balanced button-block ink" ng-click="callNumber(restaurant.phonenumber)">
           <icon class="ion-android-call"></icon> Call Us
         </button>
       </div>
@@ -94,6 +100,15 @@
           <icon class="ion-plus"></icon> Edit Review</button>
         <button ng-click="showConfirmDelete(review)" class="button button-assertive ink">
           <icon class="ion-android-delete"></icon> Delete Review</button>
+      </div>
+      <div ng-show="exists">
+        <div>
+          Your Review: 
+        </div>
+        <div>
+          {{review.content}}
+        </div>
+        <hr>
       </div>
 
       <div class="list">

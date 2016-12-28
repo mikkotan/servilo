@@ -1,5 +1,5 @@
-app.factory("Upload", ["Database", "$firebaseArray", "$q",
-  function(Database, $firebaseArray, $q){
+app.factory("Upload", ["Database", "$firebaseArray", "$q", "User",
+  function(Database, $firebaseArray, $q, User){
 
   var storageRef = firebase.storage().ref();
   var options = {
@@ -63,12 +63,30 @@ app.factory("Upload", ["Database", "$firebaseArray", "$q",
       var ref = Database.restaurantReviewsReference().child(restaurantId).child(reviewId).child('images');
       return $firebaseArray(ref);
     },
+    getMultipleUploadRestaurant : function(restaurantId) {
+      var ref = Database.restaurantsReference().child(restaurantId).child('images');
+      return $firebaseArray(ref);
+    },
+    uploadMultipleRestaurant : function(images, restaurantId) {
+      var list = this.getMultipleUploadRestaurant(restaurantId);
+      for (var i = 0; i < images.length; i++) {
+        list.$add({
+          src: images[i].original,
+          thumb: images[i].thumb,
+          owner_id: User.auth().$id
+        })
+        .then(function(ref) {
+          console.log("added..." + ref);
+        });
+      }
+    },
     uploadMultiple : function(images, restaurantId, reviewId) {
       var list = this.getMultipleUpload(restaurantId, reviewId);
       for (var i = 0; i < images.length; i++) {
         list.$add({
           src: images[i].original,
-          thumb: images[i].thumb
+          thumb: images[i].thumb,
+          owner_id: User.auth().$id
         })
         .then(function(ref) {
           console.log("added..." + ref);
