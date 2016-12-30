@@ -9,10 +9,16 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
     User.setOnline(currentAuth.uid);
     $scope.currentLocation = CordovaGeolocation.get();
 
+    setTimeout(function() {
+      $ionicSlideBoxDelegate.update();
+    }, 5000);
+
     $scope.goToRestaurant = function(id) {
       return $state.go('tabs.search')
         .then(() => {
-          $state.go('tabs.viewRestaurant.main', {restaurantId: id})
+          $state.go('tabs.viewRestaurant.main', {
+            restaurantId: id
+          })
         })
     }
     //comment for now
@@ -54,6 +60,11 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
               get: Restaurant.get(restaurant.$id).$loaded()
                 .then((restaurant) => {
                   r.details = restaurant
+                  Restaurant.getAverageRating(restaurant.$id)
+                    .then((avg) => {
+                      r.avg = avg
+                      $scope.$apply()
+                    })
                 })
             }
 
@@ -63,7 +74,7 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
     }
     // --------------- END NEW SELECTED CATEGORY RESTAURANTS LOOP -----
 
-    
+
     Advertisement.getRestaurants().$loaded()
       .then((restaurants) => {
         $scope.advertisedRestaurants = restaurants
@@ -71,7 +82,7 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
         $scope.$watchCollection('advertisedRestaurants', function(watchedAdvertisements) {
           $scope.newAdvertisements = watchedAdvertisements.map(function(advertisement) {
             var a = {
-              get : Restaurant.get(advertisement.$id).$loaded()
+              get: Restaurant.get(advertisement.$id).$loaded()
                 .then((restaurant) => {
                   a.details = restaurant
                   Restaurant.getAverageRating(restaurant.$id)
@@ -79,6 +90,7 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
                       a.avg = avg
                       a.ready = true
                       $scope.$apply()
+                      $ionicSlideBoxDelegate.update();
                     })
                 })
             }
@@ -91,25 +103,26 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
         alert(err)
       })
 
-    $scope.$on('ngLastRepeat.workorderlist',function(e) {
-        $scope.materialize();
+    $scope.$on('ngLastRepeat.workorderlist', function(e) {
+      $scope.materialize();
     });
 
-    $scope.materialize = function(){
-        $timeout(function(){
-            // ionicMaterialMotion.fadeSlideInRight();
-            ionicMaterialInk.displayEffect();
-          },0);
+    $scope.materialize = function() {
+      $timeout(function() {
+        // ionicMaterialMotion.fadeSlideInRight();
+        ionicMaterialInk.displayEffect();
+      }, 0);
     };
 
 
 
 
     $scope.options = {
-      loop: true,
+      loop: false,
       effect: 'slide',
-      autoplay: 5000,
+      autoplay: 3000,
       speed: 500,
+      paginationHide: true
     }
     $scope.data = {};
     $scope.$watch('data.slider', function(nv, ov) {

@@ -1,4 +1,4 @@
-// Ionic Starter App
+ // Ionic Starter App
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
@@ -160,11 +160,12 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
                 }
               });
         }
-
       }else {
         console.log("Free Will")
       }
     })
+
+
     $rootScope.$on("$stateChangeSuccess",
       function(event, toState, toParams, fromState, fromParams, options) {
         if(toState.name == "tabs.home"){
@@ -260,7 +261,7 @@ function($scope, $state,currentAuth ,Role) {
   Role.get(currentAuth.uid).then((value)=>{
     $scope.userRole = value
   })
-  console.error(currentAuth.uid);
+  // console.error(currentAuth.uid);
   $scope.goToHome = function() {
     $state.go("tabs.home")
   }

@@ -29,6 +29,8 @@ app.controller("AddMenuCtrl",["$scope", "restaurantId", "$cordovaCamera", "Resta
         });
     }
 
+    
+
     $scope.addMenu = function(menu) {
       Menu.create({
         name : menu.name.toLowerCase(),

@@ -188,7 +188,7 @@
           <ion-item menu-close ui-sref="profile" ng-if="userRole.isAny" class="item-borderless">
             Profile
           </ion-item>
-          <hr ng-show="firebaseUser">
+          <hr class="custom-hr" ng-show="firebaseUser">
           <ion-item ng-if="userRole.isAnyExceptUser" menu-close  ui-sref="tabs.restaurant" class="item-borderless">
             Restaurants
           </ion-item>
@@ -199,7 +199,7 @@
           <ion-item menu-close ng-controller="RestaurantCtrl" ng-if="userRole.isUser" class="item-borderless" ng-click="newRestaurant()">
             Create Restaurant
           </ion-item>
-          <hr ng-show="firebaseUser">
+          <hr class="custom-hr" ng-show="firebaseUser">
           <ion-item menu-close ng-if="userRole.isAny" class="item-borderless" ng-click="signOut()">
             Sign Out
           </ion-item>

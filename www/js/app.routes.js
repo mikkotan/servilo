@@ -5,7 +5,7 @@ app.config(["$stateProvider","$urlRouterProvider","$ionicConfigProvider","fireba
   ionGalleryConfigProvider.setGalleryConfig({
     action_label: 'Close',
     toggle: true,
-    row_size: 4,
+    row_size: 3,
     fixed_row_size: true
   });
 

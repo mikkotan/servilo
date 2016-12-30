@@ -1,5 +1,5 @@
-app.controller("ViewRestaurantMenus", ["$scope", "$state", "restaurantId", "CartData", "$ionicModal", "Cart", "Restaurant", "ionicToast", "Menu", "$ionicLoading",
-  function($scope, $state, restaurantId, CartData, $ionicModal, Cart, Restaurant, ionicToast, Menu, $ionicLoading) {
+app.controller("ViewRestaurantMenus", ["$scope", "$stateParams", "$state", "restaurantId", "CartData", "$ionicModal", "Cart", "Restaurant", "ionicToast", "Menu", "$ionicLoading",
+  function($scope, $stateParams, $state, restaurantId, CartData, $ionicModal, Cart, Restaurant, ionicToast, Menu, $ionicLoading) {
     console.log("This is view restaurant menus");
     $ionicLoading.show();
     $scope.restaurantId = restaurantId
@@ -14,6 +14,7 @@ app.controller("ViewRestaurantMenus", ["$scope", "$state", "restaurantId", "Cart
     $scope.$watch('data.slider', function(nv, ov) {
       $scope.slider = $scope.data.slider;
     })
+    $scope.categories = Menu.getMenuCategories($stateParams.restaurantId);
 
     $scope.promoFilter = function() {
       return function(promo) {
@@ -51,7 +52,6 @@ app.controller("ViewRestaurantMenus", ["$scope", "$state", "restaurantId", "Cart
       .then((promos) => {
         $scope.promos = promos
       })
-
     Restaurant.getMenus(restaurantId).$loaded()
       .then((menus) => {
         if (menus.length == 0) {
@@ -62,7 +62,7 @@ app.controller("ViewRestaurantMenus", ["$scope", "$state", "restaurantId", "Cart
         $scope.$watchCollection('restaurantMenus', function(newRestaurantMenus) {
           $scope.menus = newRestaurantMenus.map(function(menu) {
             var m = {
-              get : Menu.get(menu.$id).$loaded()
+              get: Menu.get(menu.$id).$loaded()
                 .then((menuObj) => {
                   $ionicLoading.hide();
                   m.details = menuObj;
@@ -87,9 +87,9 @@ app.controller("ViewRestaurantMenus", ["$scope", "$state", "restaurantId", "Cart
       })
 
 
-    $scope.availability = function(menu) {
-      return menu.availability ? "Available" : "Currently not available"
-    }
+    // $scope.availability = function(menu) {
+    //   return menu.availability ? "Add to cart" : "Currently not available"
+    // }
 
     $scope.addToCart = function(menu) {
       console.log(menu.photoURL);
@@ -132,6 +132,10 @@ app.controller("ViewRestaurantMenus", ["$scope", "$state", "restaurantId", "Cart
       $scope.addToCartModal.hide();
     }
 
+    $scope.computeSubtotal = function(quantity){
+        $scope.subtotal = $scope.menuPrice * quantity;
+    }
+
     $scope.sendToCart = function(menu) {
 
       let menuOrder = Cart.menuId(CartData.get().menus, "id", $scope.id);
@@ -139,11 +143,11 @@ app.controller("ViewRestaurantMenus", ["$scope", "$state", "restaurantId", "Cart
       if (menu.quantity) {
         if (menu.quantity > 0) {
           let menuCart = {
-              id: $scope.id,
-              name: $scope.menuName,
-              price: $scope.menuPrice,
-              photoURL: $scope.menuPhoto,
-              quantity: menu.quantity
+            id: $scope.id,
+            name: $scope.menuName,
+            price: $scope.menuPrice,
+            photoURL: $scope.menuPhoto,
+            quantity: menu.quantity
           };
           console.log(menuCart)
           $scope.error = false;
@@ -189,8 +193,16 @@ app.controller("ViewRestaurantMenus", ["$scope", "$state", "restaurantId", "Cart
       scope: $scope
     });
 
-
-
+    $scope.toggleGroup = function(group) {
+      if ($scope.isGroupShown(group)) {
+        $scope.shownGroup = null;
+      } else {
+        $scope.shownGroup = group;
+      }
+    };
+    $scope.isGroupShown = function(group) {
+      return $scope.shownGroup === group;
+    };
 
   }
 ]);

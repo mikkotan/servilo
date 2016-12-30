@@ -33,7 +33,7 @@ app.controller("DashboardMenusCtrl", ["$scope", "$stateParams", "$ionicModal", "
     $scope.photoURL = "";
 
 
-    $scope.showAddCategoryModal = function() {
+    $scope.showAddCategoryModal = function(resId) {
       $scope.category = {
         restaurant_id: $scope.restoId
       }
