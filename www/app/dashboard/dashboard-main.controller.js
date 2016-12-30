@@ -1,6 +1,7 @@
-app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionicModal", "$ionicPopup", "$firebaseArray", "Restaurant", "Database", "$ionicLoading", "Upload", "$cordovaCamera", "CordovaGeolocation", "Advertisement",
-  function($scope, $state, $stateParams, $ionicModal, $ionicPopup, $firebaseArray, Restaurant, Database, $ionicLoading, Upload, $cordovaCamera, CordovaGeolocation, Advertisement) {
+app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionicModal", "$ionicPopup", "$firebaseArray", "Restaurant", "Database", "$ionicLoading", "Upload", "$cordovaCamera", "CordovaGeolocation", "Advertisement", "User",
+  function($scope, $state, $stateParams, $ionicModal, $ionicPopup, $firebaseArray, Restaurant, Database, $ionicLoading, Upload, $cordovaCamera, CordovaGeolocation, Advertisement, User) {
     $ionicLoading.show();
+
     $scope.data = {};
     $scope.countryCode = 'PH';
 
@@ -28,7 +29,6 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
 
     Advertisement.isAdvertised($stateParams.restaurantId)
       .then((ad) => {
-        console.log(JSON.stringify(ad))
         $scope.ad = ad
       })
 
@@ -114,48 +114,60 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
     };
 
     $scope.deleteRestaurant = function(restaurant) {
-      var resObj = restaurant;
-      Restaurant.delete(restaurant.$id)
-        .then(() => {
-          console.log('Success deleting ');
-        })
-        .catch((err) => {
-          console.log('Error on deleting: ' + err);
-        })
-
-      Database.restaurantMenusReference().child(resObj.$id).remove();
-
-      Database.restaurantReservationsReference().child(resObj.$id).once('value')
-        .then((snapshot) => {
-          for (var reservation in snapshot.val()) {
-            console.log(reservation);
-            Reservation.delete(reservation)
+      var resObj = restaurant
+      $ionicPopup.confirm({
+        title: "Delete Restaurant",
+        template: "Are you sure to delete '" + restaurant.name + "' ?"
+      })
+        .then((res) => {
+          if (res) {
+            $ionicLoading.show()
+            Restaurant.delete(restaurant.$id)
               .then(() => {
-                console.log('delete sucess')
-                alert('delete success');
+                console.log('Success deleting ');
+                // Database.restaurantMenusReference().child(resObj.$id).remove();
+                // Database.userFavoritesReference().child(User.auth().$id).child(resObj.$id).remove()
+
+                Database.restaurantReservationsReference().child(resObj.$id).once('value')
+                  .then((snapshot) => {
+                    for (var reservation in snapshot.val()) {
+                      Reservation.delete(reservation)
+                        .then(() => {
+                          console.log('delete sucess')
+                          alert('delete success');
+                        })
+                        .catch((err) => {
+                          console.log(err)
+                          alert(err);
+                        })
+                    }
+                  })
+
+                Database.restaurantOrdersReference().child(resObj.$id).once('value')
+                  .then((snapshot) => {
+                    for (var order in snapshot.val()) {
+
+                      Order.delete(order)
+                        .then(() => {
+                          console.log('success')
+                        })
+                        .catch((err) => {
+                          console.log(err)
+                          alert(err);
+                        })
+                    }
+                  })
+                $ionicLoading.hide()
+                $state.go('tabs.restaurant');
               })
               .catch((err) => {
-                console.log(err)
-                alert(err);
+                $ionicLoading.hide()
+                alert(err)
+                console.log('Error on deleting: ' + err);
               })
           }
         })
 
-      Database.restaurantOrdersReference().child(resObj.$id).once('value')
-        .then((snapshot) => {
-          for (var order in snapshot.val()) {
-            console.log(order);
-            Order.delete(order)
-              .then(() => {
-                console.log('success')
-              })
-              .catch((err) => {
-                console.log(err)
-                alert(err);
-              })
-          }
-        })
-      $state.go('tabs.restaurant');
     }
 
     $scope.placeName = function(latitude, longitude) {
@@ -242,20 +254,21 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
         longitude: restaurant.longitude
       };
     }
+
     $scope.useCurrent = function() {
       var currentLocation = CordovaGeolocation.get();
+
       $scope.setMarker(currentLocation.latitude, currentLocation.longitude);
-      Restaurant.getLocation(currentLocation.latitude, currentLocation.longitude).then(function(data) {
-        $scope.data.location = data;
-        //   $scope.data.location.geometry.location.lat = currentLocation.latitude;
-        //   $scope.data.location.geometry.location.lng = currentLocation.longitude;
-        // $scope.restaurant.location = data
-        // console.log($scope.restaurant.location)
-      });
+
+      Restaurant.getLocation(currentLocation.latitude, currentLocation.longitude)
+        .then(function(data) {
+          $scope.data.location = data;
+        });
     }
 
     $scope.edit = function(restaurant) {
       $ionicLoading.show();
+
       var location = $scope.data.location.formatted_address
       var lat = $scope.marker.coords.latitude
       var long = $scope.marker.coords.longitude

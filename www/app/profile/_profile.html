@@ -17,7 +17,7 @@
 
       <h4 class="content">Favorites</h4>
       <ion-list class="list animate-fade-slide-in-right">
-        <ion-item ng-repeat="restaurant in userFavorites">
+        <ion-item ng-repeat="restaurant in userFavorites" ng-show="restaurant.name">
           <p>
             {{restaurant.name}}
           </p>

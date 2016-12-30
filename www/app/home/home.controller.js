@@ -43,33 +43,32 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
     // });
 
     Category.getAllCategories().$loaded()
-      .then((categoryRestaurants) => {
-        $scope.categories = categoryRestaurants
+      .then((categories) => {
+        $scope.categories = categories
+      })
+    $scope.selectCategory = function(id) {
+      return Category.getRestaurants(id).$loaded()
+        .then((restaurants) => {
 
-        $scope.$watchCollection('categories', function(newCategories) {
-          $scope.newCategories = newCategories.map(function(category) {
-            var c = {
-              id: category.$id,
-              get : Category.getRestaurants(category.$id).$loaded()
-                .then((restaurants) => {
-                  c.restaurants = restaurants.map(function(restaurant) {
-                    var r = {
-                      get : Restaurant.get(restaurant.$id).$loaded()
-                        .then((restaurant) => {
-                          r.details = restaurant
-                        })
-                        .catch((err) => {
-                          console.log(err)
-                        })
-                    }
-                    return r
-                  })
+          $scope.selectedCategoryRestaurants = restaurants.map(function(restaurant) {
+
+            var r = {
+              get: Restaurant.get(restaurant.$id).$loaded()
+                .then((restaurant) => {
+                  r.details = restaurant
+                  Restaurant.getAverageRating(restaurant.$id)
+                    .then((avg) => {
+                      r.avg = avg
+                      $scope.$apply()
+                    })
                 })
             }
-            return c
+
+            return r
           })
         })
-      })
+    }
+
 
     Advertisement.getRestaurants().$loaded()
       .then((restaurants) => {
@@ -109,28 +108,6 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
         ionicMaterialInk.displayEffect();
       }, 0);
     };
-
-    $scope.selectCategory = function(cat) {
-        Category.getRestaurants(cat).$loaded()
-          .then((restaurants) => {
-            c.restaurants = restaurants.map(function(restaurant) {
-              var r = {
-                get : Restaurant.get(restaurant.$id).$loaded()
-                  .then((restaurant) => {
-                    r.details = restaurant
-                  })
-                  .catch((err) => {
-                    console.log(err)
-                  })
-              }
-
-              console.log(r);
-              return r
-            })
-          })
-    };
-
-
 
     $scope.options = {
       loop: false,

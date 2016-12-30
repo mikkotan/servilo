@@ -21,7 +21,6 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
       $state.go('tabs.viewRestaurant.menus');
     }
 
-
     var restaurantId = $stateParams.restaurantId;
     var userReviewsRef = Review.userReview(restaurantId);
     $scope.loadingReviews = false;
@@ -34,11 +33,12 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
 
     Restaurant.get(restaurantId).$loaded()
       .then(function(restaurant) {
+        $scope.image = {};
         $scope.restaurant = restaurant;
         User.hasFavored(restaurant.$id)
           .then((val) => {
-            console.log('Hasfavored from controller : ' + val)
-            $scope.hasFavored = val
+            console.log('Hasfavored from controller : '+val.exists)
+            $scope.hasFavored = val.exists
             $scope.restaurantOpenStatus = Restaurant.getRestaurantOpenStatus(restaurant);
             var restaurantStatus = Restaurant.getRestaurantStatus(restaurant.owner_id)
             restaurantStatus.on('value', function(snap) {
@@ -113,7 +113,17 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
     }
 
     $scope.addToFavorites = function(restaurant) {
-      User.addToFavorites(restaurant);
+      $ionicPopup.confirm({
+        title: 'Add to Favorites',
+        template: "Add '" + restaurant.name + "' to favorites?"
+      })
+        .then((res) => {
+          User.addToFavorites(restaurant)
+            .then((val) => {
+              $scope.hasFavored = val.exists
+              $scope.$apply()
+            })
+        })
     }
 
     $scope.showAddReservationModal = function() {
@@ -162,7 +172,8 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
         newReview.ref
           .then(function() {
             $ionicLoading.hide();
-            Upload.uploadMultiple($scope.images, restaurantId, newReview.key)
+            Upload.uploadMultiple($scope.images, restaurantId, newReview.key);
+            Upload.uploadMultipleRestaurant($scope.images, restaurantId);
             console.log("add review done");
             $scope.isAlreadyReviewed();
             $scope.reviewModal.hide();
@@ -316,7 +327,13 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
       $scope.viewItems = Gallery.get();
     }
 
-
+    $scope.callNumber = function(number) {
+      window.plugins.CallNumber.callNumber(function() {
+        console.log("call success");
+      }, function() {
+        console.log("call failed");
+      }, number)
+    };
 
     $scope.days = {
       '0': {
