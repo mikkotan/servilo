@@ -6,9 +6,9 @@
     <!-- <button class="button button-calm" ng-di ng-click="viewCart()"> <i class="ion-android-cart"> </i> Cart{{count}}</button> -->
 
     <h1>{{status}}</h1>
-    <h6>Promos</h6>
-    <ion-slides options="options" slider="data.slider">
-      <ion-slide-page ng-repeat="promo in promos | filter:promoFilter()">
+    <h6 ng-if="promos.length != 0">Promos</h6>
+    <ion-slides options="options" slider="data.slider" ng-if="promos.length != 0">
+      <ion-slide-page ng-repeat="promo in promos | filter:promoFilter()" ng-if="promos.length != 0">
         <!-- <div><img class="slider-imgs" ng-src="img/material-wall.jpg"></div> -->
         <div class="card padding">
           <div class="item item-thumbnail-left">
