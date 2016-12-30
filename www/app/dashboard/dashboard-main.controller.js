@@ -125,8 +125,8 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
             Restaurant.delete(restaurant.$id)
               .then(() => {
                 console.log('Success deleting ');
-                Database.restaurantMenusReference().child(resObj.$id).remove();
-                Database.userFavoritesReference().child(User.auth().$id).child(resObj.$id).remove()
+                // Database.restaurantMenusReference().child(resObj.$id).remove();
+                // Database.userFavoritesReference().child(User.auth().$id).child(resObj.$id).remove()
 
                 Database.restaurantReservationsReference().child(resObj.$id).once('value')
                   .then((snapshot) => {

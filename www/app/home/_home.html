@@ -2,11 +2,13 @@
   <ion-content>
   <div class="padding">
     <h6>Categories</h6>
-    <li ng-repeat="n in newCategories">
-      {{n.id}}
-      <p ng-repeat="r in n.restaurants">
-        {{r.details.name}}
-      </p>
+    <li ng-repeat="category in categories">
+      {{category.$id}}
+      <button ng-click="selectCategory(category.$id)"> Select </button>
+    </li>
+    <h6 ng-if="selectedCategoryRestaurants">Selected Category Restaurants</h6>
+    <li ng-repeat="s in selectedCategoryRestaurants" ng-if="s.details.name" style="color:green">
+      {{s.details.name}}
     </li>
     <h6>Ads</h6>
     <ion-slides options="options" slider="data.slider">

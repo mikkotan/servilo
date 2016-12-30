@@ -34,35 +34,36 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
     //   console.error("The following error occurred: "+error);
     // });
 
+    // --------------- NEW CATEGORY LOOP ---------
     Category.getAllCategories().$loaded()
-      .then((categoryRestaurants) => {
-        $scope.categories = categoryRestaurants
+      .then((categories) => {
 
-        $scope.$watchCollection('categories', function(newCategories) {
-          $scope.newCategories = newCategories.map(function(category) {
-            var c = {
-              id: category.$id,
-              get : Category.getRestaurants(category.$id).$loaded()
-                .then((restaurants) => {
-                  c.restaurants = restaurants.map(function(restaurant) {
-                    var r = {
-                      get : Restaurant.get(restaurant.$id).$loaded()
-                        .then((restaurant) => {
-                          r.details = restaurant
-                        })
-                        .catch((err) => {
-                          console.log(err)
-                        })
-                    }
-                    return r
-                  })
+        $scope.categories = categories
+
+      })
+    // --------------- END NEW CATEGORY LOOP ------
+
+    // --------------- NEW SELECTED CATEGORY RESTAURANTS LOOP ------
+    $scope.selectCategory = function(id) {
+      return Category.getRestaurants(id).$loaded()
+        .then((restaurants) => {
+
+          $scope.selectedCategoryRestaurants = restaurants.map(function(restaurant) {
+
+            var r = {
+              get: Restaurant.get(restaurant.$id).$loaded()
+                .then((restaurant) => {
+                  r.details = restaurant
                 })
             }
-            return c
+
+            return r
           })
         })
-      })
+    }
+    // --------------- END NEW SELECTED CATEGORY RESTAURANTS LOOP -----
 
+    
     Advertisement.getRestaurants().$loaded()
       .then((restaurants) => {
         $scope.advertisedRestaurants = restaurants

@@ -49,6 +49,8 @@ app.controller("ProfileCtrl", ["$scope", "User", "$ionicLoading", "$ionicPopover
                 Restaurant.get(restaurant.$id).$loaded()
                   .then((res) => {
                     r.name = res.name
+                    r.ready = true
+                    r.details = res
                     // ionicMaterialMotion.slideUp({
                     //   selector: '.slide-up'
                     // });
