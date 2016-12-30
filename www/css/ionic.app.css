@@ -397,6 +397,9 @@ body {
 .static-map {
   width: 100%; }
 
+.card-slider {
+  height: 20vh !important; }
+
 .gallery-view .image-container {
   position: relative;
   overflow: hidden;

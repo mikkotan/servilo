@@ -21,6 +21,8 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
           })
         })
     }
+
+
     //comment for now
     // cordova.plugins.diagnostic.isLocationAvailable(function(available) {
     //   console.log("Location is " + (available ? "available" : "not available"));
@@ -108,12 +110,32 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
       }, 0);
     };
 
+    $scope.selectCategory = function(cat) {
+        Category.getRestaurants(cat).$loaded()
+          .then((restaurants) => {
+            c.restaurants = restaurants.map(function(restaurant) {
+              var r = {
+                get : Restaurant.get(restaurant.$id).$loaded()
+                  .then((restaurant) => {
+                    r.details = restaurant
+                  })
+                  .catch((err) => {
+                    console.log(err)
+                  })
+              }
+
+              console.log(r);
+              return r
+            })
+          })
+    };
 
 
 
     $scope.options = {
       loop: false,
       effect: 'slide',
+      autoHeight: true,
       autoplay: 3000,
       speed: 500,
       paginationHide: true

@@ -1,53 +1,59 @@
 <ion-view view-title="Home">
   <ion-content>
-  <div class="padding">
-    <h6>Categories</h6>
-    <li ng-repeat="n in newCategories">
-      {{n.id}}
-      <p ng-repeat="r in n.restaurants">
-        {{r.details.name}}
-      </p>
-    </li>
-    <h6>Ads</h6>
-    <ion-slides options="options" slider="data.slider">
-      <ion-slide-page ng-repeat="advertisement in newAdvertisements" ng-if="advertisement.ready">
-        <div class="card ink" ng-click="goToRestaurant(advertisement.details.$id)">
-        <!-- <div class="card ink" ui-sref="tabs.viewRestaurant.main({restaurantId:advertisement.details.$id})" > -->
-          <div class="item item-thumbnail-left">
-            <img class="img-thumbnail" ng-if="advertisement.details.photoURL" ng-src="{{advertisement.details.photoURL}}" />
-            <img ng-if="!advertisement.details.photoURL" ng-src="img/wow.jpg">
+    <div class="padding">
+      <h6>Ads</h6>
+      <ion-slides options="options" slider="data.slider">
+        <ion-slide-page ng-repeat="advertisement in newAdvertisements" ng-if="advertisement.ready">
+          <div class="card ink" ng-click="goToRestaurant(advertisement.details.$id)">
+            <!-- <div class="card ink" ui-sref="tabs.viewRestaurant.main({restaurantId:advertisement.details.$id})" > -->
+            <div class="item item-thumbnail-left">
+              <img class="img-thumbnail" ng-if="advertisement.details.photoURL" ng-src="{{advertisement.details.photoURL}}" />
+              <img ng-if="!advertisement.details.photoURL" ng-src="img/wow.jpg">
               <icon class="ion-spoon"></icon> {{advertisement.details.name}}
               <span style="color:green">
                 <icon class="ion-android-star-outline"></icon> {{advertisement.avg}}
               </span>
-            <p>
-              Sponsored
-            </p>
-            <p>
-              {{advertisement.details.secured_data.avgPrice.toFixed(2) | currency:"₱"}}
-            </p>
-            <p>
-              <icon class="ion-ios-location-outline"></icon> {{advertisement.details.location}}
-            </p>
-            <button class="button button-balanced button-small button-outline" ng-click="CallNumber(advertisement.details.phonenumber)">
+              <p>
+                Sponsored
+              </p>
+              <p>
+                {{advertisement.details.secured_data.avgPrice.toFixed(2) | currency:"₱"}}
+              </p>
+              <p>
+                <icon class="ion-ios-location-outline"></icon> {{advertisement.details.location}}
+              </p>
+              <button class="button button-balanced button-small button-outline" ng-click="CallNumber(advertisement.details.phonenumber)">
               <icon class="ion-android-call"></icon> Call Us
             </button>
+            </div>
           </div>
+        </ion-slide-page>
+      </ion-slides>
+    </div>
+
+    <h6>Categories</h6>
+    <div ng-repeat="n in newCategories">
+      <div class="row" ng-if="$even">
+        <div class="col col-50"style="background: url('../img/{{cat.id}}.jpg')" ng-repeat="cat in [newCategories[$index],newCategories[$index + 1]]" ng-if="cat">
+          <h2 class="capitalize">{{cat.id}}</h2>
+          <!-- <button ng-click="selectCategory(cat.id)"></button>
+          <p ng-repeat="r in cat.restaurants">
+            {{r.details.name}}
+          </p> -->
         </div>
-      </ion-slide-page>
-    </ion-slides>
-  </div>
+      </div>
+    </div>
 
     HOME HERE
     <ion-refresher pulling-text="Pull to refresh..." on-refresh="doRefresh()">
     </ion-refresher>
     <ion-list>
-      <ion-item class="ink" ng-repeat="rest in home.restaurants | orderBy:'distance'" item="rest" ng-last-repeat="workorderlist">
+      <ion-item class="ink" ng-repeat="rest in home.categorizedRestos" item="rest" ng-last-repeat="workorderlist">
         {{rest.name}}
       </ion-item>
     </ion-list>
 
-    <ion-infinite-scroll ng-if="!home.noMoreItemsAvailable" on-infinite="loadMore()" distance="1%">
-    </ion-infinite-scroll>
+    <!-- <ion-infinite-scroll ng-if="!home.noMoreItemsAvailable" on-infinite="loadMore()" distance="1%">
+    </ion-infinite-scroll> -->
   </ion-content>
 </ion-view>

@@ -92,12 +92,12 @@
                   <span class="input-label has-input">Location of Restaurant</span>
                   <input type="text" placeholder="Change address" google-autocomplete-suggestion location="data.location" country-code="{{countryCode}}" name="location" ng-model="data.location.formatted_address" readonly ng-required=true />
                   <!-- <input type="text" placeholder="Location of Restaurant" ng-model="restaurant.location" details="data.detail"/> -->
-                  
+
                   <div class="error" ng-show="newRestaurantform.location.$touched || submitError">
                     <p ng-show="newRestaurantform.location.$error.required">* Restaurant's location is required</p>
                   </div>
                 </label>
-
+                
                 <img ng-src="https://maps.googleapis.com/maps/api/staticmap?center={{marker.coords.latitude}},{{marker.coords.longitude}}
                                 &zoom=18
                                 &size=500x300
