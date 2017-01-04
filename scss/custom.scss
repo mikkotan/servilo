@@ -240,7 +240,7 @@ ion-popover-view.fit ion-content {
 
 .login-container > .header {
   -webkit-flex: 4;
-  padding-top: 20px;
+  padding-top: 15px;
 }
 
 .bottom-text {
@@ -319,7 +319,11 @@ ion-popover-view.fit ion-content {
   color: white;
 }
 
-ion-slides {
+.card-slides > ion-slides {
+  height: 20vh !important;
+}
+
+.img-slides > ion-slides {
   height: 40vh !important;
 }
 
@@ -483,5 +487,51 @@ body {
 }
 
 .card-slider {
-  height: 20vh !important;
+  height: 30vh !important;
+}
+
+#category-div {
+  height: 100px;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#category-div:nth-child(odd) {
+  border-right: 3px solid white;
+}
+
+#category-row:nth-child(odd) {
+  border-bottom: 3px solid white;
+}
+
+#category-row:nth-last-child(-n+2) {
+  border-bottom: 0;
+}
+
+#category-container {
+  background-color: rgba(0,0,0,0.5);
+  display: inherit;
+  height: 90%
+}
+
+#category-title {
+  text-transform: capitalize;
+  color: white;
+  display: inline;
+  font-size: 150% !important;
+}
+
+.padding-0 {
+  padding: 0 !important;
+}
+
+.margin-0 {
+  margin: 0 !important;
+}
+
+.error p {
+  color: red !important;
 }
