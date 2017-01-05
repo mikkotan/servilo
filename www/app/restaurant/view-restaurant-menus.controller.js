@@ -7,8 +7,9 @@ app.controller("ViewRestaurantMenus", ["$scope", "$stateParams", "$state", "rest
     $scope.options = {
       loop: true,
       effect: 'slide',
-      autoplay: 5000,
+      autoplay: 3000,
       speed: 500,
+      paginationHide: true
     }
     $scope.data = {};
     $scope.$watch('data.slider', function(nv, ov) {
@@ -30,8 +31,8 @@ app.controller("ViewRestaurantMenus", ["$scope", "$stateParams", "$state", "rest
       .then((categories) => {
         $scope.categories = categories.map(function(category) {
           var c = {
-            name : category.name,
-            getMenus : Menu.getMenusFromCategories(restaurantId, category.$id).$loaded()
+            name: category.name,
+            getMenus: Menu.getMenusFromCategories(restaurantId, category.$id).$loaded()
               .then((menus) => {
                 c.menus = menus.map(function(menu) {
                   var m = {
@@ -132,8 +133,8 @@ app.controller("ViewRestaurantMenus", ["$scope", "$stateParams", "$state", "rest
       $scope.addToCartModal.hide();
     }
 
-    $scope.computeSubtotal = function(quantity){
-        $scope.subtotal = $scope.menuPrice * quantity;
+    $scope.computeSubtotal = function(quantity) {
+      $scope.subtotal = $scope.menuPrice * quantity;
     }
 
     $scope.sendToCart = function(menu) {

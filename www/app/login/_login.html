@@ -1,20 +1,20 @@
-<ion-view view-title="Login" hide-nav-bar="true">
+<ion-view view-title="Login" hide-nav-bar="true" cache-view="false">
   <ion-content class="login-page">
     <section class="login-container">
-      <button class="button button-block button-assertive ink" ui-sref="landing">Back</button>
       <div class="card padding">
         <form ng-submit="login(user)" name="loginForm" novalidate>
           <div class="list">
             <label class="item item-input item-floating-label">
               <span class="input-label has-input">E-mail Address</span>
-              <input type="text" placeholder="E-mail Address" ng-model="user.email" name="email" ng-required=true>
-              <div class="error" ng-show="loginForm.email.$touched">
+              <input type="email" placeholder="E-mail Address" ng-model="user.email" name="email" ng-required=true>
+              <div class="error" ng-if="loginForm.email.$touched">
                 <p ng-show="loginForm.email.$error.required">* Email address is required</p>
+                <p ng-show="loginForm.email.$invalid && loginForm.email.$dirty">* Input is not an email</p>
               </div>
             </label>
             <label class="item item-input item-floating-label">
               <span class="input-label has-input">Password</span>
-              <input type="{{passwordType}}" placeholder="Password" ng-model="user.password" ng-required=true>
+              <input type="{{passwordType}}" placeholder="Password" ng-model="user.password" name="password" ng-required=true>
             </label>
             <div class="item item-checkbox">
               <label class="checkbox">
@@ -22,13 +22,14 @@
             </div>
           </div>
           <div class="list">
-            <button type="submit" class="button button-block button-balanced ink" >Login</button>
+            <button type="submit" class="button button-block button-balanced ink">Login</button>
           </div>
-          <div ng-show="invalids">
-              *Invlid email address or password
-          </div>
-        </form>
+
+
+          <button class="button button-block button-assertive ink" ui-sref="landing">Back</button>
       </div>
+
+      </form>
     </section>
     <!-- <div class="ionic login " style="background-image: url('../img/batchoy.jpg');" ng-app="login">
         <div class="hero no-header flat">

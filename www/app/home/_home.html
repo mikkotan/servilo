@@ -1,58 +1,87 @@
 <ion-view view-title="Home">
-  <ion-content>
-  <div class="padding">
-    <h6>Categories</h6>
-    <li ng-repeat="category in categories">
-      {{category.$id}}
-      <button ng-click="selectCategory(category.$id)"> Select </button>
-    </li>
-    <h6 ng-if="selectedCategoryRestaurants">Selected Category Restaurants</h6>
-    <li ng-repeat="s in selectedCategoryRestaurants" ng-if="s.details.name" style="color:green">
-      {{s.details.name}}
-      <p>
-        Rating: {{s.avg}}
-      </p>
-    </li>
-    <h6>Ads</h6>
-    <ion-slides options="options" slider="data.slider">
-      <ion-slide-page ng-repeat="advertisement in newAdvertisements" ng-if="advertisement.ready">
-        <div class="card ink" ng-click="goToRestaurant(advertisement.details.$id)">
-        <!-- <div class="card ink" ui-sref="tabs.viewRestaurant.main({restaurantId:advertisement.details.$id})" > -->
-          <div class="item item-thumbnail-left">
-            <img class="img-thumbnail" ng-if="advertisement.details.photoURL" ng-src="{{advertisement.details.photoURL}}" />
-            <img ng-if="!advertisement.details.photoURL" ng-src="img/wow.jpg">
+  <ion-content delegate-handle="content">
+    <div class="card-slides">
+      <ion-slides options="options" slider="data.slider">
+        <ion-slide-page ng-repeat="advertisement in newAdvertisements" ng-if="advertisement.ready">
+          <div class="card ink" ng-click="goToRestaurant(advertisement.details.$id)">
+            <div class="item item-thumbnail-left">
+              <img class="img-thumbnail" ng-if="advertisement.details.photoURL" ng-src="{{advertisement.details.photoURL}}" />
+              <img ng-if="!advertisement.details.photoURL" ng-src="img/wow.jpg">
+              <p style="color:violet">
+                Sponsored (click to view)
+              </p>
               <icon class="ion-spoon"></icon> {{advertisement.details.name}}
               <span style="color:green">
                 <icon class="ion-android-star-outline"></icon> {{advertisement.avg}}
               </span>
-            <p>
-              Sponsored
-            </p>
-            <p>
-              {{advertisement.details.secured_data.avgPrice.toFixed(2) | currency:"₱"}}
-            </p>
-            <p>
-              <icon class="ion-ios-location-outline"></icon> {{advertisement.details.location}}
-            </p>
-            <button class="button button-balanced button-small button-outline" ng-click="CallNumber(advertisement.details.phonenumber)">
-              <icon class="ion-android-call"></icon> Call Us
-            </button>
+              <p>
+                {{advertisement.details.secured_data.avgPrice.toFixed(2) | currency:"₱"}}
+              </p>
+              <p>
+                <icon class="ion-ios-location-outline"></icon> {{advertisement.details.location}}
+              </p>
+            </div>
+          </div>
+        </ion-slide-page>
+      </ion-slides>
+    </div>
+
+
+    <h6>Categories</h6>
+    <div ng-repeat="category in categories" id="category-row">
+      <div class="row padding-0 margin-0" ng-if="$even">
+        <div class="col col-50 ink" ng-click="selectCategory(cat.$id); scroll('selected')"  id="category-div"  style="background: url('../img/{{cat.$id}}.jpg')" ng-repeat="cat in [categories[$index],categories[$index + 1]]" ng-last-repeat="categorylist" ng-if="cat">
+          <div id="category-container">
+            <div id="category-title">{{cat.$id}}</div>
           </div>
         </div>
-      </ion-slide-page>
-    </ion-slides>
-  </div>
+      </div>
+    </div>
 
-    HOME HERE
+    <section class="padding" id="selected">
+      <div>
+        <h6 ng-if="selectedCategoryRestaurants">Selected Category Restaurants</h6>
+
+        <div class="card ink" ng-repeat="s in selectedCategoryRestaurants" ng-click="goToRestaurant(s.details.$id)" ng-if="s.details.name">
+          <div class="item item-thumbnail-left">
+            <img class="img-thumbnail" ng-if="s.details.photoURL" ng-src="{{s.details.photoURL}}" />
+            <img ng-if="!s.details.photoURL" ng-src="img/wow.jpg">
+            <h3 class="capitalize">
+              <icon class="ion-spoon"></icon> {{s.details.name}}
+              <span style="color:green">
+                <icon class="ion-android-star-outline"></icon> {{s.avg}}
+              </span>
+            </h3>
+            <p>
+              {{s.details.secured_data.avgPrice.toFixed(2) | currency:"₱"}}
+            </p>
+            <p>
+              <icon class="ion-ios-location-outline"></icon> {{s.details.location}}
+            </p>
+          </div>
+        </div>
+        <!-- <li ng-repeat="s in selectedCategoryRestaurants" ng-if="s.details.name" style="color:green">
+          <div >
+            {{s.details.name}}
+          </div>
+          <p>
+            Rating: {{s.avg}}
+          </p>
+        </li> -->
+      </div>
+    </section>
+
+
+    <!-- HOME HERE
     <ion-refresher pulling-text="Pull to refresh..." on-refresh="doRefresh()">
     </ion-refresher>
     <ion-list>
-      <ion-item class="ink" ng-repeat="rest in home.restaurants | orderBy:'distance'" item="rest" ng-last-repeat="workorderlist">
+      <ion-item class="ink" ng-repeat="rest in home.categorizedRestos" item="rest" ng-last-repeat="workorderlist">
         {{rest.name}}
       </ion-item>
-    </ion-list>
+    </ion-list> -->
 
-    <ion-infinite-scroll ng-if="!home.noMoreItemsAvailable" on-infinite="loadMore()" distance="1%">
-    </ion-infinite-scroll>
+    <!-- <ion-infinite-scroll ng-if="!home.noMoreItemsAvailable" on-infinite="loadMore()" distance="1%">
+    </ion-infinite-scroll> -->
   </ion-content>
 </ion-view>

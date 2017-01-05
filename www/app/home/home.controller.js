@@ -1,7 +1,7 @@
 app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal", "$state", "ionicMaterialInk", "ionicMaterialMotion",
-"$ionicLoading", "Home", "$timeout", "User", "CordovaGeolocation", "Advertisement", "Restaurant", "Category","currentAuth",
+  "$ionicLoading", "Home", "$timeout", "User", "CordovaGeolocation", "Advertisement", "Restaurant", "Category", "currentAuth", "$location", "$anchorScroll", "$ionicScrollDelegate",
   function($scope, $ionicSlideBoxDelegate, $ionicModal, $state, ionicMaterialInk, ionicMaterialMotion, $ionicLoading, Home, $timeout,
-    User,CordovaGeolocation, Advertisement, Restaurant, Category , currentAuth) {
+    User, CordovaGeolocation, Advertisement, Restaurant, Category, currentAuth, $location, $anchorScroll, $ionicScrollDelegate) {
 
     // ionicMaterialInk.displayEffect();
     var vm = this;
@@ -21,6 +21,8 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
           })
         })
     }
+
+
     //comment for now
     // cordova.plugins.diagnostic.isLocationAvailable(function(available) {
     //   console.log("Location is " + (available ? "available" : "not available"));
@@ -40,16 +42,10 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
     //   console.error("The following error occurred: "+error);
     // });
 
-    // --------------- NEW CATEGORY LOOP ---------
     Category.getAllCategories().$loaded()
       .then((categories) => {
-
         $scope.categories = categories
-
       })
-    // --------------- END NEW CATEGORY LOOP ------
-
-    // --------------- NEW SELECTED CATEGORY RESTAURANTS LOOP ------
     $scope.selectCategory = function(id) {
       return Category.getRestaurants(id).$loaded()
         .then((restaurants) => {
@@ -72,7 +68,13 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
           })
         })
     }
-    // --------------- END NEW SELECTED CATEGORY RESTAURANTS LOOP -----
+
+    $scope.scroll = function(anchor) {
+      $location.hash(anchor);
+      var handle = $ionicScrollDelegate.$getByHandle("content");
+      console.log(anchor);
+      handle.anchorScroll(true);
+    };
 
 
     Advertisement.getRestaurants().$loaded()
@@ -106,6 +108,9 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
     $scope.$on('ngLastRepeat.workorderlist', function(e) {
       $scope.materialize();
     });
+    $scope.$on('ngLastRepeat.categorylist', function(e) {
+      $scope.materialize();
+    });
 
     $scope.materialize = function() {
       $timeout(function() {
@@ -113,9 +118,6 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
         ionicMaterialInk.displayEffect();
       }, 0);
     };
-
-
-
 
     $scope.options = {
       loop: false,
