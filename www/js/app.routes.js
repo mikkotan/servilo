@@ -44,12 +44,6 @@ app.config(["$stateProvider","$urlRouterProvider","$ionicConfigProvider","fireba
       abstract: true,
       templateUrl: "templates/tabs.html",
       controller: 'TabsCtrl',
-      resolve: {
-        currentAuth: function(Auth) {
-          console.log("resolve tab fired inside view!!!");
-          return Auth.$requireSignIn();
-        }
-      },
       class : 'Tab'
     })
     .state('tabs.home', {
@@ -238,18 +232,17 @@ app.config(["$stateProvider","$urlRouterProvider","$ionicConfigProvider","fireba
       },
       class : 'Order'
     })
-    .state('tabs.notifications', {
+    .state('notifications', {
       url: "/notifications",
-      views: {
-        'notifications-tab': {
-          templateUrl: 'app/notification/_notifications.html',
-          controller: "NotificationsCtrl",
-          resolve: {
-            notifications: function(User) {
-              return User.getAuthNotifications().$loaded();
-            }
-          }
-        }
+      templateUrl: 'app/notification/_notifications.html',
+      controller: "NotificationsCtrl",
+      resolve: {
+        "currentAuth": ["Auth", function(Auth) {
+          return Auth.$requireSignIn();
+        }],
+        "notifications": ["User",function(User) {
+          return User.getAuthNotifications().$loaded();
+        }]
       },
       class : 'Notification'
     })
