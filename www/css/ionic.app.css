@@ -421,8 +421,7 @@ body {
   border-bottom: 0; }
 
 #category-container {
-  background-color: rgba(0, 0, 0, 0.5);
-  display: inherit; }
+  background-color: rgba(0, 0, 0, 0.5); }
 
 #category-title {
   text-transform: capitalize;
@@ -15215,7 +15214,13 @@ a.button {
   backface-visibility: hidden;
   padding: 0;
   border: none;
-  border-radius: 50%; }
+  border-radius: 50%;
+  -webkit-transition: all linear 0.5s;
+  transition: all linear 0.5s;
+  opacity: 1; }
+
+#floating-button.ng-hide {
+  opacity: 0; }
 
 #floating-button.center {
   margin-left: auto !important;
