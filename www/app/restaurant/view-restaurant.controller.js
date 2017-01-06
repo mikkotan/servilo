@@ -1,5 +1,5 @@
-app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParams", "ionicMaterialInk", "$ionicLoading", "$ionicModal", "$ionicPopup", "CordovaGeolocation", "Restaurant", "User", "Review", "Reservation", "$ionicLoading", "Notification", "$ionicSlideBoxDelegate", "$ionicScrollDelegate", "Gallery", "$timeout",
-  function($scope, $state, Upload, $stateParams, ionicMaterialInk, $ionicLoading, $ionicModal, $ionicPopup, CordovaGeolocation, Restaurant, User, Review, Reservation, $ionicLoading, Notification, $ionicSlideBoxDelegate, $ionicScrollDelegate, Gallery, $timeout) {
+app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParams", "ionicMaterialInk", "$ionicLoading", "$ionicModal", "$ionicPopup", "CordovaGeolocation", "Restaurant", "User", "Review", "Reservation", "Notification", "$ionicSlideBoxDelegate", "$ionicScrollDelegate", "Gallery", "$timeout",
+  function($scope, $state, Upload, $stateParams, ionicMaterialInk, $ionicLoading, $ionicModal, $ionicPopup, CordovaGeolocation, Restaurant, User, Review, Reservation, Notification, $ionicSlideBoxDelegate, $ionicScrollDelegate, Gallery, $timeout) {
 
     $ionicLoading.show();
     // ionicMaterialInk.displayEffect();

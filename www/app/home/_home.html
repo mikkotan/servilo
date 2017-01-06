@@ -30,10 +30,10 @@
     </div>
 
 
-    <h6>Categories</h6>
+    <!-- <h6>Categories</h6> -->
     <div ng-repeat="category in categories" id="category-row">
       <div class="row padding-0 margin-0" ng-if="$even">
-        <div class="col col-50 ink" ng-click="selectCategory(cat.$id); scroll('selected')" id="category-div" style="background: url('img/{{cat.$id}}.jpg')" ng-repeat="cat in [categories[$index],categories[$index + 1]]" ng-last-repeat="categorylist" ng-if="cat">
+        <div class="col col-50 ink" ng-click="selectCategory(cat.$id)" id="category-div" style="background: url('img/{{cat.$id}}.jpg')" ng-repeat="cat in [categories[$index],categories[$index + 1]]" ng-last-repeat="categorylist" ng-if="cat">
           <div id="category-container">
             <div id="category-title">{{cat.$id}}</div>
           </div>
@@ -41,7 +41,7 @@
       </div>
     </div>
 
-    <section class="padding" id="selected">
+    <section class="" id="selected">
       <div>
         <h6 ng-if="selectedCategoryRestaurants">Selected Category Restaurants</h6>
         <ion-spinner ng-show="loading" icon="lines"></ion-spinner>

@@ -2,6 +2,7 @@ app.config(["$stateProvider","$urlRouterProvider","$ionicConfigProvider","fireba
     function($stateProvider, $urlRouterProvider, $ionicConfigProvider, firebaseConfigProvider,
       $ionicCloudProvider, ionGalleryConfigProvider) {
 
+  $ionicConfigProvider.navBar.alignTitle('center');
   ionGalleryConfigProvider.setGalleryConfig({
     action_label: 'Close',
     toggle: true,
