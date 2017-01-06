@@ -1,33 +1,45 @@
 <ion-view view-title="dashboard-interact">
-  <ion-content class="padding has-tabs-top">
+  <ion-content class="has-tabs-top">
     <div class="row">
-      <div class="col">
-        <div class="card">
-          <div class="item x">
-            <a class="button button-block button-calm" ng-click="goToOrders()">ORDERS</a>
+      <div class="col col-50">
+        <div class="list card ink" ng-click="goToOrders()">
+          <div class="item">
+              <h1 class="icon ion-clipboard"></h1>
+              <p>
+                Orders
+              </p>
           </div>
         </div>
       </div>
-      <div class="col">
-        <div class="card">
-          <div class="item item-text-wrap">
-            <a class="button button-block button-calm" ng-click="goToReservations()">RESERVATIONS</a>
+      <div class="col col-50">
+        <div class="list card ink" ng-click="goToReservations()">
+          <div class="item">
+               <h1 class="icon ion-calendar"></h1>
+              <p>
+                Reservations
+              </p>
           </div>
         </div>
       </div>
     </div>
     <div class="row">
-      <div class="col">
-        <div class="card">
-          <div class="item item-text-wrap">
-            <a class="button button-block button-calm" ng-click="goToPromos()">PROMOS</a>
+      <div class="col col-50">
+        <div class="list card ink" ng-click="goToPromos()">
+          <div class="item">
+               <h1 class="icon ion-speakerphone"></h1>
+              <p>
+                Promos
+              </p>
           </div>
         </div>
       </div>
-      <div class="col">
-        <div class="card">
-          <div class="item item-text-wrap">
-            <a class="button  button-block button-calm" ng-click="goToReviews()">REVIEWS</a>
+      <div class="col col-50">
+        <div class="list card ink" ng-click="goToReviews()">
+          <div class="item">
+               <h1 class="icon ion-chatboxes"></h1>
+              <p>
+                Reviews
+              </p>
           </div>
         </div>
       </div>

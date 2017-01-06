@@ -59,7 +59,6 @@ ul.rating li i {
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 100%;
-  padding-top: 15px;
   border-bottom: 3px solid #FFF;
   background-image: url("../img/material-wall.jpg");
 }
@@ -76,8 +75,8 @@ ul.rating li i {
   border: 1px solid #fff;
   width: 400px;
   height: 400px;
-  margin: 30px auto 0;
-  box-shadow: 0 0 4px rgba(0,0,0,0.7);
+  margin: 20px auto 0;
+  // box-shadow: 0 0 4px rgba(0,0,0,0.7);
   background-color: white;
 }
 
