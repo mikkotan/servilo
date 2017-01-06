@@ -41,53 +41,36 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
       }
     };
 
-
-    //comment for now
-    // cordova.plugins.diagnostic.isLocationAvailable(function(available) {
-    //   console.log("Location is " + (available ? "available" : "not available"));
-    //   if(!available) {
-    //     cordova.plugins.locationAccuracy.request(function(success) {
-    //       console.log("Successfully requested accuracy: "+success.message);
-    //     }, function(error) {
-    //       console.error("Accuracy request failed: error code="+error.code+"; error message="+error.message);
-    //        if(error.code !== cordova.plugins.locationAccuracy.ERROR_USER_DISAGREED){
-    //            if(window.confirm("Failed to automatically set Location Mode to 'High Accuracy'. Would you like to switch to the Location Settings page and do this manually?")){
-    //                cordova.plugins.diagnostic.switchToLocationSettings();
-    //            }
-    //        }
-    //     }, cordova.plugins.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY)
-    //   }
-    // }, function(error) {
-    //   console.error("The following error occurred: "+error);
-    // });
-
     Category.getAllCategories().$loaded()
       .then((categories) => {
         $scope.categories = categories
       })
     $scope.selectCategory = function(id) {
+      $scope.selectedCategoryRestaurants = [];
       $scope.loading = true;
-      return Category.getRestaurants(id).$loaded()
-        .then((restaurants) => {
+      $timeout(function() {
+        return Category.getRestaurants(id).$loaded()
+          .then((restaurants) => {
+            $scope.scroll('selected')
+            $scope.selectedCategoryRestaurants = restaurants.map(function(restaurant) {
 
-          $scope.selectedCategoryRestaurants = restaurants.map(function(restaurant) {
+              var r = {
+                get: Restaurant.get(restaurant.$id).$loaded()
+                  .then((restaurant) => {
+                    r.details = restaurant
+                    Restaurant.getAverageRating(restaurant.$id)
+                      .then((avg) => {
+                        r.avg = avg
+                        $scope.loading = false;
+                        $scope.$apply()
+                      })
+                  })
+              }
 
-            var r = {
-              get: Restaurant.get(restaurant.$id).$loaded()
-                .then((restaurant) => {
-                  r.details = restaurant
-                  Restaurant.getAverageRating(restaurant.$id)
-                    .then((avg) => {
-                      r.avg = avg
-                      $scope.loading = false;
-                      $scope.$apply()
-                    })
-                })
-            }
-
-            return r
+              return r
+            })
           })
-        })
+      }, 200)
     }
 
     $scope.scroll = function(anchor) {
@@ -95,7 +78,6 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
       console.log(anchor);
       $scope.handle.anchorScroll(true);
     };
-
 
     Advertisement.getRestaurants().$loaded()
       .then((restaurants) => {
