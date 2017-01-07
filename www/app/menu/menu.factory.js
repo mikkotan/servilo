@@ -32,6 +32,9 @@ app.factory("Menu",["$firebaseAuth","$firebaseArray","$firebaseObject","Restaura
     getMenuCategories : function(restaurantId) {
       return $firebaseArray(restaurants.child(restaurantId).child('menu_categories'));
     },
+    getMenusFromCategories : function(restaurantId, categoryId) {
+      return $firebaseArray(restaurants.child(restaurantId).child('menu_categories').child(categoryId).child('menus'))
+    },
     create : function(menu) {
       var authObj = firebase.auth().currentUser.uid;
       var pushId = Database.menusReference().push();

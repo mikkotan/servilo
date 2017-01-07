@@ -43,7 +43,7 @@ app.controller("SignUpCtrl", ["$scope", "Auth", "User", "$state", "IonicPushServ
               console.log("may error")
               if(err.code == "auth/email-already-in-use"){
                 $scope.submitError = true;
-                $scope.emaillAlreadyInUse = true;
+                $scope.emailAlreadyInUse = true;
               }
             });
           }catch(e){

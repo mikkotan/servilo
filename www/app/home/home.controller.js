@@ -1,7 +1,7 @@
 app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal", "$state", "ionicMaterialInk", "ionicMaterialMotion",
-"$ionicLoading", "Home", "$timeout", "User", "CordovaGeolocation", "Advertisement", "Restaurant", "Category","currentAuth",
+  "$ionicLoading", "Home", "$timeout", "User", "CordovaGeolocation", "Advertisement", "Restaurant", "Category", "currentAuth", "$location", "$anchorScroll", "$ionicScrollDelegate",
   function($scope, $ionicSlideBoxDelegate, $ionicModal, $state, ionicMaterialInk, ionicMaterialMotion, $ionicLoading, Home, $timeout,
-    User,CordovaGeolocation, Advertisement, Restaurant, Category , currentAuth) {
+    User, CordovaGeolocation, Advertisement, Restaurant, Category, currentAuth, $location, $anchorScroll, $ionicScrollDelegate) {
 
     // ionicMaterialInk.displayEffect();
     var vm = this;
@@ -9,59 +9,75 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
     User.setOnline(currentAuth.uid);
     $scope.currentLocation = CordovaGeolocation.get();
 
+    $scope.sttButton = false;
+    $scope.handle = $ionicScrollDelegate.$getByHandle("content");
+
+    setTimeout(function() {
+      $ionicSlideBoxDelegate.update();
+    }, 5000);
+
     $scope.goToRestaurant = function(id) {
       return $state.go('tabs.search')
         .then(() => {
-          $state.go('tabs.viewRestaurant.main', {restaurantId: id})
-        })
-    }
-    //comment for now
-    // cordova.plugins.diagnostic.isLocationAvailable(function(available) {
-    //   console.log("Location is " + (available ? "available" : "not available"));
-    //   if(!available) {
-    //     cordova.plugins.locationAccuracy.request(function(success) {
-    //       console.log("Successfully requested accuracy: "+success.message);
-    //     }, function(error) {
-    //       console.error("Accuracy request failed: error code="+error.code+"; error message="+error.message);
-    //        if(error.code !== cordova.plugins.locationAccuracy.ERROR_USER_DISAGREED){
-    //            if(window.confirm("Failed to automatically set Location Mode to 'High Accuracy'. Would you like to switch to the Location Settings page and do this manually?")){
-    //                cordova.plugins.diagnostic.switchToLocationSettings();
-    //            }
-    //        }
-    //     }, cordova.plugins.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY)
-    //   }
-    // }, function(error) {
-    //   console.error("The following error occurred: "+error);
-    // });
-
-    Category.getAllCategories().$loaded()
-      .then((categoryRestaurants) => {
-        $scope.categories = categoryRestaurants
-
-        $scope.$watchCollection('categories', function(newCategories) {
-          $scope.newCategories = newCategories.map(function(category) {
-            var c = {
-              id: category.$id,
-              get : Category.getRestaurants(category.$id).$loaded()
-                .then((restaurants) => {
-                  c.restaurants = restaurants.map(function(restaurant) {
-                    var r = {
-                      get : Restaurant.get(restaurant.$id).$loaded()
-                        .then((restaurant) => {
-                          r.details = restaurant
-                        })
-                        .catch((err) => {
-                          console.log(err)
-                        })
-                    }
-                    return r
-                  })
-                })
-            }
-            return c
+          $state.go('tabs.viewRestaurant.main', {
+            restaurantId: id
           })
         })
+    };
+    $scope.scrollToTop = function() {
+      $ionicScrollDelegate.scrollTop(true);
+      $scope.sttButton = false;
+    };
+    $scope.getScrollPosition = function() {
+      var moveData = $scope.handle.getScrollPosition().top;
+    //   console.log(moveData);
+      if (moveData > 150) {
+
+        $scope.sttButton = true;
+        $scope.$apply()
+      } else {
+        $scope.sttButton = false;
+        $scope.$apply();
+      }
+    };
+
+    Category.getAllCategories().$loaded()
+      .then((categories) => {
+        $scope.categories = categories
       })
+    $scope.selectCategory = function(id) {
+      $scope.selectedCategoryRestaurants = [];
+      $scope.loading = true;
+      $timeout(function() {
+        return Category.getRestaurants(id).$loaded()
+          .then((restaurants) => {
+            $scope.scroll('selected')
+            $scope.selectedCategoryRestaurants = restaurants.map(function(restaurant) {
+
+              var r = {
+                get: Restaurant.get(restaurant.$id).$loaded()
+                  .then((restaurant) => {
+                    r.details = restaurant
+                    Restaurant.getAverageRating(restaurant.$id)
+                      .then((avg) => {
+                        r.avg = avg
+                        $scope.loading = false;
+                        $scope.$apply()
+                      })
+                  })
+              }
+
+              return r
+            })
+          })
+      }, 200)
+    }
+
+    $scope.scroll = function(anchor) {
+      $location.hash(anchor);
+      console.log(anchor);
+      $scope.handle.anchorScroll(true);
+    };
 
     Advertisement.getRestaurants().$loaded()
       .then((restaurants) => {
@@ -70,7 +86,7 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
         $scope.$watchCollection('advertisedRestaurants', function(watchedAdvertisements) {
           $scope.newAdvertisements = watchedAdvertisements.map(function(advertisement) {
             var a = {
-              get : Restaurant.get(advertisement.$id).$loaded()
+              get: Restaurant.get(advertisement.$id).$loaded()
                 .then((restaurant) => {
                   a.details = restaurant
                   Restaurant.getAverageRating(restaurant.$id)
@@ -78,6 +94,7 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
                       a.avg = avg
                       a.ready = true
                       $scope.$apply()
+                      $ionicSlideBoxDelegate.update();
                     })
                 })
             }
@@ -90,25 +107,26 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
         alert(err)
       })
 
-    $scope.$on('ngLastRepeat.workorderlist',function(e) {
-        $scope.materialize();
+    $scope.$on('ngLastRepeat.workorderlist', function(e) {
+      $scope.materialize();
+    });
+    $scope.$on('ngLastRepeat.categorylist', function(e) {
+      $scope.materialize();
     });
 
-    $scope.materialize = function(){
-        $timeout(function(){
-            // ionicMaterialMotion.fadeSlideInRight();
-            ionicMaterialInk.displayEffect();
-          },0);
+    $scope.materialize = function() {
+      $timeout(function() {
+        // ionicMaterialMotion.fadeSlideInRight();
+        ionicMaterialInk.displayEffect();
+      }, 0);
     };
 
-
-
-
     $scope.options = {
-      loop: true,
+      loop: false,
       effect: 'slide',
-      autoplay: 5000,
+      autoplay: 3000,
       speed: 500,
+      paginationHide: true
     }
     $scope.data = {};
     $scope.$watch('data.slider', function(nv, ov) {

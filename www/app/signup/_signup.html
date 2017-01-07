@@ -1,48 +1,53 @@
-<ion-view view-title="SignUp" hide-nav-bar="true">
-  <ion-content class="login-page" scroll="false">
+<ion-view view-title="SignUp" hide-nav-bar="true" cache-view="false">
+  <ion-content class="login-page">
     <section class="login-container">
-      <button class="button button-block button-assertive ink" ui-sref="landing">Back</button>
+
       <div class="card padding">
         <form ng-submit="createUser(user)" name="form" novalidate>
-            <div class="list">
-              <label class="item item-input item-floating-label">
+          <div class="list">
+            <label class="item item-input item-floating-label">
                 <span class="input-label has-input">First Name</span>
                 <input type="text" placeholder="First Name" ng-model="user.firstName" name="firstName" ng-required=true>
-                <div class="error" ng-show="form.firstName.$touched || submitError">
+                <div class="error" ng-if="form.firstName.$touched || submitError">
                   <p ng-show="form.firstName.$error.required">* First name is required</p>
                 </div>
               </label>
-              <label class="item item-input item-floating-label">
+            <label class="item item-input item-floating-label">
                 <span class="input-label has-input">Last Name</span>
                 <input type="text" placeholder="Last Name" ng-model="user.lastName" name="lastName" ng-required=true>
-                <div class="error" ng-show="form.lastName.$touched || submitError">
+                <div class="error" ng-if="form.lastName.$touched || submitError">
                   <p ng-show="form.lastName.$error.required">* Last name is required</p>
                 </div>
               </label>
-              <label class="item item-input item-floating-label">
+            <label class="item item-input item-floating-label">
                 <span class="input-label has-input">E-mail Address</span>
                 <input type="email" placeholder="E-mail Address" ng-model="user.email" name="email" ng-required=true>
-                <div ng-show="form.email.$touched || submitError" class="error">
+                <div ng-if="form.email.$touched || submitError" class="error">
                   <p ng-show="form.email.$error.required">* Email is required</p>
-                  <p ng-show="form.email.$invalid">* Email should be in a form of "*******@***"</p>
-                  <p ng-show="emaillAlreadyInUse">* Email already in use please choose another one</p>
+                  <p ng-show="form.email.$invalid && form.email.$dirty">* Input is not an email</p>
+                  <p ng-show="emailAlreadyInUse">* Email already in use</p>
                 </div>
               </label>
-              <label class="item item-input item-floating-label">
+            <label class="item item-input item-floating-label">
                 <span class="input-label has-input">Password</span>
                 <input type="{{passwordType}}" placeholder="Password" ng-model="user.password" name="password" ng-minlength="6" ng-required=true>
               </label>
-              <ion-checkbox ng-click="showHidePassword()">Show password</ion-checkbox>
-              <div ng-show="form.password.$touched || submitError" class="error">
-                <p ng-show="form.password.$error.required">* Password is required</p>
-                <p ng-show="form.password.$error.minlength">* Password is to short needed atleast 6 character</p>
-              </div>
+            <ion-checkbox ng-click="showHidePassword()">Show password</ion-checkbox>
+            <div ng-if="form.password.$touched || submitError" class="error">
+              <p ng-show="form.password.$error.required">* Password is required</p>
+              <p ng-show="form.password.$error.minlength">* Password is to short needed atleast 6 character</p>
             </div>
-            <div class="list">
-              <button type="submit" class="button button-block button-energized ink">Signup</button>
-            </div>
+          </div>
+          <div class="list">
+            <button type="submit" class="button button-block button-energized ink">Signup</button>
+          </div>
+
+          <button class="button button-block button-assertive ink" ui-sref="landing">Back</button>
         </form>
       </div>
+
+
+
     </section>
   </ion-content>
 </ion-view>

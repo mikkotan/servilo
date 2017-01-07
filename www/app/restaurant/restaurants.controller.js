@@ -1,5 +1,6 @@
-app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera", "CordovaGeolocation","Upload", "$ionicPopup", "Order", "Database", "Reservation",
-  function($scope, $firebaseArray, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation,Upload, $ionicPopup, Order, Database, Reservation) {
+app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera", "CordovaGeolocation", "Upload", "$ionicPopup", "Order", "Database", "Reservation", "ionicToast",
+  function($scope, $firebaseArray, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation, Upload, $ionicPopup, Order, Database, Reservation, ionicToast) {
+
 
     $scope.modalControl = {};
     $scope.facilities = Database.facilities();
@@ -12,6 +13,36 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     $scope.data = {};
     $scope.countryCode = 'PH';
 
+    $scope.options = {
+      loop: true,
+      effect: 'slide',
+      autoplay: 5000,
+      speed: 500,
+    }
+    $scope.slide = {};
+    $scope.$watch('slide.slider', function(nv, ov) {
+      $scope.slider = $scope.slide.slider;
+    })
+
+    // $scope.restaurant = {};
+    // $scope.restaurant.main = true;
+    // $scope.restaurant.menus = false;
+    // $scope.restaurant.location = false;
+    // $scope.activeClass = function(tab) {
+    //   if (tab == 'main') {
+    //     $scope.restaurant.main = true;
+    //     $scope.restaurant.menus = false;
+    //     $scope.restaurant.location = false;
+    //   } else if (tab == 'menus') {
+    //     $scope.restaurant.menus = true;
+    //     $scope.restaurant.menus = false;
+    //     $scope.restaurant.location = false;
+    //   } else if (tab == 'location') {
+    //     $scope.restaurant.main = false;
+    //     $scope.restaurant.menus = false;
+    //     $scope.restaurant.location = true;
+    //   }
+    // }
     console.log($scope.AppUser);
 
     $scope.rating = {
@@ -92,15 +123,14 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
     };
 
     $scope.testPhoto = function() {
-      navigator.camera.getPicture(onSuccess, onFail,
-        {
-          sourceType: Camera.PictureSourceType.CAMERA,
-          quality: 50,
-          destinationType: Camera.DestinationType.DATA_URL,
-          encodingType: Camera.EncodingType.JPEG,
-          mediaType: Camera.MediaType.PICTURE,
-          correctOrientation: true,
-        });
+      navigator.camera.getPicture(onSuccess, onFail, {
+        sourceType: Camera.PictureSourceType.CAMERA,
+        quality: 50,
+        destinationType: Camera.DestinationType.DATA_URL,
+        encodingType: Camera.EncodingType.JPEG,
+        mediaType: Camera.MediaType.PICTURE,
+        correctOrientation: true,
+      });
 
       function onSuccess(imageURI) {
         var storageRef = firebase.storage().ref();
@@ -111,7 +141,8 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
         window.imageResizer.resizeImage(
           function(data) {
             storageRef.child('test-thumb.jpg').putString(data.imageData, 'base64', metadata);
-          }, function (error) {
+          },
+          function(error) {
             console.log("Error : \r\n" + error);
           }, imageURI, 0.1, 0.1, {
             resizeType: ImageResizer.RESIZE_TYPE_FACTOR,
@@ -122,7 +153,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
       }
 
       function onFail(message) {
-          alert('Failed because: ' + message);
+        alert('Failed because: ' + message);
       }
     }
 
@@ -145,7 +176,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
       restaurant.name = "";
       restaurant.location = "";
       restaurant.type = "";
-      restaurant  .cuisine = "";
+      restaurant.cuisine = "";
       restaurant.phonenumber = "";
       restaurant.closeTime = "";
       $scope.imageURL = null;

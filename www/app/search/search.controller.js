@@ -1,23 +1,28 @@
-app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMaterialInk", "$timeout", "$ionicPopup", "CordovaGeolocation", "ionicToast", "$ionicLoading", "Search", "currentGeoLocation", "Restaurant", "$ionicActionSheet",
-  function($scope, Auth, $state, User, ionicMaterialInk, $timeout, $ionicPopup, CordovaGeolocation, ionicToast, $ionicLoading, Search, currentGeoLocation, Restaurant, $ionicActionSheet) {
+app.controller('SearchTabCtrl', ["$scope", "$rootScope", "Auth", "$state", "User", "ionicMaterialInk", "$timeout", "$ionicPopup", "CordovaGeolocation", "ionicToast", "$ionicLoading", "Search", "currentGeoLocation", "Restaurant", "$ionicActionSheet",
+  function($scope, $rootScope, Auth, $state, User, ionicMaterialInk, $timeout, $ionicPopup, CordovaGeolocation, ionicToast, $ionicLoading, Search, currentGeoLocation, Restaurant, $ionicActionSheet) {
 
-    // $scope.isLocationAvailable = false; //mobile
-    $scope.isLocationAvailable = true; //browser
+    $scope.isLocationAvailable = false; //mobile
+
+    // $scope.isLocationAvailable = true; //browser
     var checkLocation = function() {
-      if(ionic.Platform.isAndroid() || ionic.Platform.isIOS()) { //uncomment if working in browser 
-      cordova.plugins.diagnostic.isLocationAvailable(function(available) {
-        console.log("Location is " + (available ? "available" : "not available"));
-        if(available) {
-          $scope.isLocationAvailable = true;
-        } else {
-          $scope.isLocationAvailable = false;
-        }
-      }, function(error) {
-        console.error("The following error occurred: "+error);
-      });
-    } //uncomment if working in browser 
+      if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) { //uncomment if working in browser
+        cordova.plugins.diagnostic.isLocationAvailable(function(available) {
+          console.log("Location is " + (available ? "available" : "not available"));
+          if (available) {
+            $scope.isLocationAvailable = true;
+          } else {
+            $scope.isLocationAvailable = false;
+          }
+        }, function(error) {
+          console.error("The following error occurred: " + error);
+        });
+      } //uncomment if working in browser
     }
     checkLocation();
+    $rootScope.$on("$stateChangeStart",
+      function(event, toState, toParams, fromState, fromParams, options) {
+        checkLocation();
+      })
 
     $scope.doRefresh = function() {
       checkLocation();
@@ -28,7 +33,7 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
     $scope.$on('ngLastRepeat.workorderlist', function(e) {
       $scope.materialize();
     });
-    
+
     $scope.showList = true;
     $scope.showMap = false;
 
@@ -61,8 +66,7 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
           $scope.filterName = $scope.data.filter;
           $scope.clearField();
           $scope.clearLocationField();
-        }
-        else {
+        } else {
           $scope.data.filter = previousFilterName;
         }
       });
@@ -148,7 +152,7 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
       click: function(marker, eventName, model) {
         if (model.id != '0') {
 
-        //   infowindow.open(marker);
+          //   infowindow.open(marker);
 
           $state.go("tabs.viewRestaurant.main", {
             restaurantId: model.id
@@ -159,7 +163,7 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
 
     $scope.showNear = function() {
       cordova.plugins.diagnostic.isLocationAvailable(function(available) { //comment to work on browser
-        if(available) {                                                    //comment to work on browser
+        if (available) { //comment to work on browser
           $scope.allowMarkerChange('', 'name');
           var currentLocation = CordovaGeolocation.get();
           $scope.markers.push(Search.getYouAreHere());
@@ -178,11 +182,11 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
             longitude: currentLocation.longitude
           };
           isMarkerCanChange = false;
-        }                           //comment to work on browser
-        else {                      //comment to work on browser
+        } //comment to work on browser
+        else { //comment to work on browser
           $scope.requestLocation(); //comment to work on browser
-        }                           //comment to work on browser
-      });                           //comment to work on browser
+        } //comment to work on browser
+      }); //comment to work on browser
     };
 
     $scope.$watch('data.location.formatted_address', function(newValue) {
@@ -203,7 +207,7 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
       //   template: '<p>Searching. . .</p><ion-spinner icon="lines"></ion-spinner>'
       // });
       Search.getRestaurant().on("child_added", function(snapshot) {
-        if(snapshot) {
+        if (snapshot) {
           $ionicLoading.hide();
           $scope.loading = false;
         }
@@ -240,7 +244,9 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
           var results = [];
           const items = [];
           Search.searchMenu(input).once('value', snap => {
-            snap.forEach(item => { items.push(item) });
+            snap.forEach(item => {
+              items.push(item)
+            });
             if (items.length == 0) {
               $scope.restaurants = items;
               ionicToast.show('NO RESTAURANTS MAN', 'bottom', false, 2500);
@@ -294,7 +300,7 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
     }
 
     $scope.clearLocationField = function() {
-      if($scope.data.location) {
+      if ($scope.data.location) {
         $scope.data.location.formatted_address = "";
       }
       $scope.allowMarkerChange('', 'location');
@@ -303,24 +309,26 @@ app.controller('SearchTabCtrl', ["$scope", "Auth", "$state", "User", "ionicMater
     $scope.requestLocation = function() {
       cordova.plugins.diagnostic.isLocationAvailable(function(available) {
         console.log("Location is " + (available ? "available" : "not available"));
-        if(!available) {
+        if (!available) {
           cordova.plugins.locationAccuracy.request(function(success) {
-            console.log("Successfully requested accuracy: "+success.message);
+            console.log("Successfully requested accuracy: " + success.message);
             $scope.isLocationAvailable = true;
+            ionicToast.show('Location is turned on', 'bottom', false, 2500);
             $scope.$apply();
           }, function(error) {
-            console.error("Accuracy request failed: error code="+error.code+"; error message="+error.message);
-             if(error.code !== cordova.plugins.locationAccuracy.ERROR_USER_DISAGREED){
-                 if(window.confirm("Failed to automatically set Location Mode to 'High Accuracy'. Would you like to switch to the Location Settings page and do this manually?")){
-                     cordova.plugins.diagnostic.switchToLocationSettings();
-                 }
-             }
+            console.error("Accuracy request failed: error code=" + error.code + "; error message=" + error.message);
+            if (error.code !== cordova.plugins.locationAccuracy.ERROR_USER_DISAGREED) {
+              if (window.confirm("Failed to automatically set Location Mode to 'High Accuracy'. Would you like to switch to the Location Settings page and do this manually?")) {
+                cordova.plugins.diagnostic.switchToLocationSettings();
+              }
+            }
           }, cordova.plugins.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY)
         } else {
           $scope.isLocationAvailable = true;
+          ionicToast.show('Location is turned on', 'bottom', false, 2500);
         }
       }, function(error) {
-        console.error("The following error occurred: "+error);
+        console.error("The following error occurred: " + error);
       });
     }
 

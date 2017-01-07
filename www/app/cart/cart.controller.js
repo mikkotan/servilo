@@ -88,6 +88,14 @@ app.controller("CartCtrl", ["$scope", "User", "CartData", "Cart", "Database", "R
         // console.log($scope.restaurant.location)
       });
     }
+    $scope.$watch('data.location.formatted_address', function(newValue) {
+      if (newValue == undefined) {
+        console.log('Empty');
+      } else {
+        console.log('Has content');
+        $scope.setMarker($scope.data.location.geometry.location.lat(), $scope.data.location.geometry.location.lng());
+      }
+    });
 
     var scanCart = function(Cart) {
       var scanMenu = []

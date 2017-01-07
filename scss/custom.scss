@@ -16,31 +16,39 @@
     display: none !important;
   }
 }
+
 ul.rating li {
   display: inline;
   border: 0;
   background: none;
   padding: 5px 10px;
 }
+
 ul.rating li i {
   font-size: 30px;
 }
+
 .tab-item.activated,
 .tab-item.active,
 .tab-item.tab-item-active {
-  color: #ef473a;
+  color: #B71C1C !important;
+  border-color: #B71C1C !important;
 }
+
 .angular-google-map-container {
   height: 375px;
   width: 100%;
 }
+
 .angular-google-map {
   height: 375px;
   width: 100%;
 }
+
 .bar.bar-profile {
   height: 170px;
 }
+
 .bar .profile {
   top: 0;
   right: 0;
@@ -55,11 +63,13 @@ ul.rating li i {
   border-bottom: 3px solid #FFF;
   background-image: url("../img/material-wall.jpg");
 }
+
 .profile .sidebar-name {
   color: #FFF;
   margin-top: 10px !important;
   margin-bottom: 10px !important;
 }
+
 .sidebar-picture {
   display: block;
   border-radius: 100px;
@@ -70,9 +80,11 @@ ul.rating li i {
   box-shadow: 0 0 4px rgba(0,0,0,0.7);
   background-color: white;
 }
+
 .menu .has-header {
   top: 169px;
 }
+
 #content {
   position: relative;
   margin-top: 75px;
@@ -80,6 +92,7 @@ ul.rating li i {
   box-shadow: 0 -1px 10px rgba(0,0,0,0.4);
   padding-top: 200px;
 }
+
 #profile-info {
   position: absolute;
   top: -95px;
@@ -87,17 +100,21 @@ ul.rating li i {
   z-index: 2;
   text-align: center;
 }
+
 #profile-name {
   color: #444;
   font-size: 26px;
 }
+
 #profile-description {
   font-size: 15px;
   color: #888;
 }
+
 #profile-description a {
   color: #888;
 }
+
 #profile-image {
   display: block;
   border-radius: 100px;
@@ -108,6 +125,7 @@ ul.rating li i {
   box-shadow: 0 0 4px rgba(0,0,0,0.7);
   background-color: white;
 }
+
 #profile-preview {
   display: block;
   border-radius: 100px;
@@ -118,15 +136,19 @@ ul.rating li i {
   box-shadow: 0 0 4px rgba(0,0,0,0.7);
   background-color: white;
 }
+
 .list-item-content {
   padding: 5px;
 }
+
 .list-item {
   color: #666666;
 }
+
 .post {
   color: #444;
 }
+
 .post-time {
   position: absolute;
   right: 5px;
@@ -134,6 +156,7 @@ ul.rating li i {
   font-size: 11px;
   color: #888;
 }
+
 .post-profile-image {
   display: inline-block;
   vertical-align: top;
@@ -141,6 +164,7 @@ ul.rating li i {
   height: 48px;
   margin-right: 10px;
 }
+
 .post-options {
   position: absolute;
   font-size: 16px;
@@ -148,46 +172,57 @@ ul.rating li i {
   bottom: 5px;
   color: #888;
 }
+
 ion-popover-view.fit {
   height: auto !important;
 }
+
 ion-popover-view.fit ion-content {
   position: relative !important;
 }
+
 .platform-android ion-popover-view.fit {
   margin-top: 10px !important;
 }
+
 .custom-popup {
   .popup {
     width: 90% !important;
   }
 }
+
 .delete-popup {
   .popup-buttons .button-positive {
     background-color: #ef473a !important;
   }
+
   .popup {
     width: 90% !important;
   }
 }
+
 .progress-bar {
   background: #f20d49 !important;
   border-radius: 100px;
   height: 20px;
+
   p {
     text-align: center;
     color: white !important;
     text-align: center;
   }
 }
+
 .capitalize {
   text-transform: capitalize;
 }
+
 .container-class {
   ::-webkit-scrollbar {
     display: none !important;
   }
 }
+
 .login-page {
   background: url('../img/batchoy.jpg');
   background-size: cover;
@@ -195,44 +230,54 @@ ion-popover-view.fit ion-content {
   margin: auto;
   z-index: -1;
 }
+
 .login-container {
   display: -webkit-flex;
   -webkit-flex-direction: column;
   height: 100%;
   background: rgba(black, 0.75);
 }
+
 .login-container > .header {
   -webkit-flex: 4;
-  padding-top: 20px;
+  padding-top: 15px;
 }
+
 .bottom-text {
   color: #fff;
 }
+
 * {
   box-shadow: none !important;
 }
+
 .center {
   margin-left: auto;
   margin-right: auto;
   display: block;
 }
+
 .image-list-thumb {
   padding: 2px;
   height: 150px;
 }
+
 .image-modal {
   width: 100% !important;
   height: 100%;
   top: 0 !important;
   left: 0 !important;
 }
+
 .transparent {
   background: rgba(0,0,0,0.7);
 }
+
 .slider {
   width: 100%;
   height: 100%;
 }
+
 .image {
   width: 100%;
   height: 600px;
@@ -247,56 +292,246 @@ ion-popover-view.fit ion-content {
 //   transition: opacity 300ms ease-in-out;
 //   background-color: #000;
 // }
+
 .custom {
   background-color: #3f4041 !important;
 }
+
 .custom .item {
   background-color: transparent;
   border: none;
   color: white;
 }
-.custom hr {
-  border: 1px solid #666;
+
+.custom-hr {
+  border: 1px solid #666 !important;
 }
+
 .custom .item-complex .item-content,
 .dark .item-radio .item-content {
   background-color: transparent;
 }
+
 .custom a,
 .custom h2,
 .custom h3,
 .custom p {
   color: white;
 }
-ion-slides {
+
+.card-slides > ion-slides {
+  height: 20vh !important;
+}
+
+.img-slides > ion-slides {
   height: 40vh !important;
 }
+
 ion-slides .card {
   max-height: 100%;
   margin: auto;
   display: block;
 }
+
 .button-bar > .button {
   border: 1px solid #cfcfcf;
 }
+
 .button-bar > .button:last-child {
   border-radius: 0 20px 20px 0 !important;
 }
+
 .button-bar > .button:first-child {
   border-radius: 20px 0 0 20px !important;
 }
+
 a.button.button-block {
   width: 100%;
 }
+
 .platform-android .action-sheet-cancel {
-    display: block !important;
+  display: block !important;
 }
+
 .img-holder {
   position: relative;
   width: 100px;
 }
+
 .img-holder .link {
   position: absolute;
-  bottom: 10px; /*your button position*/
-  right: 10px; /*your button position*/
+  bottom: 10px;
+  /*your button position*/
+  right: 10px;
+  /*your button position*/
+}
+
+.current {
+  border-width: 2px;
+  border-bottom: thin solid #B71C1C !important;
+  color: #B71C1C !important;
+}
+
+.block {
+  display: block;
+  position: relative;
+}
+
+.fill {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.fill img {
+  min-height: 100%;
+  min-width: 100%;
+  object-fit: cover;
+}
+
+.bottom-right {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.no-margin-top {
+  margin-top: 0 !important;
+}
+
+.swiper-pagination {
+  display: none;
+}
+
+#restaurant-name {
+  color: #444;
+  font-size: 20px;
+}
+
+.justify {
+  text-align: justify;
+}
+
+.border-top-bottom {
+  border-bottom: thin solid #000 !important;
+  border-top: thin solid #000 !important;
+}
+
+.open h2,
+.open p {
+  color: green !important;
+}
+
+.closed h2,
+.closed p {
+  color: red !important;
+}
+
+.faded {
+  opacity: 0.5;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.gallery-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 100;
+  display: block;
+}
+
+.gallery-button-div {
+  display: block;
+}
+
+.relative {
+  position: relative !important;
+  z-index: -1;
+}
+
+.list .item.item-accordion {
+  line-height: 38px;
+  padding-top: 0;
+  padding-bottom: 0;
+  transition: 0.09s all linear;
+}
+
+.list .item.item-accordion.ng-hide {
+  line-height: 0;
+}
+
+.list .item.item-accordion.ng-hide-add,
+.list .item.item-accordion.ng-hide-remove {
+  display: block !important;
+}
+// to allow user to hold and select text for easy copy-pasting
+
+body {
+  -webkit-user-select: auto !important;
+
+  .scroll {
+    -webkit-user-select: inherit;
+  }
+}
+
+.title {
+  text-align: center !important;
+}
+
+.static-map {
+  width: 100%;
+}
+
+.card-slider {
+  height: 30vh !important;
+}
+
+#category-div {
+  height: 100px;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#category-div:nth-child(odd) {
+  border-right: 3px solid white;
+}
+
+#category-row:nth-child(odd) {
+  border-bottom: 3px solid white;
+}
+
+#category-row:nth-last-child(-n+2) {
+  border-bottom: 0;
+}
+
+#category-container {
+  background-color: rgba(0,0,0,0.5);
+  // display: inherit;
+  // height: 90%
+}
+
+#category-title {
+  text-transform: capitalize;
+  color: white;
+  display: inline;
+  font-size: 150% !important;
+}
+
+.padding-0 {
+  padding: 0 !important;
+}
+
+.margin-0 {
+  margin: 0 !important;
+}
+
+.error p {
+  color: red !important;
 }

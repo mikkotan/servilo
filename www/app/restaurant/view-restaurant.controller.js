@@ -1,9 +1,9 @@
-app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParams", "ionicMaterialInk", "$ionicLoading", "$ionicModal", "$ionicPopup", "CordovaGeolocation", "Restaurant", "User", "Review", "Reservation", "$ionicLoading", "Notification", "$ionicSlideBoxDelegate", "$ionicScrollDelegate", "Gallery", "$timeout",
-  function($scope, $state, Upload, $stateParams, ionicMaterialInk, $ionicLoading, $ionicModal, $ionicPopup, CordovaGeolocation, Restaurant, User, Review, Reservation, $ionicLoading, Notification, $ionicSlideBoxDelegate, $ionicScrollDelegate, Gallery, $timeout) {
+app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParams", "ionicMaterialInk", "$ionicLoading", "$ionicModal", "$ionicPopup", "CordovaGeolocation", "Restaurant", "User", "Review", "Reservation", "Notification", "$ionicSlideBoxDelegate", "$ionicScrollDelegate", "Gallery", "$timeout",
+  function($scope, $state, Upload, $stateParams, ionicMaterialInk, $ionicLoading, $ionicModal, $ionicPopup, CordovaGeolocation, Restaurant, User, Review, Reservation, Notification, $ionicSlideBoxDelegate, $ionicScrollDelegate, Gallery, $timeout) {
 
     $ionicLoading.show();
     // ionicMaterialInk.displayEffect();
-    $scope.$on('applyInk',function(e) {
+    $scope.$on('applyInk', function(e) {
       ionicMaterialInk.displayEffect();
     })
     $scope.$emit('applyInk');
@@ -16,16 +16,29 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
     }
     $scope.user = User.auth();
 
+
+    $scope.goToOrder = function() {
+      $state.go('tabs.viewRestaurant.menus');
+    }
+
     var restaurantId = $stateParams.restaurantId;
     var userReviewsRef = Review.userReview(restaurantId);
     $scope.loadingReviews = false;
+
+    Restaurant.getAverageRating(restaurantId)
+      .then((res) => {
+        $scope.avg = res
+      });
+
+
     Restaurant.get(restaurantId).$loaded()
       .then(function(restaurant) {
+        $scope.image = {};
         $scope.restaurant = restaurant;
         User.hasFavored(restaurant.$id)
           .then((val) => {
-            console.log('Hasfavored from controller : '+val)
-            $scope.hasFavored = val
+            console.log('Hasfavored from controller : '+val.exists)
+            $scope.hasFavored = val.exists
             $scope.restaurantOpenStatus = Restaurant.getRestaurantOpenStatus(restaurant);
             var restaurantStatus = Restaurant.getRestaurantStatus(restaurant.owner_id)
             restaurantStatus.on('value', function(snap) {
@@ -74,14 +87,14 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
       confirmReservation.then(function(res) {
         if (res) {
           Reservation.create({
-            datetime: reservation.datetime.getTime(),
-            number_of_persons: reservation.number_of_persons,
-            status: 'pending',
-            user_id: User.auth().$id,
-            note: reservation.note,
-            restaurant_id: restaurantId,
-            timestamp: firebase.database.ServerValue.TIMESTAMP
-          })
+              datetime: reservation.datetime.getTime(),
+              number_of_persons: reservation.number_of_persons,
+              status: 'pending',
+              user_id: User.auth().$id,
+              note: reservation.note,
+              restaurant_id: restaurantId,
+              timestamp: firebase.database.ServerValue.TIMESTAMP
+            })
             .then(() => {
               console.log('success reservation')
               alert('Reservation has been booked successfully.');
@@ -100,7 +113,17 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
     }
 
     $scope.addToFavorites = function(restaurant) {
-      User.addToFavorites(restaurant);
+      $ionicPopup.confirm({
+        title: 'Add to Favorites',
+        template: "Add '" + restaurant.name + "' to favorites?"
+      })
+        .then((res) => {
+          User.addToFavorites(restaurant)
+            .then((val) => {
+              $scope.hasFavored = val.exists
+              $scope.$apply()
+            })
+        })
     }
 
     $scope.showAddReservationModal = function() {
@@ -144,12 +167,13 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
 
     $scope.addReview = function(review) {
       $ionicLoading.show();
-      try{
+      try {
         var newReview = Review.addReview(restaurantId, review);
         newReview.ref
           .then(function() {
             $ionicLoading.hide();
-            Upload.uploadMultiple($scope.images, restaurantId, newReview.key)
+            Upload.uploadMultiple($scope.images, restaurantId, newReview.key);
+            Upload.uploadMultipleRestaurant($scope.images, restaurantId);
             console.log("add review done");
             $scope.isAlreadyReviewed();
             $scope.reviewModal.hide();
@@ -170,10 +194,10 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
             alert(err);
             // $ionicLoading.hide();
           })
-        }catch(e){
-          $ionicLoading.hide();
-          $scope.submitError =true;
-        }
+      } catch (e) {
+        $ionicLoading.hide();
+        $scope.submitError = true;
+      }
     }
 
     $scope.openEditModal = function(review) {
@@ -243,17 +267,17 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
 
     $scope.addReply = function(reply) {
       Review.addReply(restaurantId, reply, $scope.reviewId)
-      .then(function() {
-        reply.content = "";
-        $scope.addReplyModal.hide();
-      })
+        .then(function() {
+          reply.content = "";
+          $scope.addReplyModal.hide();
+        })
     }
 
     $scope.editReply = function(reply) {
       Review.editReply(reply)
-      .then(function() {
-        $scope.editReplyModal.hide();
-      })
+        .then(function() {
+          $scope.editReplyModal.hide();
+        })
     }
 
     $scope.showConfirmDelete = function(review) {
@@ -302,5 +326,38 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
       $scope.viewReviewer = reviewer;
       $scope.viewItems = Gallery.get();
     }
+
+    $scope.callNumber = function(number) {
+      window.plugins.CallNumber.callNumber(function() {
+        console.log("call success");
+      }, function() {
+        console.log("call failed");
+      }, number)
+    };
+
+    $scope.days = {
+      '0': {
+        name: 'Monday'
+      },
+      '1': {
+        name: 'Tuesday'
+      },
+      '2': {
+        name: 'Wednesday'
+      },
+      '3': {
+        name: 'Thursday'
+      },
+      '4': {
+        name: 'Friday'
+      },
+      '5': {
+        name: 'Saturday'
+      },
+      '6': {
+        name: 'Sunday'
+      }
+    }
+
   }
 ]);
