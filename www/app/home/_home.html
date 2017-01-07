@@ -1,5 +1,7 @@
 <ion-view view-title="Home">
-  <ion-content delegate-handle="content">
+  <ion-floating-button has-footer="true" click="scrollToTop()" class="back-to-top" ng-hide="!sttButton" button-color="#2AC9AA" icon="ion-ios-arrow-up" icon-color="#fff">
+  </ion-floating-button>
+  <ion-content delegate-handle="content" on-scroll="getScrollPosition()">
     <div class="card-slides">
       <ion-slides options="options" slider="data.slider">
         <ion-slide-page ng-repeat="advertisement in newAdvertisements" ng-if="advertisement.ready">
@@ -30,7 +32,7 @@
     <h6>Categories</h6>
     <div ng-repeat="category in categories" id="category-row">
       <div class="row padding-0 margin-0" ng-if="$even">
-        <div class="col col-50 ink" ng-click="selectCategory(cat.$id); scroll('selected')"  id="category-div"  style="background: url('../img/{{cat.$id}}.jpg')" ng-repeat="cat in [categories[$index],categories[$index + 1]]" ng-last-repeat="categorylist" ng-if="cat">
+        <div class="col col-50 ink" ng-click="selectCategory(cat.$id); scroll('selected')" id="category-div" style="background: url('img/{{cat.$id}}.jpg')" ng-repeat="cat in [categories[$index],categories[$index + 1]]" ng-last-repeat="categorylist" ng-if="cat">
           <div id="category-container">
             <div id="category-title">{{cat.$id}}</div>
           </div>
@@ -41,7 +43,7 @@
     <section class="padding" id="selected">
       <div>
         <h6 ng-if="selectedCategoryRestaurants">Selected Category Restaurants</h6>
-
+        <ion-spinner ng-show="loading" icon="lines"></ion-spinner>
         <div class="card ink" ng-repeat="s in selectedCategoryRestaurants" ng-click="goToRestaurant(s.details.$id)" ng-if="s.details.name">
           <div class="item item-thumbnail-left">
             <img class="img-thumbnail" ng-if="s.details.photoURL" ng-src="{{s.details.photoURL}}" />
@@ -70,8 +72,6 @@
         </li> -->
       </div>
     </section>
-
-
     <!-- HOME HERE
     <ion-refresher pulling-text="Pull to refresh..." on-refresh="doRefresh()">
     </ion-refresher>
@@ -84,4 +84,5 @@
     <!-- <ion-infinite-scroll ng-if="!home.noMoreItemsAvailable" on-infinite="loadMore()" distance="1%">
     </ion-infinite-scroll> -->
   </ion-content>
+
 </ion-view>

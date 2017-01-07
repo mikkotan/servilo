@@ -36,11 +36,12 @@
           <img ng-src="{{menu.details.photoURL}}">
           <h3>{{menu.details.name}}</h3>
           <h3>{{menu.details.price | currency: '₱'}}</h3>
-          <button class="button button-calm pull-right" ng-disabled="!menu.details.availability" ng-click="addToCart(menu.details)">
-            <span ng-if="menu.details.availability">Add to cart</span>
-            <span ng-if="!menu.details.availability">Currently not available</span>
-          </button>
-
+          <div ng-if="restaurantOpenStatus && getRestaurantStatus">
+            <button class="button button-calm pull-right" ng-disabled="!menu.details.availability" ng-click="addToCart(menu.details)">
+              <span ng-if="menu.details.availability">Add to cart yeah</span>
+              <span ng-if="!menu.details.availability">Currently not available</span>
+            </button>
+          </div>
         </ion-item>
       </div>
     </ion-list>

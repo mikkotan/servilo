@@ -9,6 +9,9 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
     User.setOnline(currentAuth.uid);
     $scope.currentLocation = CordovaGeolocation.get();
 
+    $scope.sttButton = false;
+    $scope.handle = $ionicScrollDelegate.$getByHandle("content");
+
     setTimeout(function() {
       $ionicSlideBoxDelegate.update();
     }, 5000);
@@ -20,7 +23,23 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
             restaurantId: id
           })
         })
-    }
+    };
+    $scope.scrollToTop = function() {
+      $ionicScrollDelegate.scrollTop(true);
+      $scope.sttButton = false;
+    };
+    $scope.getScrollPosition = function() {
+      var moveData = $scope.handle.getScrollPosition().top;
+    //   console.log(moveData);
+      if (moveData > 150) {
+
+        $scope.sttButton = true;
+        $scope.$apply()
+      } else {
+        $scope.sttButton = false;
+        $scope.$apply();
+      }
+    };
 
 
     //comment for now
@@ -47,6 +66,7 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
         $scope.categories = categories
       })
     $scope.selectCategory = function(id) {
+      $scope.loading = true;
       return Category.getRestaurants(id).$loaded()
         .then((restaurants) => {
 
@@ -59,6 +79,7 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
                   Restaurant.getAverageRating(restaurant.$id)
                     .then((avg) => {
                       r.avg = avg
+                      $scope.loading = false;
                       $scope.$apply()
                     })
                 })
@@ -71,9 +92,8 @@ app.controller('HomeTabCtrl', ["$scope", "$ionicSlideBoxDelegate", "$ionicModal"
 
     $scope.scroll = function(anchor) {
       $location.hash(anchor);
-      var handle = $ionicScrollDelegate.$getByHandle("content");
       console.log(anchor);
-      handle.anchorScroll(true);
+      $scope.handle.anchorScroll(true);
     };
 
 

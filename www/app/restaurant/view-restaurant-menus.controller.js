@@ -15,7 +15,7 @@ app.controller("ViewRestaurantMenus", ["$scope", "$stateParams", "$state", "rest
     $scope.$watch('data.slider', function(nv, ov) {
       $scope.slider = $scope.data.slider;
     })
-    $scope.categories = Menu.getMenuCategories($stateParams.restaurantId);
+    $scope.categories = Menu.getMenuCategories(restaurantId);
 
     $scope.promoFilter = function() {
       return function(promo) {
@@ -26,6 +26,7 @@ app.controller("ViewRestaurantMenus", ["$scope", "$stateParams", "$state", "rest
         return promo.start.setHours(0) <= now.setHours(0) && promo.end.setHours(23) >= now.setHours(0)
       }
     }
+
 
     Restaurant.getCategories(restaurantId).$loaded()
       .then((categories) => {
@@ -75,12 +76,13 @@ app.controller("ViewRestaurantMenus", ["$scope", "$stateParams", "$state", "rest
         })
       })
 
-    var restaurant = Restaurant.get(restaurantId);
+    // var restaurant = Restaurant.get(restaurantId);
 
-    restaurant.$loaded()
-      .then(function() {
+    Restaurant.get(restaurantId).$loaded()
+      .then(function(restaurant) {
         var restaurantStatus = Restaurant.getRestaurantStatus(restaurant.owner_id);
-        restaurantStatus.on('value', function(snap) {
+          $scope.restaurantOpenStatus = Restaurant.getRestaurantOpenStatus(restaurant);
+          restaurantStatus.on('value', function(snap) {
           $scope.getRestaurantStatus = snap.val();
           $scope.status = restaurant.name + " is " + (snap.val() ? "Online" : "Offline");
           console.log("Status: " + $scope.getRestaurantStatus);
