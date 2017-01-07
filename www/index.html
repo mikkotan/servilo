@@ -137,11 +137,12 @@
 
 <body ng-app="app">
   <ion-side-menus ng-controller="AppCtrl" ng-cloak>
-    <ion-side-menu-content>
+    <ion-side-menu-content drag-content="false">
       <!-- <div ng-class="{'grey-bg' : sidemenuopened}"></div> -->
       <ion-nav-bar class="bar-assertive">
-        <ion-nav-back-button class="button-icon ion-arrow-left-c">
-        </ion-nav-back-button>
+        <!-- <ion-nav-back-button class="button-icon ion-arrow-left-c">
+        </ion-nav-back-button> -->
+        <ion-nav-back-button></ion-nav-back-button>
         <ion-nav-buttons side="left">
           <button class="button button-icon button-clear ion-navicon" ng-click="showMenu()">
           </button>

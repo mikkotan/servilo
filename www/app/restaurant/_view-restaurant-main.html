@@ -1,4 +1,5 @@
-<ion-view view-title="{{restaurant.name}}">
+<ion-view>
+  <ion-nav-title class="capitalize">{{restaurant.name}}</ion-nav-title>
   <ion-floating-menu has-footer="true" menu-color="#886aea" menu-icon="ion-more" menu-open-color="#444" menu-open-icon="ion-arrow-down-b" backdrop="true">
     <ion-floating-item icon="ion-android-cart" ng-if="restaurant.facilities.Online" click="goToOrder()" button-color="#387ef5" text="Place an order"></ion-floating-item>
     <ion-floating-item icon="ion-android-clipboard" ng-if="restaurant.facilities.Reservation" click="showAddReservationModal()" button-color="#387ef5" text="Book a reservation"></ion-floating-item>
