@@ -130,4 +130,5 @@
   </plugin>
   <icon src="resources/android/icon/drawable-xhdpi-icon.png"/>
   <allow-navigation href="http://192.168.0.149:8100"/>
+  <allow-navigation href="http://192.168.254.103:8100"/>
 </widget>
