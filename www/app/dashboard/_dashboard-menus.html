@@ -9,7 +9,7 @@
         <ion-item class="item-stable" ng-click="toggleGroup(category)" ng-class="{active: isGroupShown(category)}">
           <i class="icon" ng-class="isGroupShown(category) ? 'ion-minus' : 'ion-plus'"></i> &nbsp; {{category.name}}
         </ion-item>
-        <ion-item class="item-accordion item-thumbnail-left" ng-repeat="menu in category.menus" ng-show="isGroupShown(category)">
+        <ion-item class="item-accordion item-avatar" ng-repeat="menu in category.menus" ng-show="isGroupShown(category)">
           <img ng-if="menu.details.photoURL" ng-src="{{menu.details.photoURL}}">
           <img ng-if="!menu.details.photoURL" ng-src="img/wow.jpg">
           <h3>{{menu.details.name}}</h3>
