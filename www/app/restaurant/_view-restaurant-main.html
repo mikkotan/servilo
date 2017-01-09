@@ -155,6 +155,7 @@
             <div class="rate-stars">
               <!-- {{review.rating}}/5 -->
               <i class="icon ion-ios-star" ng-repeat="rating in [1,2,3,4,5]" ng-class="{true:'full', false:'off'}[rating <= review.rating]"></i>
+              {{review.rating}}/5
             </div>
             <p>
               {{review.content}}
