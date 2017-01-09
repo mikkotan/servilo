@@ -3,40 +3,43 @@
     <ion-floating-item icon="ion-android-clipboard" button-color="#387ef5" text="Add Reply"></ion-floating-item>
   </ion-floating-menu>
   <ion-content class="padding has-tabs-top">
-    <h6>Manage Reviews for {{id}}</h6>
-    <ul>
-      <li class="item" ng-repeat="review in restaurantReviews" ng-init="reviewer=getName(review.reviewer_id)">
-      <!-- ng-init="reviewer=getReviewer(review)" -->
-      <!-- ng-init="images=getImages(review.images)" -->
-        <h3>
-          {{review.content}} <span class="badge badge-balanced">{{review.rating}}</span>
-        </h3>
-        <p>
-          Displayname: {{reviewer.displayName}} <br>
-          Reviewed by: {{reviewer.firstName}} {{reviewer.lastName}}
-          <!-- Reviewed by: {{getReviewer(review).firstName}} {{getReviewer(review).lastName}} -->
+    <h6>Manage Reviews</h6>
+    <div class="list card" ng-repeat="review in restaurantReviews" ng-init="reviewer=getName(review.reviewer_id)">
+      <div class="item item-avatar">
+        <img ng-if="reviewer.photoURL" ng-src="{{reviewer.photoURL}}" style="width: 75px; height: 75px">
+        <img ng-if="!reviewer.photoURL" ng-src="img/ionic.png" style="width: 75px; height: 75px">
+        <h2>
+          <strong>{{ reviewer.displayName }}</strong>
+        </h2>
+        <p class="balanced">
+          <span class="ion-star"></span>{{review.rating}}
         </p>
-        <!-- <ion-gallery ion-gallery-items="images"></ion-gallery> -->
-        <div class="container-class">
-          <!-- <ion-scroll width="100px; height: 100px" direction="x" overflow-scroll="false"> -->
-
-            <hscroller ng-if="review.images">
-              <hcard ng-repeat="img in review.images" index="{{$index}}" desc="" image="{{img.src}}" ng-click="showImages($index)" ng-show="$index < 5"></hcard>
-              <hcard index="{{$index}}" desc="" image="img/plus.jpg" ng-click="showGallery(review.images)" ui-sref="tabs.viewRestaurant.gallery"></hcard>
-            </hscroller>
-          <!-- </ion-scroll>  -->
-          <button ng-click="openReplyModal(review)" ng-init="replies=getReplies(review.$id)">Reply</button>
-          <div ng-repeat="reply in replies" ng-init="replyName=getName(reply.user_id)">
-            <div>
-              <strong>{{replyName.firstName}} {{replyName.lastName}}:</strong>
+      </div>
+      <div class="item item-body item-text-wrap">
+        <h3>Content:</h3>
+        <p>{{review.content}}</p>
+      </div>
+      <div class="item">
+        <p>
+          <button class="ion-reply-all button button-calm button-small ink" ng-click="openReplyModal(review)" ng-init="replies=getReplies(review.$id)">Reply</button>
+        </p>
+        <h2>Replies</h2>
+        <div class="list">
+          <div class="item item-text-wrap item-thumbnail-left" ng-repeat="reply in replies" ng-init="replyName=getName(reply.user_id)">
+            <img ng-if="reviewer.photoURL" ng-src="{{reviewer.photoURL}}" style="width: 75px; height: 75px">
+            <img ng-if="!reviewer.photoURL" ng-src="img/ionic.png" style="width: 75px; height: 75px">
+            <p>
+              <strong>{{replyName.displayName}}:</strong>
+            </p>
+            <p>
               {{reply.content}}
-              <div ng-if="reply.user_id == user.$id">
-                <a class="icon ion-edit" ng-click="openEditReplyModal(reply, review.$id)">Edit</a>
-                <a class="icon ion-ios-close-outline" ng-click="replies.$remove(reply)">Remove</a>
-              </div>
-            </div>
+            </p>
+            <br>
+            <button class="button button-balanced button-small ink" ng-click="openEditReplyModal(reply, review.$id)">Edit</button>
+            <button class="button button-assertive button-small ink" ng-click="replies.$remove(reply)">Delete</button>
           </div>
         </div>
-      </li>
+      </div>
+    </div>
   </ion-content>
 </ion-view>

@@ -18,9 +18,9 @@ app.controller('SearchTabCtrl', ["$scope", "$rootScope", "Auth", "$state", "User
         });
       } //uncomment if working in browser
     }
-    checkLocation();
+    checkLocation(); //comment if on browser
     $rootScope.$on("$stateChangeStart",
-      function(event, toState, toParams, fromState, fromParams, options) {
+      function(event, toState, toParams, fromState, fromParams, options) {  //comment on browser
         checkLocation();
       })
 

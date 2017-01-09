@@ -2,21 +2,25 @@
   <ion-header-bar class="bar bar-header bar-assertive">
     <h1 class="title">Advertise your Restaurant</h1>
     <div class="buttons">
-    <button class="button button-clear button-primary" ng-click="advertiseModal.hide()"><i class="icon ion-ios-close"></i></button>
-</div>
+      <button class="button button-clear button-primary" ng-click="advertiseModal.hide()"><i class="icon ion-ios-close"></i></button>
+    </div>
   </ion-header-bar>
   <ion-content>
     <form ng-submit="createAdvertisement(ad)">
       <div class="list">
 
-        <div class="item item-icon-left" ion-datetime-picker date ng-model="ad.endDate" only-valid="{'after' : 'today', 'inclusive': 'true'}">
-          <i class="icon ion-ios-barcode-outline positive"></i> Restaurant Advertisement will run until your chosen date.
+        <div class="item item-icon-left item-text-wrap" ion-datetime-picker date ng-model="ad.endDate" only-valid="{'after' : 'today', 'inclusive': 'true'}">
+          <span class="icon ion-calendar positive"></span> Restaurant Advertisement will run until your chosen date.
           <br>
-          <strong>{{ad.endDate| date: "MMM d, y"}}</strong>
         </div>
+        <div class="item item-text-wrap" ng-if="ad.endDate">
+          <strong>Promotion will last until:</strong>
+          <h1 class="text-center">{{ad.endDate| date: "MMM d, y"}}</h1>
+        </div>
+
       </div>
       <div class="padding">
-        <button type="submit" class="button button-block button-positive">Save</button>
+        <button type="submit" class="button button-block button-balanced">Save</button>
       </div>
     </form>
   </ion-content>

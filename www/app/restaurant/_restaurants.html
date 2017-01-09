@@ -4,31 +4,34 @@
   </ion-floating-menu>
   <ion-content class="padding">
     <div class="card">
-      <div class="item">
-        <h2>Restaurateur: {{AppUser.firstName}} {{AppUser.lastName}} </h2>
-      </div>
+      <h4 class="text-center">Restaurateur: {{AppUser.firstName}} {{AppUser.lastName}} </h2>
     </div>
     <!-- <div>
       <button ng-click="newRestaurant()" class="button button-block button-positive">
         <icon class="ion-plus"></icon> New Restaurant</button>
     </div> -->
-    <ion-list>
-      <ion-item class="text-wrap" ng-repeat="restaurant in displayRestaurants">
 
-        <button class="button button-small button-calm" ui-sref="tabs.dashboard.main({restaurantId:restaurant.$id})">View in dash</button>
-        <h3 class="capitalize"><icon class="ion-spoon"></icon> {{restaurant.name}}</h3>
-        <!-- {{restaurant}} -->
-        <p>
-          <icon class="ion-ios-location-outline"></icon> {{restaurant.location}}
-        </p>
 
-        <ion-option-button class="button-royal" ng-click="deleteRestaurant(restaurant)">
-          Delete
-        </ion-option-button>
-        <ion-option-button class="button-calm" ng-click="editRestaurant(restaurant)">
-          Edit
-        </ion-option-button>
-      </ion-item>
-    </ion-list>
+    <div class="card ink" ng-repeat="restaurant in displayRestaurants" ui-sref="tabs.dashboard.main({restaurantId:restaurant.$id})" ng-last-repeat="workorderlist">
+        <div class="item item-thumbnail-left item-text-wrap">
+            <img class="img-thumbnail" ng-if="restaurant.photoURL" ng-src="{{restaurant.photoURL}}" />
+            <img ng-if="!restaurant.photoURL" ng-src="img/wow.jpg">
+            <h3 ng-init="addMarkers(restaurant.details)" class="capitalize">
+                <icon class="ion-spoon"></icon> {{restaurant.name}}
+            </h3>
+          <p>
+            <icon class="ion-ios-location-outline"></icon> {{restaurant.location}}
+          </p>
+        </div>
+    </div>
+
+
+    <!-- <ion-option-button class="button-royal" ng-click="deleteRestaurant(restaurant)">
+      Delete
+    </ion-option-button>
+    <ion-option-button class="button-calm" ng-click="editRestaurant(restaurant)">
+      Edit
+    </ion-option-button> -->
+
   </ion-content>
 </ion-view>

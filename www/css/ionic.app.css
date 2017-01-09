@@ -81,7 +81,6 @@ ul.rating li i {
   width: 400px;
   height: 400px;
   margin: 20px auto 0;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
   background-color: white; }
 
 .menu .has-header {
@@ -121,6 +120,17 @@ ul.rating li i {
   margin: 30px auto 0;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
   background-color: white; }
+
+#landing-image {
+  display: block;
+  border: 1px solid #fff;
+  width: 128px;
+  height: 128px;
+  margin: 10px auto 0;
+  background-color: white; }
+
+#landing-title {
+  color: white; }
 
 #profile-preview {
   display: block;
@@ -436,6 +446,16 @@ body {
 
 .error p {
   color: red !important; }
+
+#interact-div {
+  height: 30vh !important;
+  background-size: cover !important;
+  background-color: white !important;
+  background-repeat: no-repeat !important;
+  border: 5px solid #eef1f6;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
 
 .gallery-view .image-container {
   position: relative;

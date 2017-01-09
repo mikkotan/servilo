@@ -11,11 +11,6 @@
 
     <div class="img-slides">
       <ion-slides class="block" options="options" slider="slide.slider">
-        <!-- <ion-slide-page>
-        <div class="fill">
-          <img ng-src="img/sample.jpg">
-        </div>
-      </ion-slide-page> -->
         <ion-slide-page>
           <div class="fill">
             <img ng-if="restaurant.photoURL" ng-src="{{restaurant.photoURL}}">
@@ -30,44 +25,48 @@
       </ion-slides>
     </div>
     <div class="list card no-margin-top">
-      <div class="gallery-button-div pull-right">
-        <button class="button button-balanced button-small gallery-button pull-right" ui-sref="tabs.viewRestaurant.gallery"> View more </button>
-      </div>
       <div class="item item-thumbnail-left item-text-wrap">
-        <img ng-if="restaurant.photoURL" ng-src="{{restaurant.photoURL}}" />
+        <img ng-if="restaurant.photoURL" ng-src="{{restaurant.photoURL}}"/>
         <img ng-if="!restaurant.photoURL" ng-src="img/wow.jpg">
         <div class="row">
-          <h2 id="restaurant-name" class="capitalize"> {{restaurant.name}} </h2>
+          <h2 id="restaurant-name" class="capitalize">
+            {{restaurant.name}}
+          </h2>
           <h2 style="color:green">
-            <icon class="ion-android-star-outline"></icon> {{avg}}
-            </h2>
+            <icon class="ion-android-star-outline"></icon>
+            {{avg}}
+          </h2>
         </div>
         <hr>
         <div class="row">
           <h4>{{restaurant.location}}
-          <span class="ion-navigate" ui-sref="tabs.viewRestaurant.location"></span></h4>
+            <span class="ion-navigate" ui-sref="tabs.viewRestaurant.location"></span>
+          </h4>
         </div>
       </div>
-
       <hr class="faded">
       <div class="item item-text-wrap padding">
         <div class="open text-center" ng-if="restaurantOpenStatus">
           <h2 class="bold">OPEN</h2>
-          <p>Restaurant Hours: {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}</p>
+          <p>Restaurant Hours:
+            {{ restaurant.openTime | date:'shortTime' }}
+            -
+            {{ restaurant.closeTime | date:'shortTime' }}</p>
         </div>
         <div class="closed text-center" ng-if="!restaurantOpenStatus">
           <h2 class="bold">CLOSED</h2>
-          <p>Opens at {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}</p>
+          <p>Opens at
+            {{ restaurant.openTime | date:'shortTime' }}
+            -
+            {{ restaurant.closeTime | date:'shortTime' }}</p>
         </div>
         <hr class="faded">
         <button class="button button-balanced button-block ink" ng-click="callNumber(restaurant.phonenumber)">
-          <icon class="ion-android-call"></icon> Call Us
+          <icon class="ion-android-call"></icon>
+          Call Us
         </button>
       </div>
-
-
     </div>
-
     <div class="card">
       <div class="item item-divider">
         <span class="bold">DETAILS</span>
@@ -75,13 +74,16 @@
       <div class="row">
         <div class="col">
           <div class="item item-text-wrap">
-            <span class="bold">Contact Number:</span> {{restaurant.phonenumber}}
+            <span class="bold">Contact Number:</span>
+            {{restaurant.phonenumber}}
           </div>
           <div class="item item-text-wrap">
-            <span class="bold">Type:</span> {{restaurant.type}}
+            <span class="bold">Type:</span>
+            {{restaurant.type}}
           </div>
           <div class="item item-text-wrap">
-            <span class="bold">Cuisine:</span> {{restaurant.cuisine}}
+            <span class="bold">Cuisine:</span>
+            {{restaurant.cuisine}}
           </div>
         </div>
         <div class="col">
@@ -97,13 +99,16 @@
     <div class="card padding">
       <div ng-show="!exists">
         <button ng-click="openReviewModal()" class="button button-block button-balanced ink">
-          <icon class="ion-plus"></icon> Write Review</button>
+          <icon class="ion-plus"></icon>
+          Write Review</button>
       </div>
       <div class="button-bar" ng-show="exists">
         <button ng-click="openEditModal(review)" class="button button-balanced ink">
-          <icon class="ion-plus"></icon> Edit Review</button>
+          <icon class="ion-plus"></icon>
+          Edit Review</button>
         <button ng-click="showConfirmDelete(review)" class="button button-assertive ink">
-          <icon class="ion-android-delete"></icon> Delete Review</button>
+          <icon class="ion-android-delete"></icon>
+          Delete Review</button>
       </div>
       <div ng-show="exists">
         <div>
@@ -130,7 +135,8 @@
               <div class="col col-80">
                 <h3 ng-click="showReviewModal(review, reviewer)">{{reviewer.displayName}}</h3>
                 <p>
-                  {{review.content}} <span class="badge badge-balanced">{{review.rating}}</span>
+                  {{review.content}}
+                  <span class="badge badge-balanced">{{review.rating}}</span>
                 </p>
                 <hscroller ng-if="review.images">
                   <hcard ng-repeat="img in review.images" index="{{$index}}" desc="" image="{{img.thumb}}" ng-click="showImages($index)" ng-show="$index < 5"></hcard>

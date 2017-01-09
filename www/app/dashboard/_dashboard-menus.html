@@ -4,23 +4,27 @@
     <ion-floating-item icon="ion-edit" click="showAddCategoryModal()" button-color="#387ef5" text="Add Category"></ion-floating-item>
   </ion-floating-menu>
   <ion-content class="has-tabs-top">
-    <ion-list>
-      <!-- <a class="button button-small button-calm" ng-click="openAddModal()">Add menu</a>
-      <a class="button button-small button-calm" ng-click="showAddCategoryModal(restoId)">Add Category</a> -->
-
-      <ion-item class="item item-avatar item-icon-right" ng-repeat="menu in menus" ng-if="menu.ready">
-        <img ng-src="{{menu.details.photoURL}}">
-        <h2>{{menu.details.name}}</h2>
-        <p>{{menu.details.price}}</p>
-        <ion-toggle ng-model="menu.details.availability" ng-change="changeAvailability(menu.details)" toggle-class="toggle-calm">
-          <h3>Availability</h3></ion-toggle>
-        <ion-option-button class="button-royal" ng-click="deleteMenu(menu.details)">
-          Delete
-        </ion-option-button>
-        <ion-option-button class="button-calm" ng-click="editMenu(menu.details)">
-          Edit
-        </ion-option-button>
-      </ion-item>
+    <ion-list class="no-margin-top">
+      <div ng-repeat="category in categories">
+        <ion-item class="item-stable" ng-click="toggleGroup(category)" ng-class="{active: isGroupShown(category)}">
+          <i class="icon" ng-class="isGroupShown(category) ? 'ion-minus' : 'ion-plus'"></i> &nbsp; {{category.name}}
+        </ion-item>
+        <ion-item class="item-accordion item-thumbnail-left" ng-repeat="menu in category.menus" ng-show="isGroupShown(category)">
+          <img ng-src="{{menu.details.photoURL}}">
+          <h3>{{menu.details.name}}</h3>
+          <h3>{{menu.details.price | currency: '₱'}}</h3>
+          <ion-toggle ng-model="menu.details.availability" ng-change="changeAvailability(menu.details)" toggle-class="toggle-calm">
+            <h3>Availability</h3></ion-toggle>
+          <div class="row">
+            <div class="col">
+              <button class="button button-energized button-block button-small" ng-click="editMenu(menu.details)">Edit</button>
+            </div>
+            <div class="col">
+              <button class="button button-assertive button-block button-small" ng-click="deleteMenu(menu.details)">Delete</button>
+            </div>
+          </div>
+        </ion-item>
+      </div>
     </ion-list>
   </ion-content>
 </ion-view>

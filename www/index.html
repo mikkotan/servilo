@@ -174,34 +174,34 @@
             <a class="item" href="#/tab/home">Profile</a>
             <div class="item item-divider"></div>
             <a class="item" href="#/tab/home">Profile</a> -->
-          <ion-item menu-close ui-sref="tabs.home" class="item-borderless" ng-if="userRole.isAny">
+          <ion-item menu-close ui-sref="tabs.home" class="item-borderless ink" ng-if="userRole.isAny">
             Home
           </ion-item>
-          <ion-item menu-close ui-sref="login" class="item-borderless" ng-if="!userRole.isAny">
+          <ion-item menu-close ui-sref="login" class="item-borderless ink" ng-if="!userRole.isAny">
             Login or Signup
           </ion-item>
           <!-- <ion-item menu-close ui-sref="signup" class="item-borderless" ng-hide="firebaseUser">
             Sign Up
           </ion-item> -->
-          <ion-item menu-close ui-sref="tabs.search" ng-if="userRole.isAny" class="item-borderless">
+          <ion-item menu-close ui-sref="tabs.search" ng-if="userRole.isAny" class="item-borderless ink">
             Search
           </ion-item>
-          <ion-item menu-close ui-sref="profile" ng-if="userRole.isAny" class="item-borderless">
+          <ion-item menu-close ui-sref="profile" ng-if="userRole.isAny" class="item-borderless ink">
             Profile
           </ion-item>
           <hr class="custom-hr" ng-show="firebaseUser">
-          <ion-item ng-if="userRole.isAnyExceptUser" menu-close  ui-sref="tabs.restaurant" class="item-borderless">
+          <ion-item ng-if="userRole.isAnyExceptUser" menu-close  ui-sref="tabs.restaurant" class="item-borderless ink">
             Restaurants
           </ion-item>
-          <ion-item menu-close ng-if="userRole.isAny" class="item-borderless">
+          <ion-item menu-close ng-if="userRole.isAny" class="item-borderless ink">
             Notifications
           </ion-item>
 
-          <ion-item menu-close ng-controller="RestaurantCtrl" ng-if="userRole.isUser" class="item-borderless" ng-click="newRestaurant()">
+          <ion-item menu-close ng-controller="RestaurantCtrl" ng-if="userRole.isUser" class="item-borderless ink" ng-click="newRestaurant()">
             Create Restaurant
           </ion-item>
           <hr class="custom-hr" ng-show="firebaseUser">
-          <ion-item menu-close ng-if="userRole.isAny" class="item-borderless" ng-click="signOut()">
+          <ion-item menu-close ng-if="userRole.isAny" class="item-borderless ink" ng-click="signOut()">
             Sign Out
           </ion-item>
         </ion-list>

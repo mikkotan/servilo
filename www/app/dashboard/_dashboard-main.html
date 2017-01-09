@@ -7,70 +7,122 @@
 
   </ion-floating-menu>
   <ion-content class="has-tabs-top">
-    <div class="hero" style="background-image: url('img/wow.jpg');">
-      <div class="content">
-        <img class="avatar" ng-if="restaurant.photoURL" ng-src="{{restaurant.photoURL}}">
-        <img class="avatar" ng-if="!restaurant.photoURL" ng-src="img/ionic.png">
-        <div class="black-bg">
-          <h3 class="stable">{{restaurant.name}}</h3>
-          <h4 class="light">{{restaurant.location}}</h4>
+    <div class="img-slides">
+      <ion-slides class="block" options="options" slider="slide.slider">
+        <ion-slide-page>
+          <div class="fill">
+            <img ng-if="restaurant.photoURL" ng-src="{{restaurant.photoURL}}">
+            <img ng-if="!restaurant.photoURL" ng-src="img/sample.jpg">
+          </div>
+        </ion-slide-page>
+        <ion-slide-page ng-repeat="image in restaurant.images" ng-if="image">
+          <div class="fill">
+            <img ng-src="{{image.src}}">
+          </div>
+        </ion-slide-page>
+      </ion-slides>
+    </div>
+    <div class="list card no-margin-top">
+      <div class="item item-thumbnail-left item-text-wrap">
+        <img ng-if="restaurant.photoURL" ng-src="{{restaurant.photoURL}}"/>
+        <img ng-if="!restaurant.photoURL" ng-src="img/wow.jpg">
+        <div class="row">
+          <h2 id="restaurant-name" class="capitalize">
+            {{restaurant.name}}
+          </h2>
+          <h2 style="color:green">
+            <icon class="ion-android-star-outline"></icon>
+            {{avg}}
+          </h2>
+        </div>
+        <hr>
+        <div class="row">
+          <h4>{{restaurant.location}}
+            <span class="ion-navigate" ui-sref="tabs.viewRestaurant.location"></span>
+          </h4>
         </div>
       </div>
+      <hr class="faded">
+      <div class="item item-text-wrap padding">
+        <div class="open text-center" ng-if="restaurantOpenStatus">
+          <h2 class="bold">OPEN</h2>
+          <p>Restaurant Hours:
+            {{ restaurant.openTime | date:'shortTime' }}
+            -
+            {{ restaurant.closeTime | date:'shortTime' }}</p>
+        </div>
+        <div class="closed text-center" ng-if="!restaurantOpenStatus">
+          <h2 class="bold">CLOSED</h2>
+          <p>Opens at
+            {{ restaurant.openTime | date:'shortTime' }}
+            -
+            {{ restaurant.closeTime | date:'shortTime' }}</p>
+        </div>
+        <hr class="faded">
+        <button class="button button-balanced button-block ink" ng-click="callNumber(restaurant.phonenumber)">
+          <icon class="ion-android-call"></icon>
+          Call Us
+        </button>
+      </div>
     </div>
+
     <div class="card" ng-if="ad.exists">
       <p class="padding" ng-if="ad.isValid" style="color:green">
-        This restaurant is currently advertised. Advertisement will end at {{ad.details.endDate| date: "MMM d, y"}}.
+        This restaurant is currently advertised. Advertisement will end at
+        {{ad.details.endDate| date: "MMM d, y"}}.
       </p>
       <p class="padding" ng-if="!ad.isValid" style="color:red">
-        Restaurant advertisement has ended on {{ad.details.endDate | date: "MMM d, y"}} over. Create a new ad campaign by tapping the option button.
+        Restaurant advertisement has ended on
+        {{ad.details.endDate | date: "MMM d, y"}}
+        over. Create a new ad campaign by tapping the option button.
       </p>
     </div>
-    <div class="card list">
+
+    <div class="list card">
       <div class="item item-divider">
-        <h2>Information</h2>
+        <span class="bold">DETAILS</span>
       </div>
-      <div class="item item-text-wrap">
-        <div class="list">
-          <div class="item">
-            <p>Type: {{restaurant.type}}</p>
+      <div class="row">
+        <div class="item item-text-wrap">
+          <span class="bold">Contact Number:</span>
+          {{restaurant.phonenumber}}
+        </div>
+      </div>
+      <div class="row">
+        <div class=" item item-text-wrap">
+          <span class="bold">Type:</span>
+          {{restaurant.type}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="item item-text-wrap">
+          <span class="bold">Cuisine:</span>
+          {{restaurant.cuisine}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="item item-divider">
+            <span class="bold">Days Open:</span>
           </div>
-          <div class="item">
-            <p>Cuisine: {{restaurant.cuisine}}</p>
+          <div class="item item-text-wrap">
+            <p ng-repeat="(key, val) in restaurant.openDays track by $index" ng-if="val === true">
+              {{days[key].name}}
+            </p>
           </div>
-          <div class="item">
-            <p>Contact no.: {{restaurant.phonenumber}}</p>
+        </div>
+        <div class="col">
+          <div class="item item-divider">
+            <span class="bold">Facilities:</span>
+          </div>
+          <div class="item item-text-wrap">
+            <p ng-repeat="(key, val) in restaurant.facilities">
+              {{getFacilityName(key)}}
+            </p>
           </div>
         </div>
       </div>
     </div>
-    <div class="card list">
-      <div class="item item-divider">
-        <h2>Schedule</h2>
-      </div>
-      <div class="item item-text-wrap">
-        <div class="list">
-          <p>Time Open: </p>
-          <div class="item">
-            <p>{{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}</p>
-          </div>
-          <p>Days Open: </p>
-          <div class="item" ng-repeat="(key, val) in restaurant.openDays track by $index" ng-if="val === true">
-            <p>{{days[key].name}}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="card list">
-      <div class="item item-divider">
-        <h2>Facilities</h2>
-      </div>
-      <div class="item item-text-wrap">
-        <div class="list">
-          <div class="item" ng-repeat="(key, val) in restaurant.facilities">
-            <p>{{getFacilityName(key)}}</p>
-          </div>
-        </div>
-      </div>
-    </div>
+
   </ion-content>
 </ion-view>

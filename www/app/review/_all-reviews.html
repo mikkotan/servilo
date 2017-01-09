@@ -1,43 +1,47 @@
 <ion-view view-title="{{restaurant.name}} Reviews">
   <ion-content class="padding has-tabs-top">
-    <div class="card">
-      <div class="item">
-        <h2>{{restaurant.name}}</h2>
-      </div>
-    </div>
 
     <div class="list card" ng-repeat="review in reviews" ng-init="reviewer=getName(review.reviewer_id)" ng-last-repeat="reviewList">
-
       <div class="item item-avatar">
-        <img ng-if="reviewer.photoURL" ng-src="{{reviewer.photoURL}}" style="width: 50px; height: 50px">
-        <img ng-if="!reviewer.photoURL" ng-src="img/ionic.png" style="width: 50px; height: 50px">
-        <strong>{{ reviewer.displayName }}</strong>
-        <p>November 05, 1955</p>
+        <img ng-if="reviewer.photoURL" ng-src="{{reviewer.photoURL}}" style="width: 75px; height: 75px">
+        <img ng-if="!reviewer.photoURL" ng-src="img/ionic.png" style="width: 75px; height: 75px">
+        <h2>
+          <strong>{{ reviewer.displayName }}</strong>
+        </h2>
+        <p class="balanced">
+          <span class="ion-star"></span>{{review.rating}}
+        </p>
       </div>
+      <div class="item item-body item-text-wrap">
+        <h3>Content:</h3>
+        <p>{{review.content}}</p>
+      </div>
+      <div class="item">
+        <p>
+          <button class="ion-reply-all button button-calm button-small ink" ng-click="openReplyModal(review)" ng-init="replies=getReplies(review.$id)">Reply</button>
+        </p>
+        <h2>Replies</h2>
+        <div class="list">
+          <div class="item item-text-wrap item-thumbnail-left" ng-repeat="reply in replies" ng-init="replyName=getName(reply.user_id)">
+            <img ng-if="reviewer.photoURL" ng-src="{{reviewer.photoURL}}" style="width: 75px; height: 75px">
+            <img ng-if="!reviewer.photoURL" ng-src="img/ionic.png" style="width: 75px; height: 75px">
+            <p>
+              <strong>{{replyName.displayName}}:</strong>
+            </p>
+            <p>
+              {{reply.content}}
+            </p>
+            <br>
+            <button class="button button-balanced button-small ink" ng-click="openEditReplyModal(reply, review.$id)">Edit</button>
+            <button class="button button-assertive button-small ink" ng-click="replies.$remove(reply)">Delete</button>
 
-      <div class="item item-body">
-        {{review.content}} <span class="badge badge-balanced">{{review.rating}}</span>
-        <button class="ion-reply-all button button-calm ink" ng-click="openReplyModal(review)" ng-init="replies=getReplies(review.$id)">Reply</button>
-      </div>
-      <div class="item item-divider">
-        Reviews
-      </div>
-
-      <div class="item" ng-repeat="reply in replies" ng-init="replyName=getName(reply.user_id)">
-        <div>
-          <strong>{{replyName.displayName}}:</strong> {{reply.content}}
-          <span ng-if="reply.user_id == user.$id">
-                <a class="button button-balanced icon ion-edit ink" ng-click="openEditReplyModal(reply, review.$id)">Edit</a>
-                <a class="button button-assertive icon ion-ios-close-outline ink" ng-click="replies.$remove(reply)">Remove</a>
-              </span>
+          </div>
         </div>
       </div>
-
     </div>
     <!-- <hscroller ng-if="review.images">
            <hcard ng-repeat="img in review.images" index="{{$index}}" desc="" image="{{img.src}}"></hcard>
         </hscroller> -->
-    <ion-infinite-scroll ng-if="!noMoreItemsAvailable" on-infinite="loadMore()" distance="1%">
-    </ion-infinite-scroll>
+    <ion-infinite-scroll ng-if="!noMoreItemsAvailable" on-infinite="loadMore()" distance="1%"></ion-infinite-scroll>
   </ion-content>
 </ion-view>

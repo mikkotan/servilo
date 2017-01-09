@@ -1,5 +1,5 @@
-app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera", "CordovaGeolocation", "Upload", "$ionicPopup", "Order", "Database", "Reservation", "ionicToast",
-  function($scope, $firebaseArray, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation, Upload, $ionicPopup, Order, Database, Reservation, ionicToast) {
+app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicModal", "$ionicListDelegate", "Restaurant", "$cordovaCamera", "CordovaGeolocation", "Upload", "$ionicPopup", "Order", "Database", "Reservation", "ionicToast", "ionicMaterialInk","$timeout",
+  function($scope, $firebaseArray, User, $ionicModal, $ionicListDelegate, Restaurant, $cordovaCamera, CordovaGeolocation, Upload, $ionicPopup, Order, Database, Reservation, ionicToast, ionicMaterialInk, $timeout) {
 
 
     $scope.modalControl = {};
@@ -24,25 +24,15 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
       $scope.slider = $scope.slide.slider;
     })
 
-    // $scope.restaurant = {};
-    // $scope.restaurant.main = true;
-    // $scope.restaurant.menus = false;
-    // $scope.restaurant.location = false;
-    // $scope.activeClass = function(tab) {
-    //   if (tab == 'main') {
-    //     $scope.restaurant.main = true;
-    //     $scope.restaurant.menus = false;
-    //     $scope.restaurant.location = false;
-    //   } else if (tab == 'menus') {
-    //     $scope.restaurant.menus = true;
-    //     $scope.restaurant.menus = false;
-    //     $scope.restaurant.location = false;
-    //   } else if (tab == 'location') {
-    //     $scope.restaurant.main = false;
-    //     $scope.restaurant.menus = false;
-    //     $scope.restaurant.location = true;
-    //   }
-    // }
+    ionicMaterialInk.displayEffect();
+    $scope.$on('ngLastRepeat.workorderlist', function(e) {
+      $scope.materialize();
+    });
+    $scope.materialize = function() {
+      $timeout(function() {
+        ionicMaterialInk.displayEffect();
+      }, 0);
+    };
     console.log($scope.AppUser);
 
     $scope.rating = {
@@ -139,6 +129,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
         };
         storageRef.child('test.jpg').putString(imageURI, 'base64', metadata);
         window.imageResizer.resizeImage(
+
           function(data) {
             storageRef.child('test-thumb.jpg').putString(data.imageData, 'base64', metadata);
           },
@@ -478,7 +469,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
       }
     }
     $scope.checkIfAllfalse = function(arr) {
-        return Restaurant.checkIfAllfalse(arr);
+      return Restaurant.checkIfAllfalse(arr);
     }
   }
 ])

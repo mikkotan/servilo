@@ -7,18 +7,21 @@
       <ion-slides options="options" slider="data.slider">
         <ion-slide-page ng-repeat="advertisement in newAdvertisements" ng-if="advertisement.ready">
           <div class="card ink" ng-click="goToRestaurant(advertisement.details.$id)">
-            <div class="item item-thumbnail-left">
+            <div class="item item-thumbnail-left item-text-wrap">
               <img class="img-thumbnail" ng-if="advertisement.details.photoURL" ng-src="{{advertisement.details.photoURL}}" />
               <img ng-if="!advertisement.details.photoURL" ng-src="img/wow.jpg">
               <p style="color:violet">
                 Sponsored (click to view)
               </p>
+              <h3 class="capitalize">
               <icon class="ion-spoon"></icon> {{advertisement.details.name}}
+              </h3>
               <span style="color:green">
                 <icon class="ion-android-star-outline"></icon> {{advertisement.avg}}
+                {{advertisement.details.secured_data.avgPrice.toFixed(2) | currency:"₱"}}
               </span>
               <p>
-                {{advertisement.details.secured_data.avgPrice.toFixed(2) | currency:"₱"}}
+
               </p>
               <p>
                 <icon class="ion-ios-location-outline"></icon> {{advertisement.details.location}}
@@ -41,20 +44,20 @@
       </div>
     </div>
 
-    <section class="" id="selected">
+    <section id="selected">
       <div>
         <h6 ng-if="selectedCategoryRestaurants">Selected Category Restaurants</h6>
         <ion-spinner ng-show="loading" icon="lines"></ion-spinner>
         <div class="card ink" ng-repeat="s in selectedCategoryRestaurants" ng-click="goToRestaurant(s.details.$id)" ng-if="s.details.name">
-          <div class="item item-thumbnail-left">
+          <div class="item item-thumbnail-left item-text-wrap">
             <img class="img-thumbnail" ng-if="s.details.photoURL" ng-src="{{s.details.photoURL}}" />
             <img ng-if="!s.details.photoURL" ng-src="img/wow.jpg">
             <h3 class="capitalize">
               <icon class="ion-spoon"></icon> {{s.details.name}}
-              <span style="color:green">
-                <icon class="ion-android-star-outline"></icon> {{s.avg}}
-              </span>
             </h3>
+            <span style="color:green">
+              <icon class="ion-android-star-outline"></icon> {{s.avg}}
+            </span>
             <p>
               {{s.details.secured_data.avgPrice.toFixed(2) | currency:"₱"}}
             </p>

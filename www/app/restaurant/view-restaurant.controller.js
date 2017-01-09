@@ -37,7 +37,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
         $scope.restaurant = restaurant;
         User.hasFavored(restaurant.$id)
           .then((val) => {
-            console.log('Hasfavored from controller : '+val.exists)
+            console.log('Hasfavored from controller : ' + val.exists)
             $scope.hasFavored = val.exists
             $scope.restaurantOpenStatus = Restaurant.getRestaurantOpenStatus(restaurant);
             var restaurantStatus = Restaurant.getRestaurantStatus(restaurant.owner_id)
@@ -58,7 +58,7 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
           $ionicLoading.hide();
         });
       })
-
+    $scope.getFacilityName = Restaurant.getFacilityName;
     $scope.isAlreadyReviewed = function() {
       userReviewsRef.once('value', function(snapshot) {
         $scope.exists = snapshot.val();
@@ -114,9 +114,9 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
 
     $scope.addToFavorites = function(restaurant) {
       $ionicPopup.confirm({
-        title: 'Add to Favorites',
-        template: "Add '" + restaurant.name + "' to favorites?"
-      })
+          title: 'Add to Favorites',
+          template: "Add '" + restaurant.name + "' to favorites?"
+        })
         .then((res) => {
           User.addToFavorites(restaurant)
             .then((val) => {
@@ -149,8 +149,8 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
           })
         }
       }, function(error) {
-          $scope.isUploadDone = true;
-          console.log('Error: ' + JSON.stringify(error));
+        $scope.isUploadDone = true;
+        console.log('Error: ' + JSON.stringify(error));
       }, Upload.getMultipleUploadOptions());
     }
 

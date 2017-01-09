@@ -1,4 +1,4 @@
-app.controller('DashboardInteractPromosCtrl', function($scope, $stateParams, $ionicModal, $ionicLoading, $ionicPopup, Promo, Restaurant, Upload) {
+app.controller('DashboardInteractPromosCtrl', function($scope, $stateParams, $ionicModal, $ionicLoading, $ionicPopup, Promo, Restaurant, Upload, ionicToast) {
   console.log('eheheh lleo');
   $scope.restaurantId = $stateParams.restaurantId;
 
@@ -22,30 +22,30 @@ app.controller('DashboardInteractPromosCtrl', function($scope, $stateParams, $io
     promo.startDate.setHours(0);
     promo.endDate.setHours(23);
     Promo.create({
-      restaurant_id: $scope.restaurantId,
-      photoURL: $scope.imageURL,
-      name: promo.name,
-      description: promo.description,
-      startDate: promo.startDate.getTime(),
-      endDate: promo.endDate.getTime(),
-      timestamp: firebase.database.ServerValue.TIMESTAMP
-    })
+        restaurant_id: $scope.restaurantId,
+        photoURL: $scope.imageURL,
+        name: promo.name,
+        description: promo.description,
+        startDate: promo.startDate.getTime(),
+        endDate: promo.endDate.getTime(),
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+      })
       .then(() => {
         $ionicLoading.hide();
-        alert('Success');
+        ionicToast.show('Add promo success!', 'bottom', false, 2500);
         $scope.addPromoModal.hide();
       })
       .catch((err) => {
         $scope.addPromoModal.hide();
-        alert(err)
+        ionicToast.show('Add promo failed!', 'bottom', false, 2500);
       })
   }
 
   $scope.delete = function(promo) {
     $ionicPopup.confirm({
-      title: "Delete Promo",
-      template: "Delete '" + promo.name + "' promo?"
-    })
+        title: "Delete Promo",
+        template: "Delete '" + promo.name + "' promo?"
+      })
       .then((res) => {
         if (res) {
           return Promo.delete(promo)

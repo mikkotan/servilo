@@ -1,5 +1,5 @@
-app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionicModal", "$ionicPopup", "$firebaseArray", "Restaurant", "Database", "$ionicLoading", "Upload", "$cordovaCamera", "CordovaGeolocation", "Advertisement", "User",
-  function($scope, $state, $stateParams, $ionicModal, $ionicPopup, $firebaseArray, Restaurant, Database, $ionicLoading, Upload, $cordovaCamera, CordovaGeolocation, Advertisement, User) {
+app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionicModal", "$ionicPopup", "ionicToast", "$firebaseArray", "Restaurant", "Database", "$ionicLoading", "Upload", "$cordovaCamera", "CordovaGeolocation", "Advertisement", "User",
+  function($scope, $state, $stateParams, $ionicModal, $ionicPopup, ionicToast, $firebaseArray, Restaurant, Database, $ionicLoading, Upload, $cordovaCamera, CordovaGeolocation, Advertisement, User) {
     $ionicLoading.show();
 
     $scope.data = {};
@@ -13,16 +13,16 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
     $scope.createAdvertisement = function(advertisement) {
       advertisement.endDate.setHours(23);
       Advertisement.create({
-        endDate : advertisement.endDate.getTime(),
-        timestamp: firebase.database.ServerValue.TIMESTAMP
-      }, $stateParams.restaurantId)
+          endDate: advertisement.endDate.getTime(),
+          timestamp: firebase.database.ServerValue.TIMESTAMP
+        }, $stateParams.restaurantId)
         .then((ad) => {
           $scope.ad = ad
-          alert('Advertisement Successfully created')
+          ionicToast.show('Ad successfully created', 'bottom', false, 2500);
           $scope.advertiseModal.hide()
         })
         .catch((err) => {
-          alert(err)
+          ionicToast.show('Ad creation failed', 'bottom', false, 2500);
           $scope.advertiseModal.hide()
         })
     }
@@ -116,9 +116,9 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
     $scope.deleteRestaurant = function(restaurant) {
       var resObj = restaurant
       $ionicPopup.confirm({
-        title: "Delete Restaurant",
-        template: "Are you sure to delete '" + restaurant.name + "' ?"
-      })
+          title: "Delete Restaurant",
+          template: "Are you sure to delete '" + restaurant.name + "' ?"
+        })
         .then((res) => {
           if (res) {
             $ionicLoading.show()
@@ -134,11 +134,11 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
                       Reservation.delete(reservation)
                         .then(() => {
                           console.log('delete sucess')
-                          alert('delete success');
+                          ionicToast.show('Successfully Deleted', 'bottom', false, 2500);
                         })
                         .catch((err) => {
                           console.log(err)
-                          alert(err);
+                          ionicToast.show('Delete failed', 'bottom', false, 2500);
                         })
                     }
                   })
@@ -153,7 +153,7 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
                         })
                         .catch((err) => {
                           console.log(err)
-                          alert(err);
+                          ionicToast.show('Delete failed', 'bottom', false, 2500);
                         })
                     }
                   })
@@ -162,7 +162,7 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
               })
               .catch((err) => {
                 $ionicLoading.hide()
-                alert(err)
+                ionicToast.show('Delete failed', 'bottom', false, 2500);
                 console.log('Error on deleting: ' + err);
               })
           }
@@ -237,7 +237,7 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
       };
 
       $scope.data.location = {
-        formatted_address : restaurant.location
+        formatted_address: restaurant.location
       };
 
       $scope.restaurantEditModal.show();
@@ -339,7 +339,7 @@ app.controller("DashboardMainCtrl", ["$scope", "$state", "$stateParams", "$ionic
       $scope.imageLoading = true;
     }
     $scope.checkIfAllfalse = function(arr) {
-        return Restaurant.checkIfAllfalse(arr);
+      return Restaurant.checkIfAllfalse(arr);
     }
   }
 ]);

@@ -5,28 +5,9 @@
   <ion-tab ng-if="userRole.isAny" title="Search" icon="ion-search" href="#/tab/search">
     <ion-nav-view name="search-tab"></ion-nav-view>
   </ion-tab>
-  <!-- <ion-tab title="Menu" icon="ion-ios-information" ui-sref="tabs.menu">
-    <ion-nav-view name="menu-tab"></ion-nav-view>
-  </ion-tab> -->
-  <!-- <ion-tab title="Contact" icon="ion-ios-world" ui-sref="tabs.contact">
-    <ion-nav-view name="contact-tab"></ion-nav-view>
-  </ion-tab> -->
-  <!-- <ion-tab title="Login" icon="ion-ios-world" ui-sref="tabs.login">
-    <ion-nav-view name="login-tab"></ion-nav-view>
-  </ion-tab>
-  <ion-tab title="SignUp" icon="ion-ios-world" ui-sref="tabs.signup">
-    <ion-nav-view name="signup-tab"></ion-nav-view>
-  </ion-tab> -->
   <ion-tab ng-if="userRole.isRestaurantOwner" title="Restaurants" icon="ion-spoon" ng-click="goToMyRestaurant()">
     <ion-nav-view name="restaurant-tab"></ion-nav-view>
   </ion-tab>
-  <!-- <ion-tab ng-if="firebaseUser" title="Cart" icon="ion-android-cart" ui-sref="tabs.cart">
-    <ion-nav-view name="cart-tab"></ion-nav-view>
-  </ion-tab> -->
-  <!-- <ion-tab ng-if="firebaseUser" title="Restaurantmenus" icon="ion-spoon" ui-sref="tabs.restaurantMenus">
-    <ion-nav-view name="restaurantmenus-tab"></ion-nav-view>
-  </ion-tab> -->
-
   <ion-tab ng-if="userRole.isAny" title="My Orders" icon="ion-android-notifications" ng-click="goToMyOrders()">
     <ion-nav-view name="myorders-tab"></ion-nav-view>
   </ion-tab>
@@ -36,8 +17,4 @@
   <ion-tab ng-if="userRole.isAdmin" title="Pending Restaurants" icon="ion-android-notifications" ng-click="goToPending()">
     <ion-nav-view name="pending-tab"></ion-nav-view>
   </ion-tab>
-  <!--
-  <ion-tab ng-if="firebaseUser" title="Profile" icon="ion-person" ui-sref="tabs.profile">
-    <ion-nav-view name="profile-tab"></ion-nav-view>
-  </ion-tab> -->
 </ion-tabs>

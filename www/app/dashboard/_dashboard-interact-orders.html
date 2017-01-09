@@ -1,53 +1,61 @@
 <ion-view view-title="Interact :: Orders">
 
-  <ion-floating-menu has-footer="true" menu-color="#886aea" menu-icon="ion-plus" menu-open-color="#444" backdrop="true"
-    <ion-floating-item icon="ion-android-clipboard" button-color="#387ef5" text="Walk-in Order"></ion-floating-item>
+  <ion-floating-menu has-footer="true" menu-color="#886aea" menu-icon="ion-settings" menu-open-color="#444" backdrop="true">
+    <ion-floating-item icon="ion-android-clipboard" button-color="#387ef5" text="Walk-in Order" click="walkInOrder()"></ion-floating-item>
   </ion-floating-menu>
 
   <ion-content class="padding has-tabs-top">
-    <h3>Displaying {{filterType}} reservations</h3>
+    <h3 class="capitalize text-center">Displaying: {{filterType}}</h3>
     <div class="button-bar">
-      <button class="button button-small button-balanced" ng-click="setFilter('today')">View Today</button>
-      <button class="button button-small button-balanced" ng-click="setFilter('all')">View All</button>
-      <button class="button button-small button-balanced" ng-click="setFilter('month')">View Month</button>
+      <button class="button button-small button-balanced" ng-click="setFilter('today')">Today</button>
+      <button class="button button-small button-balanced" ng-click="setFilter('month')">Month</button>
+      <button class="button button-small button-balanced" ng-click="setFilter('all')">All</button>
     </div>
 
-    <ion-item  ng-repeat="order in orders | orderBy:'-details.order_details.timestamp' | filter:orderFilter(filterType) ">
-      <h6>Order Reference #{{order.details.order_details.timestamp}}</h6>
-      <p>
-      Customer Name: {{order.customer}}
-      </p>
-      <ion-item ng-repeat="menu in order.menus">
+    <div class="card list padding" ng-repeat="order in orders | orderBy:'-details.order_details.timestamp' | filter:orderFilter(filterType) ">
+      <div class="item item-text-wrap">
         <p>
-        Name : {{menu.name}}
+          <span class="bold">Customer Name:</span> {{order.customer}}
         </p>
         <p>
-          Quantity : {{menu.quantity}}
+          <span class="bold">Location:</span> {{order.details.order_details.location}}
+          <div class="row">
+            <div class="col">
+              <button class="button button-positive button-block button-small" ng-click="navigate(order)">WAZE</button>
+            </div>
+            <div class="col">
+              <button class="button button-positive button-block button-small" ng-click="openMapModal(order)">Open Map</button>
+            </div>
+          </div>
         </p>
         <p>
-        Price : {{menu.price}}
+          <span class="bold">Additional Notes:</span> {{order.details.order_details.note}}
         </p>
         <p>
-          Subtotal : {{ menu.price  * menu.quantity }}
+          <span class="bold">Total:</span> {{order.details.order_details.totalprice | currency: '₱'}}
         </p>
-      </ion-item>
-      <p>
-        Location: {{order.details.order_details.location}}
-      </p>
-      <p>
-        Additional Notes: {{order.details.order_details.note}}
-      </p>
-      <p>
-        Total : {{order.details.order_details.totalprice}}
-      </p>
-      <p>
-        Order Status : {{order.details.order_details.status}}
-      </p>
-      <ion-checkbox ng-repeat="(key, val) in order.details.orderStatus" ng-model="order.details.orderStatus[key]" ng-change="changeOrderStatus(order.details.$id, key, order.details.orderStatus[key])">
-        {{key}}
-      </ion-checkbox>
-        <button class="button button-positive" ng-click="navigate(order)">WAZE</button>
-      <button class="button button-positive" ng-click="openMapModal(order)">Open Map</button>
-    </ion-item>
+        <p>
+          <span class="bold">Order Reference #:</span> {{order.details.order_details.timestamp}}
+        </p>
+        <p>
+          <span class="bold">Order Status:</span> {{order.details.order_details.status}}
+          <ion-checkbox ng-repeat="(key, val) in order.details.orderStatus" ng-model="order.details.orderStatus[key]" ng-change="changeOrderStatus(order.details.$id, key, order.details.orderStatus[key])">
+            {{key}}
+          </ion-checkbox>
+        </p>
+        <ion-list class="no-margin-top">
+          <ion-item class="item-balanced" ng-click="toggleGroup(order)" ng-class="{active: isGroupShown(order)}">
+            <i class="icon" ng-class="isGroupShown(order) ? 'ion-chevron-up' : 'ion-chevron-down'"></i> Orders
+          </ion-item>
+          <ion-item class="item-accordion item-text-wrap padding" ng-repeat="menu in order.menus" ng-show="isGroupShown(order)">
+            <h3>Name: {{menu.name}}</h3>
+            <h3>Quantity: {{menu.quantity}}</h3>
+
+            <h3>Price : {{menu.price | currency: '₱'}}</h3>
+            <h3>Subtotal : {{ menu.price * menu.quantity | currency: '₱' }}</h3>
+          </ion-item>
+        </ion-list>
+      </div>
+    </div>
   </ion-content>
 </ion-view>

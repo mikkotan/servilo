@@ -5,28 +5,59 @@ app.controller("DashboardMenusCtrl", ["$scope", "$stateParams", "$ionicModal", "
 
     $scope.restaurant = Restaurant.get($stateParams.restaurantId);
 
+    Restaurant.getCategories($scope.restoId).$loaded()
+      .then((categories) => {
+        $scope.categories = categories.map(function(category) {
+          var c = {
+            name: category.name,
+            getMenus: Menu.getMenusFromCategories($scope.restoId, category.$id).$loaded()
+              .then((menus) => {
+                c.menus = menus.map(function(menu) {
+                  var m = {
+                    get: Menu.get(menu.$id).$loaded()
+                      .then((menuObj) => {
+                        m.details = menuObj
+                      })
+                  }
+                  return m
+                })
+              })
+          }
+          return c
+        })
+      })
+
     Restaurant.getMenus($scope.restoId).$loaded()
       .then((menus) => {
-        $scope.restaurantMenus = menus;
-
-        if (menus.length !== 0) {
-          $ionicLoading.show();
+        if (menus.length == 0) {
+          $ionicLoading.hide()
         }
+        $scope.restaurantMenus = menus
 
         $scope.$watchCollection('restaurantMenus', function(newRestaurantMenus) {
           $scope.menus = newRestaurantMenus.map(function(menu) {
             var m = {
               get: Menu.get(menu.$id).$loaded()
                 .then((menuObj) => {
-                  m.details = menuObj
+                  $ionicLoading.hide();
+                  m.details = menuObj;
                   m.ready = true
-                  $ionicLoading.hide()
                 })
             }
             return m;
           })
         })
       })
+    $scope.toggleGroup = function(group) {
+      if ($scope.isGroupShown(group)) {
+        $scope.shownGroup = null;
+      } else {
+        $scope.shownGroup = group;
+      }
+    };
+    $scope.isGroupShown = function(group) {
+      return $scope.shownGroup === group;
+    };
 
     $scope.categories = Menu.getMenuCategories($stateParams.restaurantId);
     $scope.defaultCategory = $scope.categories[0];
@@ -41,7 +72,7 @@ app.controller("DashboardMenusCtrl", ["$scope", "$stateParams", "$ionicModal", "
     }
 
     $scope.addCategory = function(category) {
-      try{
+      try {
         Restaurant.addCategory(category)
           .then(function() {
             console.log('ADDED CATEGORY!! ')
@@ -49,8 +80,7 @@ app.controller("DashboardMenusCtrl", ["$scope", "$stateParams", "$ionicModal", "
         $scope.category.name = "";
         $scope.category.restaurant_id = "";
         $scope.addCategoryModal.hide();
-      }
-      catch(e){
+      } catch (e) {
         $scope.submitError = true;
       }
     }
@@ -75,17 +105,17 @@ app.controller("DashboardMenusCtrl", ["$scope", "$stateParams", "$ionicModal", "
     }
 
     $scope.addMenu = function(menu) {
-      try{
+      try {
         Menu.create({
-          name : menu.name.toLowerCase(),
-          price : menu.price,
-          restaurant_id : $scope.restoId,
-          category_id : menu.category,
-          availability : false,
-          prevPrice : menu.price,
-          photoURL : $scope.photoURL,
-          timestamp : firebase.database.ServerValue.TIMESTAMP
-        })
+            name: menu.name.toLowerCase(),
+            price: menu.price,
+            restaurant_id: $scope.restoId,
+            category_id: menu.category,
+            availability: false,
+            prevPrice: menu.price,
+            photoURL: $scope.photoURL,
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+          })
           .then(() => {
             alert('Success');
             $scope.addMenuModal.hide();
@@ -93,8 +123,8 @@ app.controller("DashboardMenusCtrl", ["$scope", "$stateParams", "$ionicModal", "
           .catch((err) => {
             alert(err);
           })
-      }catch(e){
-        $scope.submitError =true;
+      } catch (e) {
+        $scope.submitError = true;
       }
     }
 
