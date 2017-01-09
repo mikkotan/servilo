@@ -1,6 +1,6 @@
 <ion-view>
   <ion-nav-title class="capitalize">{{restaurant.name}} Reviews</ion-nav-title>
-  <ion-content class="padding has-tabs-top">
+  <ion-content class="has-tabs-top">
     <div class="list card" ng-repeat="review in reviews" ng-init="reviewer=getName(review.reviewer_id)" ng-last-repeat="reviewList">
       <div class="item item-avatar">
         <img ng-if="reviewer.photoURL" ng-src="{{reviewer.photoURL}}" style="width: 75px; height: 75px">

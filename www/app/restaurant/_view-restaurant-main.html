@@ -126,7 +126,7 @@
           <div class="col col-80">
             <h3 ng-click="showReviewModal(review, reviewer)">{{reviewer.displayName}}</h3>
             <div class="rate-stars">
-              {{review.rating}}/5
+              <!-- {{review.rating}}/5 -->
               <i class="icon ion-ios-star" ng-repeat="rating in [1,2,3,4,5]" ng-class="{true:'full', false:'off'}[rating <= review.rating]"></i>
             </div>
             <span class="badge badge-balanced">{{review.rating}}</span>
