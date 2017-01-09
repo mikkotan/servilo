@@ -234,7 +234,7 @@ app.controller('SearchTabCtrl', ["$scope", "$rootScope", "Auth", "$state", "User
         if (filter == 'name') {
           Search.searchName(input).$loaded().then(function(data) {
             if (data.length <= 0) {
-              ionicToast.show('NO RESTAURANTS MAN', 'bottom', false, 2500);
+              ionicToast.show('No Restaurants Found', 'bottom', false, 2500);
             }
             $scope.loading = false;
             $scope.restaurants = data;
@@ -248,7 +248,7 @@ app.controller('SearchTabCtrl', ["$scope", "$rootScope", "Auth", "$state", "User
             });
             if (items.length == 0) {
               $scope.restaurants = items;
-              ionicToast.show('NO RESTAURANTS MAN', 'bottom', false, 2500);
+              ionicToast.show('No Restaurants Found', 'bottom', false, 2500);
               $scope.loading = false;
               $scope.$apply();
             }
