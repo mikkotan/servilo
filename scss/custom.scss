@@ -332,7 +332,7 @@ ion-popover-view.fit ion-content {
 }
 
 .card-slides > ion-slides {
-  height: 20vh !important;
+  height: 30vh !important;
 }
 
 .img-slides > ion-slides {
@@ -559,10 +559,12 @@ body {
   justify-content: center;
 }
 .rate-stars i.full{
-    color: green;
+    color: black;
+    padding: 0 !important;
 }
 .rate-stars i.off{
-    color: #000;
+    color: grey;
+    padding: 0 !important;
 }
 // .rate-stars i{
 //     margin-right: 1px;

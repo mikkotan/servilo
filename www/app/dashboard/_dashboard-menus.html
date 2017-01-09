@@ -10,7 +10,8 @@
           <i class="icon" ng-class="isGroupShown(category) ? 'ion-minus' : 'ion-plus'"></i> &nbsp; {{category.name}}
         </ion-item>
         <ion-item class="item-accordion item-thumbnail-left" ng-repeat="menu in category.menus" ng-show="isGroupShown(category)">
-          <img ng-src="{{menu.details.photoURL}}">
+          <img ng-if="menu.details.photoURL" ng-src="{{menu.details.photoURL}}">
+          <img ng-if="!menu.details.photoURL" ng-src="img/wow.jpg">
           <h3>{{menu.details.name}}</h3>
           <h3>{{menu.details.price | currency: '₱'}}</h3>
           <ion-toggle ng-model="menu.details.availability" ng-change="changeAvailability(menu.details)" toggle-class="toggle-calm">
