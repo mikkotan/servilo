@@ -26,7 +26,7 @@
     </div>
     <div class="list card no-margin-top">
       <div class="item item-thumbnail-left item-text-wrap">
-        <img ng-if="restaurant.photoURL" ng-src="{{restaurant.photoURL}}" />
+        <img ng-if="restaurant.photoURL" ng-src="{{restaurant.photoURL}}"/>
         <img ng-if="!restaurant.photoURL" ng-src="img/wow.jpg">
         <div class="row">
           <h2 id="restaurant-name" class="capitalize">
@@ -48,11 +48,17 @@
       <div class="item item-text-wrap padding">
         <div class="open text-center" ng-if="restaurantOpenStatus">
           <h2 class="bold">OPEN</h2>
-          <p>Restaurant Hours: {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}</p>
+          <p>Restaurant Hours:
+            {{ restaurant.openTime | date:'shortTime' }}
+            -
+            {{ restaurant.closeTime | date:'shortTime' }}</p>
         </div>
         <div class="closed text-center" ng-if="!restaurantOpenStatus">
           <h2 class="bold">CLOSED</h2>
-          <p>Opens at {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}</p>
+          <p>Opens at
+            {{ restaurant.openTime | date:'shortTime' }}
+            -
+            {{ restaurant.closeTime | date:'shortTime' }}</p>
         </div>
         <hr class="faded">
         <button class="button button-balanced button-block ink" ng-click="callNumber(restaurant.phonenumber)">
@@ -61,32 +67,53 @@
         </button>
       </div>
     </div>
-    <div class="card">
+
+    <div class="list card">
       <div class="item item-divider">
         <span class="bold">DETAILS</span>
       </div>
       <div class="row">
-        <div class="col">
-          <div class="item item-text-wrap">
-            <span class="bold">Contact Number:</span> {{restaurant.phonenumber}}
-          </div>
-          <div class="item item-text-wrap">
-            <span class="bold">Type:</span> {{restaurant.type}}
-          </div>
-          <div class="item item-text-wrap">
-            <span class="bold">Cuisine:</span> {{restaurant.cuisine}}
-          </div>
+        <div class="item item-text-wrap">
+          <span class="bold">Contact Number:</span>
+          {{restaurant.phonenumber}}
         </div>
+      </div>
+      <div class="row">
+        <div class=" item item-text-wrap">
+          <span class="bold">Type:</span>
+          {{restaurant.type}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="item item-text-wrap">
+          <span class="bold">Cuisine:</span>
+          {{restaurant.cuisine}}
+        </div>
+      </div>
+      <div class="row">
         <div class="col">
+          <div class="item item-divider">
+            <span class="bold">Days Open:</span>
+          </div>
           <div class="item item-text-wrap">
-            <span class="bold">DAYS OPEN:</span>
             <p ng-repeat="(key, val) in restaurant.openDays track by $index" ng-if="val === true">
               {{days[key].name}}
             </p>
           </div>
         </div>
+        <div class="col">
+          <div class="item item-divider">
+            <span class="bold">Facilities:</span>
+          </div>
+          <div class="item item-text-wrap">
+            <p ng-repeat="(key, val) in restaurant.facilities" ng-if="val === true">
+              {{getFacilityName(key)}}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
+
     <div class="card padding">
       <div ng-show="!exists">
         <button ng-click="openReviewModal()" class="button button-block button-balanced ink">
@@ -129,7 +156,6 @@
               {{review.rating}}/5
               <i class="icon ion-ios-star" ng-repeat="rating in [1,2,3,4,5]" ng-class="{true:'full', false:'off'}[rating <= review.rating]"></i>
             </div>
-            <span class="badge badge-balanced">{{review.rating}}</span>
             <p>
               {{review.content}}
             </p>
@@ -140,13 +166,13 @@
           </div>
         </div>
       </div>
-      <li class="item ink" ng-if="restaurantReviews.length > 0" ng-hide="!loadingReviews" ui-sref="tabs.viewRestaurant.reviews">
-        See all reviews
-      </li>
-      <li class="item ink" ng-if="restaurantReviews.length == 0">
-        No reviews
-      </li>
-    </div>
-    </div>
-  </ion-content>
+    <li class="item ink" ng-if="restaurantReviews.length > 0" ng-hide="!loadingReviews" ui-sref="tabs.viewRestaurant.reviews">
+      See all reviews
+    </li>
+    <li class="item ink" ng-if="restaurantReviews.length == 0">
+      No reviews
+    </li>
+  </div>
+</div>
+</ion-content>
 </ion-view>

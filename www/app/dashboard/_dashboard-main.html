@@ -116,7 +116,7 @@
             <span class="bold">Facilities:</span>
           </div>
           <div class="item item-text-wrap">
-            <p ng-repeat="(key, val) in restaurant.facilities">
+            <p ng-repeat="(key, val) in restaurant.facilities" ng-if="val === true">
               {{getFacilityName(key)}}
             </p>
           </div>

@@ -5,9 +5,9 @@
   <ion-content class="padding has-tabs-top">
     <h6>Manage Reviews</h6>
     <div class="list card" ng-repeat="review in restaurantReviews" ng-init="reviewer=getName(review.reviewer_id)">
-      <div class="item item-avatar">
-        <img ng-if="reviewer.photoURL" ng-src="{{reviewer.photoURL}}" style="width: 75px; height: 75px">
-        <img ng-if="!reviewer.photoURL" ng-src="img/ionic.png" style="width: 75px; height: 75px">
+      <div class="item item-thumbnail-left">
+        <img ng-if="reviewer.photoURL" ng-src="{{reviewer.photoURL}}">
+        <img ng-if="!reviewer.photoURL" ng-src="img/ionic.png">
         <h2>
           <strong>{{ reviewer.displayName }}</strong>
         </h2>
@@ -15,8 +15,7 @@
           <span class="ion-star"></span>{{review.rating}}
         </p>
       </div>
-      <div class="item item-body item-text-wrap">
-        <h3>Content:</h3>
+      <div class="item item-text-wrap">
         <p>{{review.content}}</p>
       </div>
       <div class="item">
