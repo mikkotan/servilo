@@ -2,6 +2,7 @@ app.config(["$stateProvider","$urlRouterProvider","$ionicConfigProvider","fireba
     function($stateProvider, $urlRouterProvider, $ionicConfigProvider, firebaseConfigProvider,
       $ionicCloudProvider, ionGalleryConfigProvider) {
 
+  $ionicConfigProvider.backButton.previousTitleText(false).text('');
   $ionicConfigProvider.navBar.alignTitle('center');
   ionGalleryConfigProvider.setGalleryConfig({
     action_label: 'Close',
@@ -98,11 +99,12 @@ app.config(["$stateProvider","$urlRouterProvider","$ionicConfigProvider","fireba
       class : 'Search'
     })
     .state('tabs.viewRestaurant', {
+      abstract: true,
       url: "/viewRestaurant/:restaurantId",
       views: {
         'search-tab': {
           templateUrl: "app/restaurant/_view-restaurant.html",
-          controller: "ViewRestaurantCtrl",
+          // controller: "ViewRestaurantCtrl",
           resolve: {
             currentAuth: function(Auth) {
               return Auth.$requireSignIn();
@@ -199,6 +201,9 @@ app.config(["$stateProvider","$urlRouterProvider","$ionicConfigProvider","fireba
           resolve: {
             currentGeoLocation: function(CordovaGeolocation) {
               return CordovaGeolocation.get();
+            },
+            restaurantId: function($stateParams) {
+              return $stateParams.restaurantId
             }
           }
         }

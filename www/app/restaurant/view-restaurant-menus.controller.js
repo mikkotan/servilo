@@ -80,6 +80,7 @@ app.controller("ViewRestaurantMenus", ["$scope", "$stateParams", "$state", "rest
 
     Restaurant.get(restaurantId).$loaded()
       .then(function(restaurant) {
+        $scope.restaurant = restaurant;
         var restaurantStatus = Restaurant.getRestaurantStatus(restaurant.owner_id);
           $scope.restaurantOpenStatus = Restaurant.getRestaurantOpenStatus(restaurant);
           restaurantStatus.on('value', function(snap) {

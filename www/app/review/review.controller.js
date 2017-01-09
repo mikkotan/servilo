@@ -13,6 +13,10 @@ app.controller("ReviewCtrl", ["$scope", "restaurantId", "$ionicModal", "$ionicLi
         },0);
     };
 
+    Restaurant.get(restaurantId).$loaded().then(function(restaurant) {
+      $scope.restaurant = restaurant;
+    });
+
     Restaurant.getReviews(restaurantId).$loaded().then(function(reviews) {
       $scope.reviews = reviews;
       $scope.user = User.auth();

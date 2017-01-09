@@ -421,12 +421,7 @@ body {
   border-bottom: 0; }
 
 #category-container {
-<<<<<<< HEAD
-  background-color: rgba(0, 0, 0, 0.5);
-  display: inherit; }
-=======
   background-color: rgba(0, 0, 0, 0.5); }
->>>>>>> 0e3f122d92c643e3c18b3e32e729e30fff905153
 
 #category-title {
   text-transform: capitalize;
@@ -442,6 +437,12 @@ body {
 
 .error p {
   color: red !important; }
+
+.rate-stars i.full {
+  color: green; }
+
+.rate-stars i.off {
+  color: #000; }
 
 .gallery-view .image-container {
   position: relative;

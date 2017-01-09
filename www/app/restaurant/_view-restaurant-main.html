@@ -39,8 +39,12 @@
         <div class="row">
           <h2 id="restaurant-name" class="capitalize"> {{restaurant.name}} </h2>
           <h2 style="color:green">
-            <icon class="ion-android-star-outline"></icon> {{avg}}
-            </h2>
+            <icon class="ion-android-star-outline"></icon>
+            <!-- <div class="left-text rate-stars">
+              <i class="icon ion-ios-star" ng-repeat="rating in [1,2,3,4,5]" ng-class="{true:'full', false:'off'}[rating <= avg]"></i>
+            </div>  -->
+            {{avg}}
+          </h2>
         </div>
         <hr>
         <div class="row">
@@ -115,13 +119,13 @@
         <hr>
       </div>
 
-      <div class="list">
+      <div class="">
         <div class="item item-divider">
           Reviews
           <ion-spinner ng-if="!loadingReviews" icon="spiral"></ion-spinner>
         </div>
-        <ul>
-          <li class="item" ng-repeat="review in restaurantReviews" ng-init="reviewer=getName(review.reviewer_id)">
+        <!-- <ul> -->
+          <div class="item no-padding" ng-repeat="review in restaurantReviews" ng-init="reviewer=getName(review.reviewer_id)">
             <div class="row">
               <div class="col col-20">
                 <img ng-if="!reviewer.photoURL" src="img/ionic.png" style="width: 50px; height: 50px">
@@ -129,8 +133,12 @@
               </div>
               <div class="col col-80">
                 <h3 ng-click="showReviewModal(review, reviewer)">{{reviewer.displayName}}</h3>
+                <div class="rate-stars">
+                  <i class="icon ion-ios-star" ng-repeat="rating in [1,2,3,4,5]" ng-class="{true:'full', false:'off'}[rating <= review.rating]"></i>
+                </div>
+                <span class="badge badge-balanced">{{review.rating}}</span>
                 <p>
-                  {{review.content}} <span class="badge badge-balanced">{{review.rating}}</span>
+                  {{review.content}}
                 </p>
                 <hscroller ng-if="review.images">
                   <hcard ng-repeat="img in review.images" index="{{$index}}" desc="" image="{{img.thumb}}" ng-click="showImages($index)" ng-show="$index < 5"></hcard>
@@ -138,14 +146,14 @@
                 </hscroller>
               </div>
             </div>
-          </li>
+          </div>
           <li class="item ink" ng-if="restaurantReviews.length > 0" ng-hide="!loadingReviews" ui-sref="tabs.viewRestaurant.reviews">
             See all reviews
           </li>
           <li class="item ink" ng-if="restaurantReviews.length == 0">
             No reviews
           </li>
-        </ul>
+        <!-- </ul> -->
       </div>
     </div>
   </ion-content>
