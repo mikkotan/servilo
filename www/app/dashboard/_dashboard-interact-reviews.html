@@ -4,38 +4,38 @@
   </ion-floating-menu>
   <ion-content class="padding has-tabs-top">
     <h6>Manage Reviews</h6>
-    <div class="list card" ng-repeat="review in restaurantReviews" ng-init="reviewer=getName(review.reviewer_id)">
-      <div class="item item-thumbnail-left">
-        <img ng-if="reviewer.photoURL" ng-src="{{reviewer.photoURL}}">
-        <img ng-if="!reviewer.photoURL" ng-src="img/ionic.png">
-        <h2>
-          <strong>{{ reviewer.displayName }}</strong>
-        </h2>
-        <p class="balanced">
-          <span class="ion-star"></span>{{review.rating}}
-        </p>
-      </div>
-      <div class="item item-text-wrap">
-        <p>{{review.content}}</p>
-      </div>
-      <div class="item">
-        <p>
-          <button class="ion-reply-all button button-calm button-small ink" ng-click="openReplyModal(review)" ng-init="replies=getReplies(review.$id)">Reply</button>
-        </p>
-        <h2>Replies</h2>
-        <div class="list">
-          <div class="item item-text-wrap item-thumbnail-left" ng-repeat="reply in replies" ng-init="replyName=getName(reply.user_id)">
-            <img ng-if="reviewer.photoURL" ng-src="{{reviewer.photoURL}}" style="width: 75px; height: 75px">
-            <img ng-if="!reviewer.photoURL" ng-src="img/ionic.png" style="width: 75px; height: 75px">
-            <p>
-              <strong>{{replyName.displayName}}:</strong>
-            </p>
-            <p>
-              {{reply.content}}
-            </p>
-            <br>
-            <button class="button button-balanced button-small ink" ng-click="openEditReplyModal(reply, review.$id)">Edit</button>
-            <button class="button button-assertive button-small ink" ng-click="replies.$remove(reply)">Delete</button>
+    <div class="card" ng-repeat="review in restaurantReviews" ng-init="reviewer=getName(review.reviewer_id)">
+      <div class="list">
+        <div class="item item-avatar">
+          <img ng-if="reviewer.photoURL" ng-src="{{reviewer.photoURL}}">
+          <img ng-if="!reviewer.photoURL" ng-src="img/ionic.png">
+          <h2>{{ reviewer.displayName }}</h2>
+          <p class="balanced">
+            <span class="ion-star"></span>{{review.rating}}
+          </p>
+        </div>
+        <div class="item item-text-wrap">
+          <p>{{review.content}}</p>
+        </div>
+        <div class="item">
+          <p>
+            <button class="ion-reply-all button button-calm button-small ink" ng-click="openReplyModal(review)" ng-init="replies=getReplies(review.$id)">Reply</button>
+          </p>
+          <h2>Replies</h2>
+          <div class="list">
+            <div class="item item-text-wrap item-thumbnail-left" ng-repeat="reply in replies" ng-init="replyName=getName(reply.user_id)">
+              <img ng-if="reviewer.photoURL" ng-src="{{reviewer.photoURL}}" style="width: 75px; height: 75px">
+              <img ng-if="!reviewer.photoURL" ng-src="img/ionic.png" style="width: 75px; height: 75px">
+              <p>
+                <strong>{{replyName.displayName}}:</strong>
+              </p>
+              <p>
+                {{reply.content}}
+              </p>
+              <br>
+              <button class="button button-balanced button-small ink" ng-click="openEditReplyModal(reply, review.$id)">Edit</button>
+              <button class="button button-assertive button-small ink" ng-click="replies.$remove(reply)">Delete</button>
+            </div>
           </div>
         </div>
       </div>
