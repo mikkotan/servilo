@@ -1,17 +1,23 @@
 <ion-view view-title="My Orders">
   <ion-content class="padding">
     <h3>My Orders</h3>
-    <ion-item ng-repeat="order in orders | orderBy:'-order_details.timestamp'">
-      <h4>Order #{{order.order_details.timestamp}}</h4>
-      <p ng-show="order.order_details.status">
-        Status: {{order.order_details.status}}
-      </p>
-      <p ng-show="order.order_details.status_time">
-        time: {{order.order_details.status_time | timeAgo }}
-      </p>
-      <button class="button button-small button-outline button-assertive" ng-click="cancel(order)" ng-show="!(order.order_details.status === 'cancelled' || order.order_details.status === 'completed')">
-        Cancel
-      </button>
-    </ion-item>
+
+    <div class="card list padding" ng-repeat="order in orders | orderBy:'-order_details.timestamp'">
+      <div class="item item-text-wrap">
+          <h4>Order #{{order.order_details.timestamp}}</h4>
+          <p>
+              Restaurant: {{order.order_details.restaurant_name}}
+          </p>
+          <p ng-show="order.order_details.status">
+            Status: {{order.order_details.status}}
+          </p>
+          <p ng-show="order.order_details.status_time">
+            Time: {{order.order_details.status_time | timeAgo }}
+          </p>
+          <button class="button button-small button-outline button-assertive" ng-click="cancel(order)" ng-show="!(order.order_details.status === 'cancelled' || order.order_details.status === 'completed')">
+            Cancel
+          </button>
+      </div>
+    </div>
   </ion-content>
 </ion-view>

@@ -31,15 +31,17 @@
         <ion-item class="item-stable" ng-click="toggleGroup(category)" ng-class="{active: isGroupShown(category)}">
           <i class="icon" ng-class="isGroupShown(category) ? 'ion-chevron-up' : 'ion-chevron-down'"></i> &nbsp; {{category.name}}
         </ion-item>
-        <ion-item class="item-accordion item-thumbnail-left padding" ng-repeat="menu in category.menus" ng-show="isGroupShown(category)">
+        <ion-item class="item-accordion item-thumbnail-left" ng-repeat="menu in category.menus" ng-show="isGroupShown(category)">
           <img ng-src="{{menu.details.photoURL}}">
           <h3>{{menu.details.name}}</h3>
           <h3>{{menu.details.price | currency: '₱'}}</h3>
-          <div ng-if="restaurantOpenStatus && getRestaurantStatus">
-            <button class="button button-calm pull-right" ng-disabled="!menu.details.availability" ng-click="addToCart(menu.details)">
-              <span ng-if="menu.details.availability">Add to cart</span>
-              <span ng-if="!menu.details.availability">Currently not available</span>
-            </button>
+          <div class="row">
+            <div class="col">
+              <button class="button button-energized button-block button-small" ng-click="editMenu(menu.details)">Edit</button>
+            </div>
+            <div class="col">
+              <button class="button button-assertive button-block button-small" ng-click="deleteMenu(menu.details)">Delete</button>
+            </div>
           </div>
         </ion-item>
       </div>

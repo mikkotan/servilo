@@ -1,6 +1,6 @@
 app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMenuDelegate", "ionicMaterialMotion", "User", "$state", "$ionicLoading", "$ionicModal", "Database", "IonicPushService", "$ionicPopup", "$timeout", "$ionicHistory",
   function($scope, Auth, ionicMaterialInk, $ionicSideMenuDelegate, ionicMaterialMotion, User, $state, $ionicLoading, $ionicModal, Database, IonicPushService, $ionicPopup, $timeout, $ionicHistory) {
-    $scope.passwordType= "password";
+    $scope.passwordType = "password";
     ionicMaterialInk.displayEffect();
     $timeout(function() {
       ionicMaterialMotion.blinds({
@@ -26,6 +26,7 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMe
           console.log('result');
           // alert(JSON.stringify(obj)); // do something useful instead of alerting
           Auth.$signInWithCredential(firebase.auth.GoogleAuthProvider.credential(result.idToken)).then(
+
             function(success) {
               console.log("google login success");
               var ref = firebase.database().ref().child("users").child(success.uid);
@@ -40,6 +41,9 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMe
                     description: "",
                     startedAt: firebase.database.ServerValue.TIMESTAMP
                   })
+
+                  User.setAsUser(success.uid)
+
                 }
                 if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
                   IonicPushService.registerToAuth();
@@ -66,6 +70,7 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMe
 
     $scope.disconnect = function() {
       window.plugins.googleplus.disconnect(
+
         function(msg) {
           alert(msg); // do something useful instead of alerting
         }
@@ -74,6 +79,7 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMe
 
     $scope.glogout = function() {
       window.plugins.googleplus.logout(
+
         function(msg) {
           alert(msg); // do something useful instead of alerting
         }
@@ -82,8 +88,10 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMe
 
     $scope.twitterLogin = function() {
       TwitterConnect.login(
+
         function(result) {
           Auth.$signInWithCredential(firebase.auth.TwitterAuthProvider.credential(result.token, result.secret)).then(
+
             function(success) {
               var ref = firebase.database().ref().child("users").child(success.uid);
               ref.once('value', function(snapshot) {
@@ -97,6 +105,8 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMe
                     description: "",
                     startedAt: firebase.database.ServerValue.TIMESTAMP
                   })
+
+                  User.setAsUser(success.uid)
                 }
                 if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
                   IonicPushService.registerToAuth();
@@ -137,7 +147,7 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMe
               disableAnimate: false,
               disableBack: true
             });
-          }).catch(()=>{
+          }).catch(() => {
             console.log("");
           })
 
@@ -148,7 +158,7 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMe
           $ionicLoading.hide();
           $ionicPopup.alert({
               title: 'Authentication Failed',
-              template: 'Incorrect username or password.'
+              template: err.message
             })
             .then((res) => {
               user.password = '';
@@ -161,6 +171,7 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMe
       facebookConnectPlugin.login(["public_profile", "user_birthday"],
         function(result) {
           Auth.$signInWithCredential(firebase.auth.FacebookAuthProvider.credential(result.authResponse.accessToken)).then(
+
             function(success) {
               var ref = firebase.database().ref().child("users").child(success.uid);
               ref.once('value', function(snapshot) {
@@ -174,6 +185,8 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMe
                     description: "",
                     startedAt: firebase.database.ServerValue.TIMESTAMP
                   })
+
+                  User.setAsUser(success.uid)
                 }
 
                 if (ionic.Platform.isAndroid() || ionic.Platform.isIOS()) {
@@ -233,11 +246,11 @@ app.controller("LoginCtrl", ["$scope", "Auth", "ionicMaterialInk", "$ionicSideMe
       scope: $scope
     });
 
-    $scope.showHidePassword = function(){
-      if ($scope.passwordType == 'password'){
-        $scope.passwordType= 'text';
-      }else{
-          $scope.passwordType = 'password';
+    $scope.showHidePassword = function() {
+      if ($scope.passwordType == 'password') {
+        $scope.passwordType = 'text';
+      } else {
+        $scope.passwordType = 'password';
       }
     }
   }
