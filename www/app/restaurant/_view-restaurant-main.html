@@ -26,7 +26,7 @@
     </div>
     <div class="list card no-margin-top">
       <div class="item item-thumbnail-left item-text-wrap">
-        <img ng-if="restaurant.photoURL" ng-src="{{restaurant.photoURL}}"/>
+        <img ng-if="restaurant.photoURL" ng-src="{{restaurant.photoURL}}" />
         <img ng-if="!restaurant.photoURL" ng-src="img/wow.jpg">
         <div class="row">
           <h2 id="restaurant-name" class="capitalize">
@@ -48,17 +48,11 @@
       <div class="item item-text-wrap padding">
         <div class="open text-center" ng-if="restaurantOpenStatus">
           <h2 class="bold">OPEN</h2>
-          <p>Restaurant Hours:
-            {{ restaurant.openTime | date:'shortTime' }}
-            -
-            {{ restaurant.closeTime | date:'shortTime' }}</p>
+          <p>Restaurant Hours: {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}</p>
         </div>
         <div class="closed text-center" ng-if="!restaurantOpenStatus">
           <h2 class="bold">CLOSED</h2>
-          <p>Opens at
-            {{ restaurant.openTime | date:'shortTime' }}
-            -
-            {{ restaurant.closeTime | date:'shortTime' }}</p>
+          <p>Opens at {{ restaurant.openTime | date:'shortTime' }} - {{ restaurant.closeTime | date:'shortTime' }}</p>
         </div>
         <hr class="faded">
         <button class="button button-balanced button-block ink" ng-click="callNumber(restaurant.phonenumber)">
@@ -74,16 +68,13 @@
       <div class="row">
         <div class="col">
           <div class="item item-text-wrap">
-            <span class="bold">Contact Number:</span>
-            {{restaurant.phonenumber}}
+            <span class="bold">Contact Number:</span> {{restaurant.phonenumber}}
           </div>
           <div class="item item-text-wrap">
-            <span class="bold">Type:</span>
-            {{restaurant.type}}
+            <span class="bold">Type:</span> {{restaurant.type}}
           </div>
           <div class="item item-text-wrap">
-            <span class="bold">Cuisine:</span>
-            {{restaurant.cuisine}}
+            <span class="bold">Cuisine:</span> {{restaurant.cuisine}}
           </div>
         </div>
         <div class="col">
@@ -102,14 +93,7 @@
           <icon class="ion-plus"></icon>
           Write Review</button>
       </div>
-      <div class="button-bar" ng-show="exists">
-        <button ng-click="openEditModal(review)" class="button button-balanced ink">
-          <icon class="ion-plus"></icon>
-          Edit Review</button>
-        <button ng-click="showConfirmDelete(review)" class="button button-assertive ink">
-          <icon class="ion-android-delete"></icon>
-          Delete Review</button>
-      </div>
+
       <div ng-show="exists">
         <div>
           Your Review:
@@ -118,41 +102,51 @@
           {{review.content}}
         </div>
         <hr>
-      </div>
-
-      <div class="list">
-        <div class="item item-divider">
-          Reviews
-          <ion-spinner ng-if="!loadingReviews" icon="spiral"></ion-spinner>
+        <div class="button-bar">
+          <button ng-click="openEditModal(review)" class="button button-balanced ink">
+            <icon class="ion-plus"></icon>
+            Edit Review</button>
+          <button ng-click="showConfirmDelete(review)" class="button button-assertive ink">
+            <icon class="ion-android-delete"></icon>
+            Delete Review</button>
         </div>
-        <ul>
-          <li class="item" ng-repeat="review in restaurantReviews" ng-init="reviewer=getName(review.reviewer_id)">
-            <div class="row">
-              <div class="col col-20">
-                <img ng-if="!reviewer.photoURL" src="img/ionic.png" style="width: 50px; height: 50px">
-                <img ng-if="reviewer.photoURL" src="{{reviewer.photoURL}}" style="width: 50px; height: 50px">
-              </div>
-              <div class="col col-80">
-                <h3 ng-click="showReviewModal(review, reviewer)">{{reviewer.displayName}}</h3>
-                <p>
-                  {{review.content}}
-                  <span class="badge badge-balanced">{{review.rating}}</span>
-                </p>
-                <hscroller ng-if="review.images">
-                  <hcard ng-repeat="img in review.images" index="{{$index}}" desc="" image="{{img.thumb}}" ng-click="showImages($index)" ng-show="$index < 5"></hcard>
-                  <hcard index="{{$index}}" desc="" image="img/plus.jpg" ng-click="showGallery(review.images)" ui-sref="tabs.viewRestaurant.gallery"></hcard>
-                </hscroller>
-              </div>
-            </div>
-          </li>
-          <li class="item ink" ng-if="restaurantReviews.length > 0" ng-hide="!loadingReviews" ui-sref="tabs.viewRestaurant.reviews">
-            See all reviews
-          </li>
-          <li class="item ink" ng-if="restaurantReviews.length == 0">
-            No reviews
-          </li>
-        </ul>
       </div>
+    </div>
+    <div class="card padding">
+      <div class="item item-divider">
+        Reviews
+        <ion-spinner ng-if="!loadingReviews" icon="spiral"></ion-spinner>
+      </div>
+      <div class="item no-padding" ng-repeat="review in restaurantReviews" ng-init="reviewer=getName(review.reviewer_id)">
+        <div class="row">
+          <div class="col col-20">
+            <img ng-if="!reviewer.photoURL" src="img/ionic.png" style="width: 50px; height: 50px">
+            <img ng-if="reviewer.photoURL" src="{{reviewer.photoURL}}" style="width: 50px; height: 50px">
+          </div>
+          <div class="col col-80">
+            <h3 ng-click="showReviewModal(review, reviewer)">{{reviewer.displayName}}</h3>
+            <div class="rate-stars">
+              {{review.rating}}/5
+              <i class="icon ion-ios-star" ng-repeat="rating in [1,2,3,4,5]" ng-class="{true:'full', false:'off'}[rating <= review.rating]"></i>
+            </div>
+            <span class="badge badge-balanced">{{review.rating}}</span>
+            <p>
+              {{review.content}}
+            </p>
+            <hscroller ng-if="review.images">
+              <hcard ng-repeat="img in review.images" index="{{$index}}" desc="" image="{{img.thumb}}" ng-click="showImages($index)" ng-show="$index < 5"></hcard>
+              <hcard index="{{$index}}" desc="" image="img/plus.jpg" ng-click="showGallery(review.images)" ui-sref="tabs.viewRestaurant.gallery"></hcard>
+            </hscroller>
+          </div>
+        </div>
+      </div>
+      <li class="item ink" ng-if="restaurantReviews.length > 0" ng-hide="!loadingReviews" ui-sref="tabs.viewRestaurant.reviews">
+        See all reviews
+      </li>
+      <li class="item ink" ng-if="restaurantReviews.length == 0">
+        No reviews
+      </li>
+    </div>
     </div>
   </ion-content>
 </ion-view>

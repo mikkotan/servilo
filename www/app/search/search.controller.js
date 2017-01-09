@@ -1,6 +1,5 @@
 app.controller('SearchTabCtrl', ["$scope", "$rootScope", "Auth", "$state", "User", "ionicMaterialInk", "$timeout", "$ionicPopup", "CordovaGeolocation", "ionicToast", "$ionicLoading", "Search", "currentGeoLocation", "Restaurant", "$ionicActionSheet",
   function($scope, $rootScope, Auth, $state, User, ionicMaterialInk, $timeout, $ionicPopup, CordovaGeolocation, ionicToast, $ionicLoading, Search, currentGeoLocation, Restaurant, $ionicActionSheet) {
-
     $scope.isLocationAvailable = false; //mobile
 
     // $scope.isLocationAvailable = true; //browser
@@ -109,7 +108,6 @@ app.controller('SearchTabCtrl', ["$scope", "$rootScope", "Auth", "$state", "User
     $scope.restaurants = [];
     $scope.markers = [];
     $scope.map = Search.getMap();
-    var isMarkerCanChange = true;
     $scope.mapText = "Nearest restaurant to your location (1km)";
 
     $scope.data = {};
@@ -181,7 +179,7 @@ app.controller('SearchTabCtrl', ["$scope", "$rootScope", "Auth", "$state", "User
             latitude: currentLocation.latitude,
             longitude: currentLocation.longitude
           };
-          isMarkerCanChange = false;
+
         } //comment to work on browser
         else { //comment to work on browser
           $scope.requestLocation(); //comment to work on browser
@@ -199,6 +197,8 @@ app.controller('SearchTabCtrl', ["$scope", "$rootScope", "Auth", "$state", "User
     });
 
     $scope.locationSearch = function() {
+      $scope.markers.length = 0;
+      $scope.restaurants.length = 0;
       var lat = $scope.data.location.geometry.location.lat();
       var long = $scope.data.location.geometry.location.lng();
       $scope.markers.push(Search.getInputLocation(lat, long));
@@ -224,7 +224,6 @@ app.controller('SearchTabCtrl', ["$scope", "$rootScope", "Auth", "$state", "User
         latitude: $scope.data.location.geometry.location.lat(),
         longitude: $scope.data.location.geometry.location.lng()
       };
-      isMarkerCanChange = false;
     };
 
     $scope.allowMarkerChange = function(inputText, filter) {
@@ -268,7 +267,6 @@ app.controller('SearchTabCtrl', ["$scope", "$rootScope", "Auth", "$state", "User
       $scope.map.zoom = 12;
       $scope.map.center.latitude = 10.729984;
       $scope.map.center.longitude = 122.549298;
-      isMarkerCanChange = true;
     }
 
     $scope.CallNumber = function(number) {

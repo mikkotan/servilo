@@ -97,7 +97,8 @@ app.controller("ViewRestaurantCtrl", ["$scope", "$state", "Upload", "$stateParam
             })
             .then(() => {
               console.log('success reservation')
-              alert('Reservation has been booked successfully.');
+              ionicToast.show('Reservation has been booked successfully', 'bottom', false, 2500);
+            //   alert('Reservation has been booked successfully.');
             })
             .catch((err) => {
               console.log(err);

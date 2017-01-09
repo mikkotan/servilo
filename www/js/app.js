@@ -6,8 +6,8 @@
 
 var app = angular.module('app', ['ui.mask', 'ionic', 'ionic.cloud', 'ionMdInput', 'ionic-material', 'ion-floating-menu', 'firebase', 'ionic.rating', 'ionic-toast', 'uiGmapgoogle-maps', 'ngCordova', 'ngCordovaOauth', 'ion-datetime-picker', 'yaru22.angular-timeago', 'ui.select', 'ngSanitize', 'ngAnimate' ,'$actionButton', 'ion-gallery', 'ionicLazyLoad', 'ionic.contrib.ui.hscrollcards', 'ion-google-autocomplete'])
 
-app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushService", "User", "Database", "$cordovaGeolocation", "$ionicPopup", "$cordovaPushV5", "Cart", "$ionicLoading", "Auth",
-  function($ionicPlatform, $rootScope, $state, $templateCache, IonicPushService, User, Database, $cordovaGeolocation, $ionicPopup, $cordovaPushV5, Cart, $ionicLoading, Auth) {
+app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushService", "User", "Database", "$cordovaGeolocation", "$ionicPopup", "$cordovaPushV5", "CartData", "$ionicLoading", "Auth",
+  function($ionicPlatform, $rootScope, $state, $templateCache, IonicPushService, User, Database, $cordovaGeolocation, $ionicPopup, $cordovaPushV5, CartData, $ionicLoading, Auth) {
     $ionicPlatform.ready(() => {
        $ionicLoading.show({
         templateUrl: 'templates/loading.html',
@@ -149,7 +149,6 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
                 template: 'Are you sure you want to leave?',
                 cssClass: 'delete-popup',
               });
-
               leavingRestaurantPopup.then(function(res) {
                 if (res) {
                   CartData.setNull();
@@ -160,8 +159,6 @@ app.run(["$ionicPlatform", "$rootScope", "$state", '$templateCache', "IonicPushS
                 }
               });
         }
-      }else {
-        console.log("Free Will")
       }
     })
 
@@ -253,14 +250,17 @@ app.controller('AppCtrl', function($scope, $ionicLoading, $ionicSideMenuDelegate
   });
 })
 
-.controller('TabsCtrl',["$scope","$state","currentAuth","Role",
-function($scope, $state,currentAuth ,Role) {
+.controller('TabsCtrl',["$scope","$state","Auth","Role",
+function($scope, $state, Auth ,Role) {
 
-  console.log("TAbs Controller");
-
-  Role.get(currentAuth.uid).then((value)=>{
-    $scope.userRole = value
+  Auth.$onAuthStateChanged(function(firebaseUser) {
+    if (firebaseUser) {
+      Role.get(firebaseUser.uid).then((value)=>{
+        $scope.userRole = value
+      })
+    }
   })
+
   // console.error(currentAuth.uid);
   $scope.goToHome = function() {
     $state.go("tabs.home")

@@ -190,17 +190,17 @@
             Profile
           </ion-item>
           <hr class="custom-hr" ng-show="firebaseUser">
-          <ion-item ng-if="userRole.isAnyExceptUser" menu-close  ui-sref="tabs.restaurant" class="item-borderless ink">
+          <ion-item ng-if="userRole.isAnyExceptUser" menu-close ui-sref="tabs.restaurant" class="item-borderless ink">
             Restaurants
           </ion-item>
-          <ion-item menu-close ng-if="userRole.isAny" class="item-borderless ink">
+          <ion-item menu-close ng-if="userRole.isAny" class="item-borderless ink" ui-sref="notifications">
             Notifications
           </ion-item>
 
           <ion-item menu-close ng-controller="RestaurantCtrl" ng-if="userRole.isUser" class="item-borderless ink" ng-click="newRestaurant()">
             Create Restaurant
           </ion-item>
-          <hr class="custom-hr" ng-show="firebaseUser">
+          <hr class="custom-hr" ng-if="firebaseUser">
           <ion-item menu-close ng-if="userRole.isAny" class="item-borderless ink" ng-click="signOut()">
             Sign Out
           </ion-item>

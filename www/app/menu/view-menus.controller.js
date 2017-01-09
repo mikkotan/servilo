@@ -85,7 +85,8 @@ app.controller("ViewMenusCtrl", ["$scope", "$stateParams", "restaurantMenu", "$i
         timestamp : firebase.database.ServerValue.TIMESTAMP
       })
         .then(() => {
-          alert('Success');
+        //   alert('Success');
+          ionicToast.show('Menu added', 'bottom', false, 2500);
           $scope.addMenuModal.hide();
         })
         .catch((err) => {
@@ -107,7 +108,8 @@ app.controller("ViewMenusCtrl", ["$scope", "$stateParams", "restaurantMenu", "$i
       return Menu.delete(menu.$id)
         .then(() => {
           $ionicLoading.hide()
-          alert('Menu successfully deleted.')
+          ionicToast.show('Menu successfully deleted', 'bottom', false, 2500);
+        //   alert('Menu successfully deleted.')
           console.log('Menu successfully deleted.')
         })
         .catch((err) => {

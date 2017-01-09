@@ -284,7 +284,7 @@ app.controller("RestaurantCtrl", ["$scope", "$firebaseArray", "User", "$ionicMod
             Reservation.delete(reservation)
               .then(() => {
                 console.log('delete sucess')
-                alert('delete success');
+                ionicToast.show('Successful Delete', 'bottom', false, 2500);
               })
               .catch((err) => {
                 console.log(err)

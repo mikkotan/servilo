@@ -558,3 +558,12 @@ body {
   align-items: center;
   justify-content: center;
 }
+.rate-stars i.full{
+    color: green;
+}
+.rate-stars i.off{
+    color: #000;
+}
+// .rate-stars i{
+//     margin-right: 1px;
+// }

@@ -457,6 +457,12 @@ body {
   align-items: center;
   justify-content: center; }
 
+.rate-stars i.full {
+  color: green; }
+
+.rate-stars i.off {
+  color: #000; }
+
 .gallery-view .image-container {
   position: relative;
   overflow: hidden;

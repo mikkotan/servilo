@@ -62,8 +62,9 @@ app.controller('DashboardInteractReservationsCtrl', function($scope, $stateParam
           console.log('tapped ok')
           Reservation.update(reservation, 'confirmed')
             .then(() => {
-              console.log('success fully updated')
-              alert('ok')
+              console.log('successfully updated')
+              ionicToast.show('Successfully confirmed', 'bottom', false, 2500);
+            //   alert('ok')
             })
             .catch((err) => {
               alert(err)
@@ -90,7 +91,8 @@ app.controller('DashboardInteractReservationsCtrl', function($scope, $stateParam
           Reservation.update(reservation, 'cancelled')
             .then(() => {
               console.log('success fully updated')
-              alert('ok')
+              ionicToast.show('Rejected Reservation', 'bottom', false, 2500);
+            //   alert('ok')
             })
             .catch((err) => {
               alert(err)
@@ -117,7 +119,8 @@ app.controller('DashboardInteractReservationsCtrl', function($scope, $stateParam
           Reservation.update(reservation, 'remind')
             .then(() => {
               console.log('success fully updated')
-              alert('ok')
+              ionicToast.show('Reminded customer', 'bottom', false, 2500);
+
             })
             .catch((err) => {
               alert(err)

@@ -2,6 +2,7 @@ app.config(["$stateProvider","$urlRouterProvider","$ionicConfigProvider","fireba
     function($stateProvider, $urlRouterProvider, $ionicConfigProvider, firebaseConfigProvider,
       $ionicCloudProvider, ionGalleryConfigProvider) {
 
+  $ionicConfigProvider.backButton.previousTitleText(false).text('');
   $ionicConfigProvider.navBar.alignTitle('center');
   ionGalleryConfigProvider.setGalleryConfig({
     action_label: 'Close',
@@ -45,12 +46,6 @@ app.config(["$stateProvider","$urlRouterProvider","$ionicConfigProvider","fireba
       abstract: true,
       templateUrl: "templates/tabs.html",
       controller: 'TabsCtrl',
-      resolve: {
-        currentAuth: function(Auth) {
-          console.log("resolve tab fired inside view!!!");
-          return Auth.$requireSignIn();
-        }
-      },
       class : 'Tab'
     })
     .state('tabs.home', {
@@ -104,11 +99,12 @@ app.config(["$stateProvider","$urlRouterProvider","$ionicConfigProvider","fireba
       class : 'Search'
     })
     .state('tabs.viewRestaurant', {
+      abstract: true,
       url: "/viewRestaurant/:restaurantId",
       views: {
         'search-tab': {
           templateUrl: "app/restaurant/_view-restaurant.html",
-          controller: "ViewRestaurantCtrl",
+          // controller: "ViewRestaurantCtrl",
           resolve: {
             currentAuth: function(Auth) {
               return Auth.$requireSignIn();
@@ -205,6 +201,9 @@ app.config(["$stateProvider","$urlRouterProvider","$ionicConfigProvider","fireba
           resolve: {
             currentGeoLocation: function(CordovaGeolocation) {
               return CordovaGeolocation.get();
+            },
+            restaurantId: function($stateParams) {
+              return $stateParams.restaurantId
             }
           }
         }
@@ -239,18 +238,17 @@ app.config(["$stateProvider","$urlRouterProvider","$ionicConfigProvider","fireba
       },
       class : 'Order'
     })
-    .state('tabs.notifications', {
+    .state('notifications', {
       url: "/notifications",
-      views: {
-        'notifications-tab': {
-          templateUrl: 'app/notification/_notifications.html',
-          controller: "NotificationsCtrl",
-          resolve: {
-            notifications: function(User) {
-              return User.getAuthNotifications().$loaded();
-            }
-          }
-        }
+      templateUrl: 'app/notification/_notifications.html',
+      controller: "NotificationsCtrl",
+      resolve: {
+        "currentAuth": ["Auth", function(Auth) {
+          return Auth.$requireSignIn();
+        }],
+        "notifications": ["User",function(User) {
+          return User.getAuthNotifications().$loaded();
+        }]
       },
       class : 'Notification'
     })

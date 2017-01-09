@@ -29,7 +29,7 @@ app.controller("AddMenuCtrl",["$scope", "restaurantId", "$cordovaCamera", "Resta
         });
     }
 
-    
+
 
     $scope.addMenu = function(menu) {
       Menu.create({
@@ -44,7 +44,8 @@ app.controller("AddMenuCtrl",["$scope", "restaurantId", "$cordovaCamera", "Resta
       })
         .then(() => {
           $state.go('tabs.restaurant');
-          alert('Success');
+          ionicToast.show('Menu added', 'bottom', false, 2500);
+        //   alert('Success');
         })
         .catch((err) => {
           alert(err);

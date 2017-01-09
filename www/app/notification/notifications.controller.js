@@ -1,8 +1,8 @@
-app.controller("NotificationsCtrl", ["$scope", "$firebaseArray", "$firebaseObject", "User", "Restaurant", "notifications", "Notification", "Database",
-  function($scope, $firebaseArray, $firebaseObject, User, Restaurant, notifications, Notification, Database){
+app.controller("NotificationsCtrl", ["$scope", "$firebaseArray", "$firebaseObject", "User", "Restaurant", "notifications", "Notification", "Database","currentAuth",
+  function($scope, $firebaseArray, $firebaseObject, User, Restaurant, notifications, Notification, Database,currentAuth){
 
     $scope.notifs = notifications;
-
+    console.log("read man sa notifs");
     $scope.markRead = function(notif) {
       return Notification.delete(notif)
     }

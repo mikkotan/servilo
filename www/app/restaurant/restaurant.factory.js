@@ -125,7 +125,8 @@ app.factory("Restaurant", ["$firebaseArray", "User", "Database", "$firebaseObjec
           } else {
             console.log('nonono');
             deferred.resolve(null);
-            alert('Geocoder failed due to: ' + status);
+            ionicToast.show('Geocoder failed due to: ' + status, 'bottom', false, 2500);
+            // alert('Geocoder failed due to: ' + status);
           }
         });
         return deferred.promise;
@@ -148,7 +149,8 @@ app.factory("Restaurant", ["$firebaseArray", "User", "Database", "$firebaseObjec
           } else {
             console.log('nonono');
             deferred.resolve(null);
-            alert('Geocoder failed due to: ' + status);
+            ionicToast.show('Geocoder failed due to: ' + status, 'bottom', false, 2500);
+            // alert('Geocoder failed due to: ' + status);
           }
         });
         return deferred.promise;
