@@ -2,7 +2,7 @@
   <ion-floating-button has-footer="true" click="scrollToTop()" class="back-to-top" ng-hide="!sttButton" button-color="#2AC9AA" icon="ion-ios-arrow-up" icon-color="#fff">
   </ion-floating-button>
   <ion-content delegate-handle="content" on-scroll="getScrollPosition()">
-    <div class="card-slides">
+    <div class="card-slides" ng-if="newAdvertisements.length != 0">
       <ion-slides options="options" slider="data.slider">
         <ion-slide-page ng-repeat="advertisement in newAdvertisements" ng-if="advertisement.ready">
           <div class="card ink" ng-click="goToRestaurant(advertisement.details.$id)">
