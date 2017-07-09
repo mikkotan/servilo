@@ -1,1 +1,1 @@
-# ![Servilo](resources/icon.png)
+# ![Servilo](resources/icon.png | width = 100)
