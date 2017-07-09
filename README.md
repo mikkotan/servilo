@@ -1,1 +1,1 @@
-# ![Servilo](resources/icon.png =100x100)
+# ![Servilo](resources/android/icon/drawable-xxhdpi-icon.png)
