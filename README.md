@@ -33,7 +33,7 @@ Things needed first:
 
   #### Android SDK and Gradle
 
-  * For Android SDK and Gradle we suggest you to download Android Studio, both Android SDK and Gradle will be included along with Android Studio download [here](https://developer.android.com/studio/index.html#mac-bundle)
+  * For Android SDK and Gradle we suggest you to download Android Studio, both Android SDK and Gradle will be included along with Android Studio. You may download it [here](https://developer.android.com/studio/index.html#mac-bundle).
 
 
 ## Installation Steps for Linux/Ubuntu
