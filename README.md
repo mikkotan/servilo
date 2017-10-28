@@ -17,13 +17,17 @@ Things needed first:
 * Android SDK
 * Gradle
 
-## Installation Steps for Mac OSX
+## Installation Steps for Mac OSX and Linux
 
   #### NodeJS
-
-  * Open your terminal and update your homebrew `brew update`
-  * Install nodejs using `brew install node`
-  * Try running `npm -v` and you should see something like this `5.4.2`, and `node -v` and should see something like this         `v8.2.2`
+  * _Installing NodeJS for Mac OSX_
+    * Open your terminal and update your homebrew `brew update`
+    * Install nodejs using `brew install node`
+    * Try running `npm -v` and you should see something like this `5.4.2`, and `node -v` and should see something like this         `v8.2.2`
+  * _Installing NodeJS for Linux_
+    * Open your terminal and install NodeJS and npm by running `sudo apt-get install nodejs npm`
+    * Try running `node -v` and `npm -v` if you have installed it successfully
+    * If you are running a 64-bit version of Ubuntu, you'll need to install the 32-bit libraries since Android is only 32-bit at the moment. `$ sudo apt-get install ia32-libs` If you are on Ubuntu 13.04 or greater, `ia32-libs` has been removed. You can use the following packages instead: `$ sudo apt-get install lib32z1 lib32ncurses5 lib32bz2-1.0`
 
   #### Ionic
 
@@ -33,9 +37,8 @@ Things needed first:
 
   #### Android SDK and Gradle
 
-  * For Android SDK and Gradle we suggest you to download Android Studio, both Android SDK and Gradle will be included along with Android Studio. You may download it [here](https://developer.android.com/studio/index.html#mac-bundle).
-
-
-## Installation Steps for Linux/Ubuntu
+  * For Android SDK and Gradle we suggest you to download Android Studio, both Android SDK and Gradle will be included along with Android Studio. You may download it here:
+    * [For Mac OSX](https://developer.android.com/studio/index.html#mac-bundle).
+    * [For Linux] ()
 
 ## Installation Steps for Windows
