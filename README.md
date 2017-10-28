@@ -39,6 +39,6 @@ Things needed first:
 
   * For Android SDK and Gradle we suggest you to download Android Studio, both Android SDK and Gradle will be included along with Android Studio. You may download it here:
     * [For Mac OSX](https://developer.android.com/studio/index.html#mac-bundle).
-    * [For Linux] ()
+    * [For Linux](https://dl.google.com/dl/android/studio/ide-zips/3.0.0.18/android-studio-ide-171.4408382-linux.zip).
 
 ## Installation Steps for Windows
