@@ -42,3 +42,31 @@ Things needed first:
     * [For Linux](https://dl.google.com/dl/android/studio/ide-zips/3.0.0.18/android-studio-ide-171.4408382-linux.zip).
 
 ## Installation Steps for Windows
+  ### NodeJS
+  
+  * Download the windows installer from the [NodeJS web site](https://nodejs.org/en/download/).
+  * Run the installer (the `.msi` file you've downloaded)
+  * Follow the prompts of the installer
+  * Restart your computer. You won't be able to run NodeJS until you restart your computer.
+  * Open your terminal and test NodeJS by running `node -v` and `npm -v`
+  
+  ### Ionic
+  
+  * Open your terminal and start by installing Cordova by running `npm install -g cordova`.
+  * Install Ionic by running `npm install -g ionic`.
+  * Try running `cordova -v` and `ionic -v` in your terminal and see if you've installed it successfully.
+  
+  ### Android SDK and Gradle
+  
+  * For Android SDK and Gradle we suggest you to download Android Studio, both Android SDK and Gradle will be included along with Android Studio. You may download it [here](https://developer.android.com/studio/index.html).
+  
+## Running Locally
+
+
+## Built With
+  * Ionic
+  * AngularJS
+  * NodeJS
+  * Firebase
+  
+## Authors
