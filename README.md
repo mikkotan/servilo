@@ -60,7 +60,18 @@ Things needed first:
   
   * For Android SDK and Gradle we suggest you to download Android Studio, both Android SDK and Gradle will be included along with Android Studio. You may download it [here](https://developer.android.com/studio/index.html).
   
-## Running Locally
+## Running the Project locally
+  * First clone the project, open the terminal and run this command `git clone https://github.com/michaelunltd/servilo.git`
+  * Change directory to project by running `cd servilo`.
+  * Run `ionic serve` and open `http://localhost:8100`.
+  
+## Running the app on a Device
+  * Make sure you've ran the project locally (see above).
+  * Plugin your android device using micro usb datacable to your computer.
+  * Make sure it is recognized by running `adb devices`.
+  * Go to project directory
+  * Run `cordova add platform android` to add android as platform.
+  * Then run `ionic run android`. This will run and install the project on the connected device.
 
 
 ## Built With
@@ -70,3 +81,13 @@ Things needed first:
   * Firebase
   
 ## Authors
+  * Ballon, Jireh
+  * Buaron, Jio
+  * Gasataya, JMatthew
+  * Labtic, John Matthew
+  * Tan, Michael Rasheed
+  
+## Acknowledgments
+  * _Dojo8 Coworking Space_ for discounted office space.
+  * _Firebase Community Slack_ for helping us out in day to day problems.
+  * [Jacob Wenger](https://www.linkedin.com/in/jwngr/) [Firebase Core Engineer] - for helping us in security problems.
